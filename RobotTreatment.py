@@ -18,7 +18,7 @@ WHITE = pygame.Color('white')
 class RobotTreatment:
     def __init__(self):
         self.robot = None
-
+        # adding a comment for Git purposes
         self.matlab_socket = None
         self.screen = None
         self.screen_resolution = (480, 940)
