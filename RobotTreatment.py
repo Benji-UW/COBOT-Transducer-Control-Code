@@ -120,7 +120,9 @@ class RobotTreatment:
         n_sample = 2000
         imager_t_nm1 = 0.
 
-        file1 = open(r"C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\P4-2_tracking_xz_py_14\Records\record3.txt", "w+")
+        filepath = r'C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben\'s Control Code\Records\\' + time.strftime('%c') + '.txt'
+
+        file1 = open(filepath, "w+")
 
         # Z-motion comp stuff
         self.z_adjust = 0
@@ -149,84 +151,8 @@ class RobotTreatment:
             joy_vect = self.controller.get_sticks()
             joy_hat = self.controller.get_hat()
 
-            if self.motion_comp == 1:
-                self.matlab_socket.send('motion')
-                msg = self.matlab_socket.recv(1024)
-                imager_x = float(msg[1:7]) / 1.0E5
-                imager_z = float(msg[8:14]) / 1.0E5
-                imager_t = float(msg[15:23]) / 1.0E3
-                delta_pos, delta_angle = self.robot.get_delta_pos()
-                self.imager_x_vect = np.append(self.imager_x_vect, imager_x)
-                self.x_vect = np.append(self.x_vect, delta_pos[0] + imager_x)
-                self.imager_z_vect = np.append(self.imager_z_vect, imager_z)
-                self.z_vect = np.append(self.z_vect, delta_pos[2] + imager_z)
-                self.imager_t_vect = np.append(self.imager_t_vect, imager_t)
-                if imager_t > 0:
-                    setpoint[0] = imager_x
-                    setpoint[1] = 0.
-                    setpoint[2] = imager_z
-                    self.servo_error = np.linalg.norm(setpoint)
-                    self.robot.update_servo(setpoint=setpoint)
+            self.motion_comp = 0
 
-            if self.motion_comp == 2:
-                self.matlab_socket.send('motion')
-                msg = self.matlab_socket.recv(1024)
-                imager_x = float(msg[1:7]) / 1.0E5
-                imager_z = float(msg[8:14]) / 1.0E5
-                imager_t = float(msg[15:23]) / 1.0E3
-                delta_pos, delta_angle = self.robot.get_delta_pos()
-                if imager_t != imager_t_nm1:
-                    self.imager_x_vect = np.append(self.imager_x_vect, imager_x)
-                    self.x_vect = np.append(self.x_vect, delta_pos[0] + imager_x)
-                    self.imager_z_vect = np.append(self.imager_z_vect, imager_z)
-                    self.z_vect = np.append(self.z_vect, delta_pos[2] + imager_z)
-                    self.imager_t_vect = np.append(self.imager_t_vect, imager_t)
-                if (self.imager_t_vect[-1] - self.imager_t_vect[0]) > 20.:
-                    if not self.mp_x.is_ready and np.max(np.abs(self.x_vect[-n_sample:])) > 1E-3:
-                        n_sample = self.imager_t_vect.size - 1
-                        print 'Initializing motion prediction on x...'
-                        if self.mp_x.initialize(self.imager_t_vect[-n_sample:], self.x_vect[-n_sample:], fs=100., filt_freq=5.,
-                                                time_varying=True, calc_coeff=False, order=3):
-                            self.mp_t_lu = imager_t
-                    if not self.mp_z.is_ready and np.max(np.abs(self.z_vect[-n_sample:])) > 1E-3:
-                        n_sample = self.imager_t_vect.size - 1
-                        print 'Initializing motion prediction on z...'
-                        if self.mp_z.initialize(self.imager_t_vect[-n_sample:], self.z_vect[-n_sample:], fs=100., filt_freq=5.,
-                                                time_varying=True, calc_coeff=False, order=3):
-                            self.mp_t_lu = imager_t
-                if (imager_t - self.mp_t_lu > self.mp_t_upd):
-                    if self.mp_x.is_ready:
-                        self.mp_x.update(self.imager_t_vect[-n_sample:], self.x_vect[-n_sample:])
-                        self.mp_t_lu = imager_t
-                    if self.mp_z.is_ready:
-                        self.mp_z.update(self.imager_t_vect[-n_sample:], self.z_vect[-n_sample:])
-                        self.mp_t_lu = imager_t
-                if imager_t > 0:
-                    if self.mp_x.is_ready:
-                        if imager_t != imager_t_nm1:
-                            pred_x = self.mp_x.get_pred(imager_t + self.t_pred)
-                            self.mp_x_vect = np.append(self.mp_x_vect, pred_x)
-                        else:
-                            pred_x = self.mp_x.get_pred(imager_t + (t-time.time()) + self.t_pred)
-                        setpoint[0] = pred_x
-                        
-                    else:
-                        setpoint[0] = imager_x
-                    setpoint[1] = 0.
-                    if self.mp_z.is_ready:
-                        if imager_t != imager_t_nm1:
-                            pred_z = self.mp_z.get_pred(imager_t + self.t_pred)
-                            self.mp_z_vect = np.append(self.mp_z_vect, pred_z)
-                        else:
-                            pred_z = self.mp_z.get_pred(imager_t + (t-time.time()) + self.t_pred)
-                        setpoint[2] = pred_z
-                        
-                    else:
-                        setpoint[2] = imager_z
-                    self.servo_error = np.linalg.norm(setpoint)
-                    self.robot.update_servo(setpoint=setpoint)
-                if imager_t != imager_t_nm1:
-                    imager_t_nm1 = imager_t
 
             if self.z_adjust == 1:
                 self.matlab_socket.send('motion')
@@ -236,8 +162,6 @@ class RobotTreatment:
                 latestLoop = float(msg[1:3])
                 dist_z = float(msg[4:13]) / 1.0E3
                 
-                
-
                 if np.abs(dist_z) < 0.05:
                     self.z_adjust = 0
                     file1.write(time.asctime() + ' | Exit z_adjustment with z_dist ' + str(self.z_adjust))
@@ -271,24 +195,10 @@ class RobotTreatment:
                 
                 lastLoop = latestLoop
 
-            # Initiate/stop motion compensation with plus button
+            # Formerly you would toggle motion control with this button, but I don't have any
+            # of Gilles's motion control scripts so I'm just getting rid of all of that.
             if self.controller.P in buttons and self.controller.P not in self.button_hold:
-                if self.motion_comp > 0:
-                    self.motion_comp = 0
-                    self.imager_z_vect = np.array([])
-                    self.z_vect = np.array([])
-                    self.imager_t_vect = np.array([])
-                    v = self.v_list[self.speed_preset]
-                    vR = self.vR_list[self.speed_preset]
-                    a = self.a_list[self.speed_preset]
-                    aR = self.aR_list[self.speed_preset]
-                    self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
-                    self.mp_x.reset()
-                    self.mp_z.reset()
-                else:
-                    self.motion_comp = 1
-                    pos_ref = 0.
-                    self.robot.init_servo(self.servo_lag, Kp=self.Kp, Ki=self.Ki, Kd=self.Kd)
+                print('Hey you just pressed the plus button :)')
                 self.button_hold.append(self.controller.P)
             elif self.controller.P in self.button_hold and self.controller.P not in buttons:
                 self.button_hold.remove(self.controller.P)
@@ -373,6 +283,7 @@ class RobotTreatment:
                 elif self.controller.M in self.button_hold and self.controller.M not in buttons:
                     self.button_hold.remove(self.controller.M)
 
+                # This looks like it's activating freedrive as long as the button is pushed :)
                 if self.controller.ZL in buttons and self.controller.ZL not in self.button_hold:
                     self.robot.freedrive()
                     self.button_hold.append(self.controller.ZL)
@@ -535,15 +446,6 @@ class RobotTreatment:
         else:
             self.robot_gui.tprint(self.screen, 'Current robot mean refresh rate is: 0.0 Hz')
 
-        if self.motion_comp:
-            self.robot_gui.tprint(self.screen, 'Motion compensation is on')
-            if self.mp_x.is_ready:
-                self.robot_gui.tprint(self.screen, 'Motion prediction on x is on')
-            if self.mp_z.is_ready:
-                self.robot_gui.tprint(self.screen, 'Motion prediction on z is on')
-            self.robot_gui.indent()
-            self.robot_gui.tprint(self.screen, 'Kp=%3.3f, servo_lag=%1.3f, Kd=%1.3f, t_mp=%1.3f' % (self.Kp, self.servo_lag, self.Kd, self.t_pred))
-            self.robot_gui.tprint(self.screen, 'Current error: %3.1f mm' % (self.servo_error * 1000.))
 
         if self.z_adjust:
             self.robot_gui.tprint(self.screen, 'Transducer adjustment is on')
@@ -557,3 +459,5 @@ class RobotTreatment:
                                    w[1][1] * 180. / math.pi, w[1][2] * 180. / math.pi))
             i = i + 1
         self.robot_gui.unindent()
+
+# ;C:\Users\ander\AppData\Local\GitHubDesktop\app-2.9.0\resources\app\git\cmd
