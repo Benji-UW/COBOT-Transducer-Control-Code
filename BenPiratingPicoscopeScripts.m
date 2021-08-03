@@ -348,7 +348,9 @@ if (plotLiveData == PicoConstants.TRUE)
     yRange = max(channelARangeMv, channelBRangeMv);
     ylim(axes1,[(-1 * yRange) yRange]);
 
-    hold(axes1,'on');
+    % turned hold off because I only want to see one pulse of data collected
+    hold(axes1, 'off');
+    % hold(axes1,'on');
     grid(axes1, 'on');
 
     title(axes1, 'Live Streaming Data Capture');
