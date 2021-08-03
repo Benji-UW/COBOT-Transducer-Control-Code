@@ -43,6 +43,7 @@ class RobotTreatment:
 
         self.motion_comp = 0
         self.z_adjust = 0
+        self.z_jerk_coeff = 1
 
         self.Kp = 10.
         self.Ki = 0.0
@@ -126,6 +127,7 @@ class RobotTreatment:
 
         # Z-motion comp stuff
         self.z_adjust = 0
+        
 
         while run_bool:
             t0 = time.time()
@@ -170,11 +172,11 @@ class RobotTreatment:
                 t_1 = time.time()
                 if latestLoop != lastLoop:
                     t_0 = time.time()
-                    z_tran = np.minimum((dist_z / 7.5), 1)
+                    z_tran = np.minimum((dist_z / (7.5 / self.z_jerk_coeff)), 1)
                     speed_vect[2] = z_tran
                     # print('set speed to ' + str(z_tran))
                     file1.write(time.asctime() + ' | Received message ' + str(msg) + ' set speed to ' + str(z_tran) + '\n')
-                elif t_1 - t_0 <= 0.5:
+                elif t_1 - t_0 <= 0.5 / self.z_jerk_coeff:
                     speed_vect = np.zeros((3,1))
                     rot_vect = np.zeros((3,1))
                     speed_vect[2] = z_tran
@@ -373,11 +375,11 @@ class RobotTreatment:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.robot.disconnect()
-                    print 'Robot disconnected.'
+                    print('Robot disconnected.')
                     run_bool = False
                     if self.matlab_socket is not None:
                         self.disconnect_from_matlab()
-                        print 'Disconnected from server.'
+                        print('Disconnected from server.')
 
             pygame.display.flip()
             if i_rr >= self.refresh_rate:
