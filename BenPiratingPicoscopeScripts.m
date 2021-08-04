@@ -102,7 +102,7 @@ disp(unitInfo);
 % Channel A
 channelSettings(1).enabled = PicoConstants.TRUE;
 channelSettings(1).coupling = ps5000aEnuminfo.enPS5000ACoupling.PS5000A_DC;
-channelSettings(1).range = ps5000aEnuminfo.enPS5000ARange.PS5000A_2V;
+channelSettings(1).range = ps5000aEnuminfo.enPS5000ARange.PS5000A_500MV;
 channelSettings(1).analogueOffset = 0.0;
 
 channelARangeMv = PicoConstants.SCOPE_INPUT_RANGES(channelSettings(1).range + 1);
@@ -114,7 +114,7 @@ channelARangeMv = PicoConstants.SCOPE_INPUT_RANGES(channelSettings(1).range + 1)
 % channelSettings(2).analogueOffset = 0.0;
 
 % Variables that will be required later
-channelBRangeMv = PicoConstants.SCOPE_INPUT_RANGES(channelSettings(2).range + 1);
+% channelBRangeMv = PicoConstants.SCOPE_INPUT_RANGES(channelSettings(2).range + 1);
 
 
 % The following code for blocking the C and D channels has been commented out
@@ -165,8 +165,10 @@ end
 %% Change resolution
 % The maximum resolution will depend on the number of channels enabled.
 
-% Set resolution to 15 bits as 2 channels will be enabled.
-[status.setResolution, resolution] = invoke(ps5000aDeviceObj, 'ps5000aSetDeviceResolution', 15);  
+% % Set resolution to 15 bits as 2 channels will be enabled.
+% Originally this was set to 15 bits but I set it to 12 because that turns
+% out to be satisfactory for my purposes
+[status.setResolution, resolution] = invoke(ps5000aDeviceObj, 'ps5000aSetDeviceResolution', 12);  
 
 % Obtain the maximum Analog Digital Converter (ADC) count value from the
 % driver - this is used for scaling values returned from the driver when
@@ -192,10 +194,10 @@ triggerGroupObj = triggerGroupObj(1);
 set(triggerGroupObj, 'autoTriggerMs', 0);
 
 % Channel     : 0 (ps5000aEnuminfo.enPS5000AChannel.PS5000A_CHANNEL_A)
-% Threshold   : 100 mV (edited)
+% Threshold   : 500 mV (edited)
 % Direction   : 2 (ps5000aEnuminfo.enPS5000AThresholdDirection.PS5000A_RISING)
 
-[status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', 0, 100, 2);
+[status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', 0, 500, 2);
 
 
 %% Set data buffers
@@ -246,17 +248,17 @@ status.setAppDriverBuffersA = invoke(streamingGroupObj, 'setAppAndDriverBuffers'
 % will output the actual sampling interval used by the driver.
 
 % To change the sample interval e.g 5 us for 200 kS/s
-% set(streamingGroupObj, 'streamingInterval', 5e-6);
+set(streamingGroupObj, 'streamingInterval', 1e-6);
 
 %%
 % Set the number of pre- and post-trigger samples.
 % If no trigger is set the library will still store
 % |numPreTriggerSamples| + |numPostTriggerSamples|.
-set(ps5000aDeviceObj, 'numPreTriggerSamples', 1000);
+set(ps5000aDeviceObj, 'numPreTriggerSamples', 100);
 % I'm setting the number of post-trigger samples to be 10 kS, because by default
 % the streaming interval is 1 MS/s and the frequency of the pulser/receiver is 
 % 100 Hz, meaning we want weach sample to capture just one of those
-set(ps5000aDeviceObj, 'numPostTriggerSamples', 9000); % 1e4
+set(ps5000aDeviceObj, 'numPostTriggerSamples', 900); % 1e4
 
 %%
 % The |autoStop| parameter can be set to false (0) to allow for continuous
@@ -265,7 +267,7 @@ set(streamingGroupObj, 'autoStop', PicoConstants.FALSE);
 
 % Set other streaming parameters
 downSampleRatio = 1;
-% downSampleRatioMode = ps5000aEnuminfo.enPS5000ARatioMode.PS5000A_RATIO_MODE_NONE;
+downSampleRatioMode = ps5000aEnuminfo.enPS5000ARatioMode.PS5000A_RATIO_MODE_NONE;
 
 %%
 % Defined buffers to store data collected from the channels. If capturing
@@ -345,7 +347,7 @@ if (plotLiveData == PicoConstants.TRUE)
     % channels on the same graph.
     xlim(axes1, [0 (sampleInterval * finalBufferLength)]);
 
-    yRange = max(channelARangeMv, channelBRangeMv);
+    yRange = max(channelARangeMv); %, channelBRangeMv);
     ylim(axes1,[(-1 * yRange) yRange]);
 
     % turned hold off because I only want to see one pulse of data collected
@@ -376,7 +378,7 @@ end
 % set or the call to |getStreamingLatestValues()| does not return an error
 % code (check for STOP button push inside loop).
 while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestValuesStatus == PicoStatus.PICO_OK)
-    
+    tic
     ready = PicoConstants.FALSE;
    
     while (ready == PicoConstants.FALSE)
@@ -464,7 +466,7 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
         clear startIndex;
         clear triggered;
         clear triggerAt;
-          
+        toc
    end
    
     % Check if auto stop has occurred.
