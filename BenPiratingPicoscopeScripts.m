@@ -107,33 +107,6 @@ channelSettings(1).analogueOffset = 0.0;
 
 channelARangeMv = PicoConstants.SCOPE_INPUT_RANGES(channelSettings(1).range + 1);
 
-% % Channel B
-% channelSettings(2).enabled = PicoConstants.TRUE;
-% channelSettings(2).coupling = ps5000aEnuminfo.enPS5000ACoupling.PS5000A_DC;
-% channelSettings(2).range = ps5000aEnuminfo.enPS5000ARange.PS5000A_2V;
-% channelSettings(2).analogueOffset = 0.0;
-
-% Variables that will be required later
-% channelBRangeMv = PicoConstants.SCOPE_INPUT_RANGES(channelSettings(2).range + 1);
-
-
-% The following code for blocking the C and D channels has been commented out
-% because it is known that the picoscope we're using has only two channels
-% if (ps5000aDeviceObj.channelCount == PicoConstants.QUAD_SCOPE)
-
-%     % Channel C
-%     channelSettings(3).enabled = PicoConstants.FALSE;
-%     channelSettings(3).coupling = ps5000aEnuminfo.enPS5000ACoupling.PS5000A_DC;
-%     channelSettings(3).range = ps5000aEnuminfo.enPS5000ARange.PS5000A_2V;
-%     channelSettings(3).analogueOffset = 0.0;
-
-%     % Channel D
-%     channelSettings(4).enabled = PicoConstants.FALSE;
-%     channelSettings(4).coupling = ps5000aEnuminfo.enPS5000ACoupling.PS5000A_DC;
-%     channelSettings(4).range = ps5000aEnuminfo.enPS5000ARange.PS5000A_2V;
-%     channelSettings(4).analogueOffset = 0.0;
-    
-% end
 
 % Keep the status values returned from the driver.
 numChannels = get(ps5000aDeviceObj, 'channelCount');
@@ -166,38 +139,15 @@ end
 % The maximum resolution will depend on the number of channels enabled.
 
 % % Set resolution to 15 bits as 2 channels will be enabled.
-% Originally this was set to 15 bits but I set it to 12 because that turns
+% Originally this was set to 15 bits but I set it to 8 because that turns
 % out to be satisfactory for my purposes
-[status.setResolution, resolution] = invoke(ps5000aDeviceObj, 'ps5000aSetDeviceResolution', 12);  
+[status.setResolution, resolution] = invoke(ps5000aDeviceObj, 'ps5000aSetDeviceResolution', 8);  
 
 % Obtain the maximum Analog Digital Converter (ADC) count value from the
 % driver - this is used for scaling values returned from the driver when
 % data is collected. This value may change depending on the resolution
 % selected.
 maxADCCount = get(ps5000aDeviceObj, 'maxADCValue');
-
-%% Set simple trigger
-% Set a trigger on channel A, with an auto timeout - the default value for
-% delay is used. The device will wait for a rising edge through
-% the specified threshold unless the timeout occurs first.
-
-% Trigger properties and functions are located in the Instrument
-% Driver's Trigger group.
-
-triggerGroupObj = get(ps5000aDeviceObj, 'Trigger');
-triggerGroupObj = triggerGroupObj(1);
-
-% Set the |autoTriggerMs| property in order to automatically trigger the
-% oscilloscope after 1 second if a trigger event has not occurred. Set to 0
-% to wait indefinitely for a trigger event.
-
-set(triggerGroupObj, 'autoTriggerMs', 0);
-
-% Channel     : 0 (ps5000aEnuminfo.enPS5000AChannel.PS5000A_CHANNEL_A)
-% Threshold   : 500 mV (edited)
-% Direction   : 2 (ps5000aEnuminfo.enPS5000AThresholdDirection.PS5000A_RISING)
-
-[status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', 0, 500, 2);
 
 %% Set Advanced trigger
 
@@ -236,7 +186,7 @@ TriggerDirections(1).mode = ps5000aEnuminfo.enPS5000AThresholdMode.PS5000A_LEVEL
 % This will ensure that data is correctly copied from the driver buffers
 % for later processing.
 
-overviewBufferSize  = 100000; % Size of the buffer to collect data from buffer.
+overviewBufferSize  = 250000; % Size of the buffer to collect data from buffer.
 segmentIndex        = 0;   
 ratioMode           = ps5000aEnuminfo.enPS5000ARatioMode.PS5000A_RATIO_MODE_NONE;
 
@@ -278,17 +228,17 @@ status.setAppDriverBuffersA = invoke(streamingGroupObj, 'setAppAndDriverBuffers'
 % will output the actual sampling interval used by the driver.
 
 % To change the sample interval e.g 5 us for 200 kS/s
-set(streamingGroupObj, 'streamingInterval', 1e-6);
+set(streamingGroupObj, 'streamingInterval', 2e-8);
 
 %%
 % Set the number of pre- and post-trigger samples.
 % If no trigger is set the library will still store
 % |numPreTriggerSamples| + |numPostTriggerSamples|.
-set(ps5000aDeviceObj, 'numPreTriggerSamples', 100);
+set(ps5000aDeviceObj, 'numPreTriggerSamples', 50000);
 % I'm setting the number of post-trigger samples to be 10 kS, because by default
 % the streaming interval is 1 MS/s and the frequency of the pulser/receiver is 
 % 100 Hz, meaning we want weach sample to capture just one of those
-set(ps5000aDeviceObj, 'numPostTriggerSamples', 900); % 1e4
+set(ps5000aDeviceObj, 'numPostTriggerSamples', 200000); % 1e4
 
 %%
 % The |autoStop| parameter can be set to false (0) to allow for continuous
@@ -477,12 +427,13 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
         % Copy data into the final buffer(s).
         pBufferChAFinal.Value(previousTotal + 1:totalSamples) = bufferChAmV;
 %         pBufferChBFinal.Value(previousTotal + 1:totalSamples) = bufferChBmV;
-        
-        if (plotLiveData == PicoConstants.TRUE)
+        toc
+        if (plotLiveData == PicoConstants.TRUE && startIndex == 0 && max(bufferChAmV) > 100)
             
             % Time axis. 
             % Multiply by ratio mode as samples get reduced
             time = (double(sampleInterval) * double(downSampleRatio)) * (previousTotal:(totalSamples - 1));
+            ylim(axes1,[(-1 * yRange) yRange]);
 
             plot(axes1, time, bufferChAmV); %, time, bufferChBmV);
         
@@ -496,7 +447,7 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
         clear startIndex;
         clear triggered;
         clear triggerAt;
-        toc
+        
    end
    
     % Check if auto stop has occurred.
@@ -605,13 +556,12 @@ hold(finalFigureAxes, 'off');
 time = (double(sampleInterval) * double(downSampleRatio)) * (0:length(channelAFinal) - 1);
 
 % Channel A
-chAAxes = subplot(2,1,1); 
-plot(chAAxes, time, channelAFinal, 'b');
+plot(time, channelAFinal, 'b');
 xLabelStr = strcat('Time (', sampleIntervalTimeUnitsStr, ')');
-xlabel(chAAxes, xLabelStr);
-ylabel(chAAxes, 'Voltage (mV)');
-title(chAAxes, 'Data acquisition on channel A (Final)');
-grid(chAAxes, 'on');
+xlabel(xLabelStr);
+ylabel('Voltage (mV)');
+title('Data acquisition on channel A (Final)');
+grid('on');
 
 % % Channel B
 % chBAxes = subplot(2,1,2); 
