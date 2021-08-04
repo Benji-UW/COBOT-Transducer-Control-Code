@@ -199,6 +199,36 @@ set(triggerGroupObj, 'autoTriggerMs', 0);
 
 [status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', 0, 500, 2);
 
+%% Set Advanced trigger
+
+triggerGroupObj = get(ps5000aDeviceObj, 'Trigger');
+triggerGroupObj = triggerGroupObj(1);
+
+ChATriggerConditions.source = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
+ChATriggerConditions.condition = ps5000aEnuminfo.enPS5000ATriggerState.PS5000A_CONDITION_TRUE;
+
+% Clear any pre-existing trigger configurations that may have been set.
+info = ps5000aEnuminfo.enPS5000AConditionsInfo.PS5000A_CLEAR + ps5000aEnuminfo.enPS5000AConditionsInfo.PS5000A_ADD;
+
+% Set the condition for channel A
+[status.ps5000aSetTriggerChannelConditionsV2ChA] = invoke(triggerGroupObj, 'ps5000aSetTriggerChannelConditionsV2', ChATriggerConditions, info);
+
+% *Trigger directions*
+%
+% Set the direction on which to trigger for each channel.
+%
+% Create an array of MATLAB structures corresponding to the
+% |tPS5000ADirection| structure in |ps5000aStructs|. Each structure in the
+% array defines the direction on which to trigger and also if it is a level
+% (edge) or window trigger.
+
+TriggerDirections(1).source = ps5000aEnuminfo.enPS5000AChannel.PS5000A_CHANNEL_A;
+TriggerDirections(1).direction = ps5000aEnuminfo.enPS5000AThresholdDirection.PS5000A_RISING;
+TriggerDirections(1).mode = ps5000aEnuminfo.enPS5000AThresholdMode.PS5000A_LEVEL;
+
+[status.setTriggerChannelDirectionsV2] = invoke(triggerGroupObj, 'ps5000aSetTriggerChannelDirectionsV2', TriggerDirections);
+
+
 
 %% Set data buffers
 % Data buffers for channels A and B - buffers should be set with the driver,
