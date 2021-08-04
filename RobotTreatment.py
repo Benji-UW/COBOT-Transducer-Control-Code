@@ -197,10 +197,12 @@ class RobotTreatment:
                 
                 lastLoop = latestLoop
 
-            # Formerly you would toggle motion control with this button, but I don't have any
-            # of Gilles's motion control scripts so I'm just getting rid of all of that.
+            # Cycle through different speed coefficients
             if self.controller.P in buttons and self.controller.P not in self.button_hold:
-                print('Hey you just pressed the plus button :)')
+                if (self.z_jerk_coeff < 5):
+                    self.z_jerk_coeff = self.z_jerk_coeff + 1
+                else:
+                    self.z_jerk_coeff = 1
                 self.button_hold.append(self.controller.P)
             elif self.controller.P in self.button_hold and self.controller.P not in buttons:
                 self.button_hold.remove(self.controller.P)
@@ -448,9 +450,11 @@ class RobotTreatment:
         else:
             self.robot_gui.tprint(self.screen, 'Current robot mean refresh rate is: 0.0 Hz')
 
+        self.robot_gui.tprint(self.screen, 'Z_jerk coefficient is set to %d' % self.z_jerk_coeff)
 
         if self.z_adjust:
             self.robot_gui.tprint(self.screen, 'Transducer adjustment is on')
+
 
         self.robot_gui.tprint(self.screen, 'Waypoints (current: %d): ' % self.current_waypoint)
         self.robot_gui.indent()
