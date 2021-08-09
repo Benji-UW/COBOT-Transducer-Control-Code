@@ -145,8 +145,8 @@ TriggerDirections(1).mode = ps5000aEnuminfo.enPS5000AThresholdMode.PS5000A_LEVEL
 % This will ensure that data is correctly copied from the driver buffers
 % for later processing.
 
-overviewBufferSize  = 250000; % Size of the buffer to collect data from buffer.
-segmentIndex        = 0;   
+overviewBufferSize  = 12500; % Size of the buffer to collect data from buffer.
+segmentIndex        = 0;
 ratioMode           = ps5000aEnuminfo.enPS5000ARatioMode.PS5000A_RATIO_MODE_NONE;
 
 % Buffers to be passed to the driver
@@ -187,17 +187,17 @@ status.setAppDriverBuffersA = invoke(streamingGroupObj, 'setAppAndDriverBuffers'
 % will output the actual sampling interval used by the driver.
 
 % To change the sample interval e.g 5 us for 200 kS/s
-set(streamingGroupObj, 'streamingInterval', 2e-8);
+set(streamingGroupObj, 'streamingInterval', 3.2e-8);
 
 %%
 % Set the number of pre- and post-trigger samples.
 % If no trigger is set the library will still store
 % |numPreTriggerSamples| + |numPostTriggerSamples|.
-set(ps5000aDeviceObj, 'numPreTriggerSamples', 50000);
+set(ps5000aDeviceObj, 'numPreTriggerSamples', 2500);
 % I'm setting the number of post-trigger samples to be 10 kS, because by default
 % the streaming interval is 1 MS/s and the frequency of the pulser/receiver is 
 % 100 Hz, meaning we want weach sample to capture just one of those
-set(ps5000aDeviceObj, 'numPostTriggerSamples', 200000); % 1e4
+set(ps5000aDeviceObj, 'numPostTriggerSamples', 22500); % 1e4
 
 %%
 % The |autoStop| parameter can be set to false (0) to allow for continuous
