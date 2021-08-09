@@ -522,14 +522,6 @@ ylabel('Voltage (mV)');
 title('Data acquisition on channel A (Final)');
 grid('on');
 
-% % Channel B
-% chBAxes = subplot(2,1,2); 
-% plot(chBAxes, time, channelBFinal, 'r');
-% title(chBAxes, 'Data acquisition on channel B (Final)');
-% xLabelStr = strcat('Time (', sampleIntervalTimeUnitsStr, ')');
-% xlabel(chBAxes, xLabelStr);
-% ylabel(chBAxes, 'Voltage (mV)');
-% grid(chBAxes, 'on');
 
 movegui(finalFigure, 'east');
 

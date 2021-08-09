@@ -133,7 +133,7 @@ downSampleRatioMode = ps5000aEnuminfo.enPS5000ARatioMode.PS5000A_RATIO_MODE_NONE
 maxSamples = get(ps5000aDeviceObj, 'numPreTriggerSamples') + ...
     get(ps5000aDeviceObj, 'numPostTriggerSamples');
 
-finalBufferLength = round(1.5 * maxSamples / downSampleRatio);
+finalBufferLength = round(15 * maxSamples / downSampleRatio);
 
 pBufferChAFinal = libpointer('int16Ptr', zeros(finalBufferLength, ...
     1, 'int16'));
@@ -245,6 +245,23 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
         
         % Copy data into the final buffer(s).
         pBufferChAFinal.Value(previousTotal + 1:totalSamples) = bufferChAmV;
+        
+        peaks = find(bufferChAmV == 500);
+        
+        if (~isempty(peaks))
+            lastTip = peaks(length(peaks));
+            
+            timeLastTip = bufferChAmV(lastTip);
+            chATemp = bufferChAmV(timeLastTip:length(bufferChAmV));
+            chATemp(abs(bufferChAmV) < 12) = 0;
+            
+            
+            
+        end
+        
+        
+        
+        
         toc
       
         % Clear variables for use again
