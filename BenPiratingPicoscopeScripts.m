@@ -113,30 +113,40 @@ maxADCCount = get(ps5000aDeviceObj, 'maxADCValue');
 triggerGroupObj = get(ps5000aDeviceObj, 'Trigger');
 triggerGroupObj = triggerGroupObj(1);
 
-ChATriggerConditions.source = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
-ChATriggerConditions.condition = ps5000aEnuminfo.enPS5000ATriggerState.PS5000A_CONDITION_TRUE;
+% ChATriggerConditions.source = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
+% ChATriggerConditions.condition = ps5000aEnuminfo.enPS5000ATriggerState.PS5000A_CONDITION_TRUE;
+% 
+% % Clear any pre-existing trigger configurations that may have been set.
+% info = ps5000aEnuminfo.enPS5000AConditionsInfo.PS5000A_CLEAR + ...
+%     ps5000aEnuminfo.enPS5000AConditionsInfo.PS5000A_ADD;
+% 
+% % Set the condition for channel A
+% [status.ps5000aSetTriggerChannelConditionsV2ChA] = invoke(triggerGroupObj, ...
+%     'ps5000aSetTriggerChannelConditionsV2', ChATriggerConditions, info);
+% 
+% % *Trigger directions*
+% %
+% % Set the direction on which to trigger for each channel.
+% %
+% % Create an array of MATLAB structures corresponding to the
+% % |tPS5000ADirection| structure in |ps5000aStructs|. Each structure in the
+% % array defines the direction on which to trigger and also if it is a level
+% % (edge) or window trigger.
+% 
+% TriggerDirections(1).source = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
+% TriggerDirections(1).direction = ps5000aEnuminfo.enPS5000AThresholdDirection.PS5000A_RISING;
+% TriggerDirections(1).mode = ps5000aEnuminfo.enPS5000AThresholdMode.PS5000A_LEVEL;
+% 
+% [status.setTriggerChannelDirectionsV2] = invoke(triggerGroupObj, ...
+%     'ps5000aSetTriggerChannelDirectionsV2', TriggerDirections);
 
-% Clear any pre-existing trigger configurations that may have been set.
-info = ps5000aEnuminfo.enPS5000AConditionsInfo.PS5000A_CLEAR + ps5000aEnuminfo.enPS5000AConditionsInfo.PS5000A_ADD;
+set(triggerGroupObj, 'autoTriggerMs', 1000);
 
-% Set the condition for channel A
-[status.ps5000aSetTriggerChannelConditionsV2ChA] = invoke(triggerGroupObj, 'ps5000aSetTriggerChannelConditionsV2', ChATriggerConditions, info);
+% Channel     : 0 (ps5000aEnuminfo.enPS5000AChannel.PS5000A_CHANNEL_A)
+% Threshold   : 500 mV
+% Direction   : 2 (ps5000aEnuminfo.enPS5000AThresholdDirection.PS5000A_RISING)
 
-% *Trigger directions*
-%
-% Set the direction on which to trigger for each channel.
-%
-% Create an array of MATLAB structures corresponding to the
-% |tPS5000ADirection| structure in |ps5000aStructs|. Each structure in the
-% array defines the direction on which to trigger and also if it is a level
-% (edge) or window trigger.
-
-TriggerDirections(1).source = ps5000aEnuminfo.enPS5000AChannel.PS5000A_CHANNEL_A;
-TriggerDirections(1).direction = ps5000aEnuminfo.enPS5000AThresholdDirection.PS5000A_RISING;
-TriggerDirections(1).mode = ps5000aEnuminfo.enPS5000AThresholdMode.PS5000A_LEVEL;
-
-[status.setTriggerChannelDirectionsV2] = invoke(triggerGroupObj, 'ps5000aSetTriggerChannelDirectionsV2', TriggerDirections);
-
+[status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', 4, 500, 2);
 
 
 %% Set data buffers
@@ -187,7 +197,7 @@ status.setAppDriverBuffersA = invoke(streamingGroupObj, 'setAppAndDriverBuffers'
 % will output the actual sampling interval used by the driver.
 
 % To change the sample interval e.g 5 us for 200 kS/s
-set(streamingGroupObj, 'streamingInterval', 3.2e-8);
+set(streamingGroupObj, 'streamingInterval', 1.6e-8);
 
 %%
 % Set the number of pre- and post-trigger samples.
@@ -222,7 +232,7 @@ maxSamples = get(ps5000aDeviceObj, 'numPreTriggerSamples') + ...
 % Take into account the downsampling ratio mode - required if collecting
 % data without a trigger and using the autoStop flag.
 
-finalBufferLength = round(1.5 * maxSamples / downSampleRatio);
+finalBufferLength = round(15 * maxSamples / downSampleRatio);
 
 pBufferChAFinal = libpointer('int16Ptr', zeros(finalBufferLength, 1, 'int16'));
 % pBufferChBFinal = libpointer('int16Ptr', zeros(finalBufferLength, 1, 'int16'));
@@ -387,7 +397,7 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
         pBufferChAFinal.Value(previousTotal + 1:totalSamples) = bufferChAmV;
 %         pBufferChBFinal.Value(previousTotal + 1:totalSamples) = bufferChBmV;
         toc
-        if (plotLiveData == PicoConstants.TRUE && startIndex == 0 && max(bufferChAmV) > 100)
+        if (plotLiveData == PicoConstants.TRUE && startIndex == 0)% && max(bufferChAmV) > 100)
             
             % Time axis. 
             % Multiply by ratio mode as samples get reduced
