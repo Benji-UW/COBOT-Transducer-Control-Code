@@ -98,35 +98,13 @@ disp(unitInfo);
 % Channel A
 channelSettings(1).enabled = PicoConstants.TRUE;
 channelSettings(1).coupling = ps5000aEnuminfo.enPS5000ACoupling.PS5000A_DC;
-channelSettings(1).range = ps5000aEnuminfo.enPS5000ARange.PS5000A_2V;
+channelSettings(1).range = ps5000aEnuminfo.enPS5000ARange.PS5000A_500MV;
 channelSettings(1).analogueOffset = 0.0;
 
 channelARangeMv = PicoConstants.SCOPE_INPUT_RANGES(channelSettings(1).range + 1);
 
-% Channel B
-channelSettings(2).enabled = PicoConstants.TRUE;
-channelSettings(2).coupling = ps5000aEnuminfo.enPS5000ACoupling.PS5000A_DC;
-channelSettings(2).range = ps5000aEnuminfo.enPS5000ARange.PS5000A_2V;
-channelSettings(2).analogueOffset = 0.0;
-
 % Variables that will be required later
-channelBRangeMv = PicoConstants.SCOPE_INPUT_RANGES(channelSettings(2).range + 1);
 
-if (ps5000aDeviceObj.channelCount == PicoConstants.QUAD_SCOPE)
-
-    % Channel C
-    channelSettings(3).enabled = PicoConstants.FALSE;
-    channelSettings(3).coupling = ps5000aEnuminfo.enPS5000ACoupling.PS5000A_DC;
-    channelSettings(3).range = ps5000aEnuminfo.enPS5000ARange.PS5000A_2V;
-    channelSettings(3).analogueOffset = 0.0;
-
-    % Channel D
-    channelSettings(4).enabled = PicoConstants.FALSE;
-    channelSettings(4).coupling = ps5000aEnuminfo.enPS5000ACoupling.PS5000A_DC;
-    channelSettings(4).range = ps5000aEnuminfo.enPS5000ARange.PS5000A_2V;
-    channelSettings(4).analogueOffset = 0.0;
-    
-end
 
 % Keep the status values returned from the driver.
 numChannels = get(ps5000aDeviceObj, 'channelCount');
@@ -142,20 +120,18 @@ if (status.currentPowerSource == PicoStatus.PICO_POWER_SUPPLY_NOT_CONNECTED)
     
 end
 
-for ch = 1:numChannels
+ch = 1;
+status.setChannelStatus(ch) = invoke(ps5000aDeviceObj, 'ps5000aSetChannel', ...
+    (ch - 1), channelSettings(ch).enabled, ...
+    channelSettings(ch).coupling, channelSettings(ch).range, ...
+    channelSettings(ch).analogueOffset);
    
-    status.setChannelStatus(ch) = invoke(ps5000aDeviceObj, 'ps5000aSetChannel', ...
-        (ch - 1), channelSettings(ch).enabled, ...
-        channelSettings(ch).coupling, channelSettings(ch).range, ...
-        channelSettings(ch).analogueOffset);
-    
-end
 
 %% Change resolution
 % The maximum resolution will depend on the number of channels enabled.
 
 % Set resolution to 15 bits as 2 channels will be enabled.
-[status.setResolution, resolution] = invoke(ps5000aDeviceObj, 'ps5000aSetDeviceResolution', 15);  
+[status.setResolution, resolution] = invoke(ps5000aDeviceObj, 'ps5000aSetDeviceResolution', 12);  
 
 % Obtain the maximum Analog Digital Converter (ADC) count value from the
 % driver - this is used for scaling values returned from the driver when
@@ -184,7 +160,7 @@ set(triggerGroupObj, 'autoTriggerMs', 1000);
 % Threshold   : 500 mV
 % Direction   : 2 (ps5000aEnuminfo.enPS5000AThresholdDirection.PS5000A_RISING)
 
-[status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', 0, 500, 2);
+[status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', 0, 200, 2);
 
 %% Set data buffers
 % Data buffers for channels A and B - buffers should be set with the driver,
@@ -198,8 +174,6 @@ ratioMode           = ps5000aEnuminfo.enPS5000ARatioMode.PS5000A_RATIO_MODE_NONE
 
 % Buffers to be passed to the driver
 pDriverBufferChA = libpointer('int16Ptr', zeros(overviewBufferSize, 1, 'int16'));
-pDriverBufferChB = libpointer('int16Ptr', zeros(overviewBufferSize, 1, 'int16'));
-
 status.setDataBufferChA = invoke(ps5000aDeviceObj, 'ps5000aSetDataBuffer', ...
     channelA, pDriverBufferChA, overviewBufferSize, segmentIndex, ratioMode);
 
@@ -208,7 +182,6 @@ status.setDataBufferChA = invoke(ps5000aDeviceObj, 'ps5000aSetDataBuffer', ...
 
 % Application Buffers - these are for copying from the driver into.
 pAppBufferChA = libpointer('int16Ptr', zeros(overviewBufferSize, 1, 'int16'));
-% pAppBufferChB = libpointer('int16Ptr', zeros(overviewBufferSize, 1, 'int16'));
 
 % Streaming properties and functions are located in the Instrument Driver's
 % Streaming group.
@@ -218,9 +191,6 @@ streamingGroupObj = streamingGroupObj(1);
 
 status.setAppDriverBuffersA = invoke(streamingGroupObj, 'setAppAndDriverBuffers', channelA, ...
     pAppBufferChA, pDriverBufferChA, overviewBufferSize);
-
-% status.setAppDriverBuffersB = invoke(streamingGroupObj, 'setAppAndDriverBuffers', channelB, ...
-%     pAppBufferChB, pDriverBufferChB, overviewBufferSize);
 
 
 %% Start streaming and collect data
@@ -234,19 +204,19 @@ status.setAppDriverBuffersA = invoke(streamingGroupObj, 'setAppAndDriverBuffers'
 % will output the actual sampling interval used by the driver.
 
 % To change the sample interval e.g 5 us for 200 kS/s
-% set(streamingGroupObj, 'streamingInterval', 5e-6);
+set(streamingGroupObj, 'streamingInterval', 3.2e-8);
 
 %%
 % Set the number of pre- and post-trigger samples.
 % If no trigger is set the library will still store
 % |numPreTriggerSamples| + |numPostTriggerSamples|.
-set(ps5000aDeviceObj, 'numPreTriggerSamples', 0);
-set(ps5000aDeviceObj, 'numPostTriggerSamples', 5000000);
+set(ps5000aDeviceObj, 'numPreTriggerSamples', 1000);
+set(ps5000aDeviceObj, 'numPostTriggerSamples', 10000);
 
 %%
 % The |autoStop| parameter can be set to false (0) to allow for continuous
 % data collection.
-% set(streamingGroupObj, 'autoStop', PicoConstants.FALSE);
+set(streamingGroupObj, 'autoStop', PicoConstants.FALSE);
 
 % Set other streaming parameters
 downSampleRatio = 1;
@@ -266,7 +236,7 @@ maxSamples = get(ps5000aDeviceObj, 'numPreTriggerSamples') + ...
 % Take into account the downsampling ratio mode - required if collecting
 % data without a trigger and using the autoStop flag.
 
-finalBufferLength = round(1.5 * maxSamples / downSampleRatio);
+finalBufferLength = round(150 * maxSamples / downSampleRatio);
 
 pBufferChAFinal = libpointer('int16Ptr', zeros(finalBufferLength, 1, 'int16'));
 % pBufferChBFinal = libpointer('int16Ptr', zeros(finalBufferLength, 1, 'int16'));
@@ -330,7 +300,7 @@ if (plotLiveData == PicoConstants.TRUE)
     % channels on the same graph.
     xlim(axes1, [0 (sampleInterval * finalBufferLength)]);
 
-    yRange = max(channelARangeMv, channelBRangeMv);
+    yRange = max(channelARangeMv);
     ylim(axes1,[(-1 * yRange) yRange]);
 
     hold(axes1,'on');
@@ -359,13 +329,13 @@ end
 % set or the call to |getStreamingLatestValues()| does not return an error
 % code (check for STOP button push inside loop).
 while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestValuesStatus == PicoStatus.PICO_OK)
-    
+    fprintf('Starting collection \n')
     ready = PicoConstants.FALSE;
-   
+    tic
     while (ready == PicoConstants.FALSE)
 
        status.getStreamingLatestValuesStatus = invoke(streamingGroupObj, 'getStreamingLatestValues'); 
-        
+       
        ready = invoke(streamingGroupObj, 'isReady');
 
        % Give option to abort from here
@@ -378,14 +348,16 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
             break;
 
        end
-
+       toc
+       
        drawnow;
-
+       
     end
     
     % Check for data
+    tic
     [newSamples, startIndex] = invoke(streamingGroupObj, 'availableData');
-
+    toc
     if (newSamples > 0)
         
         % Check if the scope has triggered.
@@ -409,7 +381,9 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
 
         previousTotal   = totalSamples;
         totalSamples    = totalSamples + newSamples;
-
+        
+        
+        
         % Printing to console can slow down acquisition - use for
         % demonstration.
         fprintf('Collected %d samples, startIndex: %d total: %d.\n', newSamples, startIndex, totalSamples);
@@ -419,16 +393,18 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
         lastValuePosn = startIndex + newSamples;
         
         % Convert data values to millivolts from the application buffer(s).
+        
+        tic
         bufferChAmV = adc2mv(pAppBufferChA.Value(firstValuePosn:lastValuePosn), channelARangeMv, maxADCCount);
-%         bufferChBmV = adc2mv(pAppBufferChB.Value(firstValuePosn:lastValuePosn), channelBRangeMv, maxADCCount);
-
+        toc
         % Process collected data further if required - this example plots
         % the data if the User has selected 'Yes' at the prompt.
         
         % Copy data into the final buffer(s).
+        tic
         pBufferChAFinal.Value(previousTotal + 1:totalSamples) = bufferChAmV;
-%         pBufferChBFinal.Value(previousTotal + 1:totalSamples) = bufferChBmV;
-        
+        toc
+        tic
         if (plotLiveData == PicoConstants.TRUE)
             
             % Time axis. 
@@ -438,10 +414,12 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
             plot(axes1, time, bufferChAmV); %, time, bufferChBmV);
         
         end
-       
+        refreshTime = toc;
+        
+        % fprintf('Refresh rate equal to %f Hz', ( 1 / refreshTime));
+        
         % Clear variables for use again
         clear bufferChAmV;
-%         clear bufferChBmV;
         clear firstValuePosn;
         clear lastValuePosn;
         clear startIndex;
@@ -563,15 +541,6 @@ xlabel(chAAxes, xLabelStr);
 ylabel(chAAxes, 'Voltage (mV)');
 title(chAAxes, 'Data acquisition on channel A (Final)');
 grid(chAAxes, 'on');
-
-% % Channel B
-% chBAxes = subplot(2,1,2); 
-% plot(chBAxes, time, channelBFinal, 'r');
-% title(chBAxes, 'Data acquisition on channel B (Final)');
-% xLabelStr = strcat('Time (', sampleIntervalTimeUnitsStr, ')');
-% xlabel(chBAxes, xLabelStr);
-% ylabel(chBAxes, 'Voltage (mV)');
-% grid(chBAxes, 'on');
 
 movegui(finalFigure, 'east');
 

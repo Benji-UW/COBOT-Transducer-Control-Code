@@ -140,13 +140,15 @@ triggerGroupObj = triggerGroupObj(1);
 % [status.setTriggerChannelDirectionsV2] = invoke(triggerGroupObj, ...
 %     'ps5000aSetTriggerChannelDirectionsV2', TriggerDirections);
 
-set(triggerGroupObj, 'autoTriggerMs', 1000);
+set(triggerGroupObj, 'autoTriggerMs', 10);
 
 % Channel     : 0 (ps5000aEnuminfo.enPS5000AChannel.PS5000A_CHANNEL_A)
 % Threshold   : 500 mV
 % Direction   : 2 (ps5000aEnuminfo.enPS5000AThresholdDirection.PS5000A_RISING)
 
-[status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', 4, 500, 2);
+channel = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
+
+[status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', 0, 200, 2);
 
 
 %% Set data buffers
@@ -155,7 +157,7 @@ set(triggerGroupObj, 'autoTriggerMs', 1000);
 % This will ensure that data is correctly copied from the driver buffers
 % for later processing.
 
-overviewBufferSize  = 12500; % Size of the buffer to collect data from buffer.
+overviewBufferSize  = 80000; % Size of the buffer to collect data from buffer.
 segmentIndex        = 0;
 ratioMode           = ps5000aEnuminfo.enPS5000ARatioMode.PS5000A_RATIO_MODE_NONE;
 
@@ -167,8 +169,6 @@ pDriverBufferChA = libpointer('int16Ptr', zeros(overviewBufferSize, 1, 'int16'))
 status.setDataBufferChA = invoke(ps5000aDeviceObj, 'ps5000aSetDataBuffer', ...
     channelA, pDriverBufferChA, overviewBufferSize, segmentIndex, ratioMode);
 
-% status.setDataBufferChB = invoke(ps5000aDeviceObj, 'ps5000aSetDataBuffer', ...
-%     channelB, pDriverBufferChB, overviewBufferSize, segmentIndex, ratioMode);
 
 % Application Buffers - these are for copying from the driver into.
 pAppBufferChA = libpointer('int16Ptr', zeros(overviewBufferSize, 1, 'int16'));
@@ -197,22 +197,22 @@ status.setAppDriverBuffersA = invoke(streamingGroupObj, 'setAppAndDriverBuffers'
 % will output the actual sampling interval used by the driver.
 
 % To change the sample interval e.g 5 us for 200 kS/s
-set(streamingGroupObj, 'streamingInterval', 1.6e-8);
+set(streamingGroupObj, 'streamingInterval', 3.2e-8);
 
 %%
 % Set the number of pre- and post-trigger samples.
 % If no trigger is set the library will still store
 % |numPreTriggerSamples| + |numPostTriggerSamples|.
-set(ps5000aDeviceObj, 'numPreTriggerSamples', 2500);
+set(ps5000aDeviceObj, 'numPreTriggerSamples', 2000);
 % I'm setting the number of post-trigger samples to be 10 kS, because by default
 % the streaming interval is 1 MS/s and the frequency of the pulser/receiver is 
 % 100 Hz, meaning we want weach sample to capture just one of those
-set(ps5000aDeviceObj, 'numPostTriggerSamples', 22500); % 1e4
+set(ps5000aDeviceObj, 'numPostTriggerSamples', 8000); % 1e4
 
 %%
 % The |autoStop| parameter can be set to false (0) to allow for continuous
 % data collection.
-set(streamingGroupObj, 'autoStop', PicoConstants.FALSE);
+% set(streamingGroupObj, 'autoStop', PicoConstants.FALSE);
 
 % Set other streaming parameters
 downSampleRatio = 1;
@@ -232,7 +232,7 @@ maxSamples = get(ps5000aDeviceObj, 'numPreTriggerSamples') + ...
 % Take into account the downsampling ratio mode - required if collecting
 % data without a trigger and using the autoStop flag.
 
-finalBufferLength = round(15 * maxSamples / downSampleRatio);
+finalBufferLength = round(150 * maxSamples / downSampleRatio);
 
 pBufferChAFinal = libpointer('int16Ptr', zeros(finalBufferLength, 1, 'int16'));
 % pBufferChBFinal = libpointer('int16Ptr', zeros(finalBufferLength, 1, 'int16'));
@@ -326,8 +326,9 @@ end
 % Collect samples as long as the |hasAutoStopOccurred| flag has not been
 % set or the call to |getStreamingLatestValues()| does not return an error
 % code (check for STOP button push inside loop).
+tic
 while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestValuesStatus == PicoStatus.PICO_OK)
-    tic
+    
     ready = PicoConstants.FALSE;
    
     while (ready == PicoConstants.FALSE)
@@ -388,7 +389,6 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
         
         % Convert data values to millivolts from the application buffer(s).
         bufferChAmV = adc2mv(pAppBufferChA.Value(firstValuePosn:lastValuePosn), channelARangeMv, maxADCCount);
-%         bufferChBmV = adc2mv(pAppBufferChB.Value(firstValuePosn:lastValuePosn), channelBRangeMv, maxADCCount);
 
         % Process collected data further if required - this example plots
         % the data if the User has selected 'Yes' at the prompt.
@@ -396,8 +396,13 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
         % Copy data into the final buffer(s).
         pBufferChAFinal.Value(previousTotal + 1:totalSamples) = bufferChAmV;
 %         pBufferChBFinal.Value(previousTotal + 1:totalSamples) = bufferChBmV;
-        toc
-        if (plotLiveData == PicoConstants.TRUE && startIndex == 0)% && max(bufferChAmV) > 100)
+        
+        
+        if (plotLiveData == PicoConstants.TRUE && startIndex == 0 && max(bufferChAmV) > 100)
+            LoadTime = toc;
+        
+            fprintf('Samples recording peaks at %f Hz \n', (1 / LoadTime));
+            tic
             
             % Time axis. 
             % Multiply by ratio mode as samples get reduced
@@ -410,7 +415,6 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
        
         % Clear variables for use again
         clear bufferChAmV;
-%         clear bufferChBmV;
         clear firstValuePosn;
         clear lastValuePosn;
         clear startIndex;
