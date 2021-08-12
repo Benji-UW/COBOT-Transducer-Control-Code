@@ -1,10 +1,4 @@
-%% Clear command window and close any figures
-
-clc;
-clear all;
-close all;
-
-%% Load configuration information
+function [effective_refresh] = scopeTest(buffer_size, trigger_samp_frac)
 
 PS5000aConfig;
 
@@ -12,7 +6,6 @@ PS5000aConfig;
 % Define any parameters that might be required throughout the script.
 
 channelA = ps5000aEnuminfo.enPS5000AChannel.PS5000A_CHANNEL_A;
-% channelB = ps5000aEnuminfo.enPS5000AChannel.PS5000A_CHANNEL_B;
 
 %% Device connection
 
@@ -40,15 +33,10 @@ if (exist('ps5000aDeviceObj', 'var') && ps5000aDeviceObj.isvalid && strcmp(ps500
 end
 
 % Create a device object. 
-ps5000aDeviceObj = icdevice('picotech_ps5000a_generic', ''); 
+ps5000aDeviceObj = icdevice('picotech_ps5000a_generic', '');
 
 % Connect device object to hardware.
 connect(ps5000aDeviceObj);
-
-%% Display unit information
-
-[status.getUnitInfo, unitInfo] = invoke(ps5000aDeviceObj, 'getUnitInfo');
-disp(unitInfo);
 
 %% Channel setup
 % All channels are enabled by default - if the device is a 4-channel scope,
@@ -56,7 +44,6 @@ disp(unitInfo);
 
 % Ben here - We only use channel A for our readings with the transducer, so 
 % I commented out the code I needed for that :)
-
 
 % Channel A
 channelSettings(1).enabled = PicoConstants.TRUE;
@@ -66,23 +53,11 @@ channelSettings(1).analogueOffset = 0.0;
 
 channelARangeMv = PicoConstants.SCOPE_INPUT_RANGES(channelSettings(1).range + 1);
 
-
-% Keep the status values returned from the driver.
-numChannels = get(ps5000aDeviceObj, 'channelCount');
-status.setChannelStatus = zeros(numChannels, 1);
-
 [status.currentPowerSource] = invoke(ps5000aDeviceObj, 'ps5000aCurrentPowerSource');
-
-% % Check if the power supply is connected - channels C and D will not be
-% % enabled on a 4-channel oscilloscope if it is only USB powered.
-% if (status.currentPowerSource == PicoStatus.PICO_POWER_SUPPLY_NOT_CONNECTED)
-    
-%     numChannels = PicoConstants.DUAL_SCOPE;
-    
-% end
 
 % Manually set the numChannels to Single_Scope because of the known setup.
 numChannels = PicoConstants.SINGLE_SCOPE;
+status.setChannelStatus = zeros(numChannels, 1);
 
 
 for ch = 1:numChannels
@@ -113,33 +88,6 @@ maxADCCount = get(ps5000aDeviceObj, 'maxADCValue');
 triggerGroupObj = get(ps5000aDeviceObj, 'Trigger');
 triggerGroupObj = triggerGroupObj(1);
 
-% ChATriggerConditions.source = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
-% ChATriggerConditions.condition = ps5000aEnuminfo.enPS5000ATriggerState.PS5000A_CONDITION_TRUE;
-% 
-% % Clear any pre-existing trigger configurations that may have been set.
-% info = ps5000aEnuminfo.enPS5000AConditionsInfo.PS5000A_CLEAR + ...
-%     ps5000aEnuminfo.enPS5000AConditionsInfo.PS5000A_ADD;
-% 
-% % Set the condition for channel A
-% [status.ps5000aSetTriggerChannelConditionsV2ChA] = invoke(triggerGroupObj, ...
-%     'ps5000aSetTriggerChannelConditionsV2', ChATriggerConditions, info);
-% 
-% % *Trigger directions*
-% %
-% % Set the direction on which to trigger for each channel.
-% %
-% % Create an array of MATLAB structures corresponding to the
-% % |tPS5000ADirection| structure in |ps5000aStructs|. Each structure in the
-% % array defines the direction on which to trigger and also if it is a level
-% % (edge) or window trigger.
-% 
-% TriggerDirections(1).source = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
-% TriggerDirections(1).direction = ps5000aEnuminfo.enPS5000AThresholdDirection.PS5000A_RISING;
-% TriggerDirections(1).mode = ps5000aEnuminfo.enPS5000AThresholdMode.PS5000A_LEVEL;
-% 
-% [status.setTriggerChannelDirectionsV2] = invoke(triggerGroupObj, ...
-%     'ps5000aSetTriggerChannelDirectionsV2', TriggerDirections);
-
 set(triggerGroupObj, 'autoTriggerMs', 10);
 
 % Channel     : 0 (ps5000aEnuminfo.enPS5000AChannel.PS5000A_CHANNEL_A)
@@ -148,7 +96,7 @@ set(triggerGroupObj, 'autoTriggerMs', 10);
 
 channel = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
 
-[status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', 0, 200, 2);
+[status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', channel, 200, 2);
 
 
 %% Set data buffers
@@ -157,7 +105,7 @@ channel = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
 % This will ensure that data is correctly copied from the driver buffers
 % for later processing.
 
-overviewBufferSize  = 80000; % Size of the buffer to collect data from buffer.
+overviewBufferSize  = buffer_size; % Size of the buffer to collect data from buffer.
 segmentIndex        = 0;
 ratioMode           = ps5000aEnuminfo.enPS5000ARatioMode.PS5000A_RATIO_MODE_NONE;
 
@@ -183,9 +131,6 @@ streamingGroupObj = streamingGroupObj(1);
 status.setAppDriverBuffersA = invoke(streamingGroupObj, 'setAppAndDriverBuffers', channelA, ...
     pAppBufferChA, pDriverBufferChA, overviewBufferSize);
 
-% status.setAppDriverBuffersB = invoke(streamingGroupObj, 'setAppAndDriverBuffers', channelB, ...
-%     pAppBufferChB, pDriverBufferChB, overviewBufferSize);
-
 %% Start streaming and collect data
 % Use default value for streaming interval which is 1e-6 for 1 MS/s.
 % Collect data for 5 seconds with auto stop - maximum array size will depend
@@ -203,11 +148,13 @@ set(streamingGroupObj, 'streamingInterval', 3.2e-8);
 % Set the number of pre- and post-trigger samples.
 % If no trigger is set the library will still store
 % |numPreTriggerSamples| + |numPostTriggerSamples|.
-set(ps5000aDeviceObj, 'numPreTriggerSamples', 2000);
+trigger_samps = trigger_samp_frac * buffer_size;
+
+set(ps5000aDeviceObj, 'numPreTriggerSamples', trigger_samps * 0.1);
 % I'm setting the number of post-trigger samples to be 10 kS, because by default
 % the streaming interval is 1 MS/s and the frequency of the pulser/receiver is 
 % 100 Hz, meaning we want weach sample to capture just one of those
-set(ps5000aDeviceObj, 'numPostTriggerSamples', 8000); % 1e4
+set(ps5000aDeviceObj, 'numPostTriggerSamples', trigger_samps * 0.9); % 1e4
 
 %%
 % The |autoStop| parameter can be set to false (0) to allow for continuous
@@ -235,20 +182,6 @@ maxSamples = get(ps5000aDeviceObj, 'numPreTriggerSamples') + ...
 finalBufferLength = round(150 * maxSamples / downSampleRatio);
 
 pBufferChAFinal = libpointer('int16Ptr', zeros(finalBufferLength, 1, 'int16'));
-% pBufferChBFinal = libpointer('int16Ptr', zeros(finalBufferLength, 1, 'int16'));
-
-% Prompt User to indicate if they wish to plot live streaming data.
-plotLiveData = questionDialog('Plot live streaming data?', 'Streaming Data Plot');
-
-if (plotLiveData == PicoConstants.TRUE)
-   
-    disp('Live streaming data collection with second plot on completion.');
-    
-else
-    
-    disp('Streaming data plot on completion.');
-    
-end
 
 originalPowerSource = invoke(ps5000aDeviceObj, 'ps5000aCurrentPowerSource');
 
@@ -258,7 +191,6 @@ originalPowerSource = invoke(ps5000aDeviceObj, 'ps5000aCurrentPowerSource');
     downSampleRatioMode, overviewBufferSize);
     
 disp('Streaming data...');
-fprintf('Click the STOP button to stop capture or wait for auto stop if enabled.\n') 
 
 % Variables to be used when collecting the data:
 
@@ -275,81 +207,24 @@ time = zeros(overviewBufferSize / downSampleRatio, 1);	% Array to hold time valu
 
 status.getStreamingLatestValuesStatus = PicoStatus.PICO_OK; % OK
 
-% Display a 'Stop' button.
-[stopFig.h, stopFig.h] = stopButton();             
-             
-flag = 1; % Use flag variable to indicate if stop button has been clicked (0).
-setappdata(gcf, 'run', flag);
-
-% Plot Properties - these are for displaying data as it is collected.
-
-if (plotLiveData == PicoConstants.TRUE)
-    
-    % Plot on a single figure. 
-    figure1 = figure('Name','PicoScope 5000 Series (A API) Example - Streaming Mode Capture', ...
-         'NumberTitle','off');
-     
-    axes1 = axes('Parent', figure1);
-
-    % Estimate x-axis limit to try and avoid using too much CPU resources
-    % when drawing - use max voltage range selected if plotting multiple
-    % channels on the same graph.
-    xlim(axes1, [0 (sampleInterval * finalBufferLength)]);
-
-    yRange = max(channelARangeMv); %, channelBRangeMv);
-    ylim(axes1,[(-1 * yRange) yRange]);
-
-    % turned hold off because I only want to see one pulse of data collected
-    hold(axes1, 'off');
-    % hold(axes1,'on');
-    grid(axes1, 'on');
-
-    title(axes1, 'Live Streaming Data Capture');
-    
-    if (strcmp(sampleIntervalTimeUnitsStr, 'us'))
-        
-        xLabelStr = 'Time (\mus)';
-        
-    else
-       
-        xLabelStr = strcat('Time (', sampleIntervalTimeUnitsStr, ')');
-        xlabel(axes1, xLabelStr);
-        
-    end
-    
-    xlabel(axes1, xLabelStr);
-    ylabel(axes1, 'Voltage (mV)');
-    
-end
-
 %%
 % Collect samples as long as the |hasAutoStopOccurred| flag has not been
 % set or the call to |getStreamingLatestValues()| does not return an error
 % code (check for STOP button push inside loop).
+
+effective_update = zeros(100, 1);
+ind = 1;
+
 tic
-while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestValuesStatus == PicoStatus.PICO_OK)
+while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestValuesStatus == PicoStatus.PICO_OK && ind <= 100)
     
     ready = PicoConstants.FALSE;
    
     while (ready == PicoConstants.FALSE)
-
        status.getStreamingLatestValuesStatus = invoke(streamingGroupObj, 'getStreamingLatestValues'); 
         
        ready = invoke(streamingGroupObj, 'isReady');
-
-       % Give option to abort from here
-       flag = getappdata(gcf, 'run');
        drawnow;
-
-       if (flag == 0)
-
-            disp('STOP button clicked - aborting data collection.')
-            break;
-
-       end
-
-       drawnow;
-
     end
     
     % Check for data
@@ -361,7 +236,6 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
         [triggered, triggeredAt] = invoke(streamingGroupObj, 'isTriggerReady');
 
         if (triggered == PicoConstants.TRUE)
-
             % Adjust trigger position as MATLAB does not use zero-based
             % indexing.
             bufferTriggerPosition = triggeredAt + 1;
@@ -395,24 +269,20 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
         
         % Copy data into the final buffer(s).
         pBufferChAFinal.Value(previousTotal + 1:totalSamples) = bufferChAmV;
-%         pBufferChBFinal.Value(previousTotal + 1:totalSamples) = bufferChBmV;
         
-        
-        if (plotLiveData == PicoConstants.TRUE && startIndex == 0 && max(bufferChAmV) > 100)
-            LoadTime = toc;
-        
-            fprintf('Samples recording peaks at %f Hz \n', (1 / LoadTime));
-            tic
+        if(startIndex == 0  && max(bufferChAmV) > 100)
+            load_time = toc;
             
-            % Time axis. 
-            % Multiply by ratio mode as samples get reduced
-            time = (double(sampleInterval) * double(downSampleRatio)) * (previousTotal:(totalSamples - 1));
-            ylim(axes1,[(-1 * yRange) yRange]);
-
-            plot(axes1, time, bufferChAmV); %, time, bufferChBmV);
-        
+            effective_update(ind) = 1 / load_time;
+            ind = ind + 1;
+            
+            if (ind > length(effective_update))
+                return
+            end
+            
+            tic
         end
-       
+        
         % Clear variables for use again
         clear bufferChAmV;
         clear firstValuePosn;
@@ -432,36 +302,6 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && status.getStreamingLatestVal
        break;
 
     end
-   
-    % Check if 'STOP' button has been clicked.
-    flag = getappdata(gcf, 'run');
-    drawnow;
-
-    if (flag == 0)
-
-        disp('STOP button clicked - aborting data collection.')
-        break;
-        
-    end
- 
-end
-
-% Close the STOP button window.
-if (exist('stopFig', 'var'))
-    
-    close('Stop Button');
-    clear stopFig;
-        
-end
-
-if (plotLiveData == PicoConstants.TRUE)
-    
-    drawnow;
-    
-    % Take hold off the current figure.
-    hold(axes1, 'off');
-    movegui(figure1, 'west');
-    
 end
 
 if (hasTriggered == PicoConstants.TRUE)
@@ -487,60 +327,11 @@ fprintf('\n');
 
 fprintf('Number of samples available after data collection: %u\n', numStreamingValues);
 
-%% Process data
-% Process data post-capture if required - here the data will be plotted.
-
-% Reduce size of arrays if required.
-
-if (totalSamples < finalBufferLength)
-    
-    pBufferChAFinal.Value(totalSamples + 1:end) = [];
-%     pBufferChBFinal.Value(totalSamples + 1:end) = [];
-
-end
-
-% Retrieve data for the channels.
-channelAFinal = pBufferChAFinal.Value();
-% channelBFinal = pBufferChBFinal.Value();
-
-% Plot total data collected on another figure.
-
-finalFigure = figure('Name','PicoScope 5000 Series (A API) Example - Streaming Mode Capture', ...
-    'NumberTitle','off');
-
-finalFigureAxes = axes('Parent', finalFigure);
-hold(finalFigureAxes, 'on');
-grid(finalFigureAxes, 'on');
-
-if (strcmp(sampleIntervalTimeUnitsStr, 'us'))
-        
-    xlabel(finalFigureAxes, 'Time (\mus)');
-
-else
-
-    xLabelStr = strcat('Time (', sampleIntervalTimeUnitsStr, ')');
-    xlabel(finalFigureAxes, xLabelStr);
-
-end
-
-ylabel(finalFigureAxes, 'Voltage (mV)');
-hold(finalFigureAxes, 'off');
-
-time = (double(sampleInterval) * double(downSampleRatio)) * (0:length(channelAFinal) - 1);
-
-% Channel A
-plot(time, channelAFinal, 'b');
-xLabelStr = strcat('Time (', sampleIntervalTimeUnitsStr, ')');
-xlabel(xLabelStr);
-ylabel('Voltage (mV)');
-title('Data acquisition on channel A (Final)');
-grid('on');
-
-movegui(finalFigure, 'east');
-
-
 %% Disconnect device
-% Disconnect device object from hardware.
 
 disconnect(ps5000aDeviceObj);
 delete(ps5000aDeviceObj);
+
+effective_refresh = mean(effective_update);
+
+end
