@@ -139,7 +139,7 @@ triggerGroupObj = triggerGroupObj(1);
 % [status.setTriggerChannelDirectionsV2] = invoke(triggerGroupObj, ...
 %     'ps5000aSetTriggerChannelDirectionsV2', TriggerDirections);
 
-set(triggerGroupObj, 'autoTriggerMs', 10);
+set(triggerGroupObj, 'autoTriggerMs', 100);
 
 % Channel     : 0 (ps5000aEnuminfo.enPS5000AChannel.PS5000A_CHANNEL_A)
 % Threshold   : 500 mV
@@ -156,7 +156,7 @@ channel = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
 % This will ensure that data is correctly copied from the driver buffers
 % for later processing.
 
-overviewBufferSize  = (312500 * 1); % Size of the buffer to collect data from buffer.
+overviewBufferSize  = (312500 * 1.0); % Size of the buffer to collect data from buffer.
 segmentIndex        = 0;
 ratioMode           = ps5000aEnuminfo.enPS5000ARatioMode.PS5000A_RATIO_MODE_NONE;
 
@@ -354,7 +354,7 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
     % Check for data
     [newSamples, startIndex] = invoke(streamingGroupObj, 'availableData');
 
-    if (newSamples > 0)
+    if (newSamples > 0 && startIndex == 0)
         
         % Check if the scope has triggered.
         [triggered, triggeredAt] = invoke(streamingGroupObj, 'isTriggerReady');
@@ -380,8 +380,8 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
 
         % Printing to console can slow down acquisition - use for
         % demonstration.
-        fprintf('Collected %d samples, startIndex: %d total: %d.\n', ...
-          newSamples, startIndex, totalSamples);
+%         fprintf('Collected %d samples, startIndex: %d total: %d.\n', ...
+%           newSamples, startIndex, totalSamples);
         
         % Position indices of data in the buffer(s).
         firstValuePosn = startIndex + 1;
@@ -397,11 +397,11 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
         % Copy data into the final buffer(s).
 %         pBufferChAFinal.Value(previousTotal + 1:totalSamples) = bufferChAmV;        
         
-        if (plotLiveData == PicoConstants.TRUE && max(bufferChAmV) > 100 && startIndex == 0)
+        if (plotLiveData == PicoConstants.TRUE && max(bufferChAmV) > 100)% && startIndex == 0)
             LoadTime = toc;
         
-%             fprintf('Samples recording peaks at %f Hz, skipped %d sample periods. \n', ...
-%                 (1 / LoadTime), missed_phases);
+            fprintf('Samples recording peaks at %f Hz, skipped %d sample periods. \n', ...
+                (1 / LoadTime), missed_phases);
             tic
             
             avg_samp_freq(ind) = 1 / LoadTime;
@@ -413,7 +413,7 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
 %             ylim(axes1,[(-1 * yRange) yRange]);
 % 
 %             plot(axes1, time, bufferChAmV); %, time, bufferChBmV);
-%             missed_phases = 0;
+            missed_phases = 0;
         end
        
         % Clear variables for use again
@@ -536,7 +536,7 @@ time = (double(sampleInterval) * double(downSampleRatio)) * (0:length(channelAFi
 avg_samp_freq = nonzeros(avg_samp_freq);
 plot(avg_samp_freq, 'b')
 hold on
-mov_avg = movmean(avg_samp_freq, 5);
+mov_avg = movmean(avg_samp_freq, 10);
 plot(mov_avg, 'r');
 xLabelStr = strcat('Time (', sampleIntervalTimeUnitsStr, ')');
 xlabel(xLabelStr);
