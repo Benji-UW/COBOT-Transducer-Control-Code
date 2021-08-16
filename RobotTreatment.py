@@ -43,7 +43,7 @@ class RobotTreatment:
 
         self.motion_comp = 0
         self.z_adjust = 0
-        self.z_jerk_coeff = 1
+        self.z_jerk_coeff = 3
 
         self.Kp = 10.
         self.Ki = 0.0
@@ -121,9 +121,9 @@ class RobotTreatment:
         n_sample = 2000
         imager_t_nm1 = 0.
 
-        filepath = r'C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben\'s Control Code\Records\\' + time.strftime('%c') + '.txt'
+        # filepath = r'C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben\'s Control Code\Records\try1.txt' #+ time.strftime('%c') + '.txt'
 
-        file1 = open(filepath, "w+")
+        # file1 = open(filepath, "w+")
 
         # Z-motion comp stuff
         self.z_adjust = 0
@@ -166,7 +166,7 @@ class RobotTreatment:
                 
                 if np.abs(dist_z) < 0.05:
                     self.z_adjust = 0
-                    file1.write(time.asctime() + ' | Exit z_adjustment with z_dist ' + str(self.z_adjust))
+                    # file1.write(time.asctime() + ' | Exit z_adjustment with z_dist ' + str(self.z_adjust))
                     return
                 # dist_z is the vertical distance we need to travel in mm
                 t_1 = time.time()
@@ -175,7 +175,7 @@ class RobotTreatment:
                     z_tran = np.minimum((dist_z / (7.5 / self.z_jerk_coeff)), 1)
                     speed_vect[2] = z_tran
                     # print('set speed to ' + str(z_tran))
-                    file1.write(time.asctime() + ' | Received message ' + str(msg) + ' set speed to ' + str(z_tran) + '\n')
+                    # file1.write(time.asctime() + ' | Received message ' + str(msg) + ' set speed to ' + str(z_tran) + '\n')
                 elif t_1 - t_0 <= 0.5 / self.z_jerk_coeff:
                     speed_vect = np.zeros((3,1))
                     rot_vect = np.zeros((3,1))
@@ -183,13 +183,13 @@ class RobotTreatment:
 
                     self.robot.speedl(speed_vect, rot_vect, self.lag)
                     
-                    file1.write(time.asctime() + ' | Received message ' + str(msg) + ' triggered speed' + str(z_tran) + '\n')
+                    # file1.write(time.asctime() + ' | Received message ' + str(msg) + ' triggered speed' + str(z_tran) + '\n')
 
                 else:
                     speed_vect = np.zeros((3,1))
                     rot_vect = np.zeros((3,1))
                     # print('took a break from moving')
-                    file1.write(time.asctime() + ' | Received message ' + str(msg) + ' took a break from moving' + '\n')
+                    # file1.write(time.asctime() + ' | Received message ' + str(msg) + ' took a break from moving' + '\n')
 
 
                 # if latestLoop != lastLoop:

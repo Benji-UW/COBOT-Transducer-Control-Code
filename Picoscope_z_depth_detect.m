@@ -163,14 +163,16 @@ setappdata(gcf, 'run', flag);
 % Collect samples as long as the |hasAutoStopOccurred| flag has not been
 % set or the call to |getStreamingLatestValues()| does not return an error
 % code (check for STOP button push inside loop).
-avg_samp_freq = zeros(150, 1);
-ind = 1;
-zHist = ones(150,2);
+timeout = 250;
+avg_samp_freq = zeros(timeout, 1);
+ind = 0;
+zHist = ones(timeout,2);
 
 missed_phases = 0;
 tic
 while(hasAutoStopOccurred == PicoConstants.FALSE && ...
-        status.getStreamingLatestValuesStatus == PicoStatus.PICO_OK && ind < 151)
+        status.getStreamingLatestValuesStatus == PicoStatus.PICO_OK && ...
+        ind < timeout + 1)
     missed_phases = missed_phases + 1;
     ready = PicoConstants.FALSE;
    
@@ -238,10 +240,10 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
         % Copy data into the final buffer(s).
 %         pBufferChAFinal.Value(previousTotal + 1:totalSamples) = bufferChAmV;        
         
-        if (plotLiveData == PicoConstants.TRUE && max(bufferChAmV) > 100)% && startIndex == 0)
+        if (max(bufferChAmV) == 500)% && startIndex == 0)
             LoadTime = toc;
-            avg_samp_freq(ind) = 1 / LoadTime;
             ind = ind + 1;
+            avg_samp_freq(ind) = 1 / LoadTime;
 %             
 %             Time axis. 
 %             Multiply by ratio mode as samples get reduced
@@ -255,42 +257,54 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
             peaks = find(bufferChAmV ==  500);
             peak = peaks(length(peaks));
             
-            bufferChAmV = bufferChAmV(peak:(peak + 3500));
-            bufferChAmV(abs(bufferChAmV) < 12) = 0;
+            bufferChAmV = bufferChAmV((peak + 312):(peak + 3000));
+%             bufferChAmV(abs(bufferChAmV) < 12) = 0;
             
             pulse_peaks = find(bufferChAmV > 12);
-            
-            pulse_peaks = pulse_peaks(3:(round(length(pulse_peaks) / 2)));
-            bins = discretize(pulse_peaks, 3);
-            
-            first_peak = pulse_peaks(bins == 2);
-            
-            peak_vals = bufferChAmV(first_peak);
-            
-            [M,I] = max(peak_vals);
-            
-            fin_index = first_peak(I);
-            
-            time = fin_index * 3.2e-8;
-            
-            
-            z_mot = (tm - target_time) * 1500;
+            a = size(pulse_peaks);
+            if (a(1) ~= 0)
+                if (length(pulse_peaks) == 1)
+                    first_peak = pulse_peaks(1);
+                else
+                    bins = discretize(pulse_peaks, 2);
+                    first_peak = pulse_peaks(bins == 1);
+                end
 
-            z_motT = z_mot * scale_motion;
+                peak_vals = bufferChAmV(first_peak);
 
-            % fclose(socket);
+                [M,I] = max(peak_vals);
 
-            msg_format = 'T%02dZ%09d\n';
-            msg = sprintf(msg_format, [mod(abcd,100), round(z_motT)]);
+                fin_index = first_peak(I);
 
-            write(socket, msg);
+                time = fin_index * 3.2e-8;
 
-            zHist(ind, 1) = tm * 1.5;
-            if abcd == 1
+
+                z_mot = (time - target_time) * 1500;
+
+                z_motT = z_mot * scale_motion;
+
+                % fclose(socket);
+
+                msg_format = 'T%02dZ%09d\n';
+                msg = sprintf(msg_format, [mod(ind,100), round(z_motT)]);
+
+                write(socket, msg);
+
+                zHist(ind, 1) = time * 1.5;
+                if ind == 1
+                    zHist(ind, 2) = LoadTime;
+                else
+                    zHist(ind, 2) = zHist(ind - 1, 2) + LoadTime;
+                end
+            end
+            zHist(ind, 1) = time * 1.5;
+            if ind == 1
                 zHist(ind, 2) = LoadTime;
             else
-                zHist(ind, 2) = zHist(abcd - 1, 2) + LoadTime;
+                zHist(ind, 2) = zHist(ind - 1, 2) + LoadTime;
             end
+            
+%           pulse_peaks = pulse_peaks(3:(round(length(pulse_peaks) / 2)));
             
             tic
         end
@@ -349,3 +363,11 @@ fprintf('\n');
 
 disconnect(ps5000aDeviceObj);
 delete(ps5000aDeviceObj);
+
+
+plot(zHist(:,2), zHist(:,1))
+xlabel('time (s)')
+ylabel('zDistance, (1mm)')
+yline(target_time * 1.5)
+yline((target_time * 1.5) + 0.5e-6)
+yline((target_time * 1.5) - 0.5e-6)

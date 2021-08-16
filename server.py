@@ -44,7 +44,6 @@ def client_thread(conn):
             is_alive = False
         else:
             motion = client_input
-
             # debugging type step:
             # cl = str(client_input)
             # print('client just sent ' + cl)
