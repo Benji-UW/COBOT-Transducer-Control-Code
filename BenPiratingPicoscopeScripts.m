@@ -13,7 +13,7 @@ PS5000aConfig;
 
 channelA = ps5000aEnuminfo.enPS5000AChannel.PS5000A_CHANNEL_A;
 
-%% Device connection
+%% Device connection:
 
 % Check if an Instrument session using the device object |ps5000aDeviceObj|
 % is still open, and if so, disconnect if the User chooses 'Yes' when prompted.
