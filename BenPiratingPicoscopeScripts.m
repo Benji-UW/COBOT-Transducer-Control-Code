@@ -156,7 +156,7 @@ channel = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
 % This will ensure that data is correctly copied from the driver buffers
 % for later processing.
 
-overviewBufferSize  = (312500 * 1.0); % Size of the buffer to collect data from buffer.
+overviewBufferSize  = (312500 * 1.00); % Size of the buffer to collect data from buffer.
 segmentIndex        = 0;
 ratioMode           = ps5000aEnuminfo.enPS5000ARatioMode.PS5000A_RATIO_MODE_NONE;
 
