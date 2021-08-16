@@ -16,4 +16,8 @@ samples_per_second = 1 / sample_period;
 samples_in_desired_window = samples_per_second * 1e-4;
 trigg_freq = 100; % Hz
 
+min_frac = 0.001;
+max_frac = 5;
+min_size = 3125;
+
 
