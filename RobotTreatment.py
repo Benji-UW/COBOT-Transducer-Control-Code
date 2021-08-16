@@ -43,6 +43,7 @@ class RobotTreatment:
 
         self.motion_comp = 0
         self.z_adjust = 0
+        self.z_jerk_coeff = 1
 
         self.Kp = 10.
         self.Ki = 0.0
@@ -126,6 +127,7 @@ class RobotTreatment:
 
         # Z-motion comp stuff
         self.z_adjust = 0
+        
 
         while run_bool:
             t0 = time.time()
@@ -170,11 +172,11 @@ class RobotTreatment:
                 t_1 = time.time()
                 if latestLoop != lastLoop:
                     t_0 = time.time()
-                    z_tran = np.minimum((dist_z / 7.5), 1)
+                    z_tran = np.minimum((dist_z / (7.5 / self.z_jerk_coeff)), 1)
                     speed_vect[2] = z_tran
                     # print('set speed to ' + str(z_tran))
                     file1.write(time.asctime() + ' | Received message ' + str(msg) + ' set speed to ' + str(z_tran) + '\n')
-                elif t_1 - t_0 <= 0.5:
+                elif t_1 - t_0 <= 0.5 / self.z_jerk_coeff:
                     speed_vect = np.zeros((3,1))
                     rot_vect = np.zeros((3,1))
                     speed_vect[2] = z_tran
@@ -195,10 +197,12 @@ class RobotTreatment:
                 
                 lastLoop = latestLoop
 
-            # Formerly you would toggle motion control with this button, but I don't have any
-            # of Gilles's motion control scripts so I'm just getting rid of all of that.
+            # Cycle through different speed coefficients
             if self.controller.P in buttons and self.controller.P not in self.button_hold:
-                print('Hey you just pressed the plus button :)')
+                if (self.z_jerk_coeff < 5):
+                    self.z_jerk_coeff = self.z_jerk_coeff + 1
+                else:
+                    self.z_jerk_coeff = 1
                 self.button_hold.append(self.controller.P)
             elif self.controller.P in self.button_hold and self.controller.P not in buttons:
                 self.button_hold.remove(self.controller.P)
@@ -373,11 +377,11 @@ class RobotTreatment:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.robot.disconnect()
-                    print 'Robot disconnected.'
+                    print('Robot disconnected.')
                     run_bool = False
                     if self.matlab_socket is not None:
                         self.disconnect_from_matlab()
-                        print 'Disconnected from server.'
+                        print('Disconnected from server.')
 
             pygame.display.flip()
             if i_rr >= self.refresh_rate:
@@ -446,9 +450,11 @@ class RobotTreatment:
         else:
             self.robot_gui.tprint(self.screen, 'Current robot mean refresh rate is: 0.0 Hz')
 
+        self.robot_gui.tprint(self.screen, 'Z_jerk coefficient is set to %d' % self.z_jerk_coeff)
 
         if self.z_adjust:
             self.robot_gui.tprint(self.screen, 'Transducer adjustment is on')
+
 
         self.robot_gui.tprint(self.screen, 'Waypoints (current: %d): ' % self.current_waypoint)
         self.robot_gui.indent()
