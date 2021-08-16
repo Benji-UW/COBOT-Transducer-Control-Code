@@ -165,7 +165,6 @@ setappdata(gcf, 'run', flag);
 % code (check for STOP button push inside loop).
 avg_samp_freq = zeros(150, 1);
 ind = 1;
-zHist = ones(150,2);
 
 missed_phases = 0;
 tic
@@ -240,6 +239,11 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
         
         if (plotLiveData == PicoConstants.TRUE && max(bufferChAmV) > 100)% && startIndex == 0)
             LoadTime = toc;
+        
+            fprintf('Samples recording peaks at %f Hz, skipped %d sample periods. \n', ...
+                (1 / LoadTime), missed_phases);
+            tic
+            
             avg_samp_freq(ind) = 1 / LoadTime;
             ind = ind + 1;
 %             
@@ -267,32 +271,8 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
             
             peak_vals = bufferChAmV(first_peak);
             
-            [M,I] = max(peak_vals);
-            
-            fin_index = first_peak(I);
-            
-            time = fin_index * 3.2e-8;
             
             
-            z_mot = (tm - target_time) * 1500;
-
-            z_motT = z_mot * scale_motion;
-
-            % fclose(socket);
-
-            msg_format = 'T%02dZ%09d\n';
-            msg = sprintf(msg_format, [mod(abcd,100), round(z_motT)]);
-
-            write(socket, msg);
-
-            zHist(ind, 1) = tm * 1.5;
-            if abcd == 1
-                zHist(ind, 2) = LoadTime;
-            else
-                zHist(ind, 2) = zHist(abcd - 1, 2) + LoadTime;
-            end
-            
-            tic
         end
        
         % Clear variables for use again
