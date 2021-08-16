@@ -72,22 +72,10 @@ maxADCCount = get(ps5000aDeviceObj, 'maxADCValue');
 triggerGroupObj = get(ps5000aDeviceObj, 'Trigger');
 triggerGroupObj = triggerGroupObj(1);
 
-ChATriggerConditions.source = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
-ChATriggerConditions.condition = ps5000aEnuminfo.enPS5000ATriggerState.PS5000A_CONDITION_TRUE;
+set(triggerGroupObj, 'autoTriggerMs', 10);
 
-info = ps5000aEnuminfo.enPS5000AConditionsInfo.PS5000A_CLEAR + ...
-    ps5000aEnuminfo.enPS5000AConditionsInfo.PS5000A_ADD;
-
-% Set the condition for channel A
-[status.ps5000aSetTriggerChannelConditionsV2ChA] = invoke(triggerGroupObj, ...
-    'ps5000aSetTriggerChannelConditionsV2', ChATriggerConditions, info);
-
-TriggerDirections(1).source = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
-TriggerDirections(1).direction = ps5000aEnuminfo.enPS5000AThresholdDirection.PS5000A_RISING;
-TriggerDirections(1).mode = ps5000aEnuminfo.enPS5000AThresholdMode.PS5000A_LEVEL;
-
-[status.setTriggerChannelDirectionsV2] = invoke(triggerGroupObj, ...
-    'ps5000aSetTriggerChannelDirectionsV2', TriggerDirections);
+channel = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
+[status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', 0, 200, 2);
 
 %% Resolution settings
 
