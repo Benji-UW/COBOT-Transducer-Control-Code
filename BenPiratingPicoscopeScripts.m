@@ -149,7 +149,6 @@ channel = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
 
 [status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', 0, 250, 2);
 
-
 %% Set data buffers
 % Data buffers for channels A and B - buffers should be set with the driver,
 % and these *MUST* be passed with application buffers to the wrapper driver.
