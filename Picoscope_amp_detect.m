@@ -10,7 +10,7 @@ clc;
 %% Server setup
 
 socket = tcpclient('localhost', 50008);
-scale_motion = 1E6;
+% scale_motion = 1E6;
 
 % Experimental focal length: 23.7750 mm (perhaps due to depth of concavity)
 target_time = (47.55 / 1000) / 1500;
@@ -69,7 +69,8 @@ status.setChannelStatus(1) = invoke(ps5000aDeviceObj, ...
     channelSettings(1).analogueOffset);
 
 % The resolution is set to 8 bits as that seems to suffice for our purposes
-[status.setResolution, resolution] = invoke(ps5000aDeviceObj, 'ps5000aSetDeviceResolution', 8);  
+[status.setResolution, resolution] = invoke(ps5000aDeviceObj, ...
+    'ps5000aSetDeviceResolution', 8);  
 maxADCCount = get(ps5000aDeviceObj, 'maxADCValue');
 
 % Trigger setup
@@ -79,7 +80,8 @@ triggerGroupObj = triggerGroupObj(1);
 set(triggerGroupObj, 'autoTriggerMs', 10);
 
 channel = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
-[status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', 0, 200, 2);
+[status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', ...
+    0, 200, 2);
 
 %% Resolution settings
 
@@ -105,8 +107,8 @@ pAppBufferChA = libpointer('int16Ptr', zeros(overviewBufferSize, 1, 'int16'));
 streamingGroupObj = get(ps5000aDeviceObj, 'Streaming');
 streamingGroupObj = streamingGroupObj(1);
 
-status.setAppDriverBuffersA = invoke(streamingGroupObj, 'setAppAndDriverBuffers', channelA, ...
-    pAppBufferChA, pDriverBufferChA, overviewBufferSize);
+status.setAppDriverBuffersA = invoke(streamingGroupObj, 'setAppAndDriverBuffers', ...
+    channelA, pAppBufferChA, pDriverBufferChA, overviewBufferSize);
 
 % Sample rate is defined by the 
 set(streamingGroupObj, 'streamingInterval', sampleRate);
@@ -171,6 +173,7 @@ timeout = 250;
 avg_samp_freq = zeros(timeout, 1);
 ind = 0;
 % zHist = ones(timeout,2);
+ampHist = ones(timeout,2);
 
 missed_phases = 0;
 tic
@@ -236,19 +239,13 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
         
         % Convert data values to millivolts from the application buffer(s).
         bufferChAmV = adc2mv(pAppBufferChA.Value(firstValuePosn:lastValuePosn), ...
-            channelARangeMv, maxADCCount);
-
-        % Process collected data further if required - this example plots
-        % the data if the User has selected 'Yes' at the prompt.
-        
-        % Copy data into the final buffer(s).
-%         pBufferChAFinal.Value(previousTotal + 1:totalSamples) = bufferChAmV;        
+            channelARangeMv, maxADCCount);      
         
         if (max(bufferChAmV) == 500)% && startIndex == 0)
             LoadTime = toc;
             ind = ind + 1;
             avg_samp_freq(ind) = 1 / LoadTime;
-%             
+            
 %             Time axis. 
 %             Multiply by ratio mode as samples get reduced
 %             time = (double(sampleInterval) * double(downSampleRatio)) ...
@@ -259,7 +256,14 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
             missed_phases = 0;
             
             peaks = find(bufferChAmV ==  500);
-            peak = peaks(length(peaks));
+            
+            % The point of this is isolating the index of the middle-most
+            % peak; this is valuable because in scans that contain just one
+            % pulse this will capture some redundant points from within the
+            % peak (since the peak over-volts 500 mV for a few samples) but
+            % in scans that contain more than one pulse (due to buffer
+            % issues ?)
+            peak = peaks(round(length(peaks) / 2));
             
             bufferChAmV = bufferChAmV((peak + 312):(peak + 3000));
 %             bufferChAmV(abs(bufferChAmV) < 12) = 0;
