@@ -32,6 +32,7 @@ class UR3e:
     def __init__(self):
         # Initialize variables
         self.pos = np.zeros((3, 1))
+        
         self.angle = np.zeros((3, 1))
         self.tcp_offset = np.zeros((3, 1))
         self.tcp_rot = np.zeros((3, 1))

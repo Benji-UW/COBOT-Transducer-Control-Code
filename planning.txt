@@ -1,0 +1,9 @@
+Ugh
+
+Okay, I need to plan out roughly what my amplitude maximization algorithm is going to be.
+
+I'm gonna start out just using the z-axis optimization to avoid complicating things too thoroughly
+
+I have to have a speedf based way of moving the end effector, it'll have to be something time-based and I should do more math to remember displacement amounts.
+
+1. 

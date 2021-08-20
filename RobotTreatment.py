@@ -44,6 +44,7 @@ class RobotTreatment:
         self.motion_comp = 0
         self.z_adjust = 0
         self.z_jerk_coeff = 3
+        self.amp_hist = []
 
         self.Kp = 10.
         self.Ki = 0.0
@@ -156,46 +157,65 @@ class RobotTreatment:
             self.motion_comp = 0
 
 
+            # if self.z_adjust == 1:
+            #     self.matlab_socket.send('motion')
+            #     msg = self.matlab_socket.recv(1024)
+
+            #     # print('recieved msg ' + msg)
+            #     latestLoop = float(msg[1:3])
+            #     dist_z = float(msg[4:13]) / 1.0E3
+                
+            #     if np.abs(dist_z) < 0.05:
+            #         self.z_adjust = 0
+            #         # file1.write(time.asctime() + ' | Exit z_adjustment with z_dist ' + str(self.z_adjust))
+            #         return
+            #     # dist_z is the vertical distance we need to travel in mm
+            #     t_1 = time.time()
+            #     if latestLoop != lastLoop:
+            #         t_0 = time.time()
+            #         z_tran = np.minimum((dist_z / (7.5 / self.z_jerk_coeff)), 1)
+            #         speed_vect[2] = z_tran
+            #         # print('set speed to ' + str(z_tran))
+            #         # file1.write(time.asctime() + ' | Received message ' + str(msg) + ' set speed to ' + str(z_tran) + '\n')
+            #     elif t_1 - t_0 <= 0.5 / self.z_jerk_coeff:
+            #         speed_vect = np.zeros((3,1))
+            #         rot_vect = np.zeros((3,1))
+            #         speed_vect[2] = z_tran
+
+            #         self.robot.speedl(speed_vect, rot_vect, self.lag)
+                    
+            #         # file1.write(time.asctime() + ' | Received message ' + str(msg) + ' triggered speed' + str(z_tran) + '\n')
+
+            #     else:
+            #         speed_vect = np.zeros((3,1))
+            #         rot_vect = np.zeros((3,1))
+            #         # print('took a break from moving')
+            #         # file1.write(time.asctime() + ' | Received message ' + str(msg) + ' took a break from moving' + '\n')
+
+
+            #     # if latestLoop != lastLoop:
+            #     #     self.robot.speedl(speed_vect, rot_vect, self.lag)
+                
+            #     lastLoop = latestLoop
+
             if self.z_adjust == 1:
                 self.matlab_socket.send('motion')
                 msg = self.matlab_socket.recv(1024)
 
                 # print('recieved msg ' + msg)
                 latestLoop = float(msg[1:3])
-                dist_z = float(msg[4:13]) / 1.0E3
+                mag = float(msg[4:13]) / 1.0E3
                 
-                if np.abs(dist_z) < 0.05:
-                    self.z_adjust = 0
-                    # file1.write(time.asctime() + ' | Exit z_adjustment with z_dist ' + str(self.z_adjust))
-                    return
-                # dist_z is the vertical distance we need to travel in mm
-                t_1 = time.time()
-                if latestLoop != lastLoop:
-                    t_0 = time.time()
-                    z_tran = np.minimum((dist_z / (7.5 / self.z_jerk_coeff)), 1)
-                    speed_vect[2] = z_tran
-                    # print('set speed to ' + str(z_tran))
-                    # file1.write(time.asctime() + ' | Received message ' + str(msg) + ' set speed to ' + str(z_tran) + '\n')
-                elif t_1 - t_0 <= 0.5 / self.z_jerk_coeff:
-                    speed_vect = np.zeros((3,1))
-                    rot_vect = np.zeros((3,1))
-                    speed_vect[2] = z_tran
-
-                    self.robot.speedl(speed_vect, rot_vect, self.lag)
+                pos = self.robot.pos
+                if (opt_stage == 1):
                     
-                    # file1.write(time.asctime() + ' | Received message ' + str(msg) + ' triggered speed' + str(z_tran) + '\n')
-
-                else:
-                    speed_vect = np.zeros((3,1))
-                    rot_vect = np.zeros((3,1))
-                    # print('took a break from moving')
-                    # file1.write(time.asctime() + ' | Received message ' + str(msg) + ' took a break from moving' + '\n')
 
 
                 # if latestLoop != lastLoop:
                 #     self.robot.speedl(speed_vect, rot_vect, self.lag)
                 
                 lastLoop = latestLoop
+
 
             # Cycle through different speed coefficients
             if self.controller.P in buttons and self.controller.P not in self.button_hold:
@@ -218,6 +238,7 @@ class RobotTreatment:
                 aR = self.aR_list[self.speed_preset]
 
                 lastLoop = 0
+                opt_stage = 1
 
                 self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
 
