@@ -265,7 +265,7 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
             % issues ?)
             peak = peaks(round(length(peaks) / 2));
             
-            bufferChAmV = bufferChAmV((peak + 312):(peak + 3000));
+            bufferChAmV = bufferChAmV((peak):(peak + 3000));
 %             bufferChAmV(abs(bufferChAmV) < 12) = 0;
             
             pulse_peaks = find(bufferChAmV > 12);
@@ -274,27 +274,31 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
                 if (length(pulse_peaks) == 1)
                     first_peak = pulse_peaks(1);
                 else
-                    bins = discretize(pulse_peaks, 2);
-                    first_peak = pulse_peaks(bins == 1);
+                    bins = discretize(pulse_peaks, 3);
+                    first_peak = pulse_peaks(bins == 2);
                 end
 
                 peak_vals = bufferChAmV(first_peak);
 
-                [M,I] = max(peak_vals);
+                % [M,I] = max(peak_vals);
 
-                fin_index = first_peak(I);
+                % fin_index = first_peak(I);
 
-                time = fin_index * 3.2e-8;
+                amp = max(peak_vals);
+
+                % time = fin_index * 3.2e-8;
 
 
-                z_mot = (time - target_time) * 1500;
+                % z_mot = (time - target_time) * 1500;
 
-                z_motT = z_mot * scale_motion;
+                % z_motT = z_mot * scale_motion;
+
+                amp = amp * scale_motion;
 
                 % fclose(socket);
 
                 msg_format = 'T%02dZ%09d\n';
-                msg = sprintf(msg_format, [mod(ind,100), round(z_motT)]);
+                msg = sprintf(msg_format, [mod(ind,100), round(amp)]);
 
                 write(socket, msg);
 
