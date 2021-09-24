@@ -215,8 +215,6 @@ class RobotTreatment:
                 #     self.robot.speedl(speed_vect, rot_vect, self.lag)
                 
                 lastLoop = latestLoop
-
-
             # Cycle through different speed coefficients
             if self.controller.P in buttons and self.controller.P not in self.button_hold:
                 if (self.z_jerk_coeff < 5):
