@@ -18,7 +18,6 @@ WHITE = pygame.Color('white')
 class RobotTreatment:
     def __init__(self):
         self.robot = None
-        # adding another comment for Git purposes
         self.matlab_socket = None
         self.screen = None
         self.screen_resolution = (480, 940)
@@ -100,11 +99,13 @@ class RobotTreatment:
         self.robot = UR3e()
         if not self.robot.connect(ip_robot)[0]:
             return False
+        
         self.robot.initialize()
         v = self.v_list[self.speed_preset]
         vR = self.vR_list[self.speed_preset]
         a = self.a_list[self.speed_preset]
         aR = self.aR_list[self.speed_preset]
+        
         self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
         self.robot.set_max_displacement(self.max_disp)
 
