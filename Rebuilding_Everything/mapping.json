@@ -1,0 +1,15 @@
+{
+    "default_Pro": {
+        "x-axis": 0,
+        "y-axis": 1,
+        "z-axis": 3,
+        "switch_space": "B",
+        "speed_preset_up": "D_up",
+        "speed_preset_down": "D_down",
+        "set_o": "X",
+        "toggle_freedrive": "A",
+        "goto_o": "Y",
+        "change_base": "P",
+        "exit": "H"
+    }
+}

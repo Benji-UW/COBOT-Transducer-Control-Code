@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class Controller:
     def __init__(self, joystick):
         self.joystick = joystick
