@@ -124,12 +124,9 @@ class RobotTreatment:
         imager_t_nm1 = 0.
 
         # filepath = r'C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben\'s Control Code\Records\try1.txt' #+ time.strftime('%c') + '.txt'
-
         # file1 = open(filepath, "w+")
-
         # Z-motion comp stuff
         self.z_adjust = 0
-        
 
         while run_bool:
             t0 = time.time()

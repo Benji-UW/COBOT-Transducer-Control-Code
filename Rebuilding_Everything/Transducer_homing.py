@@ -6,7 +6,7 @@ import os
 import numpy as np
 
 from pygame.locals import *
-from Controller import Controller
+from Controller_2 import Controller_2
 from UR3e import *
 from RobotGUI import *
 from datetime import datetime
@@ -36,9 +36,6 @@ class Transducer_homing:
         self.button_hold = []
         self.max_disp = 0.02
 
-        self.waypoints = []
-        self.current_waypoint = 0
-
         self.motion_comp = 0
         self.z_adjust = 0
         self.z_jerk_coeff = 3
@@ -58,14 +55,6 @@ class Transducer_homing:
         self.servo_t = 0.02
         self.servo_lh_t = 0.035
         self.servo_gain = 1000
-
-        self.imager_x_vect = np.array([])
-        self.x_vect = np.array([])
-        self.mp_x_vect = np.array([])
-        self.imager_z_vect = np.array([])
-        self.z_vect = np.array([])
-        self.mp_z_vect = np.array([])
-        self.imager_t_vect = np.array([])
 
     def connect_to_matlab(self, server_ip='localhost', port=50008):
         self.matlab_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -89,7 +78,7 @@ class Transducer_homing:
         pygame.joystick.init()
         joystick = pygame.joystick.Joystick(0)
         joystick.init()
-        self.controller = Controller(joystick)
+        self.controller = Controller_2(joystick)
 
         self.robot_gui = RobotGUI()
 
@@ -105,6 +94,40 @@ class Transducer_homing:
         
         self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
         self.robot.set_max_displacement(self.max_disp)
+
+    def start(self):
+        self.robot_gui.reset()
+        run_bool = True
+        listener = self.MATLAB_listener()
+        self.last_ten_refresh_rate = np.zeros((10,0))
+
+
+        self.t = time.time()
+        (self.new_mag, self.latest_mag) = next(listener)
+
+        i=-1
+
+        while run_bool:
+            i+=1
+            self.robot.update()
+            self.screen.fill(WHITE)
+
+            (self.new_mag, self.latest_mag) = next(listener)
+            if self.new_mag:
+                self.last_ten_refresh_rate[i%10] = time.time() - self.t
+                self.t = time.time()
+
+            self.main_menu_GUI()
+
+
+            pygame.event.pump()
+            keys = pygame.key.get_pressed()
+
+            if keys[pygame.key.key_code("esc")] == 1:
+                run_bool = False
+                break
+
+
 
     def MATLAB_listener(self):
         '''This method creates a generator for listening to the server for new data from
@@ -122,3 +145,31 @@ class Transducer_homing:
                 yield (False, mag)
             else:
                 yield (True, mag)
+
+    def main_menu_GUI(self):
+        self.write_pos_info()
+
+    def write_pos_info(self):
+        pos = self.robot.pos
+        angle = self.robot.angle
+        tcp_offset = self.robot.tcp_offset
+        tcp_angle = self.robot.tcp_rot
+        delta_pos, delta_angle = self.robot.get_delta_pos()
+        v = self.v_list[self.speed_preset]
+        vR = self.vR_list[self.speed_preset]
+        a = self.a_list[self.speed_preset]
+        aR = self.aR_list[self.speed_preset]
+
+        self.robot_gui.tprint(self.screen, 'Current base: %s' % self.robot.base)
+
+        self.robot_gui.tprint(self.screen, 'TCP offset:')
+        self.robot_gui.indent()
+        self.robot_gui.tprint(self.screen, 'x= %4.1f mm, Rx= %3.0f deg' %
+                              (tcp_offset[0] * 1000., tcp_angle[0] * 180 / math.pi))
+        self.robot_gui.tprint(self.screen, 'y= %4.1f mm, Ry= %3.0f deg' %
+                              (tcp_offset[1] * 1000., tcp_angle[1] * 180 / math.pi))
+        self.robot_gui.tprint(self.screen, 'z= %4.1f mm, Rz= %3.0f deg' %
+                              (tcp_offset[2] * 1000., tcp_angle[2] * 180 / math.pi))
+        self.robot_gui.unindent()
+
+        

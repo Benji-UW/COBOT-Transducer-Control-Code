@@ -11,5 +11,19 @@
         "goto_o": "Y",
         "change_base": "P",
         "exit": "H"
-    }
+    },
+
+    "default_keyboard": {
+        "x-axis": "AD",
+        "y-axis": "WS",
+        "z-axis": "QE",
+        "switch_space": "1",
+        "speed_preset_up": "=",
+        "speed_preset_down": "-",
+        "set_o": "x",
+        "toggle_freedrive": "F",
+        "goto_o": "G",
+        "change_base": "B",
+        "exit": "backspace"
+    } 
 }
