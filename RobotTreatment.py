@@ -157,7 +157,6 @@ class RobotTreatment:
 
             self.motion_comp = 0
 
-
             # if self.z_adjust == 1:
             #     self.matlab_socket.send('motion')
             #     msg = self.matlab_socket.recv(1024)
@@ -209,8 +208,6 @@ class RobotTreatment:
                 
                 pos = self.robot.pos
                 if (opt_stage == 1):
-                    
-
 
                 # if latestLoop != lastLoop:
                 #     self.robot.speedl(speed_vect, rot_vect, self.lag)
