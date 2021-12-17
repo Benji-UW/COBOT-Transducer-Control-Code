@@ -4,7 +4,7 @@ import time
 from threading import Thread
 
 HOST = ''
-PORT = 50008
+PORT = 508
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))

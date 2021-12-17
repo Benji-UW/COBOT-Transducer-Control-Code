@@ -6,7 +6,7 @@ Unit convention: m/kg/s
 import numpy as np
 import socket
 import time
-from math import cos, sin
+from math import *
 
 
 def _reg_convert(reg, rtype=None):
@@ -83,18 +83,18 @@ class UR3e:
         self.robot_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.robot_socket.connect((robot_ip, robot_port))
-        except socket.gaierror, e:
+        except socket.gaierror as e:
             print('Connection error to robot: %s' % e)
-            return False, e
+            return (False, e)
 
         self.modbus_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.modbus_socket.connect((robot_ip, modbus_port))
-        except socket.gaierror, e:
+        except socket.gaierror as e:
             print('Connection error to modbus: %s' % e)
-            return False, e
+            return (False, e)
 
-        return True, ''
+        return (True, '')
 
     def disconnect(self):
         self.robot_socket.close()
@@ -124,11 +124,11 @@ class UR3e:
 
     def movel(self, pos_to, angle_to, t=0.0):
         if self._check_move_displacement(pos_to):
-            cmd = 'movel(p[%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f],a=%1.2f,v=%1.2f,t=%2.2f,r=0)' % \
+            cmd = b'movel(p[%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f],a=%1.2f,v=%1.2f,t=%2.2f,r=0)' % \
                   (pos_to[0], pos_to[1], pos_to[2], angle_to[0], angle_to[1], angle_to[2], self.acc, self.velocity, t)
-            self.robot_socket.send('sync()\n')
+            self.robot_socket.send(b'sync()\n')
             time.sleep(self.sleep_time)
-            self.robot_socket.send(cmd + '\n')
+            self.robot_socket.send(cmd + b'\n')
             if t == 0.0:
                 dist = np.linalg.norm(np.subtract(pos_to, self.pos))  # move distance
                 t_a = self.velocity / self.acc  # time to accelerate
@@ -151,10 +151,10 @@ class UR3e:
                 rotation_vect = (self.vel_rot / speed) * rotation_vect
             speed_vect = self._change_base(speed_vect)
             rotation_vect = self._change_base(rotation_vect)
-            cmd = 'speedl([%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f],%1.3f,%2.3f,%1.3f)' % \
+            cmd = b'speedl([%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f],%1.3f,%2.3f,%1.3f)' % \
                   (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2],
                    self.acc, lag, self.acc_rot)
-            self.robot_socket.send(cmd + '\n')
+            self.robot_socket.send(cmd + b'\n')
             return True
         else:
             self.stopl()
@@ -166,9 +166,9 @@ class UR3e:
             angle = np.copy(self.initial_angle) + dangle
         else:
             angle = np.copy(self.initial_angle)
-        cmd = 'servoj(get_inverse_kin(p[%1.4f,%1.4f,%1.4f,%2.4f,%2.4f,%2.4f]),0,0,%2.3f,%2.3f,%d)' % \
+        cmd = b'servoj(get_inverse_kin(p[%1.4f,%1.4f,%1.4f,%2.4f,%2.4f,%2.4f]),0,0,%2.3f,%2.3f,%d)' % \
               (pos[0], pos[1], pos[2], angle[0], angle[1], angle[2], t, lh_t, gain)
-        self.robot_socket.send(cmd + '\n')
+        self.robot_socket.send(cmd + b'\n')
 
     def init_servo(self, lag, Kp=0.01, Ki=0.0, Kd=0.0, servo_type='delta'):
         self.servo_t = time.time()
@@ -212,9 +212,9 @@ class UR3e:
             servo_dev = 0.0
         servo = servo_prop + servo_int + servo_dev
         if self._check_speed_displacement(-servo):
-            cmd = 'speedl([%1.5f,%1.5f,%1.5f,0,0,0],%1.3f,%2.3f,%1.3f)' % \
+            cmd = b'speedl([%1.5f,%1.5f,%1.5f,0,0,0],%1.3f,%2.3f,%1.3f)' % \
                   (-servo[0], -servo[1], -servo[2], 2.0, self.servo_lag, 2.0)
-            self.robot_socket.send(cmd + '\n')
+            self.robot_socket.send(cmd + b'\n')
         else:
             self.stopl()
 
@@ -222,15 +222,15 @@ class UR3e:
         self.servo_error_nm1 = self.servo_error
 
     def stopl(self, acc=1):
-        self.robot_socket.send('stopl(%2.3f)\n' % acc)
+        self.robot_socket.send(b'stopl(%2.3f)\n' % acc)
         return True
 
     def freedrive(self):
-        self.robot_socket.send('freedrive_mode()\n')
+        self.robot_socket.send(b'freedrive_mode()\n')
         return True
 
     def end_freedrive(self):
-        self.robot_socket.send('end_freedrive_mode()\n')
+        self.robot_socket.send(b'end_freedrive_mode()\n')
         self._get_pos()
         self.initial_pos = np.copy(self.pos)
         self.initial_angle = np.copy(self.angle)
@@ -270,75 +270,87 @@ class UR3e:
 
     def _get_pos(self):
         # Get registry 400 to 405 in modbus, ie 0x190 w/ read size of 6
-        cmd = '\x00\x04\x00\x00\x00\x06\x00\x03\x01\x90\x00\x06'
+        cmd = b'\x00\x04\x00\x00\x00\x06\x00\x03\x01\x90\x00\x06'
         self.modbus_socket.send(cmd)
         reg = self.modbus_socket.recv(1024)
         
         # Get x, registry 400 in modbus, ie 0x190
-        self.pos[0] = _reg_convert(reg[-12:-10].encode('hex'), 'pos')
+        #self.pos[0] = _reg_convert(reg[-12:-10].encode('hex'), 'pos')
+        self.pos[0] = _reg_convert(reg[-12:-10].hex(), 'pos')
 
         # Get y, registry 401 in modbus, ie 0x191
-        self.pos[1] = _reg_convert(reg[-10:-8].encode('hex'), 'pos')
+        #self.pos[1] = _reg_convert(reg[-10:-8].encode('hex'), 'pos')
+        self.pos[1] = _reg_convert(reg[-10:-8].hex(), 'pos')
 
         # Get z, registry 402 in modbus, ie 0x192
-        self.pos[2] = _reg_convert(reg[-8:-6].encode('hex'), 'pos')
+        #self.pos[2] = _reg_convert(reg[-8:-6].encode('hex'), 'pos')
+        self.pos[2] = _reg_convert(reg[-8:-6].hex(), 'pos')
 
         # Get Rx, registry 403 in modbus, ie 0x193
-        self.angle[0] = _reg_convert(reg[-6:-4].encode('hex'), 'angle')
+        # self.angle[0] = _reg_convert(reg[-6:-4].encode('hex'), 'angle')
+        self.angle[0] = _reg_convert(reg[-6:-4].hex(), 'angle')
 
         # Get Ry, registry 404 in modbus, ie 0x194
-        self.angle[1] = _reg_convert(reg[-4:-2].encode('hex'), 'angle')
+        #self.angle[1] = _reg_convert(reg[-4:-2].encode('hex'), 'angle')
+        self.angle[1] = _reg_convert(reg[-4:-2].hex(), 'angle')
 
         # Get Rz, registry 405 in modbus, ie 0x195
-        self.angle[2] = _reg_convert(reg[-2:].encode('hex'), 'angle')
+        #self.angle[2] = _reg_convert(reg[-2:].encode('hex'), 'angle')
+        self.angle[2] = _reg_convert(reg[-2:].hex(), 'angle')
 
     def _get_tcp_offset(self):
         # Get x offset, registry 420 in modbus, ie 0x1A4
-        cmd = '\x00\x04\x00\x00\x00\x06\x00\x03\x01\xA4\x00\x01'
+        cmd = b'\x00\x04\x00\x00\x00\x06\x00\x03\x01\xA4\x00\x01'
         self.modbus_socket.send(cmd)
         reg = self.modbus_socket.recv(1024)
-        reg = reg.replace('\x00\x04\x00\x00\x00\x05\x00\x03\x02', '')
-        reg = reg.encode('hex')
+        reg = reg.replace(b'\x00\x04\x00\x00\x00\x05\x00\x03\x02', b'')
+        #reg = reg.encode('hex')
+        reg = reg.hex()
         self.tcp_offset[0] = _reg_convert(reg, 'tcp_offset')
 
         # Get y offset, registry 421 in modbus, ie 0x1A5
-        cmd = '\x00\x04\x00\x00\x00\x06\x00\x03\x01\xA5\x00\x01'
+        cmd = b'\x00\x04\x00\x00\x00\x06\x00\x03\x01\xA5\x00\x01'
         self.modbus_socket.send(cmd)
         reg = self.modbus_socket.recv(1024)
-        reg = reg.replace('\x00\x04\x00\x00\x00\x05\x00\x03\x02', '')
-        reg = reg.encode('hex')
+        reg = reg.replace(b'\x00\x04\x00\x00\x00\x05\x00\x03\x02', b'')
+        #reg = reg.encode('hex')
+        reg = reg.hex()
         self.tcp_offset[1] = _reg_convert(reg, 'tcp_offset')
 
         # Get z offset, registry 422 in modbus, ie 0x1A6
-        cmd = '\x00\x04\x00\x00\x00\x06\x00\x03\x01\xA6\x00\x01'
+        cmd = b'\x00\x04\x00\x00\x00\x06\x00\x03\x01\xA6\x00\x01'
         self.modbus_socket.send(cmd)
         reg = self.modbus_socket.recv(1024)
-        reg = reg.replace('\x00\x04\x00\x00\x00\x05\x00\x03\x02', '')
-        reg = reg.encode('hex')
+        reg = reg.replace(b'\x00\x04\x00\x00\x00\x05\x00\x03\x02', b'')
+        #reg = reg.encode('hex')
+        reg = reg.hex()
         self.tcp_offset[2] = _reg_convert(reg, 'tcp_offset')
 
         # Get Rx rotation, registry 423 in modbus, ie 0x1A7
-        cmd = '\x00\x04\x00\x00\x00\x06\x00\x03\x01\xA7\x00\x01'
+        cmd = b'\x00\x04\x00\x00\x00\x06\x00\x03\x01\xA7\x00\x01'
         self.modbus_socket.send(cmd)
         reg = self.modbus_socket.recv(1024)
-        reg = reg.replace('\x00\x04\x00\x00\x00\x05\x00\x03\x02', '')
-        reg = reg.encode('hex')
+        reg = reg.replace(b'\x00\x04\x00\x00\x00\x05\x00\x03\x02', b'')
+        #reg = reg.encode('hex')
+        reg = reg.hex()
         self.tcp_rot[0] = _reg_convert(reg, 'angle')
 
         # Get Ry rotation, registry 424 in modbus, ie 0x1A8
-        cmd = '\x00\x04\x00\x00\x00\x06\x00\x03\x01\xA8\x00\x01'
+        cmd = b'\x00\x04\x00\x00\x00\x06\x00\x03\x01\xA8\x00\x01'
         self.modbus_socket.send(cmd)
         reg = self.modbus_socket.recv(1024)
-        reg = reg.replace('\x00\x04\x00\x00\x00\x05\x00\x03\x02', '')
-        reg = reg.encode('hex')
+        reg = reg.replace(b'\x00\x04\x00\x00\x00\x05\x00\x03\x02', b'')
+        #reg = reg.encode('hex')
+        reg = reg.hex()
         self.tcp_rot[1] = _reg_convert(reg, 'angle')
 
         # Get Rz rotation, registry 425 in modbus, ie 0x1A9
-        cmd = '\x00\x04\x00\x00\x00\x06\x00\x03\x01\xA9\x00\x01'
+        cmd = b'\x00\x04\x00\x00\x00\x06\x00\x03\x01\xA9\x00\x01'
         self.modbus_socket.send(cmd)
         reg = self.modbus_socket.recv(1024)
-        reg = reg.replace('\x00\x04\x00\x00\x00\x05\x00\x03\x02', '')
-        reg = reg.encode('hex')
+        reg = reg.replace(b'\x00\x04\x00\x00\x00\x05\x00\x03\x02', b'')
+        #reg = reg.encode('hex')
+        reg = reg.hex()
         self.tcp_rot[2] = _reg_convert(reg, 'angle')
         
     def _change_base(self, vect, inv=False):

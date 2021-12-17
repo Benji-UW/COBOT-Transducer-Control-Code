@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class Controller:
     def __init__(self, joystick):
         self.joystick = joystick
@@ -55,6 +54,10 @@ class Controller:
             self.D_right = 13
             self.D_lef = 14
             self.capture = 15
+            self.max_buttons = 17
+            self.PAD = 18
+            self.ZL = 16
+            self.ZR = 17
             
 
     def get_buttons(self):
@@ -72,7 +75,7 @@ class Controller:
                 if self.joystick.get_button(i):
                     buttons.append(i)
         elif  'Pro' in self.name:
-            for i in range(self.max_buttons):
+            for i in range(self.max_buttons - 3):
                 if self.joystick.get_button(i):
                     buttons.append(i)
             # Equivalent l
@@ -102,8 +105,21 @@ class Controller:
             if abs(self.joystick.get_axis(2)) > self.joy_min:
                 joy_vect[2] = self.joystick.get_axis(2)
             if abs(self.joystick.get_axis(3)) > self.joy_min:
-                joy_vect[3] = -self.joystick.get_axis(3)
+                joy_vect[3] = self.joystick.get_axis(3)
         return joy_vect
 
     def get_hat(self):
-        return self.joystick.get_hat(0)
+        if 'Pro' in self.name:
+            up_down = 0
+            if self.joystick.get_button(self.D_up):
+                up_down = 1
+            elif self.joystick.get_button(self.D_down):
+                up_down = -1
+            left_right = 0
+            if self.joystick.get_button(self.D_lef):
+                left_right = 1
+            elif self.joystick.get_button(self.D_right):
+                left_right = -1
+            return [left_right, up_down]
+        else:
+            return self.joystick.get_hat(0)

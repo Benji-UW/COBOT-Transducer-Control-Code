@@ -70,17 +70,17 @@ class RobotTreatment:
         self.mp_z_vect = np.array([])
         self.imager_t_vect = np.array([])
 
-    def connect_to_matlab(self, server_ip='localhost', port=50008):
+    def connect_to_matlab(self, server_ip='localhost', port=508):
         self.matlab_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.matlab_socket.connect((server_ip, port))
-        except socket.gaierror, e:
+        except socket.gaierror as e:
             print('Connection error to robot: %s' % e)
-            return False, e
-        return True, ''
+            return (False,e)
+        return (True, '')
 
     def disconnect_from_matlab(self):
-        self.matlab_socket.send('end')
+        self.matlab_socket.send(b'end')
         self.matlab_socket.close()
 
     def initialize(self, ip_robot='192.168.0.10'):
@@ -196,7 +196,7 @@ class RobotTreatment:
             #     lastLoop = latestLoop
 
             if self.z_adjust == 1:
-                self.matlab_socket.send('motion')
+                self.matlab_socket.send(b'motion')
                 msg = self.matlab_socket.recv(1024)
 
                 # print('recieved msg ' + msg)
@@ -204,7 +204,7 @@ class RobotTreatment:
                 mag = float(msg[4:13]) / 1.0E3
                 
                 pos = self.robot.pos
-                if (opt_stage == 1):
+                #if (opt_stage == 1):
 
                 # if latestLoop != lastLoop:
                 #     self.robot.speedl(speed_vect, rot_vect, self.lag)
