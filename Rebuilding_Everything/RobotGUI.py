@@ -20,6 +20,9 @@ class RobotGUI:
         screen.blit(text_bitmap, (self.x, self.y))
         self.y += self.line_height
 
+    def skip_line(self, lines):
+        self.y+= self.line_height*lines
+
     def plot_graph(self, screen, size, x_data, y_data, colour=pygame.Color(25, 25, 205), width=2, hold=False):
         if x_data.size > self.max_array_length:
             x_data = x_data[-1-self.max_array_length:-1]

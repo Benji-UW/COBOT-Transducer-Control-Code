@@ -10,6 +10,7 @@ from Controller_2 import Controller_2
 from UR3e import *
 from RobotGUI import *
 from datetime import datetime
+from DemoPathfinder import *
 
 BLACK = pygame.Color('black')
 WHITE = pygame.Color('white')
@@ -98,42 +99,64 @@ class Transducer_homing:
     def start(self):
         self.robot_gui.reset()
         run_bool = True
-        listener = self.MATLAB_listener()
+        router = False
+        self.listener = self.MATLAB_listener()
         self.last_ten_refresh_rate = np.zeros((10,0))
-
+        self.mag_loc = set()
 
         self.t = time.time()
-        (self.new_mag, self.latest_mag) = next(listener)
+        (self.new_mag, self.latest_mag) = next(self.listener)
 
-        i=-1
+        self.i=-1
 
         while run_bool:
-            i+=1
             self.robot.update()
             self.screen.fill(WHITE)
 
-            (self.new_mag, self.latest_mag) = next(listener)
+            (self.new_mag, self.latest_mag) = next(self.listener)
+            # This section of code is entirely for handling a new signal reading from MATLAB
             if self.new_mag:
-                self.last_ten_refresh_rate[i%10] = time.time() - self.t
+                # Iterate a counter that keeps track of the magnitude readings we've recieved
+                self.i+=1
+                # Log how much time has elapsed since the previous reading
+                self.last_ten_refresh_rate[self.i%10] = time.time() - self.t
                 self.t = time.time()
+                pos, angle = self.robot.get_delta_pos()
+                self.mag_loc.add(((pos,angle), self.new_mag))
+
+                if router:
+                    pathfinder.newMag(((pos,angle), self.latest_mag))
+                    # You are here
+                    
 
             self.main_menu_GUI()
-
 
             pygame.event.pump()
             keys = pygame.key.get_pressed()
 
             if keys[pygame.key.key_code("esc")] == 1:
+                self.robot.disconnect()
+                print('Robot disconnected.')
                 run_bool = False
-                break
+            if keys[pygame.key.key_code("d")] == 1 and not router:
+                router = True
+                pathfinder = DemoPathfinder()
+                self.robot.set_initial_pos()
 
+                
+            if router:
+                pass
 
+    def get_delta_pos(self):
+        '''Converts the get_delta_pos method built into the UR3e method into
+        the local units used in the pathfinders, mm/kg/s/deg'''
+        
 
     def MATLAB_listener(self):
         '''This method creates a generator for listening to the server for new data from
         MATLAB. At each yield statement it returns a tuple containing a boolean and a float,
         the boolean indicating whether the magnitude is new and the float representing the
-        magnitude.'''
+        magnitude.'''   
         mag = -1
         latest_loop = -1
         while True:
@@ -171,5 +194,11 @@ class Transducer_homing:
         self.robot_gui.tprint(self.screen, 'z= %4.1f mm, Rz= %3.0f deg' %
                               (tcp_offset[2] * 1000., tcp_angle[2] * 180 / math.pi))
         self.robot_gui.unindent()
+
+        self.robot_gui.skip_line(3)
+
+        self.robot_gui.tprint(self.screen, 'Press (d)emo to demonstrate the basic pathrouting module')
+
+        
 
         
