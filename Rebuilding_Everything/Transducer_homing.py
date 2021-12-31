@@ -57,6 +57,9 @@ class Transducer_homing:
         self.servo_lh_t = 0.035
         self.servo_gain = 1000
 
+        self.range_of_motion = {'X': 0,'Y': 0,'Z':8,'Rx':45,'Ry':45,'Rz':0}
+
+
     def connect_to_matlab(self, server_ip='localhost', port=50008):
         self.matlab_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
@@ -77,8 +80,11 @@ class Transducer_homing:
         pygame.display.set_caption('Transducer homing')
 
         pygame.joystick.init()
-        joystick = pygame.joystick.Joystick(0)
-        joystick.init()
+        try:
+            joystick = pygame.joystick.Joystick(0)
+            joystick.init()
+        except pygame.error:
+            joystick = -1
         self.controller = Controller_2(joystick)
 
         self.robot_gui = RobotGUI()
@@ -100,6 +106,7 @@ class Transducer_homing:
         self.robot_gui.reset()
         run_bool = True
         router = False
+        translate = True
         self.listener = self.MATLAB_listener()
         self.last_ten_refresh_rate = np.zeros((10,0))
         self.mag_loc = set()
@@ -111,7 +118,7 @@ class Transducer_homing:
 
         while run_bool:
             self.robot.update()
-            self.screen.fill(WHITE)
+            self.main_menu_GUI()
 
             (self.new_mag, self.latest_mag) = next(self.listener)
             # This section of code is entirely for handling a new signal reading from MATLAB
@@ -125,40 +132,54 @@ class Transducer_homing:
                 self.mag_loc.add(((pos,angle), self.new_mag))
 
                 if router:
-                    pathfinder.newMag(((pos,angle), self.latest_mag))
+                    self.pathfinder.newMag(((pos,angle), self.latest_mag))
                     # You are here
                     
 
-            self.main_menu_GUI()
-
             pygame.event.pump()
             keys = pygame.key.get_pressed()
+            pressed_buttons=self.controller.get_buttons(keys)
 
-            if keys[pygame.key.key_code("esc")] == 1:
+            # Press esc to escape the program and close out everything.
+            if pressed_buttons["exit"]:
                 self.robot.disconnect()
                 print('Robot disconnected.')
                 run_bool = False
+            # Press d to trigger the demo pathfinder
             if keys[pygame.key.key_code("d")] == 1 and not router:
                 router = True
-                pathfinder = DemoPathfinder()
+                self.pathfinder = DemoPathfinder(8,45,45)
                 self.robot.set_initial_pos()
-
+            # Press x to stop the running pathfinder
+            if keys[pygame.key.key_code("x")] == 1 and router:
+                router = False
+            if keys[pygame.key.key_code("a")] == 1 and not router:
+                self.change_range_gui()
                 
             if router:
                 pass
+            else:
+                joy_vect = self.controller.get_hat(keys)
+                speed_vect = np.zeros((3,1))
+                rot_vect = np.zeros((3,1))
+                if translate:
+                    speed_vect = joy_vect
+                else:
+                    rot_vect = joy_vect
+                self.robot.speedl(speed_vect,rot_vect, self.lag)
+
 
     def get_delta_pos(self):
         '''Converts the get_delta_pos method built into the UR3e method into
         the local units used in the pathfinders, mm/kg/s/deg'''
+        pass
         
-
     def MATLAB_listener(self):
         '''This method creates a generator for listening to the server for new data from
         MATLAB. At each yield statement it returns a tuple containing a boolean and a float,
         the boolean indicating whether the magnitude is new and the float representing the
         magnitude.'''   
-        mag = -1
-        latest_loop = -1
+        mag,latest_loop = -1,-1        
         while True:
             self.matlab_socket.send('motion')
             msg = self.matlab_socket.recv(1024)
@@ -167,12 +188,29 @@ class Transducer_homing:
             if loop == latest_loop:
                 yield (False, mag)
             else:
+                latest_loop = loop
                 yield (True, mag)
 
     def main_menu_GUI(self):
+        self.screen.fill(WHITE)
         self.write_pos_info()
 
-    def write_pos_info(self):
+    def change_range_gui(self):
+        '''It is not a priority right now but I would ultimately like there to be
+        a GUI option for adjusting the default range of motion for the pathfinder.
+        By default the range is +/- 8 mm along the z axis and +/- 45 degrees along
+        the Rx and Ry axes.'''
+        pass
+        # not_set = True
+        # cursor = 0
+        
+        # while not_set:
+        #     self.screen.fill(WHITE)
+
+        #     pygame.event.pump()
+        #     keys = pygame.key.get_pressed()
+
+    def write_pos_info(self, router):
         pos = self.robot.pos
         angle = self.robot.angle
         tcp_offset = self.robot.tcp_offset
@@ -196,8 +234,14 @@ class Transducer_homing:
         self.robot_gui.unindent()
 
         self.robot_gui.skip_line(3)
-
-        self.robot_gui.tprint(self.screen, 'Press (d)emo to demonstrate the basic pathrouting module')
+        
+        if router:
+            self.robot_gui.tprint(self.screen, 'Press (d)emo to demonstrate the basic pathrouting module')
+            self.robot_gui.indent()
+            self.robot_gui.tprint(self.screen, 'Beware this will override the controller until the pathfinder is cancelled or has finished the task.')
+            self.robot_gui.unindent()
+        else:
+            self.robot_gui.tprint(self.screen, 'Press (x) to cancel the running pathfinder')
 
         
 

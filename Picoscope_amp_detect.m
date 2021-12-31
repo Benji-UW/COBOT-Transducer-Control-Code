@@ -169,7 +169,7 @@ setappdata(gcf, 'run', flag);
 % Collect samples as long as the |hasAutoStopOccurred| flag has not been
 % set or the call to |getStreamingLatestValues()| does not return an error
 % code (check for STOP button push inside loop).
-timeout = 250;
+timeout = 250000;
 avg_samp_freq = zeros(timeout, 1);
 ind = 0;
 % zHist = ones(timeout,2);
