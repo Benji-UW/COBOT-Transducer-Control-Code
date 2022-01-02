@@ -1,5 +1,5 @@
 '''
-Unit convetion: mm/kg/s/deg
+Unit convention: mm/kg/s/deg
 '''
 import math
 import numpy as np
@@ -47,11 +47,14 @@ class DemoPathfinder:
         while True:
             yield self.to_travel[0]
 
+    def next(self):
+        return self.to_travel[0]
+
     def starting_point_loader(self):
         '''This method gets called when the pathfinder is initializes, and adds the center of 
         the search space as well as all the corners to the "to-travel" list.'''
         center_pt = [math.mean(self.range_of_motion[a]) for a in self.range_of_motion.keys]
-        self.to_travel.append(tuple(center_pt))
+        self.to_travel.append(tuple(center_pt[:3]),tuple(center_pt[3:]))
 
         corners = set()
 
@@ -72,6 +75,9 @@ class DemoPathfinder:
                 return False
             if abs(self.to_travel[0][1][i] - point[1][i]) > tolerance[1]:
                 return False
+        return True
+    
+
 
 
 
