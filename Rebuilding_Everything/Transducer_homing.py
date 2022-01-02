@@ -1,3 +1,6 @@
+'''
+Unit convention: mm/kg/s/deg
+'''
 import socket
 import time
 import pygame
@@ -16,6 +19,8 @@ BLACK = pygame.Color('black')
 WHITE = pygame.Color('white')
 
 class Transducer_homing:
+    '''The UR3e robot keeps the position and angle of the TCP in meters/radians, 
+    this class mostly stores them in mm/deg'''
     def __init__(self):
         self.robot = None
         self.matlab_socket = None
@@ -128,13 +133,12 @@ class Transducer_homing:
                 # Log how much time has elapsed since the previous reading
                 self.last_ten_refresh_rate[self.i%10] = time.time() - self.t
                 self.t = time.time()
-                pos, angle = self.robot.get_delta_pos()
+                pos, angle = self.get_delta_pos()
                 self.mag_loc.add(((pos,angle), self.new_mag))
 
                 if router:
                     self.pathfinder.newMag(((pos,angle), self.latest_mag))
-                    # You are here
-                    
+                    # You are here                
 
             pygame.event.pump()
             keys = pygame.key.get_pressed()
@@ -156,24 +160,41 @@ class Transducer_homing:
             if keys[pygame.key.key_code("a")] == 1 and not router:
                 self.change_range_gui()
                 
+
+            speed_vect = np.zeros((3,1))
+            rot_vect = np.zeros((3,1))
             if router:
-                pass
+                nextpoint = self.pathfinder.next()
+                (speed_vect,rot_vect) = self.interpolate_motion(nextpoint)
             else:
                 joy_vect = self.controller.get_hat(keys)
-                speed_vect = np.zeros((3,1))
-                rot_vect = np.zeros((3,1))
                 if translate:
                     speed_vect = joy_vect
                 else:
                     rot_vect = joy_vect
-                self.robot.speedl(speed_vect,rot_vect, self.lag)
-
+            
+            self.robot.speedl(speed_vect,rot_vect, self.lag)
 
     def get_delta_pos(self):
         '''Converts the get_delta_pos method built into the UR3e method into
         the local units used in the pathfinders, mm/kg/s/deg'''
-        pass
+        d_pos,d_angle = self.robot.get_delta_pos()
+        d_pos = d_pos*1000
+        d_angle = np.rad2deg(d_angle)
+        return (d_pos,d_angle)
+
+    def interpolate_motion(self,next_target):
+        c_pos,c_angle = self.get_delta_pos()
+        t_pos,t_angle = (next_target[0],next_target[1])
+        delta_pos = t_pos - c_pos
+        speed_vect = delta_pos / np.max(delta_pos)
+
+        delta_ang = t_angle - c_angle
+        rot_vect = delta_ang / np.max(delta_ang)
         
+        return speed_vect,rot_vect
+
+
     def MATLAB_listener(self):
         '''This method creates a generator for listening to the server for new data from
         MATLAB. At each yield statement it returns a tuple containing a boolean and a float,

@@ -140,6 +140,8 @@ class UR3e:
         return False
 
     def speedl(self, speed_vect, rotation_vect, lag):
+        '''The speeds that get sent to the robot only go to three digits of precision,
+        (1.123), so the minimum transmissible speed is 0.001'''
         if self._check_speed_displacement(speed_vect):
             speed_vect = self.velocity * speed_vect
             rotation_vect = self.vel_rot * rotation_vect
@@ -170,7 +172,7 @@ class UR3e:
               (pos[0], pos[1], pos[2], angle[0], angle[1], angle[2], t, lh_t, gain)
         self.robot_socket.send(cmd + b'\n')
 
-    def init_servo(self, lag, Kp=0.01, Ki=0.0, Kd=0.0, servo_type='delta'):
+    def init_servo(self,lag,Kp=0.01,Ki=0.0,Kd=0.0,servo_type='delta'):
         self.servo_t = time.time()
         self.servo_t_nm1 = self.servo_t
         self.servo_lag = lag
