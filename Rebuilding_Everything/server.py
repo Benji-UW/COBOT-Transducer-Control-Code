@@ -29,22 +29,23 @@ def client_thread(conn):
     while is_alive:
         client_input = conn.recv(1024)
         t = time.time()
-        if client_input == 'motion':
-            print('received motion ' + motion)
+        if client_input == b'motion':
+            print('received motion:')
+            print(motion)
             conn.send(motion)
-        elif client_input == 'cond':
+        elif client_input == b'cond':
             conn.send(str(condition))
-        elif client_input == 'c0':
+        elif client_input == b'c0':
             condition = 0
-        elif client_input == 'c1':
+        elif client_input == b'c1':
             condition = 1
-        elif client_input == 'end':
+        elif client_input == b'end':
             print('Connection to process %d ended.' % number)
             conn.close()
             is_alive = False
         else:
             motion = client_input
-            print(motion)
+            #print(motion)
             # debugging type step:
             # cl = str(client_input)
             # print('client just sent ' + cl)

@@ -12,7 +12,7 @@ class Controller_2:
         if (joystick != -1):
             self.joystick = joystick
             self.name = self.joystick.get_name()
-            controller_file = open('controllers.json')
+            controller_file = open(r'Rebuilding_Everything\controllers.json')
             data = json.load(controller_file)
             keep_going = True
             
@@ -26,7 +26,7 @@ class Controller_2:
 
             if (keep_going):
                 self.buttons = data[short_name]
-                mapping_file = open('mapping.json')
+                mapping_file = open(r'Rebuilding_Everything\mapping.json')
                 data = json.load(mapping_file)
 
                 if short_name == 'Pro':
@@ -54,7 +54,8 @@ class Controller_2:
         funcs = list(self.mapping.keys())[3:] # Skips the first three because they're joystick axes
         
         if self.name == 'keyboard':
-            pressed_buttons = dict(zip(funcs, [keys[pygame.key.key_code(self.mapping[a])] for a in funcs]))
+            butts = [keys[pygame.key.key_code(self.mapping[a])] for a in funcs]
+            pressed_buttons = dict(zip(funcs, butts))
             print(pressed_buttons)
             # pressed_buttons["switch space"] = keys[pygame.key.key_code(self.mapping["switch_space"])]
             # pressed_buttons["speed up"] = keys[pygame.key.key_code(self.mapping["speed_preset_up"])]
@@ -65,7 +66,8 @@ class Controller_2:
             # pressed_buttons["change base"] = keys[pygame.key.key_code(self.mapping["change_base"])]
             # pressed_buttons["exit"] = keys[pygame.key.key_code(self.mapping["exit"])]
         else:
-            pressed_buttons = dict(zip([funcs, [self.joystick.get_button(self.buttons(self.mapping[a])) for a in funcs]]))
+            butts = [self.joystick.get_button(self.buttons[self.mapping[a]]) for a in funcs]
+            pressed_buttons = dict(zip(funcs, butts))
         
         return pressed_buttons
 

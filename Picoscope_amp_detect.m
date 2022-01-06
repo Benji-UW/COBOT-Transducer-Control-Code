@@ -9,7 +9,7 @@ clc;
 
 %% Server setup
 
-socket = tcpclient('localhost', 50008);
+socket = tcpclient('localhost', 508);
 % scale_motion = 1E6;
 
 % Experimental focal length: 23.7750 mm (perhaps due to depth of concavity)
@@ -92,7 +92,7 @@ samplesPerSecond = 1 / sampleRate;
 samplePeriod = 1e-4; % 100 us
 
 % Size of the buffer to collect data from buffer.
-overviewBufferSize  = 312500;
+overviewBufferSize  = 312500 * 2;
 segmentIndex        = 0;   
 ratioMode           = ps5000aEnuminfo.enPS5000ARatioMode.PS5000A_RATIO_MODE_NONE;
 
@@ -241,6 +241,8 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
         bufferChAmV = adc2mv(pAppBufferChA.Value(firstValuePosn:lastValuePosn), ...
             channelARangeMv, maxADCCount);      
         
+        %max(bufferChAmV)
+        
         if (max(bufferChAmV) == 500)% && startIndex == 0)
             LoadTime = toc;
             ind = ind + 1;
@@ -265,7 +267,7 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
             % issues ?)
             peak = peaks(round(length(peaks) / 2));
             
-            bufferChAmV = bufferChAmV((peak):(peak + 3000));
+            bufferChAmV = bufferChAmV((peak):min((peak + 3000), length(bufferChAmV)));
 %             bufferChAmV(abs(bufferChAmV) < 12) = 0;
             
             pulse_peaks = find(bufferChAmV > 12);
@@ -288,19 +290,21 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
 
                 % time = fin_index * 3.2e-8;
 
-
                 % z_mot = (time - target_time) * 1500;
 
                 % z_motT = z_mot * scale_motion;
 
-                amp = amp * scale_motion;
+                amp = amp * 1E3;
 
                 % fclose(socket);
+                
+                if (isequal(size(amp),[1,1]))
+                    msg_format = 'T%02dZ%09d\n';
+                    msg = sprintf(msg_format, [mod(ind,100), max(round(amp), 1)])
 
-                msg_format = 'T%02dZ%09d\n';
-                msg = sprintf(msg_format, [mod(ind,100), round(amp)]);
-
-                write(socket, msg);
+                    write(socket, msg);
+                end
+                
 
 %                 zHist(ind, 1) = time * 1.5;
 %                 if ind == 1
@@ -376,10 +380,11 @@ fprintf('\n');
 disconnect(ps5000aDeviceObj);
 delete(ps5000aDeviceObj);
 
+mean(avg_samp_freq)
 
-plot(zHist(:,2), zHist(:,1))
-xlabel('time (s)')
-ylabel('zDistance, (1mm)')
-yline(target_time * 1.5)
-yline((target_time * 1.5) + 0.5e-6)
-yline((target_time * 1.5) - 0.5e-6)
+%plot(zHist(:,2), zHist(:,1))
+%xlabel('time (s)')
+%ylabel('zDistance, (1mm)')
+%yline(target_time * 1.5)
+%yline((target_time * 1.5) + 0.5e-6)
+%yline((target_time * 1.5) - 0.5e-6)

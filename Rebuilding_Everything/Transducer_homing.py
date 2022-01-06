@@ -28,6 +28,7 @@ class Transducer_homing:
         self.screen_resolution = (480, 940)
         self.controller = None
         self.robot_gui = None
+        self.latest_loop = -1
 
         self.v_list = [0.005, 0.0125, 0.025, 0.05, 0.1, 0.2, 0.4, 0.8]
         self.vR_list = [0.025, 0.05, 0.1, 0.2, 0.4, 0.8, 1.0, 2.0]
@@ -65,13 +66,14 @@ class Transducer_homing:
         self.range_of_motion = {'X': 0,'Y': 0,'Z':8,'Rx':45,'Ry':45,'Rz':0}
 
 
-    def connect_to_matlab(self, server_ip='localhost', port=50008):
+    def connect_to_matlab(self, server_ip='localhost', port=508):
         self.matlab_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.matlab_socket.connect((server_ip, port))
         except socket.gaierror as e:
             print(f'Connection error to robot: {e}')
             return (False,e)
+        print('Connected to MATLAB')
         return (True,'')
 
     def disconnect_from_matlab(self):
@@ -106,6 +108,7 @@ class Transducer_homing:
         
         self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
         self.robot.set_max_displacement(self.max_disp)
+        print("Robot initialized :)")
 
     def start(self):
         self.robot_gui.reset()
@@ -115,17 +118,22 @@ class Transducer_homing:
         self.listener = self.MATLAB_listener()
         self.last_ten_refresh_rate = np.zeros((10,0))
         self.mag_loc = set()
+        i_rr = 0
 
         self.t = time.time()
-        (self.new_mag, self.latest_mag) = next(self.listener)
+        #(self.new_mag, self.latest_mag) = next(self.listener)
 
         self.i=-1
+        print('About to start the main loop')
 
         while run_bool:
+            t0 = time.time()
             self.robot.update()
-            self.main_menu_GUI()
+            self.main_menu_GUI(router)
 
-            (self.new_mag, self.latest_mag) = next(self.listener)
+            #(self.new_mag, self.latest_mag) = next(self.listener)
+            (self.new_mag, self.latest_mag) = self.MATLAB_next()
+            print('made it here')
             # This section of code is entirely for handling a new signal reading from MATLAB
             if self.new_mag:
                 # Iterate a counter that keeps track of the magnitude readings we've recieved
@@ -133,7 +141,11 @@ class Transducer_homing:
                 # Log how much time has elapsed since the previous reading
                 self.last_ten_refresh_rate[self.i%10] = time.time() - self.t
                 self.t = time.time()
-                pos, angle = self.get_delta_pos()
+                pos,angle = self.get_delta_pos()
+
+                pos = tuple(map(tuple, pos))
+                angle = tuple(map(tuple, angle))
+
                 self.mag_loc.add(((pos,angle), self.new_mag))
 
                 if router:
@@ -175,6 +187,23 @@ class Transducer_homing:
             
             self.robot.speedl(speed_vect,rot_vect, self.lag)
 
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.robot.disconnect()
+                    print('Robot disconnected.')
+                    run_bool = False
+                    if self.matlab_socket is not None:
+                        self.disconnect_from_matlab()
+                        print('Disconnected from server.')
+            pygame.display.flip()
+            if i_rr >= self.refresh_rate:
+                i_rr = 0
+            t = time.time()
+            if 1.0 / self.refresh_rate - (t - t0) > 0:
+                time.sleep(1.0 / self.refresh_rate - (t - t0))
+
+
     def get_delta_pos(self):
         '''Converts the get_delta_pos method built into the UR3e method into
         the local units used in the pathfinders, mm/kg/s/deg'''
@@ -200,21 +229,36 @@ class Transducer_homing:
         MATLAB. At each yield statement it returns a tuple containing a boolean and a float,
         the boolean indicating whether the magnitude is new and the float representing the
         magnitude.'''   
-        mag,latest_loop = -1,-1        
+        mag,self.latest_loop = -1,-1        
         while True:
-            self.matlab_socket.send('motion')
+            print('here i am')
+            self.matlab_socket.send(b'motion')
             msg = self.matlab_socket.recv(1024)
             mag = float(msg[4:13]) / 1.0E3
             loop = int(msg[1:3])
-            if loop == latest_loop:
+            if loop == self.latest_loop:
                 yield (False, mag)
             else:
-                latest_loop = loop
+                self.latest_loop = loop
                 yield (True, mag)
 
-    def main_menu_GUI(self):
+    def MATLAB_next(self):
+        self.matlab_socket.send(b'motion')
+        msg = self.matlab_socket.recv(1024)
+        print(msg)
+        mag = float(msg[4:13]) * 1.0E3
+        loop = int(msg[1:3])
+        if loop == self.latest_loop:
+            return (False, mag)
+        else:
+            self.latest_loop = loop
+            return (True, mag)
+
+
+    def main_menu_GUI(self,router_bool):
         self.screen.fill(WHITE)
-        self.write_pos_info()
+        self.robot_gui.reset()
+        self.write_pos_info(router_bool)
 
     def change_range_gui(self):
         '''It is not a priority right now but I would ultimately like there to be
@@ -236,7 +280,7 @@ class Transducer_homing:
         angle = self.robot.angle
         tcp_offset = self.robot.tcp_offset
         tcp_angle = self.robot.tcp_rot
-        delta_pos, delta_angle = self.robot.get_delta_pos()
+        delta_pos,delta_angle = self.robot.get_delta_pos()
         v = self.v_list[self.speed_preset]
         vR = self.vR_list[self.speed_preset]
         a = self.a_list[self.speed_preset]
@@ -256,14 +300,20 @@ class Transducer_homing:
 
         self.robot_gui.skip_line(3)
         
-        if router:
+        if not router:
             self.robot_gui.tprint(self.screen, 'Press (d)emo to demonstrate the basic pathrouting module')
             self.robot_gui.indent()
             self.robot_gui.tprint(self.screen, 'Beware this will override the controller until the pathfinder is cancelled or has finished the task.')
             self.robot_gui.unindent()
         else:
             self.robot_gui.tprint(self.screen, 'Press (x) to cancel the running pathfinder')
+        
+        print('gonna update the gui')
 
         
+robot = Transducer_homing()
+robot.initialize()
 
-        
+robot.connect_to_matlab()
+
+robot.start()
