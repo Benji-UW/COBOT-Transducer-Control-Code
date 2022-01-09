@@ -15,7 +15,7 @@ motion = 'gdfdhfjhgvj'
 condition = 0
 
 
-def client_thread(conn):
+def client_thread(conn): 
     global flag
     global motion
     global condition

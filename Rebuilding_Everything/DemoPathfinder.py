@@ -3,14 +3,16 @@ Unit convention: mm/kg/s/deg
 '''
 import math
 import numpy as np
+import json
 
-class DemoPathfinder:
+class Pathfinder:
     '''A class for controlling where the arm goes. The tl;dr is you define a search space,
     with a starting and ending value for each degree of freedom. It can do between one and
     six degrees of freedom. The units for the linear dimensions are mm, the units for the
     angular dimensions are degrees. Everything is defined relative to the initial starting
     position, so the initial position, as far as this is concerned, is ((0,0,0),(0deg,0deg,0deg))
     All internal points are stored as tuples in the form ((X,Y,Z),(Rx,Ry,Rz))'''
+
     def __init__(self, z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
         '''Accepts as input a series of values indicating the range of different
         points in space it is allowed to exist between. This defines the search
@@ -32,6 +34,7 @@ class DemoPathfinder:
 
         '''Sets the degrees of freedom of this pathfinder, only Z defaults to true.'''
         self.degrees_of_freedom = {'X': x_range!=0,'Y': y_range!=0,'Z':z_range!=0,'Rx':Rx_range!=0,'Ry':Ry_range!=0,'Rz':Rz_range!=0}
+        self.starting_point_loader()
 
     def newMag(self, point_mag):
         '''Accepts as in put a tuple in the form (((X,Y,Z),(Rx,Ry,Rz)), mag), 
@@ -53,13 +56,13 @@ class DemoPathfinder:
     def starting_point_loader(self):
         '''This method gets called when the pathfinder is initializes, and adds the center of 
         the search space as well as all the corners to the "to-travel" list.'''
-        center_pt = [math.mean(self.range_of_motion[a]) for a in self.range_of_motion.keys]
-        self.to_travel.append(tuple(center_pt[:3]),tuple(center_pt[3:]))
+        center_pt = [np.mean(self.range_of_motion[a]) for a in self.range_of_motion.keys()]
+        self.to_travel.append((tuple(center_pt[:3]),tuple(center_pt[3:])))
 
         corners = set()
 
         for i in range(64):
-            pos = (self.range_of_motion['X'][((-1)**int(i))],self.range_of_motion['Y']((-1)**int(i/2)),self.range_of_motion['Z'][((-1)**int(i/4))])
+            pos = (self.range_of_motion['X'][((-1)**int(i))],self.range_of_motion['Y'][((-1)**int(i/2))],self.range_of_motion['Z'][((-1)**int(i/4))])
             ang = (self.range_of_motion['Rx'][((-1)**int(i/8))],self.range_of_motion['Ry'][((-1)**int(i/16))],self.range_of_motion['Rz'][((-1)**int(i/32))])
             corners.add((pos,ang))
         
@@ -76,9 +79,9 @@ class DemoPathfinder:
             if abs(self.to_travel[0][1][i] - point[1][i]) > tolerance[1]:
                 return False
         return True
+
+    def save_points(self, path):
+        with open(path, 'w') as outfile:
+            json.dump(self.points, outfile)
+
     
-
-
-
-
-

@@ -42,7 +42,6 @@ class Controller_2:
 
             self.mapping = data["default_keyboard"]
             
-                
     def short_name(self, name, options):
         for shortened in options:
             if shortened in name:

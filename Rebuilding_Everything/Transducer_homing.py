@@ -158,13 +158,11 @@ class Transducer_homing:
 
             # Press esc to escape the program and close out everything.
             if pressed_buttons["exit"]:
-                self.robot.disconnect()
-                print('Robot disconnected.')
                 run_bool = False
             # Press d to trigger the demo pathfinder
             if keys[pygame.key.key_code("d")] == 1 and not router:
                 router = True
-                self.pathfinder = DemoPathfinder(8,45,45)
+                self.pathfinder = Pathfinder(8,45,45)
                 self.robot.set_initial_pos()
             # Press x to stop the running pathfinder
             if keys[pygame.key.key_code("x")] == 1 and router:
@@ -190,18 +188,24 @@ class Transducer_homing:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.robot.disconnect()
-                    print('Robot disconnected.')
                     run_bool = False
-                    if self.matlab_socket is not None:
-                        self.disconnect_from_matlab()
-                        print('Disconnected from server.')
             pygame.display.flip()
             if i_rr >= self.refresh_rate:
                 i_rr = 0
             t = time.time()
             if 1.0 / self.refresh_rate - (t - t0) > 0:
                 time.sleep(1.0 / self.refresh_rate - (t - t0))
+        #-----------------------------Bottom of loop-----------------------------------#
+
+        # loop is exited
+        self.robot.disconnect()
+        print('Robot disconnected.')
+        if self.matlab_socket is not None:
+            self.disconnect_from_matlab()
+            print('Disconnected from server.')
+        if router:
+            path = os.path.dirname(__file__) + '\\data\\' + time.ctime(time.time())
+            self.pathfinder.save_points(path)
 
 
     def get_delta_pos(self):
@@ -242,6 +246,14 @@ class Transducer_homing:
                 self.latest_loop = loop
                 yield (True, mag)
 
+    
+    def fake_MATLAB_listener(self):
+        '''This method fakes the input from the MATLAB listener, can be used to debug the
+        motion of the robotic arm on occasions when we aren't using the transducer itself yet.'''
+        while True:
+            mag = round(time.time()) % 59
+            yield (True, mag)
+
     def MATLAB_next(self):
         self.matlab_socket.send(b'motion')
         msg = self.matlab_socket.recv(1024)
@@ -268,7 +280,6 @@ class Transducer_homing:
         pass
         # not_set = True
         # cursor = 0
-        
         # while not_set:
         #     self.screen.fill(WHITE)
 
@@ -315,5 +326,5 @@ robot = Transducer_homing()
 robot.initialize()
 
 robot.connect_to_matlab()
-
+ 
 robot.start()
