@@ -7,6 +7,7 @@ class Controller_2:
         self.joy_min = 0.1
         self.buttons = {}
         self.mapping = {}
+        #joystick = -1
 
         # Go into this if statement if the joystick is a joystick
         if (joystick != -1):
@@ -37,7 +38,7 @@ class Controller_2:
                     self.joystick = None
         else:
             self.name = 'keyboard'
-            mapping_file = open('mapping.json')
+            mapping_file = open(r'Rebuilding_Everything\mapping.json')
             data = json.load(mapping_file)
 
             self.mapping = data["default_keyboard"]
@@ -84,6 +85,8 @@ class Controller_2:
             joy_vect[2]=self.joystick.get_axis(self.mapping['z-axis'])
             if np.linalg.norm(joy_vect) < self.joy_min:
                 joy_vect = np.zeros((3,1))
+            else:
+                print(joy_vect)
         
         return joy_vect
     

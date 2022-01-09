@@ -41,7 +41,7 @@ class Transducer_homing:
         self.lag = 0.1 #10. / self.refresh_rate #0.1
         self.true_refresh_rate = None
         self.button_hold = []
-        self.max_disp = 0.02
+        self.max_disp = 0.5
 
         self.motion_comp = 0
         self.z_adjust = 0
@@ -77,7 +77,7 @@ class Transducer_homing:
         return (True,'')
 
     def disconnect_from_matlab(self):
-        self.matlab_socket.send('end')
+        self.matlab_socket.send(b'end')
         self.matlab_socket.close()
 
     def initialize(self, ip_robot='192.168.0.10'):
@@ -100,6 +100,7 @@ class Transducer_homing:
         if not self.robot.connect(ip_robot)[0]:
             return False
         
+        
         self.robot.initialize()
         v = self.v_list[self.speed_preset]
         vR = self.vR_list[self.speed_preset]
@@ -115,25 +116,30 @@ class Transducer_homing:
         run_bool = True
         router = False
         translate = True
-        self.listener = self.MATLAB_listener()
+
+        #self.listener = self.MATLAB_listener()
+        self.listener = self.fake_MATLAB_listener()
         self.last_ten_refresh_rate = np.zeros((10,0))
         self.mag_loc = set()
         i_rr = 0
 
         self.t = time.time()
-        #(self.new_mag, self.latest_mag) = next(self.listener)
+        (self.new_mag, self.latest_mag) = next(self.listener)
 
         self.i=-1
         print('About to start the main loop')
+        self.robot.update()
+        print('Gonna try to turn it off')
+        self.robot._powerdown()
 
         while run_bool:
             t0 = time.time()
             self.robot.update()
             self.main_menu_GUI(router)
 
-            #(self.new_mag, self.latest_mag) = next(self.listener)
-            (self.new_mag, self.latest_mag) = self.MATLAB_next()
-            print('made it here')
+            (self.new_mag, self.latest_mag) = next(self.listener)
+            #(self.new_mag, self.latest_mag) = self.MATLAB_next()
+            #print('made it here')
             # This section of code is entirely for handling a new signal reading from MATLAB
             if self.new_mag:
                 # Iterate a counter that keeps track of the magnitude readings we've recieved
@@ -157,12 +163,14 @@ class Transducer_homing:
             pressed_buttons=self.controller.get_buttons(keys)
 
             # Press esc to escape the program and close out everything.
-            if pressed_buttons["exit"]:
+            if pressed_buttons["exit"] or keys[pygame.key.key_code("q")] == 1:
                 run_bool = False
             # Press d to trigger the demo pathfinder
+            if pressed_buttons["switch_space"]:
+                translate = not translate
             if keys[pygame.key.key_code("d")] == 1 and not router:
                 router = True
-                self.pathfinder = Pathfinder(8,45,45)
+                self.pathfinder = Pathfinder(8,45,45)            
                 self.robot.set_initial_pos()
             # Press x to stop the running pathfinder
             if keys[pygame.key.key_code("x")] == 1 and router:
@@ -175,6 +183,7 @@ class Transducer_homing:
             rot_vect = np.zeros((3,1))
             if router:
                 nextpoint = self.pathfinder.next()
+                #print(nextpoint)
                 (speed_vect,rot_vect) = self.interpolate_motion(nextpoint)
             else:
                 joy_vect = self.controller.get_hat(keys)
@@ -214,12 +223,22 @@ class Transducer_homing:
         d_pos,d_angle = self.robot.get_delta_pos()
         d_pos = d_pos*1000
         d_angle = np.rad2deg(d_angle)
+        #print(d_pos, d_angle)
         return (d_pos,d_angle)
 
     def interpolate_motion(self,next_target):
         c_pos,c_angle = self.get_delta_pos()
+        #print('current pos:')
+        #print(c_pos,c_angle)
         t_pos,t_angle = (next_target[0],next_target[1])
+
+        t_pos,t_angle = np.array([t_pos]).T,np.array([t_angle]).T
+
+        #print('target pos:')
+        #print(t_pos, t_angle)
         delta_pos = t_pos - c_pos
+        #print('delta pos:')
+        #print(delta_pos)
         speed_vect = delta_pos / np.max(delta_pos)
 
         delta_ang = t_angle - c_angle
@@ -309,6 +328,9 @@ class Transducer_homing:
                               (tcp_offset[2] * 1000., tcp_angle[2] * 180 / math.pi))
         self.robot_gui.unindent()
 
+        self.robot_gui.skip_line(1)
+        self.robot_gui.tprint(self.screen, f'Speed preset: {self.speed_preset}')
+
         self.robot_gui.skip_line(3)
         
         if not router:
@@ -319,7 +341,7 @@ class Transducer_homing:
         else:
             self.robot_gui.tprint(self.screen, 'Press (x) to cancel the running pathfinder')
         
-        print('gonna update the gui')
+        #print('gonna update the gui')
 
         
 robot = Transducer_homing()

@@ -371,10 +371,25 @@ class UR3e:
 
     def _check_speed_displacement(self, speed_vect):
         tcp_direction = np.subtract(self.pos, self.initial_pos)
+        #print(tcp_direction)
         disp = np.linalg.norm(tcp_direction)
+        #print(disp)
         tcp_direction = tcp_direction / disp
         speed_direction = speed_vect / np.linalg.norm(speed_vect)
 
         if disp < self.max_disp - self.max_disp_delta:
             return True
         return False
+
+    def _powerdown(self):
+        print("attempting to power down")
+        self.robot_socket.send(b'powerdown()\n')
+        return True
+
+    def get_tcp_force(self):
+        self.robot_socket.send(b'get_actual_tcp_speed()\n')
+        print("printing the TCP force")
+        reg = self.robot_socket.recv(1024)
+        print(reg)
+        print(reg.hex())
+        print(int(reg.hex(),16))

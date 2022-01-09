@@ -74,8 +74,13 @@ class Pathfinder:
         in the form of (mm, deg), where the first element is the toleranace of linear
         dimensions and the second is the angular tolerance. They default to 0.5 mm and 2 degrees.'''
         for i in range(3):
-            if abs(self.to_travel[0][0][i] - point[0][i]) > tolerance[0]:
-                return False
+            try:
+                if abs(self.to_travel[0][0][i] - point[0][i]) > tolerance[0]:
+                    return False
+            except TypeError:
+                print(self.to_travel[0])
+                print(point)
+                raise TypeError
             if abs(self.to_travel[0][1][i] - point[1][i]) > tolerance[1]:
                 return False
         return True
