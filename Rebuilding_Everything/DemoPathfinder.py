@@ -89,4 +89,9 @@ class Pathfinder:
         with open(path, 'w') as outfile:
             json.dump(self.points, outfile)
 
+class FullScan(Pathfinder):
+    def __init__(self, resolution, z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
+        super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
+        self.resolution = resolution
+
     

@@ -10,3 +10,4 @@ pointer = a.pointYielder()
 print(next(pointer))
 
 # well this is a piece of crap :/
+
