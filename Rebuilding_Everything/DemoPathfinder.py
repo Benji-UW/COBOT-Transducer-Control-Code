@@ -86,12 +86,46 @@ class Pathfinder:
         return True
 
     def save_points(self, path):
-        with open(path, 'w') as outfile:
-            json.dump(self.points, outfile)
+        with open(path, 'w+') as outfile:
+            json.dump(self.points, outfile, indent=4)
 
 class FullScan(Pathfinder):
     def __init__(self, resolution, z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
+        '''Acts almost identical to the regular pathfinder module, except it contains an additional
+        field for the resolution of the scan. The resolution should be passed in as a tuple in the
+        form (mm, deg) where the mm represents the linear mm tolerance for the full scan and the
+        deg represents the angular degree tolerance for the full scan. There is a minimum tolerance
+        based on the limitations of the robot, those are subject to change experimentally.'''
+        self.internal_yielder = self.internal_point_yielder()
+        min_tolerance = (0.2, 2)
+        self.resolution = (max(resolution[0],min_tolerance[0]), max(resolution[1],min_tolerance[1]))
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
-        self.resolution = resolution
+        
+    def starting_point_loader(self):
+        for i in range(10):
+            self.to_travel.append(next(self.internal_yielder))
 
-    
+    def internal_point_yielder(self):
+        '''The full scan iterates through every point in the searchspace'''
+        r_o_m = self.range_of_motion
+        res = self.resolution
+        forwards = True
+        for x in np.linspace(r_o_m['X'][0], r_o_m['X'][1], int((r_o_m['X'][1]-r_o_m['X'][0])/res[0]) + 1):
+            for y in np.linspace(r_o_m['Y'][0], r_o_m['Y'][1], int((r_o_m['Y'][1]-r_o_m['Y'][0])/res[0]) + 1):
+                for z in np.linspace(r_o_m['Z'][0], r_o_m['Z'][1], int((r_o_m['Z'][1]-r_o_m['Z'][0])/res[0]) + 1):
+                    for Rx in np.linspace(r_o_m['Rx'][0], r_o_m['Rx'][1], int((r_o_m['Rx'][1]-r_o_m['Rx'][0])/res[1]) + 1):
+                        forwards = not forwards
+                        for Ry in np.linspace(r_o_m['Ry'][forwards], r_o_m['Ry'][not forwards], int((r_o_m['Ry'][1]-r_o_m['Ry'][0])/res[1]) + 1):
+                            for Rz in np.linspace(r_o_m['Rz'][0], r_o_m['Rz'][1], int((r_o_m['Rz'][1]-r_o_m['Rz'][0])/res[1]) + 1):
+                                yield ((x,y,z),(Rx,Ry,Rz))
+        yield False   
+        
+    def close_enough(self, point, tolerance=(0.5,2)):
+        tolerance = (min(self.resolution[0] / 2, tolerance[0]), min(self.resolution[1] / 2, tolerance[1]))
+        popped = super().close_enough(point, tolerance)
+        if popped:
+            try:
+                self.to_travel.append(next(self.internal_yielder))
+            except:
+                self.to_travel.append(False)
+        return popped

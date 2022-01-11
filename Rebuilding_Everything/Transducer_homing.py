@@ -128,9 +128,6 @@ class Transducer_homing:
 
         self.i=-1
         print('About to start the main loop')
-        self.robot.update()
-        print('Gonna try to turn it off')
-        self.robot._powerdown()
 
         while run_bool:
             t0 = time.time()
@@ -172,6 +169,9 @@ class Transducer_homing:
                 router = True
                 self.pathfinder = Pathfinder(8,45,45)            
                 self.robot.set_initial_pos()
+            if keys[pygame.key.key_code("k")] == 1 and not router:
+                router = True
+                self.pathfinder = FullScan((0.5,5),20,60,60)
             # Press x to stop the running pathfinder
             if keys[pygame.key.key_code("x")] == 1 and router:
                 router = False
@@ -274,6 +274,7 @@ class Transducer_homing:
             yield (True, mag)
 
     def MATLAB_next(self):
+        '''Hopefully can be deprecated once the generator is used successfully.'''
         self.matlab_socket.send(b'motion')
         msg = self.matlab_socket.recv(1024)
         print(msg)
@@ -284,7 +285,6 @@ class Transducer_homing:
         else:
             self.latest_loop = loop
             return (True, mag)
-
 
     def main_menu_GUI(self,router_bool):
         self.screen.fill(WHITE)
@@ -335,6 +335,7 @@ class Transducer_homing:
         
         if not router:
             self.robot_gui.tprint(self.screen, 'Press (d)emo to demonstrate the basic pathrouting module')
+            self.robot_gui.tprint(self.screen, 'Press (k) to trigger a full scan with hard-coded resolution.')
             self.robot_gui.indent()
             self.robot_gui.tprint(self.screen, 'Beware this will override the controller until the pathfinder is cancelled or has finished the task.')
             self.robot_gui.unindent()
