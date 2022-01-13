@@ -86,7 +86,8 @@ class Controller_2:
             if np.linalg.norm(joy_vect) < self.joy_min:
                 joy_vect = np.zeros((3,1))
             else:
-                print(joy_vect)
+                pass
+                #print(joy_vect)
         
         return joy_vect
     

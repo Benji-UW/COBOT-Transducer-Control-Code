@@ -264,6 +264,9 @@ class UR3e:
         self.initial_angle = np.copy(self.angle)
 
     def get_delta_pos(self):
+        '''Returns the current position and angle of either the end effector or the
+        tool on the end of the arm, in the form of a pair of vertical (3,1) sized
+        numpy matrices.'''
         return self._change_base(self.pos - self.initial_pos, inv=True), \
                self._change_base(self.angle - self.initial_angle, inv=True)
 

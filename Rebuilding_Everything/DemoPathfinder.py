@@ -85,6 +85,8 @@ class Pathfinder:
                 return False
         return True
 
+#TODO: there are some points coming through to close-enough that are wrapped up in too many tuples
+
     def save_points(self, path):
         with open(path, 'w+') as outfile:
             json.dump(self.points, outfile, indent=4)
@@ -102,6 +104,7 @@ class FullScan(Pathfinder):
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
         
     def starting_point_loader(self):
+        '''For object-oriented reasons I can't go back '''
         for i in range(10):
             self.to_travel.append(next(self.internal_yielder))
 
