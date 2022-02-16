@@ -13,7 +13,7 @@ class Pathfinder:
     position, so the initial position, as far as this is concerned, is ((0,0,0),(0deg,0deg,0deg))
     All internal points are stored as tuples in the form ((X,Y,Z),(Rx,Ry,Rz))'''
 
-    def __init__(self, z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
+    def __init__(self,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
         '''Accepts as input a series of values indicating the range of different
         points in space it is allowed to exist between. This defines the search
         space of the object. It will not investigate any points outside these bounds.
@@ -21,7 +21,7 @@ class Pathfinder:
         default to zero. Z also defines the range to give more room to move backwards
         than forwards, in order to reduce the chances of the robot moving into the
         sample.'''
-        z_r = [-z_range * 1.25, z_range * 0.75]
+        z_r = [z_range * 0.75, z_range * -1.25]
         Rx_r = [-Rx_range, Rx_range]
         Ry_r = [-Ry_range, Ry_range]
         x_r = [-x_range, x_range]
@@ -60,14 +60,17 @@ class Pathfinder:
         self.to_travel.append((tuple(center_pt[:3]),tuple(center_pt[3:])))
 
         corners = set()
+        q = (0,0,1)
 
         for i in range(64):
-            pos = (self.range_of_motion['X'][((-1)**int(i))],self.range_of_motion['Y'][((-1)**int(i/2))],self.range_of_motion['Z'][((-1)**int(i/4))])
-            ang = (self.range_of_motion['Rx'][((-1)**int(i/8))],self.range_of_motion['Ry'][((-1)**int(i/16))],self.range_of_motion['Rz'][((-1)**int(i/32))])
+            pos = (self.range_of_motion['X'][q[((-1)**int(i))]],self.range_of_motion['Y'][q[((-1)**int(i/2))]],self.range_of_motion['Z'][q[((-1)**int(i/4))]])
+            ang = (self.range_of_motion['Rx'][q[((-1)**int(i/8))]],self.range_of_motion['Ry'][q[((-1)**int(i/16))]],self.range_of_motion['Rz'][q[((-1)**int(i/32))]])
+            
             corners.add((pos,ang))
         
         for pt in corners:
             self.to_travel.append(pt)
+            # print(pt)
         
     def close_enough(self, point, tolerance=(0.5,2)):
         '''Accepts as input a point and a tuple containing the dimensional tolerances,

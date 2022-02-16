@@ -140,16 +140,22 @@ class UR3e:
 
     def speedl(self, speed_vect, rotation_vect, lag):
         if self._check_speed_displacement(speed_vect):
+            # multiplies the incoming motion vectors by the velocity
             speed_vect = self.velocity * speed_vect
             rotation_vect = self.vel_rot * rotation_vect
+            # magnitude of the vector
             speed = np.linalg.norm(speed_vect)
             if speed > self.velocity:
                 speed_vect = (self.velocity / speed) * speed_vect
             speed = np.linalg.norm(rotation_vect)
             if speed > self.vel_rot:
                 rotation_vect = (self.vel_rot / speed) * rotation_vect
+            # Normalize the vectors so that the magnitude is equal to vel_rot
+
+            # damn bruh idk what this does
             speed_vect = self._change_base(speed_vect)
             rotation_vect = self._change_base(rotation_vect)
+
             cmd = b'speedl([%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f],%1.3f,%2.3f,%1.3f)' % \
                   (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2],
                    self.acc, lag, self.acc_rot)
@@ -269,6 +275,7 @@ class UR3e:
         numpy matrices.'''
         return self._change_base(self.pos - self.initial_pos, inv=True), \
                self._change_base(self.angle - self.initial_angle, inv=True)
+
 
     def _get_pos(self):
         # Get registry 400 to 405 in modbus, ie 0x190 w/ read size of 6
