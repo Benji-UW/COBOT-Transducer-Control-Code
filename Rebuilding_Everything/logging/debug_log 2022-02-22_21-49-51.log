@@ -1,0 +1,612 @@
+DEBUG:Debug log for the robot starting on 2022-02-22_21-49-51
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:
+
+-------------------------------------------------
+DEBUG:Entering a new round of motion interpolation
+DEBUG:-------------------------------------------------
+DEBUG:1. Current change in position from the origin: 
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [ 0.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:2. Current target position relative to the origin: 
+ (Should be the same shape)
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [-5.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:3. Change in position required to get from the current to the target position
+DEBUG:[[ 0.000]
+ [ 0.000]
+ [-5.000]]
+DEBUG:4. Calculated speed-vector to reach that delta_pos in a decent amount of time:
+DEBUG:[[ 0.000]
+ [ 0.000]
+ [-1.000]]
+DEBUG:5. Change in angle required to get from the current to the target position
+DEBUG:[[ 0.000  0.000  0.000]]
+DEBUG:Transmitting to the robot the following motion vectors: 
+DEBUG:Translate: [[ 0.000]
+ [ 0.000]
+ [-1.000]] 
+Rotate: [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:
+
+-------------------------------------------------
+DEBUG:Entering a new round of motion interpolation
+DEBUG:-------------------------------------------------
+DEBUG:1. Current change in position from the origin: 
+DEBUG:
+[[-0.051]
+ [ 0.046]
+ [-0.124]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:2. Current target position relative to the origin: 
+ (Should be the same shape)
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [-5.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:3. Change in position required to get from the current to the target position
+DEBUG:[[ 0.051]
+ [-0.046]
+ [-4.876]]
+DEBUG:4. Calculated speed-vector to reach that delta_pos in a decent amount of time:
+DEBUG:[[ 0.010]
+ [-0.009]
+ [-0.975]]
+DEBUG:5. Change in angle required to get from the current to the target position
+DEBUG:[[ 0.000  0.000  0.000]]
+DEBUG:Transmitting to the robot the following motion vectors: 
+DEBUG:Translate: [[ 0.010]
+ [-0.009]
+ [-0.975]] 
+Rotate: [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:
+
+-------------------------------------------------
+DEBUG:Entering a new round of motion interpolation
+DEBUG:-------------------------------------------------
+DEBUG:1. Current change in position from the origin: 
+DEBUG:
+[[ 0.040]
+ [ 0.041]
+ [-0.082]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:2. Current target position relative to the origin: 
+ (Should be the same shape)
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [-5.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:3. Change in position required to get from the current to the target position
+DEBUG:[[-0.040]
+ [-0.041]
+ [-4.918]]
+DEBUG:4. Calculated speed-vector to reach that delta_pos in a decent amount of time:
+DEBUG:[[-0.008]
+ [-0.008]
+ [-0.984]]
+DEBUG:5. Change in angle required to get from the current to the target position
+DEBUG:[[ 0.000  0.000  0.000]]
+DEBUG:Transmitting to the robot the following motion vectors: 
+DEBUG:Translate: [[-0.008]
+ [-0.008]
+ [-0.984]] 
+Rotate: [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:
+
+-------------------------------------------------
+DEBUG:Entering a new round of motion interpolation
+DEBUG:-------------------------------------------------
+DEBUG:1. Current change in position from the origin: 
+DEBUG:
+[[ 0.040]
+ [ 0.041]
+ [-0.082]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:2. Current target position relative to the origin: 
+ (Should be the same shape)
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [-5.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:3. Change in position required to get from the current to the target position
+DEBUG:[[-0.040]
+ [-0.041]
+ [-4.918]]
+DEBUG:4. Calculated speed-vector to reach that delta_pos in a decent amount of time:
+DEBUG:[[-0.008]
+ [-0.008]
+ [-0.984]]
+DEBUG:5. Change in angle required to get from the current to the target position
+DEBUG:[[ 0.000  0.000  0.000]]
+DEBUG:Transmitting to the robot the following motion vectors: 
+DEBUG:Translate: [[-0.008]
+ [-0.008]
+ [-0.984]] 
+Rotate: [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:
+
+-------------------------------------------------
+DEBUG:Entering a new round of motion interpolation
+DEBUG:-------------------------------------------------
+DEBUG:1. Current change in position from the origin: 
+DEBUG:
+[[ 0.040]
+ [ 0.041]
+ [-0.082]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:2. Current target position relative to the origin: 
+ (Should be the same shape)
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [-5.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:3. Change in position required to get from the current to the target position
+DEBUG:[[-0.040]
+ [-0.041]
+ [-4.918]]
+DEBUG:4. Calculated speed-vector to reach that delta_pos in a decent amount of time:
+DEBUG:[[-0.008]
+ [-0.008]
+ [-0.984]]
+DEBUG:5. Change in angle required to get from the current to the target position
+DEBUG:[[ 0.000  0.000  0.000]]
+DEBUG:Transmitting to the robot the following motion vectors: 
+DEBUG:Translate: [[-0.008]
+ [-0.008]
+ [-0.984]] 
+Rotate: [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:
+
+-------------------------------------------------
+DEBUG:Entering a new round of motion interpolation
+DEBUG:-------------------------------------------------
+DEBUG:1. Current change in position from the origin: 
+DEBUG:
+[[ 0.040]
+ [ 0.041]
+ [-0.082]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:2. Current target position relative to the origin: 
+ (Should be the same shape)
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [-5.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:3. Change in position required to get from the current to the target position
+DEBUG:[[-0.040]
+ [-0.041]
+ [-4.918]]
+DEBUG:4. Calculated speed-vector to reach that delta_pos in a decent amount of time:
+DEBUG:[[-0.008]
+ [-0.008]
+ [-0.984]]
+DEBUG:5. Change in angle required to get from the current to the target position
+DEBUG:[[ 0.000  0.000  0.000]]
+DEBUG:Transmitting to the robot the following motion vectors: 
+DEBUG:Translate: [[-0.008]
+ [-0.008]
+ [-0.984]] 
+Rotate: [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:
+
+-------------------------------------------------
+DEBUG:Entering a new round of motion interpolation
+DEBUG:-------------------------------------------------
+DEBUG:1. Current change in position from the origin: 
+DEBUG:
+[[ 0.040]
+ [ 0.041]
+ [-0.082]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:2. Current target position relative to the origin: 
+ (Should be the same shape)
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [-5.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:3. Change in position required to get from the current to the target position
+DEBUG:[[-0.040]
+ [-0.041]
+ [-4.918]]
+DEBUG:4. Calculated speed-vector to reach that delta_pos in a decent amount of time:
+DEBUG:[[-0.008]
+ [-0.008]
+ [-0.984]]
+DEBUG:5. Change in angle required to get from the current to the target position
+DEBUG:[[ 0.000  0.000  0.000]]
+DEBUG:Transmitting to the robot the following motion vectors: 
+DEBUG:Translate: [[-0.008]
+ [-0.008]
+ [-0.984]] 
+Rotate: [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:
+
+-------------------------------------------------
+DEBUG:Entering a new round of motion interpolation
+DEBUG:-------------------------------------------------
+DEBUG:1. Current change in position from the origin: 
+DEBUG:
+[[ 0.040]
+ [ 0.041]
+ [-0.082]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:2. Current target position relative to the origin: 
+ (Should be the same shape)
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [-5.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:3. Change in position required to get from the current to the target position
+DEBUG:[[-0.040]
+ [-0.041]
+ [-4.918]]
+DEBUG:4. Calculated speed-vector to reach that delta_pos in a decent amount of time:
+DEBUG:[[-0.008]
+ [-0.008]
+ [-0.984]]
+DEBUG:5. Change in angle required to get from the current to the target position
+DEBUG:[[ 0.000  0.000  0.000]]
+DEBUG:Transmitting to the robot the following motion vectors: 
+DEBUG:Translate: [[-0.008]
+ [-0.008]
+ [-0.984]] 
+Rotate: [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:
+
+-------------------------------------------------
+DEBUG:Entering a new round of motion interpolation
+DEBUG:-------------------------------------------------
+DEBUG:1. Current change in position from the origin: 
+DEBUG:
+[[-0.091]
+ [ 0.005]
+ [-0.042]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:2. Current target position relative to the origin: 
+ (Should be the same shape)
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [-5.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:3. Change in position required to get from the current to the target position
+DEBUG:[[ 0.091]
+ [-0.005]
+ [-4.958]]
+DEBUG:4. Calculated speed-vector to reach that delta_pos in a decent amount of time:
+DEBUG:[[ 0.018]
+ [-0.001]
+ [-0.992]]
+DEBUG:5. Change in angle required to get from the current to the target position
+DEBUG:[[ 0.000  0.000  0.000]]
+DEBUG:Transmitting to the robot the following motion vectors: 
+DEBUG:Translate: [[ 0.018]
+ [-0.001]
+ [-0.992]] 
+Rotate: [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:
+
+-------------------------------------------------
+DEBUG:Entering a new round of motion interpolation
+DEBUG:-------------------------------------------------
+DEBUG:1. Current change in position from the origin: 
+DEBUG:
+[[ 0.040]
+ [ 0.041]
+ [-0.082]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:2. Current target position relative to the origin: 
+ (Should be the same shape)
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [-5.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:3. Change in position required to get from the current to the target position
+DEBUG:[[-0.040]
+ [-0.041]
+ [-4.918]]
+DEBUG:4. Calculated speed-vector to reach that delta_pos in a decent amount of time:
+DEBUG:[[-0.008]
+ [-0.008]
+ [-0.984]]
+DEBUG:5. Change in angle required to get from the current to the target position
+DEBUG:[[ 0.000  0.000  0.000]]
+DEBUG:Transmitting to the robot the following motion vectors: 
+DEBUG:Translate: [[-0.008]
+ [-0.008]
+ [-0.984]] 
+Rotate: [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:
+
+-------------------------------------------------
+DEBUG:Entering a new round of motion interpolation
+DEBUG:-------------------------------------------------
+DEBUG:1. Current change in position from the origin: 
+DEBUG:
+[[ 0.040]
+ [ 0.041]
+ [-0.082]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:2. Current target position relative to the origin: 
+ (Should be the same shape)
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [-5.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:3. Change in position required to get from the current to the target position
+DEBUG:[[-0.040]
+ [-0.041]
+ [-4.918]]
+DEBUG:4. Calculated speed-vector to reach that delta_pos in a decent amount of time:
+DEBUG:[[-0.008]
+ [-0.008]
+ [-0.984]]
+DEBUG:5. Change in angle required to get from the current to the target position
+DEBUG:[[ 0.000  0.000  0.000]]
+DEBUG:Transmitting to the robot the following motion vectors: 
+DEBUG:Translate: [[-0.008]
+ [-0.008]
+ [-0.984]] 
+Rotate: [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:
+
+-------------------------------------------------
+DEBUG:Entering a new round of motion interpolation
+DEBUG:-------------------------------------------------
+DEBUG:1. Current change in position from the origin: 
+DEBUG:
+[[-0.051]
+ [ 0.046]
+ [-0.124]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:2. Current target position relative to the origin: 
+ (Should be the same shape)
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [-5.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:3. Change in position required to get from the current to the target position
+DEBUG:[[ 0.051]
+ [-0.046]
+ [-4.876]]
+DEBUG:4. Calculated speed-vector to reach that delta_pos in a decent amount of time:
+DEBUG:[[ 0.010]
+ [-0.009]
+ [-0.975]]
+DEBUG:5. Change in angle required to get from the current to the target position
+DEBUG:[[ 0.000  0.000  0.000]]
+DEBUG:Transmitting to the robot the following motion vectors: 
+DEBUG:Translate: [[ 0.010]
+ [-0.009]
+ [-0.975]] 
+Rotate: [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------
+DEBUG:
+
+-------------------------------------------------
+DEBUG:Entering a new round of motion interpolation
+DEBUG:-------------------------------------------------
+DEBUG:1. Current change in position from the origin: 
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [ 0.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:2. Current target position relative to the origin: 
+ (Should be the same shape)
+DEBUG:
+[[ 0.000]
+ [ 0.000]
+ [-5.000]], [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:3. Change in position required to get from the current to the target position
+DEBUG:[[ 0.000]
+ [ 0.000]
+ [-5.000]]
+DEBUG:4. Calculated speed-vector to reach that delta_pos in a decent amount of time:
+DEBUG:[[ 0.000]
+ [ 0.000]
+ [-1.000]]
+DEBUG:5. Change in angle required to get from the current to the target position
+DEBUG:[[ 0.000  0.000  0.000]]
+DEBUG:Transmitting to the robot the following motion vectors: 
+DEBUG:Translate: [[ 0.000]
+ [ 0.000]
+ [-1.000]] 
+Rotate: [[ 0.000]
+ [ 0.000]
+ [ 0.000]]
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]])
+DEBUG:Current pos/angle: ([[ 0.328  0.095 -0.015]], [[-2.067 -2.163 -0.939]]
+DEBUG:----------------------------------------------

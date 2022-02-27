@@ -1,7 +1,7 @@
 '''
 Unit convention: mm/kg/s/deg
 '''
-import socket
+import socket, struct
 import time
 import pygame
 import math
@@ -134,6 +134,7 @@ class Transducer_homing:
 
         self.starting_pos = [np.copy(self.robot.pos), np.copy(self.robot.angle)]
         changed_preset = False
+        nextpoint = None
 
         i_rr = 0
 
@@ -146,7 +147,8 @@ class Transducer_homing:
         while run_bool:
             t0 = time.time()
             self.robot.update()
-            self.main_menu_GUI(router)
+            self.main_menu_GUI(router, nextpoint)
+            #self.robot.get_tcp_force()
 
             (new_mag, latest_mag) = next(self.listener)
             #(new_mag, latest_mag) = self.MATLAB_next()
@@ -190,7 +192,7 @@ class Transducer_homing:
                 translate = not translate
             if keys[pygame.key.key_code("d")] == 1 and not router:
                 router = True
-                self.pathfinder = Pathfinder(40,45,45)
+                self.pathfinder = Pathfinder(20,30,30)
                 self.robot.set_initial_pos()
             if keys[pygame.key.key_code("k")] == 1 and not router:
                 router = True
@@ -198,6 +200,15 @@ class Transducer_homing:
             # Press x to stop the running pathfinder
             if keys[pygame.key.key_code("x")] == 1 and router:
                 router = False
+            if keys[pygame.key.key_code("m")] == 1 and router:
+                t_pos,t_angle = (nextpoint[0],nextpoint[1])
+                t_pos,t_angle = np.array([t_pos]).T,np.array([t_angle]).T
+
+                self.robot.movel(self.starting_pos[0] + t_pos,self.starting_pos[1] +  t_angle)
+                
+                print("movel engaged")
+                print("Target set to the following point:")
+                print(self.starting_pos[0] + t_pos,self.starting_pos[1] +  t_angle)
             if keys[pygame.key.key_code("a")] == 1 and not router:
                 self.change_range_gui()
             if keys[pygame.key.key_code("h")] == 1 and not router:
@@ -217,6 +228,7 @@ class Transducer_homing:
                 nextpoint = self.pathfinder.next()
                 #print(nextpoint)
                 (speed_vect,rot_vect) = self.interpolate_motion(nextpoint)
+                
                 logging.debug("Transmitting to the robot the following motion vectors: ")
                 logging.debug(f"Translate: {speed_vect} \nRotate: {rot_vect}")
             else:
@@ -224,9 +236,17 @@ class Transducer_homing:
                 if translate:
                     speed_vect = joy_vect
                 else:
-                    rot_vect = joy_vect
+                    rot_vect[0] = joy_vect[1]
+                    rot_vect[1] = joy_vect[0]
+                    rot_vect[2] = joy_vect[2]
+
             
             self.robot.speedl(speed_vect,rot_vect,self.lag)
+            logging.debug("----------------------------------------------")
+            logging.debug("Position info about the robot:")
+            logging.debug(f"Initial pos/angle: ({self.robot.initial_pos.T}, {self.robot.initial_angle.T})")
+            logging.debug(f"Current pos/angle: ({self.robot.pos.T}, {self.robot.angle.T}")
+            logging.debug("----------------------------------------------")
 
 
             for event in pygame.event.get():
@@ -260,14 +280,15 @@ class Transducer_homing:
         '''Converts the get_delta_pos method built into the UR3e method into
         the local units used in the pathfinders, mm/kg/s/deg'''
         d_pos,d_angle = self.robot.get_delta_pos()
+        
         d_pos = d_pos*1000
         d_angle = np.rad2deg(d_angle)
         
-        for i in range(3):
-            if (d_angle[i] > 180):
-                d_angle[i] -= 360
-            elif (d_angle[i] < -180):
-                d_angle[i] += 360
+        # for i in range(3):
+        #     if (d_angle[i] > 180):
+        #         d_angle[i] -= 360
+        #     elif (d_angle[i] < -180):
+        #         d_angle[i] += 360
 
         #print(d_pos, d_angle)
         return (d_pos,d_angle)
@@ -298,7 +319,7 @@ class Transducer_homing:
         logging.debug("3. Change in position required to get from the current to the target position")
         logging.debug(f"{delta_pos}")
 
-        if (np.max(delta_pos) != 0):
+        if (np.max(np.abs(delta_pos)) != 0):
             speed_vect = delta_pos / max(np.max(np.abs(delta_pos)),5)
             logging.debug("4. Calculated speed-vector to reach that delta_pos in a decent amount of time:")
             logging.debug(f"{speed_vect}")
@@ -308,14 +329,19 @@ class Transducer_homing:
         delta_ang = t_angle - c_angle
 
         logging.debug("5. Change in angle required to get from the current to the target position")
-        logging.debug(delta_ang)
+        logging.debug(delta_ang.T)
+
+        rot_vect = np.zeros((3,1))
         
-        if (np.max(delta_ang) != 0):
-            rot_vect = delta_ang / np.max(np.abs(delta_ang))
+        if (np.max(np.abs(delta_ang)) != 0):
+            delta_ang = delta_ang / np.max(np.abs(delta_ang))
+            rot_vect[0] = 1 * delta_ang[0] # 1 - Rx
+            rot_vect[1] = -1 * delta_ang[1] 
+            # rot_vect[2] = -0 * delta_ang[1]# 0 - Rz
+            rot_vect[2] = 0
             logging.debug("6. Calculated angular-speed to reach that delta_pos in a decent amount of time:")
             logging.debug(f"{rot_vect}")
-        else:
-            rot_vect = delta_ang
+        
         
         # logging.debug("7. Translation vector about to be sent to the robot for execution: (trans, rot)")
         # logging.debug(f"{speed_vect}, {rot_vect}")
@@ -361,10 +387,10 @@ class Transducer_homing:
             self.latest_loop = loop
             return (True, mag)
 
-    def main_menu_GUI(self,router_bool):
+    def main_menu_GUI(self,router_bool,current_target):
         self.screen.fill(WHITE)
         self.robot_gui.reset()
-        self.write_pos_info(router_bool)
+        self.write_pos_info(router_bool,current_target)
 
     def change_range_gui(self):
         '''It is not a priority right now but I would ultimately like there to be
@@ -380,7 +406,7 @@ class Transducer_homing:
         #     pygame.event.pump()
         #     keys = pygame.key.get_pressed()
 
-    def write_pos_info(self, router):
+    def write_pos_info(self, router, current_target):
         pos = self.robot.pos
         angle = self.robot.angle
         tcp_offset = self.robot.tcp_offset
@@ -399,22 +425,32 @@ class Transducer_homing:
         self.robot_gui.tprint(self.screen, 'x= %4.1f mm, Rx= %3.0f deg' %
                               (delta_pos[0], delta_angle[0]))
         self.robot_gui.tprint(self.screen, 'y= %4.1f mm, Ry= %3.0f deg' %
-                              (delta_pos[1], delta_angle[1]))
+                              (delta_pos[1], delta_angle[2]))
         self.robot_gui.tprint(self.screen, 'z= %4.1f mm, Rz= %3.0f deg' %
-                              (delta_pos[2], delta_angle[2]))
+                              (delta_pos[2], delta_angle[1]))
         self.robot_gui.unindent()
 
         self.robot_gui.skip_line(1)
 
-        self.robot_gui.tprint(self.screen, 'TCP position in base:')
-        self.robot_gui.indent()
-        self.robot_gui.tprint(self.screen, 'x= %4.1f mm, Rx= %3.0f deg' %
-                              (pos[0]*1000, np.rad2deg(angle[0])))
-        self.robot_gui.tprint(self.screen, 'y= %4.1f mm, Ry= %3.0f deg' %
-                              (pos[1]*1000, np.rad2deg(angle[1])))
-        self.robot_gui.tprint(self.screen, 'z= %4.1f mm, Rz= %3.0f deg' %
-                              (pos[2]*1000, np.rad2deg(angle[2])))
-        self.robot_gui.unindent()
+        # self.robot_gui.tprint(self.screen, 'TCP position in base:')
+        self.robot_gui.tprint(self.screen, "TCP position in base: ((%4.1f, %4.1f, %4.1f), (%3.0f,%3.0f,%3.0f))" % 
+                            (pos[0]*1000,pos[1]*1000,pos[2]*1000,np.rad2deg(angle[0]),np.rad2deg(angle[1]),np.rad2deg(angle[2])))
+        # self.robot_gui.indent()
+        # self.robot_gui.tprint(self.screen, 'x= %4.1f mm, Rx= %3.0f deg' %
+        #                       (pos[0]*1000, np.rad2deg(angle[0])))
+        # self.robot_gui.tprint(self.screen, 'y= %4.1f mm, Ry= %3.0f deg' %
+        #                       (pos[1]*1000, np.rad2deg(angle[1])))
+        # self.robot_gui.tprint(self.screen, 'z= %4.1f mm, Rz= %3.0f deg' %
+        #                       (pos[2]*1000, np.rad2deg(angle[2])))
+        # self.robot_gui.unindent()
+
+        if current_target is not None:
+            self.robot_gui.skip_line(1)
+            t_pos = current_target[0]
+            t_ang = current_target[1]
+            self.robot_gui.tprint(self.screen, "Next target: ((%4.1f, %4.1f, %4.1f), (%3.0f,%3.0f,%3.0f))" % 
+                                (t_pos[0],t_pos[1],t_pos[2],t_ang[0],t_ang[1],t_ang[2]))
+
 
         self.robot_gui.skip_line(1)
 
@@ -435,6 +471,7 @@ class Transducer_homing:
             next_target = self.pathfinder.next()
             t_pos,t_angle = (next_target[0],next_target[1])
             self.robot_gui.tprint(self.screen, 'Press (x) to cancel the running pathfinder')
+            self.robot_gui.tprint(self.screen, "Press (m) to movel to the next target point.")
             self.robot_gui.skip_line(2)
             self.robot_gui.tprint(self.screen, 'Current target:')
             self.robot_gui.indent()
@@ -451,6 +488,40 @@ class Transducer_homing:
         self.robot_gui.tprint(self.screen, time.ctime())
 
         #print('gonna update the gui')
+    
+    def test_functions(self):
+        '''Sends a series of test functions to the robot and then logs them,
+        I'm doing this to try to learn more about how to trigger events remotely.
+        Each command contains a bytestring with the name of the command we're
+        attempting to trigger, and an expected value that we're hoping to get back.'''
+        commands = []
+        commands.append((b'get_freedrive_status()\n', 'int'))
+        commands.append((b'force()\n', 'float'))
+        commands.append((b'get_actual_joint_positions()\n', 'array of six floats'))
+        commands.append((b'get_actual_tcp_pose()\n', 'array of six floats'))
+        commands.append((b'get_controller_temp()\n', 'float'))
+        commands.append((b'get_tcp_force()\n', 'array of six floats, maybe preceded with a p'))
+        commands.append((b'is_steady()\n', 'boolean'))
+        commands.append((b'wrench_trans(p[0,0,0,1,1,1], [0,0,0,1,1,2])\n', 'list of floats again'))
+
+        for command in commands:
+            logstring = self.robot.generic_io_response(command[0])
+            logging.debug(logstring)
+        #     responses = self.robot.generic_test_command_response(command[0])
+        #     logging.debug(f"Testing the {command[0]} command, expecting output as {command[1]}.")
+        #     logging.debug(f"\nBytestring response:\n{responses[0]}\nHex responses:\n{responses[1]}")
+        #     data = responses[0]
+
+        #     # struct.unpack notes: ! represents the byte order (server = (big-endian))
+        #     # B represents an unsigned char (b is signed)
+        #     # i represents an int (I would be unsigned)
+        #     # q represents a long long (Q would be unsigned)
+            
+        #     packlen = struct.unpack('!i', data[0:4])
+        #     timestamp = struct.unpack('!Q', data[10:18])
+        #     packtype = struct.unpack('!B', data[4:5])
+
+        #     logging.debug(f"\nPackage length: {packlen}\nTimestamp: {timestamp}\nPackage type (supposed to be an unsigned int): {packtype}")
 
         
 robot = Transducer_homing()
@@ -458,4 +529,5 @@ robot.initialize()
 
 robot.connect_to_matlab()
  
+robot.test_functions()
 robot.start()

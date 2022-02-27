@@ -4,6 +4,7 @@ Unit convention: m/kg/s
 """
 import numpy as np
 import socket
+import struct
 import time
 from math import *
 
@@ -33,6 +34,10 @@ class UR3e:
         self.pos = np.zeros((3, 1))
         
         self.angle = np.zeros((3, 1))
+        
+        # TCP offset and rotation refer to the displacement of the TCP from 
+        # the end effector, they are constant throughout the operation of 
+        # the robot.
         self.tcp_offset = np.zeros((3, 1))
         self.tcp_rot = np.zeros((3, 1))
 
@@ -69,6 +74,38 @@ class UR3e:
         self.servo_lag = 0.0
         self.servo_type = None
         self.servo_cmd = np.zeros((3, 4))
+
+        self.message_type = {}
+        self.message_type[20] = "ROBOT_MESSAGE"
+        self.message_type[16] = "ROBOT_STATE"
+        self.message_type[22] = "HMC_MESSAGE"
+        self.message_type[5] = "MODBUS_INFO_MESSAGE"
+        self.message_type[-1] = "DISCONNECT"
+        self.message_type[23] = "SAFETY_SETUP_BROADCAST_MESSAGE"
+        self.message_type[24] = "SAFETY_COMPLIANCE_FUCK"
+        self.message_type[25] = "PROGRAM_STATE_MESSAGE"
+
+        self.package_type = {}
+        self.package_type[0] = "ROBOT_MODE_DATA"
+        self.package_type[1] = "JOINT_DATA"
+        self.package_type[2] = "TOOL_DATA"
+        self.package_type[3] = "MASTERBOARD_DATA"
+        self.package_type[4] = "CARTESIAN_INFO"
+        self.package_type[5] = "KINEMATICS_INFO"
+        self.package_type[6] = "CONFIGURATION_DATA"
+        self.package_type[7] = "FORCE_MODE_DATA"
+        self.package_type[8] = "ADDITIONAL_INFO"
+        self.package_type[9] = "NEEDED_FOR_CALIB_DATA"
+        self.package_type[11] = "TOOL_COMM_INFO"
+        self.package_type[12] = "TOOL_MODE_INFO"
+        self.package_type[13] = "SINGULARITY_INFO"
+        self.package_type[-1] = "fuck"
+        self.package_type[255] = "fuck"
+        self.package_type[10] = "fuck"
+        self.package_type[14] = "fuck"
+
+
+        
 
     def connect(self, robot_ip, robot_port=30002, modbus_port=502):
         """
@@ -403,3 +440,56 @@ class UR3e:
         print(reg)
         print(reg.hex())
         print(int(reg.hex(),16))
+
+    def generic_test_command_response(self, command, no_bytes=1024):
+        self.robot_socket.send(command)
+        reg = self.robot_socket.recv(no_bytes)
+        return reg,reg.hex()
+
+    def generic_io_response(self, command, no_bytes=4096):
+        '''This is a white whale of the project, send a generic URscript command to the robot
+        and parse all the data that it sends back. This is essential for doing more intricate
+        motions with the end effector.'''
+
+        # Send the transmit requeset and listen for 4096 bytes back (enough to store any packet)
+        self.robot_socket.send(command)
+        data = self.robot_socket.recv(no_bytes)
+
+        # initialize i to track position in the packet
+        i = 0
+        logstring = f"Toggling the command {command}\n"
+
+        if data:
+            logstring += "Logging new packet.\n"
+
+            #extract packet length, timestamp, and packet type from the start of the packet
+            # Length of overall package: 32bit integer
+            msglen = (struct.unpack('!i', data[0:4]))[0]
+            # Unsigned char messageType (corresponds to hard-coded message types)
+            print(data[4])
+            # msgtype = (struct.unpack('!b', data[4]))[0]
+            msgtype = data[4]
+
+            logstring += f"Message length: {msglen}\n"
+            logstring += f"Message type: {msgtype}, {self.message_type[msgtype]}\n"
+
+            i = 5
+            while i+5 < msglen:
+                # Extract the length and type of the message within the packet
+                # msglen is the first four bytes
+                packlen = (struct.unpack('!i', data[i:i+4]))[0]
+                print(data[i+4])
+                # packtype = (struct.unpack('!b', data[i+4]))[0]
+                packtype = data[i+4]
+                logstring += f"Message length: {packlen}\n"
+                logstring += f"Message type: {packtype}, {self.package_type[packtype]}\n"
+
+                logstring += f"Data: {data[i+5:i+packlen]}"
+
+                i += packlen
+
+        return logstring
+
+                
+
+

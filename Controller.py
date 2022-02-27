@@ -4,7 +4,7 @@ class Controller:
     def __init__(self, joystick):
         self.joystick = joystick
         self.name = self.joystick.get_name()
-        self.joy_min = 0.1
+        self.joy_min = 0.33
         if 'HORI' in self.name:
             self.A = 0
             self.B = 1

@@ -84,7 +84,7 @@ class Pathfinder:
                 print(self.to_travel[0])
                 print(point)
                 raise TypeError
-            if abs(self.to_travel[0][1][i] - point[1][i]) > tolerance[1]:
+            if abs(self.to_travel[0][1][i % 2] - point[1][i % 2]) > tolerance[1]:
                 return False
         return True
 
