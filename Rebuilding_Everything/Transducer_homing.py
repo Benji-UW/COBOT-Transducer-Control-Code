@@ -496,6 +496,7 @@ class Transducer_homing:
         attempting to trigger, and an expected value that we're hoping to get back.'''
         commands = []
         commands.append((b'get_freedrive_status()\n', 'int'))
+        commands.append((b'get_freedrive_status()\n', 'int but with less'))
         commands.append((b'force()\n', 'float'))
         commands.append((b'get_actual_joint_positions()\n', 'array of six floats'))
         commands.append((b'get_actual_tcp_pose()\n', 'array of six floats'))
@@ -503,6 +504,7 @@ class Transducer_homing:
         commands.append((b'get_tcp_force()\n', 'array of six floats, maybe preceded with a p'))
         commands.append((b'is_steady()\n', 'boolean'))
         commands.append((b'wrench_trans(p[0,0,0,1,1,1], [0,0,0,1,1,2])\n', 'list of floats again'))
+        commands.append((b'wrench_trans(p[0,0,0,1,1,1], [0,0,0,1,2,1])\n', 'list of floats again'))
 
         for command in commands:
             logstring = self.robot.generic_io_response(command[0])

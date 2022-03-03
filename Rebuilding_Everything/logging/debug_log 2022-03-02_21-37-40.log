@@ -1,0 +1,25 @@
+DEBUG:Debug log for the robot starting on 2022-03-02_21-37-40
+DEBUG:Toggling the command b'get_freedrive_status()\n'
+Logging new packet.
+Message type: 20, ROBOT_MESSAGE
+Message length: 55
+Full raw message data: b'\x00\x00\x007\x14\xff\xff\xff\xff\xff\xff\xff\xff\xfe\x03\tURControl\x05\x0b\x00\x00\x00\x00\x00\x00\x00\x0019-05-2021, 06:19:30'
+Sub-package length: -1
+Sub-package type: 255, fuck
+Sub-package Data (including 5 header bits): b''
+Sub-package length: 352321535
+Sub-package type: 255, fuck
+Sub-package Data (including 5 header bits): b'\x14\xff\xff\xff\xff\xff\xff\xff\xff\xfe\x03\tURControl\x05\x0b\x00\x00\x00\x00\x00\x00\x00\x0019-05-2021, 06:19:30'
+
+DEBUG:Toggling the command b'get_freedrive_status()\n'
+Logging new packet.
+Message type: 20, ROBOT_MESSAGE
+Message length: 24
+Full raw message data: b'\x00\x00\x00\x18\x14\xff\xff\xff\xff\xff\xff\xff\xff\xfe\x0c\x00\x00\x00\x00\x00\x00\x00\x00\x01'
+Sub-package length: -1
+Sub-package type: 255, fuck
+Sub-package Data (including 5 header bits): b''
+Sub-package length: 352321535
+Sub-package type: 255, fuck
+Sub-package Data (including 5 header bits): b'\x14\xff\xff\xff\xff\xff\xff\xff\xff\xfe\x0c\x00\x00\x00\x00\x00\x00\x00\x00\x01'
+

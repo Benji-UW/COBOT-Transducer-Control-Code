@@ -7,6 +7,7 @@ import socket
 import struct
 import time
 from math import *
+import UR3e_config as uconf
 
 
 def _reg_convert(reg, rtype=None):
@@ -470,8 +471,9 @@ class UR3e:
             # msgtype = (struct.unpack('!b', data[4]))[0]
             msgtype = data[4]
 
-            logstring += f"Message length: {msglen}\n"
             logstring += f"Message type: {msgtype}, {self.message_type[msgtype]}\n"
+            logstring += f"Message length: {msglen}\n"
+            logstring += f"Full raw message data: {data}\n"
 
             i = 5
             while i+5 < msglen:
@@ -481,12 +483,27 @@ class UR3e:
                 print(data[i+4])
                 # packtype = (struct.unpack('!b', data[i+4]))[0]
                 packtype = data[i+4]
-                logstring += f"Message length: {packlen}\n"
-                logstring += f"Message type: {packtype}, {self.package_type[packtype]}\n"
+                logstring += f"Sub-package length: {packlen}\n"
+                logstring += f"Sub-package type: {packtype}, {self.package_type[packtype]}\n"
 
-                logstring += f"Data: {data[i+5:i+packlen]}"
+                logstring += f"Sub-package Data (including 5 header bits): {data[i:i+packlen]}\n"
 
+                if uconf.sub_package_types.keys().__contains__(packtype):
+                    j = i
+                    package = uconf.sub_package_types[packtype]
+                    for k in range(len(package)):
+                        (data_type, name) = package[k]
+                        (struct_format, byte_len) = uconf.struct_key[data_type]
+                        val = (struct.unpack('!' + struct_format, data[j:j+byte_len]))[0]
+                        logstring += f"\t{name}: {val}\n"
+                        j += byte_len
+
+                
                 i += packlen
+
+
+
+                
 
         return logstring
 
