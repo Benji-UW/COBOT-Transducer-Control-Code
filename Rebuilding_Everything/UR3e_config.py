@@ -63,3 +63,32 @@ sub_package_types = {}
 sub_package_types[0] = robot_mode_data
 sub_package_types[4] = cartesian_info
 
+
+message_type = {}
+message_type[20] = "ROBOT_MESSAGE"
+message_type[16] = "ROBOT_STATE"
+message_type[22] = "HMC_MESSAGE"
+message_type[5] = "MODBUS_INFO_MESSAGE"
+message_type[-1] = "DISCONNECT"
+message_type[23] = "SAFETY_SETUP_BROADCAST_MESSAGE"
+message_type[24] = "SAFETY_COMPLIANCE_FUCK"
+message_type[25] = "PROGRAM_STATE_MESSAGE"
+
+package_type = {}
+package_type[0] = "ROBOT_MODE_DATA"
+package_type[1] = "JOINT_DATA"
+package_type[2] = "TOOL_DATA"
+package_type[3] = "MASTERBOARD_DATA"
+package_type[4] = "CARTESIAN_INFO"
+package_type[5] = "KINEMATICS_INFO"
+package_type[6] = "CONFIGURATION_DATA"
+package_type[7] = "FORCE_MODE_DATA"
+package_type[8] = "ADDITIONAL_INFO"
+package_type[9] = "NEEDED_FOR_CALIB_DATA"
+package_type[11] = "TOOL_COMM_INFO"
+package_type[12] = "TOOL_MODE_INFO"
+package_type[13] = "SINGULARITY_INFO"
+package_type[-1] = "fuck"
+package_type[255] = "fuck"
+package_type[10] = "fuck"
+package_type[14] = "fuck"

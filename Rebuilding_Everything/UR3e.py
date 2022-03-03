@@ -76,34 +76,6 @@ class UR3e:
         self.servo_type = None
         self.servo_cmd = np.zeros((3, 4))
 
-        self.message_type = {}
-        self.message_type[20] = "ROBOT_MESSAGE"
-        self.message_type[16] = "ROBOT_STATE"
-        self.message_type[22] = "HMC_MESSAGE"
-        self.message_type[5] = "MODBUS_INFO_MESSAGE"
-        self.message_type[-1] = "DISCONNECT"
-        self.message_type[23] = "SAFETY_SETUP_BROADCAST_MESSAGE"
-        self.message_type[24] = "SAFETY_COMPLIANCE_FUCK"
-        self.message_type[25] = "PROGRAM_STATE_MESSAGE"
-
-        self.package_type = {}
-        self.package_type[0] = "ROBOT_MODE_DATA"
-        self.package_type[1] = "JOINT_DATA"
-        self.package_type[2] = "TOOL_DATA"
-        self.package_type[3] = "MASTERBOARD_DATA"
-        self.package_type[4] = "CARTESIAN_INFO"
-        self.package_type[5] = "KINEMATICS_INFO"
-        self.package_type[6] = "CONFIGURATION_DATA"
-        self.package_type[7] = "FORCE_MODE_DATA"
-        self.package_type[8] = "ADDITIONAL_INFO"
-        self.package_type[9] = "NEEDED_FOR_CALIB_DATA"
-        self.package_type[11] = "TOOL_COMM_INFO"
-        self.package_type[12] = "TOOL_MODE_INFO"
-        self.package_type[13] = "SINGULARITY_INFO"
-        self.package_type[-1] = "fuck"
-        self.package_type[255] = "fuck"
-        self.package_type[10] = "fuck"
-        self.package_type[14] = "fuck"
 
 
         
@@ -471,7 +443,7 @@ class UR3e:
             # msgtype = (struct.unpack('!b', data[4]))[0]
             msgtype = data[4]
 
-            logstring += f"Message type: {msgtype}, {self.message_type[msgtype]}\n"
+            logstring += f"Message type: {msgtype}, {uconf.message_type[msgtype]}\n"
             logstring += f"Message length: {msglen}\n"
             logstring += f"Full raw message data: {data}\n"
 
@@ -484,7 +456,7 @@ class UR3e:
                 # packtype = (struct.unpack('!b', data[i+4]))[0]
                 packtype = data[i+4]
                 logstring += f"Sub-package length: {packlen}\n"
-                logstring += f"Sub-package type: {packtype}, {self.package_type[packtype]}\n"
+                logstring += f"Sub-package type: {packtype}, {uconf.package_type[packtype]}\n"
 
                 logstring += f"Sub-package Data (including 5 header bits): {data[i:i+packlen]}\n"
 
