@@ -118,6 +118,7 @@ class Transducer_homing:
         self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
         self.robot.set_max_displacement(self.max_disp)
         self.robot.set_parameters(base='tcp')
+        # self.robot.send_custom_funcs()
         print("Robot initialized :)")
 
     def start(self):
@@ -488,6 +489,8 @@ class Transducer_homing:
         self.robot_gui.tprint(self.screen, time.ctime())
 
         #print('gonna update the gui')
+
+
     
     def test_functions(self):
         '''Sends a series of test functions to the robot and then logs them,
@@ -531,5 +534,5 @@ robot.initialize()
 
 robot.connect_to_matlab()
  
-robot.test_functions()
+# robot.test_functions()
 robot.start()

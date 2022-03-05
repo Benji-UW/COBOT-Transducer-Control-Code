@@ -175,6 +175,43 @@ class UR3e:
             self.stopl()
         return False
 
+    def my_speedl(self, speed_vect, rotation_vect, lag):
+        # multiplies the incoming motion vectors by the velocity
+        speed_vect = self.velocity * speed_vect
+        rotation_vect = self.vel_rot * rotation_vect
+        # magnitude of the vector
+        speed = np.linalg.norm(speed_vect)
+        if speed > self.velocity:
+            speed_vect = (self.velocity / speed) * speed_vect
+        speed = np.linalg.norm(rotation_vect)
+        if speed > self.vel_rot:
+            rotation_vect = (self.vel_rot / speed) * rotation_vect
+        # Normalize the vectors so that the magnitude is equal to vel_rot
+
+        # damn bruh idk what this does
+        speed_vect = self._change_base(speed_vect)
+        rotation_vect = self._change_base(rotation_vect)
+
+        # cmd = b'my_speedl([%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f],%1.3f,%2.3f,%1.3f)' % \
+        #         (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2],
+        #         self.acc, lag, self.acc_rot)
+
+        # cmd = b'speedl(wrench_trans(p[0,0,0,get_actual_tcp_pose()[3],get_actual_tcp_pose()[4],get_actual_tcp_pose()[5]],[%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f]),%1.3f,%2.3f,%1.3f)' % \
+        #         (0,0,0,1,0,0, self.acc, lag, self.acc_rot)
+        #         # (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2], self.acc, lag, self.acc_rot)
+        cmd = b"dir=get_actual_tcp_pose()\n"
+        self.robot_socket.send(cmd + b'\n')
+        cmd = "rot=p[0,0,0,dir[3],dir[4],dir[5]]\n"
+        self.robot_socket.send(cmd + b'\n')
+        cmd = "vec = wrench_trans(rot, [%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f])\n" % \
+            (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2])
+        self.robot_socket.send(cmd + b'\n')
+        cmd = "speedl(vec,%1.3f,%2.3f,%1.3f)\n" % (self.acc, lag, self.acc_rot)
+        self.robot_socket.send(cmd + b'\n')
+
+        # self.robot_socket.send(cmd + b'\n')
+        return True
+
     def ur_servo(self, dpos, dangle=None, t=0.002, lh_t=0.02, gain=800):
         pos = np.copy(self.initial_pos) + self._change_base(dpos)
         if dangle is not None:
@@ -413,6 +450,15 @@ class UR3e:
         print(reg)
         print(reg.hex())
         print(int(reg.hex(),16))
+
+    def send_custom_funcs(self):
+        my_speedl = b"def my_speedl(xd,a,t,ra)\n \
+            dir=get_actual_tcp_pose()\n \
+            rot=p[0,0,0,dir[3],dir[4],dir[5]]\n \
+            vec = wrench_trans(rot, xd)\n \
+            speedl(vec,a,t,ra)\n \
+            end\n"
+        self.robot_socket.send(my_speedl)
 
     def generic_test_command_response(self, command, no_bytes=1024):
         self.robot_socket.send(command)
