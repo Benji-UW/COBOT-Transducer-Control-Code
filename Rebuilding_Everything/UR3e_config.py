@@ -17,7 +17,7 @@ struct_key['unsigned long long'] = ('Q',8)
 struct_key['float'] = ('f',4)
 struct_key['double'] = ('d',8)
 
-
+# ROSBAG
 
 robot_mode_data = []
 robot_mode_data.append(("int", "packageSize"))

@@ -460,17 +460,26 @@ class UR3e:
 
                 logstring += f"Sub-package Data (including 5 header bits): {data[i:i+packlen]}\n"
 
+                # If this sub-package is of a type I've manually described (UR3e_config.py)
                 if uconf.sub_package_types.keys().__contains__(packtype):
+                    # sub-package iterator
                     j = i
+
+                    # 'package' contains an ordered list of tuples representing the data format
+                    # defined by this sub-package type. Each tuple is in the form (data_type, field_name)
                     package = uconf.sub_package_types[packtype]
                     for k in range(len(package)):
+                        # extract the type and name from the current item
                         (data_type, name) = package[k]
+                        # look up the appropriate "struct.unpack" format and the number of bytes
+                        # associated with this data type (('B', 1) for an unsigned int for example)
                         (struct_format, byte_len) = uconf.struct_key[data_type]
+                        # Unpack the value from the data and store it's name and value in the logstring
                         val = (struct.unpack('!' + struct_format, data[j:j+byte_len]))[0]
                         logstring += f"\t{name}: {val}\n"
+                        # Increment j to mark our new point in the string
                         j += byte_len
 
-                
                 i += packlen
 
 
