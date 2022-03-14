@@ -92,3 +92,17 @@ package_type[-1] = "fuck"
 package_type[255] = "fuck"
 package_type[10] = "fuck"
 package_type[14] = "fuck"
+
+import json
+import os
+
+path = os.path.dirname(__file__)
+path = path + '\\UR3e_config.json'
+all_data = {}
+all_data["package_type"] = package_type
+all_data["sub_package_types"] = sub_package_types
+all_data["struct_key"] = struct_key
+all_data["package_type"] = package_type
+
+with open(path, 'w+') as outfile:
+    json.dump(all_data, outfile, indent=2)

@@ -118,7 +118,6 @@ class Transducer_homing:
         self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
         self.robot.set_max_displacement(self.max_disp)
         self.robot.set_parameters(base='tcp')
-        # self.robot.send_custom_funcs()
         print("Robot initialized :)")
 
     def start(self):
@@ -243,6 +242,7 @@ class Transducer_homing:
 
             
             self.robot.speedl(speed_vect,rot_vect,self.lag)
+
             logging.debug("----------------------------------------------")
             logging.debug("Position info about the robot:")
             logging.debug(f"Initial pos/angle: ({self.robot.initial_pos.T}, {self.robot.initial_angle.T})")
@@ -271,9 +271,7 @@ class Transducer_homing:
             self.disconnect_from_matlab()
             print('Disconnected from server.')
         if router:
-            #path = os.path.dirname(__file__) + '\\data\\' + time.ctime(time.time())
             path = os.path.dirname(__file__)
-            #path = path + '\\' + time.ctime(time.time())
             path = path + '\\test.json'
             self.pathfinder.save_points(path)
 

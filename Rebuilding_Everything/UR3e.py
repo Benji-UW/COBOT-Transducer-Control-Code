@@ -54,6 +54,7 @@ class UR3e:
 
         self.robot_socket = None
         self.modbus_socket = None
+        self.data_socket = None
 
         self.base = 'tcp'
 
@@ -75,12 +76,9 @@ class UR3e:
         self.servo_lag = 0.0
         self.servo_type = None
         self.servo_cmd = np.zeros((3, 4))
-
-
-
         
 
-    def connect(self, robot_ip, robot_port=30002, modbus_port=502):
+    def connect(self, robot_ip, robot_port=30002, modbus_port=502, data_ip = "192.168.1.69", data_port=420):
         """
         Connect to the robot.
 
@@ -102,6 +100,14 @@ class UR3e:
         except socket.gaierror as e:
             print('Connection error to modbus: %s' % e)
             return (False, e)
+
+        # self.data_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # try:
+        #     self.robot_socket.send(b"socket_open(\"192.168.1.69\", 420, \"data_socket\")")
+        #     self.data_socket.connect(("192.168.1.69", data_port))
+        # except socket.gaierror as e:
+        #     print(f'Connection error to the data port: {e}')
+        #     return (False, e)
 
         return (True, '')
 
@@ -130,6 +136,8 @@ class UR3e:
     def set_initial_pos(self):
         self.initial_pos = np.copy(self.pos)
         self.initial_angle = np.copy(self.angle)
+
+        self.robot_socket.send(b"init_pos = get_actual_tcp_pose()\n")
 
     def movel(self, pos_to, angle_to, t=0.0):
         if self._check_move_displacement(pos_to):
@@ -192,21 +200,31 @@ class UR3e:
         speed_vect = self._change_base(speed_vect)
         rotation_vect = self._change_base(rotation_vect)
 
-        # cmd = b'my_speedl([%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f],%1.3f,%2.3f,%1.3f)' % \
-        #         (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2],
-        #         self.acc, lag, self.acc_rot)
+        # cmds = []
+        # cmds.append(b"dir=get_actual_tcp_pose()\n")
+        # cmds.append(b"rot=p[0,0,0,dir[3],dir[4],dir[5]]\n")
+        # # cmds.append(b"vec = wrench_trans(rot, [%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f])\n" % \
+        # #     (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2]))
+        # cmds.append(b"vec = wrench_trans(rot, [0,0,0,%2.3f,%2.3f,%2.3f])\n" % \
+        #     (rotation_vect[0], rotation_vect[1], rotation_vect[2]))
+        
+        # cmds.append(b"vec_1 = [%1.3f, %1.3f, %1.3f, vec[3],vec[4],vec[5]]\n" % (speed_vect[0], speed_vect[1], speed_vect[2]))
+        # cmds.append(b"speedl(vec_1,%1.3f,%2.3f,%1.3f)\n" % (self.acc, lag, self.acc_rot))
 
-        # cmd = b'speedl(wrench_trans(p[0,0,0,get_actual_tcp_pose()[3],get_actual_tcp_pose()[4],get_actual_tcp_pose()[5]],[%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f]),%1.3f,%2.3f,%1.3f)' % \
-        #         (0,0,0,1,0,0, self.acc, lag, self.acc_rot)
-        #         # (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2], self.acc, lag, self.acc_rot)
+        # for cmd in cmds:
+        #     self.robot_socket.send(cmd)
+
+            # If this code works, delete the stuff down below
         cmd = b"dir=get_actual_tcp_pose()\n"
         self.robot_socket.send(cmd + b'\n')
-        cmd = "rot=p[0,0,0,dir[3],dir[4],dir[5]]\n"
+        cmd = b"rot=p[0,0,0,dir[3],dir[4],dir[5]]\n"
         self.robot_socket.send(cmd + b'\n')
-        cmd = "vec = wrench_trans(rot, [%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f])\n" % \
+        cmd = b"vec = wrench_trans(rot, [%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f])\n" % \
             (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2])
-        self.robot_socket.send(cmd + b'\n')
-        cmd = "speedl(vec,%1.3f,%2.3f,%1.3f)\n" % (self.acc, lag, self.acc_rot)
+        self.robot_socket.send(cmd)
+        cmd = b"vec_1 = [%1.3f, %1.3f, %1.3f, vec[3],vec[4],vec[5]]\n"
+        self.robot_socket.send(cmd)
+        cmd = b"speedl(vec_1,%1.3f,%2.3f,%1.3f)\n" % (self.acc, lag, self.acc_rot)
         self.robot_socket.send(cmd + b'\n')
 
         # self.robot_socket.send(cmd + b'\n')
@@ -443,23 +461,6 @@ class UR3e:
         self.robot_socket.send(b'powerdown()\n')
         return True
 
-    def get_tcp_force(self):
-        self.robot_socket.send(b'get_actual_tcp_speed()\n')
-        print("printing the TCP force")
-        reg = self.robot_socket.recv(1024)
-        print(reg)
-        print(reg.hex())
-        print(int(reg.hex(),16))
-
-    def send_custom_funcs(self):
-        my_speedl = b"def my_speedl(xd,a,t,ra)\n \
-            dir=get_actual_tcp_pose()\n \
-            rot=p[0,0,0,dir[3],dir[4],dir[5]]\n \
-            vec = wrench_trans(rot, xd)\n \
-            speedl(vec,a,t,ra)\n \
-            end\n"
-        self.robot_socket.send(my_speedl)
-
     def generic_test_command_response(self, command, no_bytes=1024):
         self.robot_socket.send(command)
         reg = self.robot_socket.recv(no_bytes)
@@ -526,14 +527,21 @@ class UR3e:
                         # Increment j to mark our new point in the string
                         j += byte_len
 
-                i += packlen
-
-
-
-                
+                i += packlen      
 
         return logstring
 
+    def new_port_response(self):
+        cmds = [b"pos = get_actual_tcp_pos()\n", \
+            b"trans = wrench_trans(init_pos, pos)\n", \
+            b"socket_set_var(\"Rx\", trans[3]*1000, \"data_socket\")\n", \
+            b"socket_set_var(\"Ry\", trans[4]*1000, \"data_socket\")\n", \
+            b"socket_set_var(\"Rx\", trans[5]*1000, \"data_socket\")\n"]
+
+        for cmd in cmds:
+            self.robot_socket.send(cmd)
+        
+        self.data_socket.recv(1024)
                 
 
 

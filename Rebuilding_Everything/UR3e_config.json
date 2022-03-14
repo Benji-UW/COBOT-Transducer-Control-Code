@@ -1,0 +1,205 @@
+{
+  "package_type": {
+    "0": "ROBOT_MODE_DATA",
+    "1": "JOINT_DATA",
+    "2": "TOOL_DATA",
+    "3": "MASTERBOARD_DATA",
+    "4": "CARTESIAN_INFO",
+    "5": "KINEMATICS_INFO",
+    "6": "CONFIGURATION_DATA",
+    "7": "FORCE_MODE_DATA",
+    "8": "ADDITIONAL_INFO",
+    "9": "NEEDED_FOR_CALIB_DATA",
+    "11": "TOOL_COMM_INFO",
+    "12": "TOOL_MODE_INFO",
+    "13": "SINGULARITY_INFO",
+    "-1": "fuck",
+    "255": "fuck",
+    "10": "fuck",
+    "14": "fuck"
+  },
+  "sub_package_types": {
+    "0": [
+      [
+        "int",
+        "packageSize"
+      ],
+      [
+        "unsigned char",
+        "packageType"
+      ],
+      [
+        "long long",
+        "timestamp"
+      ],
+      [
+        "bool",
+        "isRealRobotConnected"
+      ],
+      [
+        "bool",
+        "isRealRobotEnabled"
+      ],
+      [
+        "bool",
+        "isRobotPowerOn"
+      ],
+      [
+        "bool",
+        "isEmergencyStopped"
+      ],
+      [
+        "bool",
+        "isProtectiveStopped"
+      ],
+      [
+        "bool",
+        "isProgramRunning"
+      ],
+      [
+        "bool",
+        "isProgramPaused"
+      ],
+      [
+        "unsigned char",
+        "robotMode"
+      ],
+      [
+        "unsigned char",
+        "controlMode"
+      ],
+      [
+        "double",
+        "targetSpeedFraction"
+      ],
+      [
+        "double",
+        "speedScaling"
+      ],
+      [
+        "double",
+        "targetSpeedFractionLimit"
+      ],
+      [
+        "unsigned char",
+        "reserved"
+      ]
+    ],
+    "4": [
+      [
+        "int",
+        "packageSize"
+      ],
+      [
+        "unsigned char",
+        "packageType"
+      ],
+      [
+        "double",
+        "X"
+      ],
+      [
+        "double",
+        "Y"
+      ],
+      [
+        "double",
+        "Z"
+      ],
+      [
+        "double",
+        "Rx"
+      ],
+      [
+        "double",
+        "Ry"
+      ],
+      [
+        "double",
+        "Rz"
+      ],
+      [
+        "double",
+        "TCPOffsetX"
+      ],
+      [
+        "double",
+        "TCPOffsetY"
+      ],
+      [
+        "double",
+        "TCPOffsetZ"
+      ],
+      [
+        "double",
+        "TCPOffsetRx"
+      ],
+      [
+        "double",
+        "TCPOffsetRy"
+      ],
+      [
+        "double",
+        "TCPOffsetRz"
+      ]
+    ]
+  },
+  "struct_key": {
+    "char": [
+      "c",
+      1
+    ],
+    "signed char": [
+      "b",
+      1
+    ],
+    "unsigned char": [
+      "B",
+      1
+    ],
+    "bool": [
+      "?",
+      1
+    ],
+    "short": [
+      "h",
+      2
+    ],
+    "unsigned short": [
+      "H",
+      2
+    ],
+    "int": [
+      "i",
+      4
+    ],
+    "unsigned int": [
+      "I",
+      4
+    ],
+    "long": [
+      "l",
+      4
+    ],
+    "unsigned long": [
+      "L",
+      4
+    ],
+    "long long": [
+      "q",
+      8
+    ],
+    "unsigned long long": [
+      "Q",
+      8
+    ],
+    "float": [
+      "f",
+      4
+    ],
+    "double": [
+      "d",
+      8
+    ]
+  }
+}
