@@ -46,8 +46,8 @@ def client_thread(conn):
             motion = client_input
             #print(motion)
             # debugging type step:
-            # cl = str(client_input)
-            # print('client just sent ' + cl)
+            cl = str(client_input)
+            print('client just sent ' + cl)
         if i_rr >= 120:
             i_rr = 0
             print('Refresh rate of process %d: %3.1f' % (number, (1. / np.mean(refresh_rate))))

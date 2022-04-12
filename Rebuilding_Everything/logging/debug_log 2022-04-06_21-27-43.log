@@ -1,0 +1,2963 @@
+DEBUG:Debug log for the robot starting on 2022-04-06_21-27-43
+DEBUG:Toggling the command b'get_freedrive_status()\n'
+Logging new packet.
+Message type: 20, ROBOT_MESSAGE
+Message length: 55
+Full raw message data: b'\x00\x00\x007\x14\xff\xff\xff\xff\xff\xff\xff\xff\xfe\x03\tURControl\x05\x0b\x00\x00\x00\x00\x00\x00\x00\x0019-05-2021, 06:19:30'
+Sub-package length: -1
+Sub-package type: 255, fuck
+Sub-package Data (including 5 header bits): b''
+Sub-package length: 352321535
+Sub-package type: 255, fuck
+Sub-package Data (including 5 header bits): b'\x14\xff\xff\xff\xff\xff\xff\xff\xff\xfe\x03\tURControl\x05\x0b\x00\x00\x00\x00\x00\x00\x00\x0019-05-2021, 06:19:30'
+
+DEBUG:Toggling the command b'get_freedrive_status()\n'
+Logging new packet.
+Message type: 20, ROBOT_MESSAGE
+Message length: 24
+Full raw message data: b'\x00\x00\x00\x18\x14\xff\xff\xff\xff\xff\xff\xff\xff\xfe\x0c\x00\x00\x00\x00\x00\x00\x00\x00\x01'
+Sub-package length: -1
+Sub-package type: 255, fuck
+Sub-package Data (including 5 header bits): b''
+Sub-package length: 352321535
+Sub-package type: 255, fuck
+Sub-package Data (including 5 header bits): b'\x14\xff\xff\xff\xff\xff\xff\xff\xff\xfe\x0c\x00\x00\x00\x00\x00\x00\x00\x00\x01'
+
+DEBUG:Toggling the command b'force()\n'
+Logging new packet.
+Message type: 16, ROBOT_STATE
+Message length: 1471
+Full raw message data: b'\x00\x00\x05\xbf\x10\x00\x00\x00/\x00\x00\x00\x00\x01,\xcf\xa8\xf0\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xfb\x01\xc0\n\xf8B\xe8\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbdu\x8a\xe2B=\xc43A\xf4\x80\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9e\xef\xa8\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x95%yB=\xf0;B\x03\x00\x00\x00\x00\x00\x00\xfd?\xf6"o\xd1\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xd1\xf8<B>V\xf8B\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15JXiX\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x91G\x16B=\xfe\xe8B\x17@\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5{\x84D-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbd_:\xf7B=\xf0;B"@\x00\x00\x00\x00\x00\xfd\xc07\xc4qxD-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00<;mXB>9\x9eB\'\x80\x00\x00\x00\x00\x00\xfd\x00\x00\x00e\x04?\xd2S\x00)9\xd2X?\xb1\x88}\xfe\x9e\xf5 \xbf\x90\xc8\xc6l\x0c\xc8\xa8\xc0\t\x14w\x99]l_?\xa0l\x03_c\xb7\xf1?h<\xf9\x03s\x80\xdd\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xe1\x05\xb1\x1fM\xc5\xb0\xfeQ\x84\xb0\xdd7{\xb2\xcc\xea\x84\xb2\xde\xbb\xb4\xb2\xd8\xb9O>m\x06\x1a\xcb\xd0\x00\x00?\xec^u\x9a\xd1\xf1\x83\xbf\xeb\x065:G,J\xbf\xa5\x84\xd0\xfa\x90~\\>\xbdX\xb7\x0c\xae\x80\x00>w\xe5\x99u0\x00\x00\xbf\x19\x97\xa5\x02\x10\x0c\xcb\xbf\xc3\xbd,Z\x92\xd8h\xbf\xcbIc\xfdm\x7f\xeb\xbe\xf2\xed\x0e\xd4\x9ec\x95\xbf\x1d]\xf5\x00\xfc\xa3\x8b\x00\x00\x00\x00\x00\x00\x00\x00?\xc3u\xa2\xf1N#\x10@P\xbeV,\xfe\xaf,\xc0P9\xc6\xa6Z\x8e\xf2\xbf\xff\x0b\x12\t\x85\xb4\x10?\xb5\xdf\x9eaC\x9c\xe3?\xb7\x9dh\x05\xb8\x97\xfe?\xf9 ZS[/\n?g\x1f\x92\xb9\xad\xd5\xf3?q\xba\xe7\x19\x89\x04\x18?\xf9%W\xfa\x0b\x19\xf9\xbf\xf9$]G\x94=\xa3\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x00\x005\t?\xe4\xaa\xf5\x84e\x14\xea\xbf\xc7\xf0\x01\x8d\x13\xf3@\xbf\xef2\x18)\xb5Yh\xbf\xbe\x87\x02\xc9\x05-\xb0?\xca2hv.\\G\xbf\xa5\x94\xee\xec\xe0p\x08\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>(\r?L?\'\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01\x00\x00\x00%\x02\x01\x01?\x98\x8f\x1c\x80\x00\x00\x00?\x98\x8f\x1c\x80\x00\x00\x00\x00\x00\x00\x00\x00<\x8aB`B\x16@\x00\xfd\x00\x00\x01\xbd\x06\xc0\x19W\x99(,/c@\x19W\x99(,/c\xc0\x19W\x99(,/c@\x19W\x99(,/c\xc0\x19W\x99(,/c@\x19W\x99(,/c\xc0\x19W\x99(,/c@\x19W\x99(,/c\xc0\x19W\x99(,/c@\x19W\x99(,/c\xc0\x19W\x99(,/c@\x19W\x99(,/c@\n\xbb\x94\xed\xdd\xc6\xb1@D\x00\x00\x00\x00\x00\x00@\n\xbb\x94\xed\xdd\xc6\xb1@D\x00\x00\x00\x00\x00\x00@\n\xbb\x94\xed\xdd\xc6\xb1@D\x00\x00\x00\x00\x00\x00@\x19\xee\xcb\xfb\x15\xb5t@T\x00\x00\x00\x00\x00\x00@\x19\xee\xcb\xfb\x15\xb5t@T\x00\x00\x00\x00\x00\x00@\x19\xee\xcb\xfb\x15\xb5t@T\x00\x00\x00\x00\x00\x00?\xf0\xc1R8-se?\xf6W\x18J\xe7D\x87?\xd0\x00\x00\x00\x00\x00\x00?\xf3333333?\xd0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xbf\xcf,\xa5zxl"\xbf\xcbJ#9\xc0\xeb\xee\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xc3o\xd2\x1f\xf2\xe4\x8f\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xc0\xc6?\x14\x12\x05\xbc?\xb5\xd9\x7fb\xb6\xae}?\xb7\x93\xdd\x97\xf6+k?\xf9!\xfbTREP\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf9!\xfbTREP\xbf\xf9!\xfbTREP\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00\x06\x00\x00\x00\x03\x00\x00\x00\x03\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\'\xbf\x1a\xe9\xf0\xcd0\x00\x00\x00\t\x08\x00\x01\x00\x01\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8"\xebW\\\x9f\xb0?\xa3\x7f\x16o\x95M\xec?\xd4\x8f\xff\xe9>\xe9\x03?\xb9\x99\x99\x99\x99\x99\x9a\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00\x00\x00\x00\x08\x0c\x00\x01\x01\x00\x00\x00U\x0e?\x94z\xe1G\xae\x14{\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00>\xc0\xc6\xf7\xa0\xb5\xed\x8d>\xc0\xc6\xf7\xa0\xb5\xed\x8d>\xc0\xc6\xf7\xa0\xb5\xed\x8d\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+Sub-package length: 47
+Sub-package type: 0, ROBOT_MODE_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00/\x00\x00\x00\x00\x01,\xcf\xa8\xf0\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 47
+	packageType: 0
+	timestamp: 5046774000
+	isRealRobotConnected: True
+	isRealRobotEnabled: True
+	isRobotPowerOn: True
+	isEmergencyStopped: False
+	isProtectiveStopped: False
+	isProgramRunning: False
+	isProgramPaused: False
+	robotMode: 7
+	controlMode: 0
+	targetSpeedFraction: 1.0
+	speedScaling: 0.0
+	targetSpeedFractionLimit: 1.0
+	reserved: 0
+Sub-package length: 251
+Sub-package type: 1, JOINT_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\xfb\x01\xc0\n\xf8B\xe8\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbdu\x8a\xe2B=\xc43A\xf4\x80\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9e\xef\xa8\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x95%yB=\xf0;B\x03\x00\x00\x00\x00\x00\x00\xfd?\xf6"o\xd1\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xd1\xf8<B>V\xf8B\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15JXiX\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x91G\x16B=\xfe\xe8B\x17@\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5{\x84D-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbd_:\xf7B=\xf0;B"@\x00\x00\x00\x00\x00\xfd\xc07\xc4qxD-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00<;mXB>9\x9eB\'\x80\x00\x00\x00\x00\x00\xfd'
+	packageSize: 251
+	packageType: 1
+	joint 1 q_actual: -3.371221367512838
+	joint 1 q_target: -3.371185119409498
+	joint 1 qd_actual: 0.0
+	joint 1 i_actual: -0.059946902096271515
+	joint 1 V_actual: 47.44160079956055
+	joint 1 T_motor: 30.5625
+	joint 2 q_actual: 2.10334248e-314
+	joint 2 q_target: -7.472324248201816e+229
+	joint 2 qd_actual: -2.6885816042858402e+233
+	joint 2 i_actual: 0.0
+	joint 2 V_actual: 1.7594082742842707e-38
+	joint 2 T_motor: 6.303511451878642e+34
+	joint 3 q_actual: 2.979788909751571e-23
+	joint 3 q_target: 6.664506921899876e-304
+	joint 3 qd_actual: -2.0710003011703905e-56
+	joint 3 i_actual: -2.271629875608987e+34
+	joint 3 V_actual: 0.0
+	joint 3 T_motor: 6.845202868380299e-41
+	joint 4 q_actual: -1.4928950334539456e+271
+	joint 4 q_target: 3.20945e-319
+	joint 4 qd_actual: 4.102958029438505e-206
+	joint 4 i_actual: 4.087164154552673e-26
+	joint 4 V_actual: 2.251751063491852e-20
+	joint 4 T_motor: 0.0
+	joint 5 q_actual: 1.327679524486e-312
+	joint 5 q_target: 4.4975980513679847e-10
+	joint 5 qd_actual: 5.38457043806e-312
+	joint 5 i_actual: -2.3060395310641207e-36
+	joint 5 V_actual: -2.295255661010742
+	joint 5 T_motor: -7.97348247374333e-26
+	joint 6 q_actual: -0.0
+	joint 6 q_target: -4.4380975863910735e-13
+	joint 6 qd_actual: 39191576576.0
+	joint 6 i_actual: -3.1937665858775697e+37
+	joint 6 V_actual: 1.2293552303667056e+30
+	joint 6 T_motor: 4.9687145644596336e-24
+Sub-package length: 101
+Sub-package type: 4, CARTESIAN_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00e\x04?\xd2S\x00)9\xd2X?\xb1\x88}\xfe\x9e\xf5 \xbf\x90\xc8\xc6l\x0c\xc8\xa8\xc0\t\x14w\x99]l_?\xa0l\x03_c\xb7\xf1?h<\xf9\x03s\x80\xdd\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 101
+	packageType: 4
+	X: 0.2863159563633295
+	Y: 0.06848895517665143
+	Z: -0.016390896172375463
+	Rx: -3.1349937421451126
+	Ry: 0.03207407512114447
+	Rz: 0.002958761553245022
+	TCPOffsetX: 0.0
+	TCPOffsetY: 0.0
+	TCPOffsetZ: 0.12251999999999999
+	TCPOffsetRx: 0.0
+	TCPOffsetRy: 0.0
+	TCPOffsetRz: 0.0
+Sub-package length: 225
+Sub-package type: 5, KINEMATICS_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\xe1\x05\xb1\x1fM\xc5\xb0\xfeQ\x84\xb0\xdd7{\xb2\xcc\xea\x84\xb2\xde\xbb\xb4\xb2\xd8\xb9O>m\x06\x1a\xcb\xd0\x00\x00?\xec^u\x9a\xd1\xf1\x83\xbf\xeb\x065:G,J\xbf\xa5\x84\xd0\xfa\x90~\\>\xbdX\xb7\x0c\xae\x80\x00>w\xe5\x99u0\x00\x00\xbf\x19\x97\xa5\x02\x10\x0c\xcb\xbf\xc3\xbd,Z\x92\xd8h\xbf\xcbIc\xfdm\x7f\xeb\xbe\xf2\xed\x0e\xd4\x9ec\x95\xbf\x1d]\xf5\x00\xfc\xa3\x8b\x00\x00\x00\x00\x00\x00\x00\x00?\xc3u\xa2\xf1N#\x10@P\xbeV,\xfe\xaf,\xc0P9\xc6\xa6Z\x8e\xf2\xbf\xff\x0b\x12\t\x85\xb4\x10?\xb5\xdf\x9eaC\x9c\xe3?\xb7\x9dh\x05\xb8\x97\xfe?\xf9 ZS[/\n?g\x1f\x92\xb9\xad\xd5\xf3?q\xba\xe7\x19\x89\x04\x18?\xf9%W\xfa\x0b\x19\xf9\xbf\xf9$]G\x94=\xa3\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02'
+	packageSize: 225
+	packageType: 5
+	joint 1 checksum: 2971618757
+	joint 2 checksum: 2969457028
+	joint 3 checksum: 2967287675
+	joint 4 checksum: 2999773828
+	joint 5 checksum: 3000941492
+	joint 6 checksum: 3000547663
+	joint 1 DHtheta: 5.4061126665561066e-08
+	joint 2 DHtheta: 0.8865306876974021
+	joint 3 DHtheta: -0.8445078027956552
+	joint 4 DHtheta: -0.042028933130720175
+	joint 5 DHtheta: 1.7491902777125312e-06
+	joint 6 DHtheta: 8.902278851585788e-08
+	joint 1 DHa: -9.762711171394931e-05
+	joint 2 DHa: -0.1542106096509912
+	joint 3 DHa: -0.21317720293427497
+	joint 4 DHa: -1.804924730883539e-05
+	joint 5 DHa: -0.000112026289795465
+	joint 6 DHa: 0.0
+	joint 1 Dhd: 0.15202748091203278
+	joint 2 Dhd: 66.97400975104819
+	joint 3 Dhd: -64.9027496227607
+	joint 4 Dhd: -1.940202748485948
+	joint 5 Dhd: 0.08544340014087796
+	joint 6 Dhd: 0.09224558009790937
+	joint 1 Dhalpha: 1.5703986412144695
+	joint 2 Dhalpha: 0.002822672436588952
+	joint 3 Dhalpha: 0.004328634961496845
+	joint 4 Dhalpha: 1.5716171042746494
+	joint 5 Dhalpha: -1.571378020864224
+	joint 6 Dhalpha: 0.0
+	calibration status: 2
+Sub-package length: 53
+Sub-package type: 9, NEEDED_FOR_CALIB_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x005\t?\xe4\xaa\xf5\x84e\x14\xea\xbf\xc7\xf0\x01\x8d\x13\xf3@\xbf\xef2\x18)\xb5Yh\xbf\xbe\x87\x02\xc9\x05-\xb0?\xca2hv.\\G\xbf\xa5\x94\xee\xec\xe0p\x08'
+Sub-package length: 75
+Sub-package type: 3, MASTERBOARD_DATA
+Sub-package Data (including 5 header bits): b"\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>(\r?L?'\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01"
+Sub-package length: 37
+Sub-package type: 2, TOOL_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00%\x02\x01\x01?\x98\x8f\x1c\x80\x00\x00\x00?\x98\x8f\x1c\x80\x00\x00\x00\x00\x00\x00\x00\x00<\x8aB`B\x16@\x00\xfd'
+Sub-package length: 445
+Sub-package type: 6, CONFIGURATION_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x01\xbd\x06\xc0\x19W\x99(,/c@\x19W\x99(,/c\xc0\x19W\x99(,/c@\x19W\x99(,/c\xc0\x19W\x99(,/c@\x19W\x99(,/c\xc0\x19W\x99(,/c@\x19W\x99(,/c\xc0\x19W\x99(,/c@\x19W\x99(,/c\xc0\x19W\x99(,/c@\x19W\x99(,/c@\n\xbb\x94\xed\xdd\xc6\xb1@D\x00\x00\x00\x00\x00\x00@\n\xbb\x94\xed\xdd\xc6\xb1@D\x00\x00\x00\x00\x00\x00@\n\xbb\x94\xed\xdd\xc6\xb1@D\x00\x00\x00\x00\x00\x00@\x19\xee\xcb\xfb\x15\xb5t@T\x00\x00\x00\x00\x00\x00@\x19\xee\xcb\xfb\x15\xb5t@T\x00\x00\x00\x00\x00\x00@\x19\xee\xcb\xfb\x15\xb5t@T\x00\x00\x00\x00\x00\x00?\xf0\xc1R8-se?\xf6W\x18J\xe7D\x87?\xd0\x00\x00\x00\x00\x00\x00?\xf3333333?\xd0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xbf\xcf,\xa5zxl"\xbf\xcbJ#9\xc0\xeb\xee\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xc3o\xd2\x1f\xf2\xe4\x8f\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xc0\xc6?\x14\x12\x05\xbc?\xb5\xd9\x7fb\xb6\xae}?\xb7\x93\xdd\x97\xf6+k?\xf9!\xfbTREP\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf9!\xfbTREP\xbf\xf9!\xfbTREP\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00\x06\x00\x00\x00\x03\x00\x00\x00\x03'
+Sub-package length: 61
+Sub-package type: 7, FORCE_MODE_DATA
+Sub-package Data (including 5 header bits): b"\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?'\xbf\x1a\xe9\xf0\xcd0"
+Sub-package length: 9
+Sub-package type: 8, ADDITIONAL_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\t\x08\x00\x01\x00\x01'
+Sub-package length: 43
+Sub-package type: 10, fuck
+Sub-package Data (including 5 header bits): b'\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8"\xebW\\\x9f\xb0?\xa3\x7f\x16o\x95M\xec?\xd4\x8f\xff\xe9>\xe9\x03?\xb9\x99\x99\x99\x99\x99\x9a'
+Sub-package length: 26
+Sub-package type: 11, TOOL_COMM_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00'
+Sub-package length: 8
+Sub-package type: 12, TOOL_MODE_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x08\x0c\x00\x01\x01'
+Sub-package length: 85
+Sub-package type: 14, fuck
+Sub-package Data (including 5 header bits): b'\x00\x00\x00U\x0e?\x94z\xe1G\xae\x14{\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00>\xc0\xc6\xf7\xa0\xb5\xed\x8d>\xc0\xc6\xf7\xa0\xb5\xed\x8d>\xc0\xc6\xf7\xa0\xb5\xed\x8d\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+
+DEBUG:Toggling the command b'get_actual_joint_positions()\n'
+Logging new packet.
+Message type: 16, ROBOT_STATE
+Message length: 716
+Full raw message data: b'\x00\x00\x02\xcc\x10\x00\x00\x00/\x00\x00\x00\x00\x01,\xd13x\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xfb\x01\xc0\n\xf8\'h\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbd;\x14\x9aB=\xc43A\xf4\x80\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9f4H\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x9cI\x83B>\x1cCB\x03\x00\x00\x00\x00\x00\x00\xfd?\xf6"\xb4\xd1\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xda;\x8cB>HKB\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15Jd\x19X\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x9bnFB=\xfe\xe8B\x17@\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5r\xfcD-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbdb\xf0QB>\x1cCB"@\x00\x00\x00\x00\x00\xfd\xc07\xc4s\xa4D-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00<\xbd7\x0cB>HKB\'\x80\x00\x00\x00\x00\x00\xfd\x00\x00\x00e\x04?\xd2R\xcdG\x98\xc4\x0c?\xb1\x89"\xaf\xd7\xe3,\xbf\x90\xc9\r\x0e\xa2\xd1@\xc0\t\x14\x8aA\x05\x07\x11?\xa0Zo\x03\xa9\xf4\xb4?h/%\xf5Y\xac\x95\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x005\t?\xdf~o\x13\xd3\x12$?\xda\xc1\x135\xbcB\x80\xbf\xeb\x188P\xf8\x1e\xc8\xbf\xc9?S\xf1\xa3t\x98?\xca\xa4z\xb3=\x8fO\xbf\xb5\xc9\xa2\xfd\xecY$\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>3\xf9?_\'\xc7\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01\x00\x00\x00%\x02\x01\x01?\xa1\x8a\xcb \x00\x00\x00?\x9c\x11E \x00\x00\x00\x00\x00\x00\x00\x00<\xaa@`B\x16\x80\x00\xfd\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\'\xbe\xd1\x8b6c\xa0\x00\x00\x00\t\x08\x00\x01\x00\x01\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8"\x9c\xdb\xb3\xe3\x8a?\xa3\x80\'\x98\x18\x9dK?\xd4\x90#\xe7\xebo\x84?\xb9\x99\x99\x99\x99\x99\x9a\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00\x00\x00\x00\x08\x0c\x00\x01\x01'
+Sub-package length: 47
+Sub-package type: 0, ROBOT_MODE_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00/\x00\x00\x00\x00\x01,\xd13x\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 47
+	packageType: 0
+	timestamp: 5046875000
+	isRealRobotConnected: True
+	isRealRobotEnabled: True
+	isRobotPowerOn: True
+	isEmergencyStopped: False
+	isProtectiveStopped: False
+	isProgramRunning: False
+	isProgramPaused: False
+	robotMode: 7
+	controlMode: 0
+	targetSpeedFraction: 1.0
+	speedScaling: 0.0
+	targetSpeedFractionLimit: 1.0
+	reserved: 0
+Sub-package length: 251
+Sub-package type: 1, JOINT_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\xfb\x01\xc0\n\xf8\'h\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbd;\x14\x9aB=\xc43A\xf4\x80\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9f4H\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x9cI\x83B>\x1cCB\x03\x00\x00\x00\x00\x00\x00\xfd?\xf6"\xb4\xd1\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xda;\x8cB>HKB\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15Jd\x19X\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x9bnFB=\xfe\xe8B\x17@\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5r\xfcD-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbdb\xf0QB>\x1cCB"@\x00\x00\x00\x00\x00\xfd\xc07\xc4s\xa4D-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00<\xbd7\x0cB>HKB\'\x80\x00\x00\x00\x00\x00\xfd'
+	packageSize: 251
+	packageType: 1
+	joint 1 q_actual: -3.371168915425436
+	joint 1 q_target: -3.371185119409498
+	joint 1 qd_actual: 0.0
+	joint 1 i_actual: -0.04567394405603409
+	joint 1 V_actual: 47.44160079956055
+	joint 1 T_motor: 30.5625
+	joint 2 q_actual: 2.1033424804e-314
+	joint 2 q_target: 7.851630046202515e-57
+	joint 2 qd_actual: -2.6885816042858402e+233
+	joint 2 i_actual: 0.0
+	joint 2 V_actual: 1.7596644316435493e-38
+	joint 2 T_motor: -5.708277408074579e-37
+	joint 3 q_actual: 1.0139696231350272e+16
+	joint 3 q_target: 6.664506925560319e-304
+	joint 3 qd_actual: -2.0710003011703905e-56
+	joint 3 i_actual: -2.271629875608987e+34
+	joint 3 V_actual: 0.0
+	joint 3 T_motor: 6.846464036998191e-41
+	joint 4 q_actual: 7.480032245614335e-22
+	joint 4 q_target: 3.20945e-319
+	joint 4 qd_actual: 4.110068111896449e-206
+	joint 4 i_actual: 4.087164154552673e-26
+	joint 4 V_actual: 2.251751063491852e-20
+	joint 4 T_motor: 0.0
+	joint 5 q_actual: 1.328521117647e-312
+	joint 5 q_target: 4.4975980513679847e-10
+	joint 5 qd_actual: 5.384570438014e-312
+	joint 5 i_actual: -4.0744191767235635e+36
+	joint 5 V_actual: -2.295255661010742
+	joint 5 T_motor: -7.97348247374333e-26
+	joint 6 q_actual: -0.0
+	joint 6 q_target: -5.382713627080256e-13
+	joint 6 qd_actual: 39191576576.0
+	joint 6 i_actual: -3.1937665858775697e+37
+	joint 6 V_actual: 2.602903606933817e+31
+	joint 6 T_motor: 4.9687145644596336e-24
+Sub-package length: 101
+Sub-package type: 4, CARTESIAN_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00e\x04?\xd2R\xcdG\x98\xc4\x0c?\xb1\x89"\xaf\xd7\xe3,\xbf\x90\xc9\r\x0e\xa2\xd1@\xc0\t\x14\x8aA\x05\x07\x11?\xa0Zo\x03\xa9\xf4\xb4?h/%\xf5Y\xac\x95\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 101
+	packageType: 4
+	X: 0.2863038253008774
+	Y: 0.06849877160119594
+	Z: -0.016391948717413785
+	Rx: -3.1350293235453894
+	Ry: 0.03193995399213048
+	Rz: 0.0029521695494643765
+	TCPOffsetX: 0.0
+	TCPOffsetY: 0.0
+	TCPOffsetZ: 0.12251999999999999
+	TCPOffsetRx: 0.0
+	TCPOffsetRy: 0.0
+	TCPOffsetRz: 0.0
+Sub-package length: 53
+Sub-package type: 9, NEEDED_FOR_CALIB_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x005\t?\xdf~o\x13\xd3\x12$?\xda\xc1\x135\xbcB\x80\xbf\xeb\x188P\xf8\x1e\xc8\xbf\xc9?S\xf1\xa3t\x98?\xca\xa4z\xb3=\x8fO\xbf\xb5\xc9\xa2\xfd\xecY$'
+Sub-package length: 75
+Sub-package type: 3, MASTERBOARD_DATA
+Sub-package Data (including 5 header bits): b"\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>3\xf9?_'\xc7\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01"
+Sub-package length: 37
+Sub-package type: 2, TOOL_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00%\x02\x01\x01?\xa1\x8a\xcb \x00\x00\x00?\x9c\x11E \x00\x00\x00\x00\x00\x00\x00\x00<\xaa@`B\x16\x80\x00\xfd'
+Sub-package length: 61
+Sub-package type: 7, FORCE_MODE_DATA
+Sub-package Data (including 5 header bits): b"\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?'\xbe\xd1\x8b6c\xa0"
+Sub-package length: 9
+Sub-package type: 8, ADDITIONAL_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\t\x08\x00\x01\x00\x01'
+Sub-package length: 43
+Sub-package type: 10, fuck
+Sub-package Data (including 5 header bits): b'\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8"\x9c\xdb\xb3\xe3\x8a?\xa3\x80\'\x98\x18\x9dK?\xd4\x90#\xe7\xebo\x84?\xb9\x99\x99\x99\x99\x99\x9a'
+Sub-package length: 26
+Sub-package type: 11, TOOL_COMM_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00'
+Sub-package length: 8
+Sub-package type: 12, TOOL_MODE_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x08\x0c\x00\x01\x01'
+
+DEBUG:Toggling the command b'get_actual_tcp_pose()\n'
+Logging new packet.
+Message type: 16, ROBOT_STATE
+Message length: 716
+Full raw message data: b'\x00\x00\x02\xcc\x10\x00\x00\x00/\x00\x00\x00\x00\x01,\xd2\xbe\x00\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xfb\x01\xc0\n\xf8"\xc8\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbdkq\xffB=\xe1\x8eA\xf4\x80\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9fiH\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x9a\xe2\xffB>\x1cCB\x03\x00\x00\x00\x00\x00\x00\xfd?\xf6"\xda\xd1\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xda\xba\xa8B>e\xa5B\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15J\\\x89X\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x94V\x16B=\xfe\xe8B\x17@\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5{\x84D-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbd|l\xfbB>\r\x96B"@\x00\x00\x00\x00\x00\xfd\xc07\xc4q\xb2D-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00;\x8b9pB>tSB\'\x80\x00\x00\x00\x00\x00\xfd\x00\x00\x00e\x04?\xd2R\x97h\xef\xfe\x13?\xb1\x89\xf5&p\xc6\x84\xbf\x90\xc7{[\xd5\x97\xd8\xc0\t\x14t\xe9\x0c\xc7\x07?\xa0^\xc2R\xd7\x05e?h\x98g\xbd\x1d\xa8\xf6\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x005\t?\xe3\xd1bH|I\xe1?\xd3"\xf4\xda~\xde@\xbf\xea\xd7\x9b"\xe9\xee@\xbf\xc2D\x8b\x01\xf3xP?\xcd\xaeX\xf1E.O\xbf\x90\x08\x06\x07\xbb<P\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>)\xe2?d\xe2q\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01\x00\x00\x00%\x02\x01\x01?\x9f\x93m\xa0\x00\x00\x00?\x9c\x11E \x00\x00\x00\x00\x00\x00\x00\x00<\x93\xfb\x80B\x16\x80\x00\xfd\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\'\xbe\xa3{G\xb4`\x00\x00\x00\t\x08\x00\x01\x00\x01\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8"\x87~jM\x08?\xa3\x80\xe5(\x928\x93?\xd4\x90*wV\xd5s?\xb9\x99\x99\x99\x99\x99\x9a\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00\x00\x00\x00\x08\x0c\x00\x01\x01'
+Sub-package length: 47
+Sub-package type: 0, ROBOT_MODE_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00/\x00\x00\x00\x00\x01,\xd2\xbe\x00\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 47
+	packageType: 0
+	timestamp: 5046976000
+	isRealRobotConnected: True
+	isRealRobotEnabled: True
+	isRobotPowerOn: True
+	isEmergencyStopped: False
+	isProtectiveStopped: False
+	isProgramRunning: False
+	isProgramPaused: False
+	robotMode: 7
+	controlMode: 0
+	targetSpeedFraction: 1.0
+	speedScaling: 0.0
+	targetSpeedFractionLimit: 1.0
+	reserved: 0
+Sub-package length: 251
+Sub-package type: 1, JOINT_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\xfb\x01\xc0\n\xf8"\xc8\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbdkq\xffB=\xe1\x8eA\xf4\x80\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9fiH\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x9a\xe2\xffB>\x1cCB\x03\x00\x00\x00\x00\x00\x00\xfd?\xf6"\xda\xd1\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xda\xba\xa8B>e\xa5B\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15J\\\x89X\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x94V\x16B=\xfe\xe8B\x17@\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5{\x84D-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbd|l\xfbB>\r\x96B"@\x00\x00\x00\x00\x00\xfd\xc07\xc4q\xb2D-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00;\x8b9pB>tSB\'\x80\x00\x00\x00\x00\x00\xfd'
+	packageSize: 251
+	packageType: 1
+	joint 1 q_actual: -3.371160093938009
+	joint 1 q_target: -3.371185119409498
+	joint 1 qd_actual: 0.0
+	joint 1 i_actual: -0.057481762021780014
+	joint 1 V_actual: 47.47026824951172
+	joint 1 T_motor: 30.5625
+	joint 2 q_actual: 2.1033424804e-314
+	joint 2 q_target: 1.4736561176353502e+199
+	joint 2 qd_actual: -2.6885816042858402e+233
+	joint 2 i_actual: 0.0
+	joint 2 V_actual: 1.75961412502868e-38
+	joint 2 T_motor: -2.5819272149497174e+38
+	joint 3 q_actual: 1.0139696231350272e+16
+	joint 3 q_target: 6.664506927576215e-304
+	joint 3 qd_actual: -2.0710003011703905e-56
+	joint 3 i_actual: -2.271629875608987e+34
+	joint 3 V_actual: 0.0
+	joint 3 T_motor: 6.846464036998191e-41
+	joint 4 q_actual: -3.919214797749306e-26
+	joint 4 q_target: 3.20945e-319
+	joint 4 qd_actual: 4.1054674703060147e-206
+	joint 4 i_actual: 4.087164154552673e-26
+	joint 4 V_actual: 2.251751063491852e-20
+	joint 4 T_motor: 0.0
+	joint 5 q_actual: 1.32793305273e-312
+	joint 5 q_target: 4.4975980513679847e-10
+	joint 5 qd_actual: 5.38457043806e-312
+	joint 5 i_actual: -2.3060395310641207e-36
+	joint 5 V_actual: -2.295255661010742
+	joint 5 T_motor: -7.97348247374333e-26
+	joint 6 q_actual: -0.0
+	joint 6 q_target: -1.6158144776687265e-12
+	joint 6 qd_actual: 39191576576.0
+	joint 6 i_actual: -3.1937665858775697e+37
+	joint 6 V_actual: 1.7654640387335983e+30
+	joint 6 T_motor: 4.9687145644596336e-24
+Sub-package length: 101
+Sub-package type: 4, CARTESIAN_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00e\x04?\xd2R\x97h\xef\xfe\x13?\xb1\x89\xf5&p\xc6\x84\xbf\x90\xc7{[\xd5\x97\xd8\xc0\t\x14t\xe9\x0c\xc7\x07?\xa0^\xc2R\xd7\x05e?h\x98g\xbd\x1d\xa8\xf6\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 101
+	packageType: 4
+	X: 0.28629098174857964
+	Y: 0.0685113161896656
+	Z: -0.01638596294414882
+	Rx: -3.134988613798558
+	Ry: 0.031972954380317366
+	Rz: 0.003002359976496223
+	TCPOffsetX: 0.0
+	TCPOffsetY: 0.0
+	TCPOffsetZ: 0.12251999999999999
+	TCPOffsetRx: 0.0
+	TCPOffsetRy: 0.0
+	TCPOffsetRz: 0.0
+Sub-package length: 53
+Sub-package type: 9, NEEDED_FOR_CALIB_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x005\t?\xe3\xd1bH|I\xe1?\xd3"\xf4\xda~\xde@\xbf\xea\xd7\x9b"\xe9\xee@\xbf\xc2D\x8b\x01\xf3xP?\xcd\xaeX\xf1E.O\xbf\x90\x08\x06\x07\xbb<P'
+Sub-package length: 75
+Sub-package type: 3, MASTERBOARD_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>)\xe2?d\xe2q\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01'
+Sub-package length: 37
+Sub-package type: 2, TOOL_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00%\x02\x01\x01?\x9f\x93m\xa0\x00\x00\x00?\x9c\x11E \x00\x00\x00\x00\x00\x00\x00\x00<\x93\xfb\x80B\x16\x80\x00\xfd'
+Sub-package length: 61
+Sub-package type: 7, FORCE_MODE_DATA
+Sub-package Data (including 5 header bits): b"\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?'\xbe\xa3{G\xb4`"
+Sub-package length: 9
+Sub-package type: 8, ADDITIONAL_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\t\x08\x00\x01\x00\x01'
+Sub-package length: 43
+Sub-package type: 10, fuck
+Sub-package Data (including 5 header bits): b'\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8"\x87~jM\x08?\xa3\x80\xe5(\x928\x93?\xd4\x90*wV\xd5s?\xb9\x99\x99\x99\x99\x99\x9a'
+Sub-package length: 26
+Sub-package type: 11, TOOL_COMM_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00'
+Sub-package length: 8
+Sub-package type: 12, TOOL_MODE_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x08\x0c\x00\x01\x01'
+
+DEBUG:Toggling the command b'get_controller_temp()\n'
+Logging new packet.
+Message type: 16, ROBOT_STATE
+Message length: 716
+Full raw message data: b'\x00\x00\x02\xcc\x10\x00\x00\x00/\x00\x00\x00\x00\x01,\xd4D\xa0\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xfb\x01\xc0\n\xf8\'h\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbd;\xd3 B=\xe1\x8eA\xf4\x00\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9e\xdd(\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x9a{+B>\x1cCB\x03\x00\x00\x00\x00\x00\x00\xfd?\xf6"\xb3\xd1\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xe0\xf3ZB>tSB\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15JhiX\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x9b!TB>\r\x96B\x17\x80\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5r\xfcD-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbdi\x95=B=\xf0;B"@\x00\x00\x00\x00\x00\xfd\xc07\xc4r\xd6D-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00;8=@B>HKB\'\x80\x00\x00\x00\x00\x00\xfd\x00\x00\x00e\x04?\xd2R\xc0lp\r\x1c?\xb1\x89.\xd2\xa6lt\xbf\x90\xccD\x0fKN\xd0\xc0\t\x14\x87\\ C\x8e?\xa0\\\xf0\xab\xbb\x98\xae?h|\xb1\x07\x87Z\xf9\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x005\t?\xdf\x9e\x81\xe3\xb6\xba\xb8?\xd0\xeb\xeb\xcfT\xdc\x00\xbf\xe7\xc0\xd7\xe7\xa2NT\xbf\xc8\xf3?g\xc4\x04\xcc?\xcbo\x07\x80y\xe3\xff\xbf\x856\xf6M\x8fw\xc0\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>Dz?_\'\xc7\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01\x00\x00\x00%\x02\x01\x01?\x98\x8f\x1c\x80\x00\x00\x00?\x9c\x11E \x00\x00\x00\x00\x00\x00\x00\x00<\x8f\x1f\x00B\x16\x80\x00\xfd\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\'\xbe\xe9Jw\x00p\x00\x00\x00\t\x08\x00\x01\x00\x01\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8"\xe6\xcb5\xe9%?\xa3\x80V\xe5|\xa7\xf5?\xd4\x8f\xf9p  d?\xb9\x99\x99\x99\x99\x99\x9a\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00\x00\x00\x00\x08\x0c\x00\x01\x01'
+Sub-package length: 47
+Sub-package type: 0, ROBOT_MODE_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00/\x00\x00\x00\x00\x01,\xd4D\xa0\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 47
+	packageType: 0
+	timestamp: 5047076000
+	isRealRobotConnected: True
+	isRealRobotEnabled: True
+	isRobotPowerOn: True
+	isEmergencyStopped: False
+	isProtectiveStopped: False
+	isProgramRunning: False
+	isProgramPaused: False
+	robotMode: 7
+	controlMode: 0
+	targetSpeedFraction: 1.0
+	speedScaling: 0.0
+	targetSpeedFractionLimit: 1.0
+	reserved: 0
+Sub-package length: 251
+Sub-package type: 1, JOINT_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\xfb\x01\xc0\n\xf8\'h\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbd;\xd3 B=\xe1\x8eA\xf4\x00\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9e\xdd(\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x9a{+B>\x1cCB\x03\x00\x00\x00\x00\x00\x00\xfd?\xf6"\xb3\xd1\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xe0\xf3ZB>tSB\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15JhiX\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x9b!TB>\r\x96B\x17\x80\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5r\xfcD-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbdi\x95=B=\xf0;B"@\x00\x00\x00\x00\x00\xfd\xc07\xc4r\xd6D-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00;8=@B>HKB\'\x80\x00\x00\x00\x00\x00\xfd'
+	packageSize: 251
+	packageType: 1
+	joint 1 q_actual: -3.371168915425436
+	joint 1 q_target: -3.371185119409498
+	joint 1 qd_actual: 0.0
+	joint 1 i_actual: -0.04585564136505127
+	joint 1 V_actual: 47.47026824951172
+	joint 1 T_motor: 30.5
+	joint 2 q_actual: 2.10334248e-314
+	joint 2 q_target: -5.869174101989325e+140
+	joint 2 qd_actual: -2.6885816042858402e+233
+	joint 2 i_actual: 0.0
+	joint 2 V_actual: 1.7595996916544975e-38
+	joint 2 T_motor: 6.900883944144232e-13
+	joint 3 q_actual: 1.0139696231350272e+16
+	joint 3 q_target: 6.664506925507269e-304
+	joint 3 qd_actual: -2.0710003011703905e-56
+	joint 3 i_actual: -2.271629875608987e+34
+	joint 3 V_actual: 0.0
+	joint 3 T_motor: 6.847304816076786e-41
+	joint 4 q_actual: -4.5899796237486106e+247
+	joint 4 q_target: 3.20945e-319
+	joint 4 qd_actual: 4.1126916182579363e-206
+	joint 4 i_actual: 4.087164154552673e-26
+	joint 4 V_actual: 2.251751063491852e-20
+	joint 4 T_motor: 0.0
+	joint 5 q_actual: 1.328496203457e-312
+	joint 5 q_target: 8.610934595573716e-10
+	joint 5 qd_actual: 5.384570438014e-312
+	joint 5 i_actual: -4.0744191767235635e+36
+	joint 5 V_actual: -2.295255661010742
+	joint 5 T_motor: -7.97348247374333e-26
+	joint 6 q_actual: -0.0
+	joint 6 q_target: -7.271116255782467e-13
+	joint 6 qd_actual: 39191576576.0
+	joint 6 i_actual: -3.1937665858775697e+37
+	joint 6 V_actual: 8.487963080191151e+30
+	joint 6 T_motor: 4.9687145644596336e-24
+Sub-package length: 101
+Sub-package type: 4, CARTESIAN_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00e\x04?\xd2R\xc0lp\r\x1c?\xb1\x89.\xd2\xa6lt\xbf\x90\xccD\x0fKN\xd0\xc0\t\x14\x87\\ C\x8e?\xa0\\\xf0\xab\xbb\x98\xae?h|\xb1\x07\x87Z\xf9\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 101
+	packageType: 4
+	X: 0.2863007601701655
+	Y: 0.06849949496101876
+	Z: -0.01640421241138662
+	Rx: -3.1350238034578473
+	Ry: 0.03195907684657705
+	Rz: 0.0029891450505873354
+	TCPOffsetX: 0.0
+	TCPOffsetY: 0.0
+	TCPOffsetZ: 0.12251999999999999
+	TCPOffsetRx: 0.0
+	TCPOffsetRy: 0.0
+	TCPOffsetRz: 0.0
+Sub-package length: 53
+Sub-package type: 9, NEEDED_FOR_CALIB_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x005\t?\xdf\x9e\x81\xe3\xb6\xba\xb8?\xd0\xeb\xeb\xcfT\xdc\x00\xbf\xe7\xc0\xd7\xe7\xa2NT\xbf\xc8\xf3?g\xc4\x04\xcc?\xcbo\x07\x80y\xe3\xff\xbf\x856\xf6M\x8fw\xc0'
+Sub-package length: 75
+Sub-package type: 3, MASTERBOARD_DATA
+Sub-package Data (including 5 header bits): b"\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>Dz?_'\xc7\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01"
+Sub-package length: 37
+Sub-package type: 2, TOOL_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00%\x02\x01\x01?\x98\x8f\x1c\x80\x00\x00\x00?\x9c\x11E \x00\x00\x00\x00\x00\x00\x00\x00<\x8f\x1f\x00B\x16\x80\x00\xfd'
+Sub-package length: 61
+Sub-package type: 7, FORCE_MODE_DATA
+Sub-package Data (including 5 header bits): b"\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?'\xbe\xe9Jw\x00p"
+Sub-package length: 9
+Sub-package type: 8, ADDITIONAL_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\t\x08\x00\x01\x00\x01'
+Sub-package length: 43
+Sub-package type: 10, fuck
+Sub-package Data (including 5 header bits): b'\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8"\xe6\xcb5\xe9%?\xa3\x80V\xe5|\xa7\xf5?\xd4\x8f\xf9p  d?\xb9\x99\x99\x99\x99\x99\x9a'
+Sub-package length: 26
+Sub-package type: 11, TOOL_COMM_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00'
+Sub-package length: 8
+Sub-package type: 12, TOOL_MODE_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x08\x0c\x00\x01\x01'
+
+DEBUG:Toggling the command b'get_tcp_force()\n'
+Logging new packet.
+Message type: 16, ROBOT_STATE
+Message length: 716
+Full raw message data: b'\x00\x00\x02\xcc\x10\x00\x00\x00/\x00\x00\x00\x00\x01,\xd5\xcf(\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xfb\x01\xc0\n\xf8G\x88\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbd\\D\xa4B=\xd2\xe1A\xf4\x00\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9e\xbc\xa8\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x9f\xa2\x0eB>\r\x96B\x03\x00\x00\x00\x00\x00\x00\xfd?\xf6"\xb3\xd1\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xde\xe3jB>HKB\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15JeIX\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x94\xbe\x00B>\x1cCB\x17\x80\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5|\x9cD-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbd\x82\xbd\x92B=\xf0;B"@\x00\x00\x00\x00\x00\xfd\xc07\xc4t D-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00<\x98\x0f\xbcB>e\xa5B\'\x80\x00\x00\x00\x00\x00\xfd\x00\x00\x00e\x04?\xd2R\xc4T\x19F\x89?\xb1\x88\x9d+\xa9!\xb8\xbf\x90\xcd\r\xf1\xc5\xf9p\xc0\t\x14q\nK\xd3\x99?\xa0ez_A6\xfb?h\xb9\xec\x93\xf1\x1cV\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x005\t?\xe2\x8aX\x80.\x12o?\xe6o\xe0\x06\xda\x90`\xbf\xe8\xc5\x89\xdar\xc1\xe8\xbf\xc2\xaa\x7f)\x8a\x98\\?\xce\xc2\xd5\xe7g\x83\xad\xbf\xb1\x82n\xba;34\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>5\xce?_\'\xc7\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01\x00\x00\x00%\x02\x01\x01?\x9f\x93m\xa0\x00\x00\x00?\x98\x8f\x1c\x80\x00\x00\x00\x00\x00\x00\x00\x00<\xb8\xd6 B\x16\x80\x00\xfd\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\'\xbe\xf0\x93[\xa8\xb0\x00\x00\x00\t\x08\x00\x01\x00\x01\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8#\x0f\xd1\x19\xca\xf7?\xa3~\xbf&\x1d\xf4\xf0?\xd4\x8f\xee\x10\xef\x1b\xcd?\xb9\x99\x99\x99\x99\x99\x9a\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00\x00\x00\x00\x08\x0c\x00\x01\x01'
+Sub-package length: 47
+Sub-package type: 0, ROBOT_MODE_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00/\x00\x00\x00\x00\x01,\xd5\xcf(\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 47
+	packageType: 0
+	timestamp: 5047177000
+	isRealRobotConnected: True
+	isRealRobotEnabled: True
+	isRobotPowerOn: True
+	isEmergencyStopped: False
+	isProtectiveStopped: False
+	isProgramRunning: False
+	isProgramPaused: False
+	robotMode: 7
+	controlMode: 0
+	targetSpeedFraction: 1.0
+	speedScaling: 0.0
+	targetSpeedFractionLimit: 1.0
+	reserved: 0
+Sub-package length: 251
+Sub-package type: 1, JOINT_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\xfb\x01\xc0\n\xf8G\x88\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbd\\D\xa4B=\xd2\xe1A\xf4\x00\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9e\xbc\xa8\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x9f\xa2\x0eB>\r\x96B\x03\x00\x00\x00\x00\x00\x00\xfd?\xf6"\xb3\xd1\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xde\xe3jB>HKB\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15JeIX\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x94\xbe\x00B>\x1cCB\x17\x80\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5|\x9cD-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbd\x82\xbd\x92B=\xf0;B"@\x00\x00\x00\x00\x00\xfd\xc07\xc4t D-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00<\x98\x0f\xbcB>e\xa5B\'\x80\x00\x00\x00\x00\x00\xfd'
+	packageSize: 251
+	packageType: 1
+	joint 1 q_actual: -3.371230189000265
+	joint 1 q_target: -3.371185119409498
+	joint 1 qd_actual: 0.0
+	joint 1 i_actual: -0.05377639830112457
+	joint 1 V_actual: 47.455936431884766
+	joint 1 T_motor: 30.5
+	joint 2 q_actual: 2.10334248e-314
+	joint 2 q_target: -1.7099336040379835e-16
+	joint 2 qd_actual: -2.6885816042858402e+233
+	joint 2 i_actual: 0.0
+	joint 2 V_actual: 1.759784522921942e-38
+	joint 2 T_motor: 2.394222255393242e-30
+	joint 3 q_actual: -1.8383494367804354e-201
+	joint 3 q_target: 6.664506925507269e-304
+	joint 3 qd_actual: -2.0710003011703905e-56
+	joint 3 i_actual: -2.271629875608987e+34
+	joint 3 V_actual: 0.0
+	joint 3 T_motor: 6.847024556383921e-41
+	joint 4 q_actual: -7.927966746657204e+170
+	joint 4 q_target: 3.20945e-319
+	joint 4 qd_actual: 4.110790526691641e-206
+	joint 4 i_actual: 4.087164154552673e-26
+	joint 4 V_actual: 2.251751063491852e-20
+	joint 4 T_motor: 0.0
+	joint 5 q_actual: 1.327966699155e-312
+	joint 5 q_target: 1.6451072431394875e-09
+	joint 5 qd_actual: 5.384570438064e-312
+	joint 5 i_actual: -6.490924233001255e-22
+	joint 5 V_actual: -2.295255661010742
+	joint 5 T_motor: -7.97348247374333e-26
+	joint 6 q_actual: -0.0
+	joint 6 q_target: -2.130549658151135e-12
+	joint 6 qd_actual: 39191576576.0
+	joint 6 i_actual: -3.1937665858775697e+37
+	joint 6 V_actual: 5.079042153844811e+31
+	joint 6 T_motor: 4.9687145644596336e-24
+Sub-package length: 101
+Sub-package type: 4, CARTESIAN_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00e\x04?\xd2R\xc4T\x19F\x89?\xb1\x88\x9d+\xa9!\xb8\xbf\x90\xcd\r\xf1\xc5\xf9p\xc0\t\x14q\nK\xd3\x99?\xa0ez_A6\xfb?h\xb9\xec\x93\xf1\x1cV\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 101
+	packageType: 4
+	X: 0.286301691177052
+	Y: 0.06849081340727181
+	Z: -0.016407220727609084
+	Rx: -3.134981232108157
+	Ry: 0.032024215820099365
+	Rz: 0.003018343034941344
+	TCPOffsetX: 0.0
+	TCPOffsetY: 0.0
+	TCPOffsetZ: 0.12251999999999999
+	TCPOffsetRx: 0.0
+	TCPOffsetRy: 0.0
+	TCPOffsetRz: 0.0
+Sub-package length: 53
+Sub-package type: 9, NEEDED_FOR_CALIB_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x005\t?\xe2\x8aX\x80.\x12o?\xe6o\xe0\x06\xda\x90`\xbf\xe8\xc5\x89\xdar\xc1\xe8\xbf\xc2\xaa\x7f)\x8a\x98\\?\xce\xc2\xd5\xe7g\x83\xad\xbf\xb1\x82n\xba;34'
+Sub-package length: 75
+Sub-package type: 3, MASTERBOARD_DATA
+Sub-package Data (including 5 header bits): b"\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>5\xce?_'\xc7\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01"
+Sub-package length: 37
+Sub-package type: 2, TOOL_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00%\x02\x01\x01?\x9f\x93m\xa0\x00\x00\x00?\x98\x8f\x1c\x80\x00\x00\x00\x00\x00\x00\x00\x00<\xb8\xd6 B\x16\x80\x00\xfd'
+Sub-package length: 61
+Sub-package type: 7, FORCE_MODE_DATA
+Sub-package Data (including 5 header bits): b"\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?'\xbe\xf0\x93[\xa8\xb0"
+Sub-package length: 9
+Sub-package type: 8, ADDITIONAL_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\t\x08\x00\x01\x00\x01'
+Sub-package length: 43
+Sub-package type: 10, fuck
+Sub-package Data (including 5 header bits): b'\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8#\x0f\xd1\x19\xca\xf7?\xa3~\xbf&\x1d\xf4\xf0?\xd4\x8f\xee\x10\xef\x1b\xcd?\xb9\x99\x99\x99\x99\x99\x9a'
+Sub-package length: 26
+Sub-package type: 11, TOOL_COMM_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00'
+Sub-package length: 8
+Sub-package type: 12, TOOL_MODE_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x08\x0c\x00\x01\x01'
+
+DEBUG:Toggling the command b'is_steady()\n'
+Logging new packet.
+Message type: 16, ROBOT_STATE
+Message length: 716
+Full raw message data: b'\x00\x00\x02\xcc\x10\x00\x00\x00/\x00\x00\x00\x00\x01,\xd7Y\xb0\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xfb\x01\xc0\n\xf8"\xc8\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbd.<\x8cB=\xe1\x8eA\xf4\x80\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9e\xe6h\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x9c\xf6\x88B>\x1cCB\x02\xc0\x00\x00\x00\x00\x00\xfd?\xf6"\x9fQ\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xdd\xc1*B>V\xf8B\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15JeIX\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x93\xc6[B=\xfe\xe8B\x17\x80\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5{\x84D-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbdy+\xdfB=\xfe\xe8B"@\x00\x00\x00\x00\x00\xfd\xc07\xc4qxD-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00;\ty\x00B>HKB\'\x80\x00\x00\x00\x00\x00\xfd\x00\x00\x00e\x04?\xd2R\xd8\x06\xf4\xdd\x15?\xb1\x89\xb9A2\x98\xd6\xbf\x90\xcb;pqT|\xc0\t\x14x\x02|(\xe7?\xa0_c,\xe5\x8b\xa0?h?q\xa7WS\x9f\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x005\t?\xddT\xe8\xd4\xb7\xae=?\xdeg+8\x9f\xf2\xe0\xbf\xe9X*\xe8\'\xc2\xc8\xbf\xc1\xb7\xd1C\x12\xbc\xec?\xcdJ\xebP\xafJY\xbf\x7f\xa8\xc6/\xe6\xd6\x00\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>2#?`L\xd5\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01\x00\x00\x00%\x02\x01\x01?\x9c\x11E \x00\x00\x00?\x9c\x11E \x00\x00\x00\x00\x00\x00\x00\x00<\x80\x89 B\x16\x80\x00\xfd\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\'\xbe\xf6n}\x8e\x90\x00\x00\x00\t\x08\x00\x01\x00\x01\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8"\xdd\xde\xd5\xd1\xb5?\xa3\x80\x94k\x04\xd5\xb5?\xd4\x8f\xfc\xac\xaf\xf8\xaf?\xb9\x99\x99\x99\x99\x99\x9a\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00\x00\x00\x00\x08\x0c\x00\x01\x01'
+Sub-package length: 47
+Sub-package type: 0, ROBOT_MODE_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00/\x00\x00\x00\x00\x01,\xd7Y\xb0\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 47
+	packageType: 0
+	timestamp: 5047278000
+	isRealRobotConnected: True
+	isRealRobotEnabled: True
+	isRobotPowerOn: True
+	isEmergencyStopped: False
+	isProtectiveStopped: False
+	isProgramRunning: False
+	isProgramPaused: False
+	robotMode: 7
+	controlMode: 0
+	targetSpeedFraction: 1.0
+	speedScaling: 0.0
+	targetSpeedFractionLimit: 1.0
+	reserved: 0
+Sub-package length: 251
+Sub-package type: 1, JOINT_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\xfb\x01\xc0\n\xf8"\xc8\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbd.<\x8cB=\xe1\x8eA\xf4\x80\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9e\xe6h\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x9c\xf6\x88B>\x1cCB\x02\xc0\x00\x00\x00\x00\x00\xfd?\xf6"\x9fQ\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xdd\xc1*B>V\xf8B\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15JeIX\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x93\xc6[B=\xfe\xe8B\x17\x80\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5{\x84D-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbdy+\xdfB=\xfe\xe8B"@\x00\x00\x00\x00\x00\xfd\xc07\xc4qxD-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00;\ty\x00B>HKB\'\x80\x00\x00\x00\x00\x00\xfd'
+	packageSize: 251
+	packageType: 1
+	joint 1 q_actual: -3.371160093938009
+	joint 1 q_target: -3.371185119409498
+	joint 1 qd_actual: 0.0
+	joint 1 i_actual: -0.04253821074962616
+	joint 1 V_actual: 47.47026824951172
+	joint 1 T_motor: 30.5625
+	joint 2 q_actual: 2.10334248e-314
+	joint 2 q_target: -2.0941912987884595e+185
+	joint 2 qd_actual: -2.6885816042858402e+233
+	joint 2 i_actual: 0.0
+	joint 2 V_actual: 1.759688674106982e-38
+	joint 2 T_motor: -5.845276065868369e-34
+	joint 3 q_actual: 1.0139146475536384e+16
+	joint 3 q_target: 6.664506924419746e-304
+	joint 3 qd_actual: -2.0710003011703905e-56
+	joint 3 i_actual: -2.271629875608987e+34
+	joint 3 V_actual: 0.0
+	joint 3 T_motor: 6.846884426537489e-41
+	joint 4 q_actual: -860447.1698628074
+	joint 4 q_target: 3.20945e-319
+	joint 4 qd_actual: 4.110790526691641e-206
+	joint 4 i_actual: 4.087164154552673e-26
+	joint 4 V_actual: 2.251751063491852e-20
+	joint 4 T_motor: 0.0
+	joint 5 q_actual: 1.32788651412e-312
+	joint 5 q_target: 4.497598053536389e-10
+	joint 5 qd_actual: 5.38457043806e-312
+	joint 5 i_actual: -2.3060395310641207e-36
+	joint 5 V_actual: -2.295255661010742
+	joint 5 T_motor: -7.97348247374333e-26
+	joint 6 q_actual: -0.0
+	joint 6 q_target: -1.4308270356367528e-12
+	joint 6 qd_actual: 39191576576.0
+	joint 6 i_actual: -3.1937665858775697e+37
+	joint 6 V_actual: 1.2293552303667056e+30
+	joint 6 T_motor: 4.9687145644596336e-24
+Sub-package length: 101
+Sub-package type: 4, CARTESIAN_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00e\x04?\xd2R\xd8\x06\xf4\xdd\x15?\xb1\x89\xb9A2\x98\xd6\xbf\x90\xcb;pqT|\xc0\t\x14x\x02|(\xe7?\xa0_c,\xe5\x8b\xa0?h?q\xa7WS\x9f\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 101
+	packageType: 4
+	X: 0.28630638770433
+	Y: 0.0685077461408555
+	Z: -0.016400269258458597
+	Rx: -3.1349945253506237
+	Ry: 0.03197774813704446
+	Rz: 0.002959939937435554
+	TCPOffsetX: 0.0
+	TCPOffsetY: 0.0
+	TCPOffsetZ: 0.12251999999999999
+	TCPOffsetRx: 0.0
+	TCPOffsetRy: 0.0
+	TCPOffsetRz: 0.0
+Sub-package length: 53
+Sub-package type: 9, NEEDED_FOR_CALIB_DATA
+Sub-package Data (including 5 header bits): b"\x00\x00\x005\t?\xddT\xe8\xd4\xb7\xae=?\xdeg+8\x9f\xf2\xe0\xbf\xe9X*\xe8'\xc2\xc8\xbf\xc1\xb7\xd1C\x12\xbc\xec?\xcdJ\xebP\xafJY\xbf\x7f\xa8\xc6/\xe6\xd6\x00"
+Sub-package length: 75
+Sub-package type: 3, MASTERBOARD_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>2#?`L\xd5\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01'
+Sub-package length: 37
+Sub-package type: 2, TOOL_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00%\x02\x01\x01?\x9c\x11E \x00\x00\x00?\x9c\x11E \x00\x00\x00\x00\x00\x00\x00\x00<\x80\x89 B\x16\x80\x00\xfd'
+Sub-package length: 61
+Sub-package type: 7, FORCE_MODE_DATA
+Sub-package Data (including 5 header bits): b"\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?'\xbe\xf6n}\x8e\x90"
+Sub-package length: 9
+Sub-package type: 8, ADDITIONAL_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\t\x08\x00\x01\x00\x01'
+Sub-package length: 43
+Sub-package type: 10, fuck
+Sub-package Data (including 5 header bits): b'\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8"\xdd\xde\xd5\xd1\xb5?\xa3\x80\x94k\x04\xd5\xb5?\xd4\x8f\xfc\xac\xaf\xf8\xaf?\xb9\x99\x99\x99\x99\x99\x9a'
+Sub-package length: 26
+Sub-package type: 11, TOOL_COMM_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00'
+Sub-package length: 8
+Sub-package type: 12, TOOL_MODE_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x08\x0c\x00\x01\x01'
+
+DEBUG:Toggling the command b'wrench_trans(p[0,0,0,1,1,1], [0,0,0,1,1,2])\n'
+Logging new packet.
+Message type: 16, ROBOT_STATE
+Message length: 716
+Full raw message data: b'\x00\x00\x02\xcc\x10\x00\x00\x00/\x00\x00\x00\x00\x01,\xd8\xe0P\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xfb\x01\xc0\n\xf88\x88\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbd@8xB>\r\x96A\xf4\x80\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9e\x91H\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x9bX_B>*\xf0B\x02\xc0\x00\x00\x00\x00\x00\xfd?\xf6"\xcaQ\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xea\x01\xaaB>V\xf8B\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15J^\xb9X\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x97\x07\xb5B>\x1cCB\x17\x80\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5\x80\xd4D-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbd\x8b\x01RB>\r\x96B"\x80\x00\x00\x00\x00\x00\xfd\xc07\xc4s\xa8D-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00;\xe6\xbf\x10B>HKB\'\x80\x00\x00\x00\x00\x00\xfd\x00\x00\x00e\x04?\xd2R}\x94\xf8\xa4\x9c?\xb1\x89\x9cv\x16\xde\xbd\xbf\x90\xceg\xafc\xf9p\xc0\t\x14aQ\xe0c\x91?\xa0a\x1d\xa5\x04\xc3\x95?i\x86\x83\x06x\xda+\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x005\t?\xe0-\xf9\xe4\xabXl?\xd5\xa1\xe7`0\xb0\xe0\xbf\xe3D"\x82\xac\xaf\x84\xbf\xc4\xeb\xc6\xb2=\x96\xb8?\xd0]\xb5S\x1e\xcf>\xbf\x9a\x91\xe3\x15J-0\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>,\xa2?`L\xd5\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01\x00\x00\x00%\x02\x01\x01?\x98\x8f\x1c\x80\x00\x00\x00?\x9c\x11E \x00\x00\x00\x00\x00\x00\x00\x00<\x89\x8d\xc0B\x16\x80\x00\xfd\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\'\xbe\xe9,\xf6\xadp\x00\x00\x00\t\x08\x00\x01\x00\x01\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8##M\x8d\xb6%?\xa3\x7fYi\xcc;\xe9?\xd4\x8f\xde\xe3\x8b\x86>?\xb9\x99\x99\x99\x99\x99\x9a\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00\x00\x00\x00\x08\x0c\x00\x01\x01'
+Sub-package length: 47
+Sub-package type: 0, ROBOT_MODE_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00/\x00\x00\x00\x00\x01,\xd8\xe0P\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 47
+	packageType: 0
+	timestamp: 5047378000
+	isRealRobotConnected: True
+	isRealRobotEnabled: True
+	isRobotPowerOn: True
+	isEmergencyStopped: False
+	isProtectiveStopped: False
+	isProgramRunning: False
+	isProgramPaused: False
+	robotMode: 7
+	controlMode: 0
+	targetSpeedFraction: 1.0
+	speedScaling: 0.0
+	targetSpeedFractionLimit: 1.0
+	reserved: 0
+Sub-package length: 251
+Sub-package type: 1, JOINT_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\xfb\x01\xc0\n\xf88\x88\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbd@8xB>\r\x96A\xf4\x80\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9e\x91H\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x9bX_B>*\xf0B\x02\xc0\x00\x00\x00\x00\x00\xfd?\xf6"\xcaQ\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xea\x01\xaaB>V\xf8B\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15J^\xb9X\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x97\x07\xb5B>\x1cCB\x17\x80\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5\x80\xd4D-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbd\x8b\x01RB>\r\x96B"\x80\x00\x00\x00\x00\x00\xfd\xc07\xc4s\xa8D-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00;\xe6\xbf\x10B>HKB\'\x80\x00\x00\x00\x00\x00\xfd'
+	packageSize: 251
+	packageType: 1
+	joint 1 q_actual: -3.3712015787707728
+	joint 1 q_target: -3.371185119409498
+	joint 1 qd_actual: 0.0
+	joint 1 i_actual: -0.046928852796554565
+	joint 1 V_actual: 47.513267517089844
+	joint 1 T_motor: 30.5625
+	joint 2 q_actual: 2.10334248e-314
+	joint 2 q_target: -2.0804738262792306e-225
+	joint 2 qd_actual: -2.6885816042858402e+233
+	joint 2 i_actual: 0.0
+	joint 2 V_actual: 1.759630660350559e-38
+	joint 2 T_motor: 1.3996670871402447e+19
+	joint 3 q_actual: -5.59240062037148e+232
+	joint 3 q_target: 6.6645069267008915e-304
+	joint 3 qd_actual: -2.0710003011703905e-56
+	joint 3 i_actual: -2.271629875608987e+34
+	joint 3 V_actual: 0.0
+	joint 3 T_motor: 6.848706114541111e-41
+	joint 4 q_actual: 1.2253174427444724e-300
+	joint 4 q_target: 3.20945e-319
+	joint 4 qd_actual: 4.1067982344024213e-206
+	joint 4 i_actual: 4.087164154552673e-26
+	joint 4 V_actual: 2.251751063491852e-20
+	joint 4 T_motor: 0.0
+	joint 5 q_actual: 1.32815634574e-312
+	joint 5 q_target: 1.6451072431394875e-09
+	joint 5 qd_actual: 5.384570438083e-312
+	joint 5 i_actual: -3370280550400.0
+	joint 5 V_actual: -2.295255661010742
+	joint 5 T_motor: -7.97348247374333e-26
+	joint 6 q_actual: -0.0
+	joint 6 q_target: -3.0701314038944402e-12
+	joint 6 qd_actual: 39728447488.0
+	joint 6 i_actual: -3.1937665858775697e+37
+	joint 6 V_actual: 2.6662861369452286e+31
+	joint 6 T_motor: 4.9687145644596336e-24
+Sub-package length: 101
+Sub-package type: 4, CARTESIAN_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00e\x04?\xd2R}\x94\xf8\xa4\x9c?\xb1\x89\x9cv\x16\xde\xbd\xbf\x90\xceg\xafc\xf9p\xc0\t\x14aQ\xe0c\x91?\xa0a\x1d\xa5\x04\xc3\x95?i\x86\x83\x06x\xda+\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 101
+	packageType: 4
+	X: 0.2862848238751867
+	Y: 0.06850602992096362
+	Z: -0.016412372665393915
+	Rx: -3.1349512478449886
+	Ry: 0.03199093474757501
+	Rz: 0.0031158980453043403
+	TCPOffsetX: 0.0
+	TCPOffsetY: 0.0
+	TCPOffsetZ: 0.12251999999999999
+	TCPOffsetRx: 0.0
+	TCPOffsetRy: 0.0
+	TCPOffsetRz: 0.0
+Sub-package length: 53
+Sub-package type: 9, NEEDED_FOR_CALIB_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x005\t?\xe0-\xf9\xe4\xabXl?\xd5\xa1\xe7`0\xb0\xe0\xbf\xe3D"\x82\xac\xaf\x84\xbf\xc4\xeb\xc6\xb2=\x96\xb8?\xd0]\xb5S\x1e\xcf>\xbf\x9a\x91\xe3\x15J-0'
+Sub-package length: 75
+Sub-package type: 3, MASTERBOARD_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>,\xa2?`L\xd5\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01'
+Sub-package length: 37
+Sub-package type: 2, TOOL_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00%\x02\x01\x01?\x98\x8f\x1c\x80\x00\x00\x00?\x9c\x11E \x00\x00\x00\x00\x00\x00\x00\x00<\x89\x8d\xc0B\x16\x80\x00\xfd'
+Sub-package length: 61
+Sub-package type: 7, FORCE_MODE_DATA
+Sub-package Data (including 5 header bits): b"\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?'\xbe\xe9,\xf6\xadp"
+Sub-package length: 9
+Sub-package type: 8, ADDITIONAL_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\t\x08\x00\x01\x00\x01'
+Sub-package length: 43
+Sub-package type: 10, fuck
+Sub-package Data (including 5 header bits): b'\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8##M\x8d\xb6%?\xa3\x7fYi\xcc;\xe9?\xd4\x8f\xde\xe3\x8b\x86>?\xb9\x99\x99\x99\x99\x99\x9a'
+Sub-package length: 26
+Sub-package type: 11, TOOL_COMM_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00'
+Sub-package length: 8
+Sub-package type: 12, TOOL_MODE_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x08\x0c\x00\x01\x01'
+
+DEBUG:Toggling the command b'wrench_trans(p[0,0,0,1,1,1], [0,0,0,1,2,1])\n'
+Logging new packet.
+Message type: 16, ROBOT_STATE
+Message length: 716
+Full raw message data: b'\x00\x00\x02\xcc\x10\x00\x00\x00/\x00\x00\x00\x00\x01,\xdaj\xd8\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xfb\x01\xc0\n\xf8>\xe8\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbdI\x04,B=\xe1\x8eA\xf4\x80\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9f\x1bh\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x9cF_B>9\x9eB\x02\xc0\x00\x00\x00\x00\x00\xfd?\xf6"\xc5Q\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xe7-dB>e\xa5B\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15JhiX\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x99\xc9\x0cB>\x1cCB\x17\x80\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5{\x84D-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbd\xa2\xcf\x8dB>\r\x96B"\x80\x00\x00\x00\x00\x00\xfd\xc07\xc4s\\D-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00\xbb./\xe0B>V\xf8B\'\x80\x00\x00\x00\x00\x00\xfd\x00\x00\x00e\x04?\xd2R\xd1A1z\xc0?\xb1\x88\xcc\x19\xa2>\x13\xbf\x90\xca\x97\xe6\xd5\xe8H\xc0\t\x14w\xdb\xc0\xa1E?\xa0d|\xad\x166y?h;~\xc5V\x1a)\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x005\t?\xe0\xeb\x81\xac\xc8\xa2\x02?\xda\xad\x8b\xa3\xe1\x1f@\xbf\xe4\xa7k("\x8f\x90\xbf\xc7\x9f\xd8\xa0p$\xf8?\xd34P\xd12\x11\x07?\x84\x0e\xa4\xf3\x90\xaf\xa0\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>=%?q|\xd5\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01\x00\x00\x00%\x02\x01\x01?\x98\x8f\x1c\x80\x00\x00\x00?\x95\x0c\xf3\xe0\x00\x00\x00\x00\x00\x00\x00\x00<\x7f\xa9\x80B\x16\x80\x00\xfd\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\'\xbe\xc9f\xfd\xd6\x10\x00\x00\x00\t\x08\x00\x01\x00\x01\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8"\xcc\x07\xc1R%?\xa3\x7fa\xb4ya\x19?\xd4\x90\x0f8\x0e\x0b\xaf?\xb9\x99\x99\x99\x99\x99\x9a\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00\x00\x00\x00\x08\x0c\x00\x01\x01'
+Sub-package length: 47
+Sub-package type: 0, ROBOT_MODE_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00/\x00\x00\x00\x00\x01,\xdaj\xd8\x01\x01\x01\x00\x00\x00\x00\x07\x00?\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 47
+	packageType: 0
+	timestamp: 5047479000
+	isRealRobotConnected: True
+	isRealRobotEnabled: True
+	isRobotPowerOn: True
+	isEmergencyStopped: False
+	isProtectiveStopped: False
+	isProgramRunning: False
+	isProgramPaused: False
+	robotMode: 7
+	controlMode: 0
+	targetSpeedFraction: 1.0
+	speedScaling: 0.0
+	targetSpeedFractionLimit: 1.0
+	reserved: 0
+Sub-package length: 251
+Sub-package type: 1, JOINT_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\xfb\x01\xc0\n\xf8>\xe8\x88Z0\xc0\n\xf8/\xe7e\x01T\x00\x00\x00\x00\x00\x00\x00\x00\xbdI\x04,B=\xe1\x8eA\xf4\x80\x00\x00\x00\x00\x00\xfd\xbf\xe8\x9f\x1bh\xa4\x8a\xa0\xbf\xe8\x9e\xf0e\xa5\x9e\x08\x00\x00\x00\x00\x00\x00\x00\x00\xbf\x9cF_B>9\x9eB\x02\xc0\x00\x00\x00\x00\x00\xfd?\xf6"\xc5Q\x10\xb4`?\xf6"\xb4\x02 \xf8\x8c\x00\x00\x00\x00\x00\x00\x00\x00\xbe\xe7-dB>e\xa5B\x05\x00\x00\x00\x00\x00\x00\xfd\xc0\x15JhiX\xbel\xc0\x15Jb\xf6\x1e\xd4\xac\x00\x00\x00\x00\x00\x00\x00\x00>\x99\xc9\x0cB>\x1cCB\x17\x80\x00\x00\x00\x00\x00\xfd\xc0\x12\xe5{\x84D-\x18\xc0\x12\xe5x\x95\xc5i\xf3\x80\x00\x00\x00\x00\x00\x00\x00\xbd\xa2\xcf\x8dB>\r\x96B"\x80\x00\x00\x00\x00\x00\xfd\xc07\xc4s\\D-\x18\xc07\xc4r1\t\xb5 \x00\x00\x00\x00\x00\x00\x00\x00\xbb./\xe0B>V\xf8B\'\x80\x00\x00\x00\x00\x00\xfd'
+	packageSize: 251
+	packageType: 1
+	joint 1 q_actual: -3.371213738118307
+	joint 1 q_target: -3.371185119409498
+	joint 1 qd_actual: 0.0
+	joint 1 i_actual: -0.04907624423503876
+	joint 1 V_actual: 47.47026824951172
+	joint 1 T_motor: 30.5625
+	joint 2 q_actual: 2.1033424804e-314
+	joint 2 q_target: 1.2162463614124736e-176
+	joint 2 qd_actual: -2.6885816042858402e+233
+	joint 2 i_actual: 0.0
+	joint 2 V_actual: 1.75966401125401e-38
+	joint 2 T_motor: 1.3996687364076863e+19
+	joint 3 q_actual: -6.255239809685255e-163
+	joint 3 q_target: 6.664506926435642e-304
+	joint 3 qd_actual: -2.0710003011703905e-56
+	joint 3 i_actual: -2.271629875608987e+34
+	joint 3 V_actual: 0.0
+	joint 3 T_motor: 6.848285725001814e-41
+	joint 4 q_actual: 4.972608446494506e-90
+	joint 4 q_target: 3.20945e-319
+	joint 4 qd_actual: 4.1126916182579363e-206
+	joint 4 i_actual: 4.087164154552673e-26
+	joint 4 V_actual: 2.251751063491852e-20
+	joint 4 T_motor: 0.0
+	joint 5 q_actual: 1.328384728335e-312
+	joint 5 q_target: 1.6451072431394875e-09
+	joint 5 qd_actual: 5.38457043806e-312
+	joint 5 i_actual: -2.3060395310641207e-36
+	joint 5 V_actual: -2.295255661010742
+	joint 5 T_motor: -7.97348247374333e-26
+	joint 6 q_actual: -0.0
+	joint 6 q_target: -8.554138361256366e-12
+	joint 6 qd_actual: 39728447488.0
+	joint 6 i_actual: -3.1937665858775697e+37
+	joint 6 V_actual: 1.7451295135467888e+31
+	joint 6 T_motor: 4.9687145644596336e-24
+Sub-package length: 101
+Sub-package type: 4, CARTESIAN_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00e\x04?\xd2R\xd1A1z\xc0?\xb1\x88\xcc\x19\xa2>\x13\xbf\x90\xca\x97\xe6\xd5\xe8H\xc0\t\x14w\xdb\xc0\xa1E?\xa0d|\xad\x166y?h;~\xc5V\x1a)\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?\xbf]x\x81\x1b\x1d\x92\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+	packageSize: 101
+	packageType: 4
+	X: 0.2863047730115049
+	Y: 0.06849361062835894
+	Z: -0.01639783235939543
+	Rx: -3.134994236770725
+	Ry: 0.032016655091052955
+	Rz: 0.002958057021433609
+	TCPOffsetX: 0.0
+	TCPOffsetY: 0.0
+	TCPOffsetZ: 0.12251999999999999
+	TCPOffsetRx: 0.0
+	TCPOffsetRy: 0.0
+	TCPOffsetRz: 0.0
+Sub-package length: 53
+Sub-package type: 9, NEEDED_FOR_CALIB_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x005\t?\xe0\xeb\x81\xac\xc8\xa2\x02?\xda\xad\x8b\xa3\xe1\x1f@\xbf\xe4\xa7k("\x8f\x90\xbf\xc7\x9f\xd8\xa0p$\xf8?\xd34P\xd12\x11\x07?\x84\x0e\xa4\xf3\x90\xaf\xa0'
+Sub-package length: 75
+Sub-package type: 3, MASTERBOARD_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00K\x03\x00\x00\x00\x00\x00\x00\x00\x00\x01\x01\x80\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00?pbM\xe0\x00\x00\x00?pbM\xe0\x00\x00\x00A\xfe\x00\x00B>=%?q|\xd5\x00\x00\x00\x00\x01\x00\x00\xad\x88BW\x00\x01\x01'
+Sub-package length: 37
+Sub-package type: 2, TOOL_DATA
+Sub-package Data (including 5 header bits): b'\x00\x00\x00%\x02\x01\x01?\x98\x8f\x1c\x80\x00\x00\x00?\x95\x0c\xf3\xe0\x00\x00\x00\x00\x00\x00\x00\x00<\x7f\xa9\x80B\x16\x80\x00\xfd'
+Sub-package length: 61
+Sub-package type: 7, FORCE_MODE_DATA
+Sub-package Data (including 5 header bits): b"\x00\x00\x00=\x07\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00?'\xbe\xc9f\xfd\xd6\x10"
+Sub-package length: 9
+Sub-package type: 8, ADDITIONAL_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\t\x08\x00\x01\x00\x01'
+Sub-package length: 43
+Sub-package type: 10, fuck
+Sub-package Data (including 5 header bits): b'\x00\x00\x00+\n\xad\x88BW\x00\x01?\xc8"\xcc\x07\xc1R%?\xa3\x7fa\xb4ya\x19?\xd4\x90\x0f8\x0e\x0b\xaf?\xb9\x99\x99\x99\x99\x99\x9a'
+Sub-package length: 26
+Sub-package type: 11, TOOL_COMM_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x1a\x0b\x00\x00\x01\xc2\x00\x00\x00\x00\x00\x00\x00\x00\x01?\xc0\x00\x00@`\x00\x00'
+Sub-package length: 8
+Sub-package type: 12, TOOL_MODE_INFO
+Sub-package Data (including 5 header bits): b'\x00\x00\x00\x08\x0c\x00\x01\x01'
+
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------
+DEBUG:----------------------------------------------
+DEBUG:Position info about the robot:
+DEBUG:Initial pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]])
+DEBUG:Current pos/angle: ([[ 0.286  0.069 -0.016]], [[-3.134  0.032  0.003]]
+DEBUG:----------------------------------------------

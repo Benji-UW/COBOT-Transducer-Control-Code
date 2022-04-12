@@ -40,6 +40,13 @@ robot_mode_data.append(("unsigned char", "reserved"))
 joint_data = []
 joint_data.append(("int", "packageSize"))
 joint_data.append(("unsigned char", "packageType"))
+for i in range(6):
+    joint_data.append(("double", f"joint {i+1} q_actual"))
+    joint_data.append(("double", f"joint {i+1} q_target"))
+    joint_data.append(("double", f"joint {i+1} qd_actual"))
+    joint_data.append(("float", f"joint {i+1} i_actual"))
+    joint_data.append(("float", f"joint {i+1} V_actual"))
+    joint_data.append(("float", f"joint {i+1} T_motor"))
 
 cartesian_info = []
 cartesian_info.append(("int", "packageSize"))
@@ -57,11 +64,30 @@ cartesian_info.append(("double", "TCPOffsetRx"))
 cartesian_info.append(("double", "TCPOffsetRy"))
 cartesian_info.append(("double", "TCPOffsetRz"))
 
+kinematics_info = []
+kinematics_info.append(("int", "packageSize"))
+kinematics_info.append(("unsigned char", "packageType"))
+for i in range(6):
+    kinematics_info.append(("unsigned int", f"joint {i+1} checksum"))
+for i in range(6):
+    kinematics_info.append(("double", f"joint {i+1} DHtheta"))
+for i in range(6):
+    kinematics_info.append(("double", f"joint {i+1} DHa"))
+for i in range(6):
+    kinematics_info.append(("double", f"joint {i+1} Dhd"))
+for i in range(6):
+    kinematics_info.append(("double", f"joint {i+1} Dhalpha"))
+kinematics_info.append(("unsigned int", "calibration status"))
+
+
+
 
 
 sub_package_types = {}
 sub_package_types[0] = robot_mode_data
 sub_package_types[4] = cartesian_info
+sub_package_types[1] = joint_data
+sub_package_types[5] = kinematics_info
 
 
 message_type = {}

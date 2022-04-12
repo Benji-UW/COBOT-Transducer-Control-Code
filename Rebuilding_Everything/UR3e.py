@@ -78,7 +78,7 @@ class UR3e:
         self.servo_cmd = np.zeros((3, 4))
         
 
-    def connect(self, robot_ip, robot_port=30002, modbus_port=502, data_ip = "192.168.1.69", data_port=420):
+    def connect(self, robot_ip, robot_port=30002, modbus_port=502, data_ip = "127.0.0.1", data_port=21):
         """
         Connect to the robot.
 
@@ -101,13 +101,13 @@ class UR3e:
             print('Connection error to modbus: %s' % e)
             return (False, e)
 
-        # self.data_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # try:
-        #     self.robot_socket.send(b"socket_open(\"192.168.1.69\", 420, \"data_socket\")")
-        #     self.data_socket.connect(("192.168.1.69", data_port))
-        # except socket.gaierror as e:
-        #     print(f'Connection error to the data port: {e}')
-        #     return (False, e)
+        self.data_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            # self.robot_socket.send(b"socket_open(\"192.168.1.69\", 420, \"data_socket\")")
+            self.data_socket.connect((data_ip, data_port))
+        except socket.gaierror as e:
+            print(f'Connection error to the data port: {e}')
+            return (False, e)
 
         return (True, '')
 
@@ -174,9 +174,12 @@ class UR3e:
             speed_vect = self._change_base(speed_vect)
             rotation_vect = self._change_base(rotation_vect)
 
-            cmd = b'speedl([%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f],%1.3f,%2.3f,%1.3f)' % \
+            # cmd = b'speedl([%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f],%1.3f,%2.3f,%1.3f)' % \
+            #       (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2],
+            #        self.acc, lag, self.acc_rot)
+            cmd = b'speedl([%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f],%1.3f,%2.3f)' % \
                   (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2],
-                   self.acc, lag, self.acc_rot)
+                   self.acc, lag)
             self.robot_socket.send(cmd + b'\n')
             return True
         else:
@@ -215,17 +218,22 @@ class UR3e:
         #     self.robot_socket.send(cmd)
 
             # If this code works, delete the stuff down below
-        cmd = b"dir=get_actual_tcp_pose()\n"
-        self.robot_socket.send(cmd + b'\n')
-        cmd = b"rot=p[0,0,0,dir[3],dir[4],dir[5]]\n"
-        self.robot_socket.send(cmd + b'\n')
-        cmd = b"vec = wrench_trans(rot, [%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f])\n" % \
-            (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2])
+        
+        # cmd = b"dir=get_actual_tcp_pose()\n"
+        # self.robot_socket.send(cmd)
+        # cmd = b"rot=p[0,0,0,dir[3],dir[4],dir[5]]\n"
+        # self.robot_socket.send(cmd)
+        # cmd = b"vec = wrench_trans(rot, [%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f])\n" % \
+        #     (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2])
+        # self.robot_socket.send(cmd)
+        # cmd = b"vec_1 = [%1.3f, %1.3f, %1.3f, vec[3],vec[4],vec[5]]\n" % (speed_vect[0], speed_vect[1], speed_vect[2])
+        # self.robot_socket.send(cmd)
+        # cmd = b"speedl(vec_1,%1.3f,%2.3f,%1.3f)\n" % (self.acc, lag, self.acc_rot)
+        # self.robot_socket.send(cmd)
+
+        cmd = b"dir=get_actual_tcp_pose()\nrot=p[0,0,0,dir[3],dir[4],dir[5]]\nvec = wrench_trans(rot, [%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f])\nvec_1 = [%1.3f, %1.3f, %1.3f, vec[3],vec[4],vec[5]]\nspeedl(vec_1,%1.3f,%2.3f,%1.3f)\n" % \
+            (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2], speed_vect[0], speed_vect[1], speed_vect[2], self.acc, lag, self.acc_rot)
         self.robot_socket.send(cmd)
-        cmd = b"vec_1 = [%1.3f, %1.3f, %1.3f, vec[3],vec[4],vec[5]]\n"
-        self.robot_socket.send(cmd)
-        cmd = b"speedl(vec_1,%1.3f,%2.3f,%1.3f)\n" % (self.acc, lag, self.acc_rot)
-        self.robot_socket.send(cmd + b'\n')
 
         # self.robot_socket.send(cmd + b'\n')
         return True
@@ -542,6 +550,18 @@ class UR3e:
             self.robot_socket.send(cmd)
         
         self.data_socket.recv(1024)
+
+    def test_URScript_API(self):
+        '''This experiment has failed. The following code should now power off the robot,
+        and yet it does. Something here is clearly wrong.'''
+        # cmds = [b"foo = 1\n", \
+        #     b"bar = foo + 3\n", \
+            # b"if bar < 2:\n\tpowerdown()\nend\n"]
+        
+        cmds = [b"test_script()\n"]
+
+        for cmd in cmds:
+            self.robot_socket.send(cmd)
                 
 
 

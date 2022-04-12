@@ -142,6 +142,294 @@
         "double",
         "TCPOffsetRz"
       ]
+    ],
+    "1": [
+      [
+        "int",
+        "packageSize"
+      ],
+      [
+        "unsigned char",
+        "packageType"
+      ],
+      [
+        "double",
+        "joint 1 q_actual"
+      ],
+      [
+        "double",
+        "joint 1 q_target"
+      ],
+      [
+        "double",
+        "joint 1 qd_actual"
+      ],
+      [
+        "float",
+        "joint 1 i_actual"
+      ],
+      [
+        "float",
+        "joint 1 V_actual"
+      ],
+      [
+        "float",
+        "joint 1 T_motor"
+      ],
+      [
+        "double",
+        "joint 2 q_actual"
+      ],
+      [
+        "double",
+        "joint 2 q_target"
+      ],
+      [
+        "double",
+        "joint 2 qd_actual"
+      ],
+      [
+        "float",
+        "joint 2 i_actual"
+      ],
+      [
+        "float",
+        "joint 2 V_actual"
+      ],
+      [
+        "float",
+        "joint 2 T_motor"
+      ],
+      [
+        "double",
+        "joint 3 q_actual"
+      ],
+      [
+        "double",
+        "joint 3 q_target"
+      ],
+      [
+        "double",
+        "joint 3 qd_actual"
+      ],
+      [
+        "float",
+        "joint 3 i_actual"
+      ],
+      [
+        "float",
+        "joint 3 V_actual"
+      ],
+      [
+        "float",
+        "joint 3 T_motor"
+      ],
+      [
+        "double",
+        "joint 4 q_actual"
+      ],
+      [
+        "double",
+        "joint 4 q_target"
+      ],
+      [
+        "double",
+        "joint 4 qd_actual"
+      ],
+      [
+        "float",
+        "joint 4 i_actual"
+      ],
+      [
+        "float",
+        "joint 4 V_actual"
+      ],
+      [
+        "float",
+        "joint 4 T_motor"
+      ],
+      [
+        "double",
+        "joint 5 q_actual"
+      ],
+      [
+        "double",
+        "joint 5 q_target"
+      ],
+      [
+        "double",
+        "joint 5 qd_actual"
+      ],
+      [
+        "float",
+        "joint 5 i_actual"
+      ],
+      [
+        "float",
+        "joint 5 V_actual"
+      ],
+      [
+        "float",
+        "joint 5 T_motor"
+      ],
+      [
+        "double",
+        "joint 6 q_actual"
+      ],
+      [
+        "double",
+        "joint 6 q_target"
+      ],
+      [
+        "double",
+        "joint 6 qd_actual"
+      ],
+      [
+        "float",
+        "joint 6 i_actual"
+      ],
+      [
+        "float",
+        "joint 6 V_actual"
+      ],
+      [
+        "float",
+        "joint 6 T_motor"
+      ]
+    ],
+    "5": [
+      [
+        "int",
+        "packageSize"
+      ],
+      [
+        "unsigned char",
+        "packageType"
+      ],
+      [
+        "unsigned int",
+        "joint 1 checksum"
+      ],
+      [
+        "unsigned int",
+        "joint 2 checksum"
+      ],
+      [
+        "unsigned int",
+        "joint 3 checksum"
+      ],
+      [
+        "unsigned int",
+        "joint 4 checksum"
+      ],
+      [
+        "unsigned int",
+        "joint 5 checksum"
+      ],
+      [
+        "unsigned int",
+        "joint 6 checksum"
+      ],
+      [
+        "double",
+        "joint 1 DHtheta"
+      ],
+      [
+        "double",
+        "joint 2 DHtheta"
+      ],
+      [
+        "double",
+        "joint 3 DHtheta"
+      ],
+      [
+        "double",
+        "joint 4 DHtheta"
+      ],
+      [
+        "double",
+        "joint 5 DHtheta"
+      ],
+      [
+        "double",
+        "joint 6 DHtheta"
+      ],
+      [
+        "double",
+        "joint 1 DHa"
+      ],
+      [
+        "double",
+        "joint 2 DHa"
+      ],
+      [
+        "double",
+        "joint 3 DHa"
+      ],
+      [
+        "double",
+        "joint 4 DHa"
+      ],
+      [
+        "double",
+        "joint 5 DHa"
+      ],
+      [
+        "double",
+        "joint 6 DHa"
+      ],
+      [
+        "double",
+        "joint 1 Dhd"
+      ],
+      [
+        "double",
+        "joint 2 Dhd"
+      ],
+      [
+        "double",
+        "joint 3 Dhd"
+      ],
+      [
+        "double",
+        "joint 4 Dhd"
+      ],
+      [
+        "double",
+        "joint 5 Dhd"
+      ],
+      [
+        "double",
+        "joint 6 Dhd"
+      ],
+      [
+        "double",
+        "joint 1 Dhalpha"
+      ],
+      [
+        "double",
+        "joint 2 Dhalpha"
+      ],
+      [
+        "double",
+        "joint 3 Dhalpha"
+      ],
+      [
+        "double",
+        "joint 4 Dhalpha"
+      ],
+      [
+        "double",
+        "joint 5 Dhalpha"
+      ],
+      [
+        "double",
+        "joint 6 Dhalpha"
+      ],
+      [
+        "unsigned int",
+        "calibration status"
+      ]
     ]
   },
   "struct_key": {

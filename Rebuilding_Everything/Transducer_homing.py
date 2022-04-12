@@ -42,7 +42,7 @@ class Transducer_homing:
         self.vR_list = [0.025, 0.05, 0.1, 0.2, 0.4, 0.8, 1.0, 2.0]
         self.a_list = [0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 1.0]
         self.aR_list = [0.1, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 2.0]
-        self.speed_preset = 1
+        self.speed_preset = 3
         self.joy_min = 0.01
 
         self.refresh_rate = 112.
@@ -117,7 +117,7 @@ class Transducer_homing:
         
         self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
         self.robot.set_max_displacement(self.max_disp)
-        self.robot.set_parameters(base='tcp')
+        self.robot.set_parameters(base='base')
         print("Robot initialized :)")
 
     def start(self):
@@ -143,6 +143,7 @@ class Transducer_homing:
 
         self.i=-1
         print('About to start the main loop')
+        self.robot.test_URScript_API()
 
         while run_bool:
             t0 = time.time()
@@ -283,11 +284,11 @@ class Transducer_homing:
         d_pos = d_pos*1000
         d_angle = np.rad2deg(d_angle)
         
-        # for i in range(3):
-        #     if (d_angle[i] > 180):
-        #         d_angle[i] -= 360
-        #     elif (d_angle[i] < -180):
-        #         d_angle[i] += 360
+        for i in range(3):
+            if (d_angle[i] > 180):
+                d_angle[i] -= 360
+            elif (d_angle[i] < -180):
+                d_angle[i] += 360
 
         #print(d_pos, d_angle)
         return (d_pos,d_angle)
@@ -532,5 +533,5 @@ robot.initialize()
 
 robot.connect_to_matlab()
  
-# robot.test_functions()
+robot.test_functions()
 robot.start()
