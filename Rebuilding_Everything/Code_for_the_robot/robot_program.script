@@ -1,0 +1,202 @@
+# This code is meant to be run once the socket connection has been made.
+
+global i = 0
+global port_name = "data_port"
+global message_state = "No message"
+global message = ""
+global latest_loop = 0
+
+while True:
+    string_from_server = socket_read_string(port_name)
+    if(string_from_server):
+        message_state = "recieved a message!"
+        latest_loop = i
+        message = string_from_server
+        textmsg(string_from_server)
+end
+
+# TODO: 
+# - Test that I can recieve and process data on the robot from the computer
+# - Test that I can send data from the robot and process it on the computer
+
+#################################################
+############## All socket commands ##############
+#################################################
+
+# socket_close(socket_name='socket_0')
+# closes the socket when you're done with it.
+
+# socket_get_var(socket_name='socket_0')
+# Reads an integer_to_binary_list freedrive_mode the server.
+# Sends the message "GET <name>/n" through the socket, expects
+# the response "<name> <int>\n" within 2 seconds. Returns 0 after
+# timeout.
+
+
+# socket_open(address, port, socket_name=’socket_0’)
+
+# Open TCP/IP ethernet communication socket
+# Attempts to open a socket connection, times out after 2 seconds.
+
+# Parameters
+# address: Server address (string)
+# port: Port number (int)
+# socket_name: Name of socket (string)
+
+
+# socket_read_ascii_float(number, socket_name=’socket_0’, timeout=2)
+
+# Reads a number of ascii formatted floats from the socket. A maximum
+# of 30 values can be read in one command. The format of the numbers
+# should be in parantheses, and seperated by ",". An example list of four
+# numbers could look like "( 1.414 , 3.14159, 1.616, 0.0 )".
+# The returned list contains the total numbers read, and then each number
+# in succession. For example a read_ascii_float on the example above
+# would return [4, 1.414, 3.14159, 1.616, 0.0].
+# A failed read or timeout will return the list with 0 as first element and
+# then "Not a number (nan)" in the following elements (ex. [0, nan, nan, nan]
+# for a read of three numbers).
+
+# Parameters
+# number: The number of variables to read (int)
+# socket_name: Name of socket (string)
+# timeout: The number of seconds until the read action times out (float).
+# A timeout of 0 or negative number indicates that the function should
+# not return until a read is completed.
+
+
+# socket_read_binary_integer(number, socket_name=’socket_0’, timeout=2)
+
+# Reads a number of 32 bit integers from the socket. Bytes are in network
+# byte order. A maximum of 30 values can be read in one command.
+# Returns (for example) [3,100,2000,30000], if there is a timeout or the
+# reply is invalid, [0,-1,-1,-1] is returned, indicating that 0 integers
+# have been read.
+
+# Parameters
+# number: The number of variables to read (int)
+# socket_name: Name of socket (string)
+# timeout: The number of seconds until the read action times out (float). A timeout of 0 or negative
+# number indicates that the function should not return until a read is completed.
+
+
+# socket_read_byte_list(number, socket_name=’socket_0’, timeout=2)
+
+# Reads a number of bytes from the socket. A maximum of 30 values can
+# be read in one command. Returns (for example) [3,100,200,44], if
+# there is a timeout or the reply is invalid, [0,-1,-1,-1] is returned,
+# indicating that 0 bytes have been read
+
+# Parameters
+# number: The number of bytes to read (int)
+# socket_name: Name of socket (string)
+# timeout: The number of seconds until the read action times out (float). A
+# timeout of 0 or negative number indicates that the function should not
+# return until a read is completed.
+
+
+# socket_read_line(socket_name=’socket_0’, timeout=2)
+
+# Deprecated: Reads the socket buffer until the first "\r\n"
+# (carriage return and newline) characters or just the "\n" 
+# (newline) character, and returns the data as a string. The
+# returned string will not contain the "\n" nor the "\r\n" characters.
+# Returns (for example) "reply from the server:", if there is a timeout or the reply is invalid, an empty
+# line is returned (""). You can test if the line is empty with an if-statement.
+
+
+# socket_read_string(socket_name=’socket_0’, prefix =’’, suffix =’’,
+# interpret_escape=’False’, timeout=2)
+
+# Reads all data from the socket and returns the data as a string.
+# Returns (for example) "reply from the server:\n Hello World". if
+# there is a timeout or the reply is invalid, an empty string is 
+# returned (""). You can test if the string is empty with an if-statement.
+
+# >>> if(string_from_server) :
+# >>> popup("the string is not empty")
+# >>> end
+
+# The optional parameters "prefix" and "suffix", can be used to express
+# what is extracted from the socket. The "prefix" specifies the start of
+# the substring (message) extracted from the socket. The data up to the
+# end of the "prefix" will be ignored and removed from the socket. The 
+# "suffix" specifies the end of the substring (message) extracted from
+# the socket. Any remaining data on the socket, after the "suffix",
+# will be preserved.
+
+# By using the "prefix" and "suffix" it is also possible send multiple
+# string to the controller at once, because the suffix defines where the
+# message ends. E.g. sending ">hello<>world<" and calling this script
+# function with the prefix=">" and suffix="<".
+
+# Note that leading spaces in the prefix and suffix strings are ignored
+# in the current software and may cause communication errors in future
+# releases. The optional parameter "interpret_escape" can be used to
+# allow the use of escape sequences "\n", "\t" and "\r" as part of the
+# prefix or suffix.
+
+# Parameters
+# socket_name: Name of socket (string)
+# prefix: Defines a prefix (string)
+# suffix: Defines a suffix (string)
+# interpret_escape: Enables the interpretation of escape sequences (bool)
+# timeout: The number of seconds until the read action times out (float).
+# A timeout of 0 or negative number indicates that the function should
+# not return until a read is completed.
+
+
+# socket_send_byte(value, socket_name=’socket_0’)
+
+# Sends a byte to the server
+# Sends the byte <value> through the socket. Expects no response. Can
+# be used to send special ASCII characters: 10 is newline, 2 is start
+# of text, 3 is end of text.
+
+# Parameters
+# value: The number to send (byte)
+# socket_name: Name of socket (string)
+
+
+# socket_send_int(value, socket_name=’socket_0’)
+
+# Sends an int (int32_t) to the server
+# Sends the int <value> through the socket. Send in network byte order.
+# Expects no response.
+
+# Parameters
+# value: The number to send (int)
+# socket_name: Name of socket (string)
+
+
+# socket_send_line(str, socket_name=’socket_0’)
+
+# Sends a string with a newline character to the server
+# - useful for communicating with the UR dashboard server
+# Sends the string <str> through the socket in ASCII coding. Expects no response.
+
+# Parameters
+# str: The string to send (ascii)
+# socket_name: Name of socket (string)
+
+
+# socket_send_string(str, socket_name=’socket_0’)
+
+# Sends a string to the server
+# Sends the string <str> through the socket in ASCII coding. Expects no response.
+
+# Parameters
+# str: The string to send (ascii)
+# socket_name: Name of socket (string)
+
+
+# socket_set_var(name, value, socket_name=’socket_0’)
+
+# Sends an integer to the server
+# Sends the message "SET <name> <value>\n" through the socket.
+# Expects no response.
+
+# Parameters
+# name: Variable name (string)
+# value: The number to send (int)
+# socket_name: Name of socket (string)

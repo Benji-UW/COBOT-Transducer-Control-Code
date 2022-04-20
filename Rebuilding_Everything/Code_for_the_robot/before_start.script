@@ -1,0 +1,21 @@
+# The code meant to run on the CoBot before the start of the main program
+# The primary purpose of this code is to stay listening for a connection to the
+# server for a while.
+
+global connected = False
+global target_IP = "192.168.0.5"
+global target_port = 50000
+
+global open = socket_open(target_IP, target_port, "data_port")
+global loops = 0
+global conn = "Robot is not connected"
+
+while open = False:
+  open = socket_open(target_IP, target_port, "data_port")
+  loops = loops + 1
+  sync()
+end
+
+global conn = "Robot is now connected!"
+
+  

@@ -78,7 +78,7 @@ class UR3e:
         self.servo_cmd = np.zeros((3, 4))
         
 
-    def connect(self, robot_ip, robot_port=30002, modbus_port=502, data_ip = "127.0.0.1", data_port=21):
+    def connect(self, robot_ip, robot_port=30020, modbus_port=502, data_ip = "192.168.0.5", data_port=50000):
         """
         Connect to the robot.
 
@@ -101,13 +101,14 @@ class UR3e:
             print('Connection error to modbus: %s' % e)
             return (False, e)
 
+        
         self.data_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
-            # self.robot_socket.send(b"socket_open(\"192.168.1.69\", 420, \"data_socket\")")
             self.data_socket.connect((data_ip, data_port))
         except socket.gaierror as e:
-            print(f'Connection error to the data port: {e}')
+            print(f'Connection error due to data port: {e}')
             return (False, e)
+        print('Connected to data_port')
 
         return (True, '')
 
@@ -550,6 +551,14 @@ class UR3e:
             self.robot_socket.send(cmd)
         
         self.data_socket.recv(1024)
+
+    def send_data_string(self, to_send):
+        '''Recieves a bytes-like object and sends it to the data port on the robot.
+        Return strue if the transmission is successful.'''
+        return self.data_socket.send(to_send)
+
+    def recv_data_string(self):
+        return self.data_socket.recv(1024)
 
     def test_URScript_API(self):
         '''This experiment has failed. The following code should now power off the robot,

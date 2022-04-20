@@ -46,7 +46,7 @@ class Transducer_homing:
         self.joy_min = 0.01
 
         self.refresh_rate = 112.
-        self.lag = 0.1 #10. / self.refresh_rate #0.1
+        self.lag = 0.02 #10. / self.refresh_rate #0.1
         self.true_refresh_rate = None
         self.button_hold = []
         self.max_disp = 0.5
@@ -73,7 +73,6 @@ class Transducer_homing:
 
         self.range_of_motion = {'X': 0,'Y': 0,'Z':8,'Rx':30,'Ry':30,'Rz':0}
 
-
     def connect_to_matlab(self, server_ip='localhost', port=508):
         self.matlab_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
@@ -83,6 +82,17 @@ class Transducer_homing:
             return (False,e)
         print('Connected to MATLAB')
         return (True,'')
+
+# DELETE IF CONNECTION WORKS IN UR3 MODULE
+    # def connect_to_data_port(self, server_ip='192.168.0.5', port=50000):
+    #     self.data_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #     try:
+    #         self.data_socket.connect((server_ip, port))
+    #     except socket.gaierror as e:
+    #         print(f'Connection error due to data port: {e}')
+    #         return (False, e)
+    #     print('Connected to data_port')
+    #     return (True, '')
 
     def disconnect_from_matlab(self):
         self.matlab_socket.send(b'end')
@@ -107,6 +117,7 @@ class Transducer_homing:
         self.robot = UR3e()
         if not self.robot.connect(ip_robot)[0]:
             return False
+        print("robot successfully connected to all ports!")
         
         
         self.robot.initialize()
@@ -126,7 +137,7 @@ class Transducer_homing:
         router = False
         translate = True
 
-        #self.listener = self.MATLAB_listener()
+        # self.listener = self.MATLAB_listener()
         self.listener = self.fake_MATLAB_listener()
 
         self.last_ten_refresh_rate = np.zeros((10,0))
@@ -143,7 +154,6 @@ class Transducer_homing:
 
         self.i=-1
         print('About to start the main loop')
-        self.robot.test_URScript_API()
 
         while run_bool:
             t0 = time.time()
@@ -152,8 +162,7 @@ class Transducer_homing:
             #self.robot.get_tcp_force()
 
             (new_mag, latest_mag) = next(self.listener)
-            #(new_mag, latest_mag) = self.MATLAB_next()
-            #print('made it here')
+
             # This section of code is entirely for handling a new signal reading from MATLAB
             if new_mag:
                 # Iterate a counter that keeps track of the magnitude readings we've recieved
@@ -191,6 +200,7 @@ class Transducer_homing:
             # Press d to trigger the demo pathfinder
             if pressed_buttons["switch_space"]:
                 translate = not translate
+            # Starts a demo pathfinder if the 'd' key is pressed
             if keys[pygame.key.key_code("d")] == 1 and not router:
                 router = True
                 self.pathfinder = Pathfinder(20,30,30)
@@ -215,6 +225,7 @@ class Transducer_homing:
             if keys[pygame.key.key_code("h")] == 1 and not router:
                 self.robot.movel(self.starting_pos[0], self.starting_pos[1])
 
+            # changes the speed preset of the robot if that occured.
             if changed_preset:
                 v = self.v_list[self.speed_preset]
                 vR = self.vR_list[self.speed_preset]
@@ -249,6 +260,12 @@ class Transducer_homing:
             logging.debug(f"Initial pos/angle: ({self.robot.initial_pos.T}, {self.robot.initial_angle.T})")
             logging.debug(f"Current pos/angle: ({self.robot.pos.T}, {self.robot.angle.T}")
             logging.debug("----------------------------------------------")
+
+
+            print("sending string...")
+            self.robot.send_data_string(b"testing IO")
+            response = self.robot.recv_data_string()
+            print(response)
 
 
             for event in pygame.event.get():
@@ -358,7 +375,9 @@ class Transducer_homing:
         while True:
             print('here i am')
             self.matlab_socket.send(b'motion')
+
             msg = self.matlab_socket.recv(1024)
+            print(msg)
             mag = float(msg[4:13]) / 1.0E3
             loop = int(msg[1:3])
             if loop == self.latest_loop:
@@ -533,5 +552,5 @@ robot.initialize()
 
 robot.connect_to_matlab()
  
-robot.test_functions()
+# robot.test_functions()
 robot.start()

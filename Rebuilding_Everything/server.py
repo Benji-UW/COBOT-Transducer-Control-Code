@@ -10,6 +10,15 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
 s.listen(6)
 
+
+HOST = "192.168.0.5"
+PORT = 50000
+
+s2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s2.bind((HOST, PORT))
+print("listening...")
+s2.listen(6)
+
 flag = 0
 motion = 'gdfdhfjhgvj'
 condition = 0
@@ -63,3 +72,8 @@ while True:
     con, addr = s.accept()
     print('Connected: ' + str(addr))
     Thread(target=client_thread, args=(con,)).start()
+    
+    con, addr = s2.accept()
+    print('Connected on server 2 ' + str(addr))
+    Thread(target=client_thread, args=(con,)).start()
+    
