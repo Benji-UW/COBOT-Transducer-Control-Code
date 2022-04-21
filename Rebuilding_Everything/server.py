@@ -39,20 +39,21 @@ def client_thread(conn):
     i_rr = 0
     while is_alive:
         # print(f'RSM: {robot_state_message}')
-        client_input = conn.recv(1024)
+        client_input = conn.recv(4096)
+        # print(str(client_input))
         t = time.time()
         if client_input == b'motion':
             print('received motion:')
             print(motion)
             conn.send(motion)
         elif client_input[:4] == b'RSM:':
-            robot_state_message = client_input[4:]
-            # print(robot_state_message)
+            robot_state_message = client_input[4:] + b" your server touched this :)))"
+            print(robot_state_message)
         elif client_input == b'RSR':
             # print("robot state requested")
             conn.send(robot_state_message)
         elif client_input == b'I am alive':
-            conn.send(b"testing IO")
+            conn.send(b"Transmit position")
         elif client_input == b'end':
             print('Connection to process %d ended.' % number)
             conn.close()
@@ -80,6 +81,10 @@ def client_thread(conn):
 
 while True:
     print("entered while loop")
+    con, addr = s.accept()
+    print('Connected: ' + str(addr))
+    Thread(target=client_thread, args=(con,)).start()
+    
     con, addr = s.accept()
     print('Connected: ' + str(addr))
     Thread(target=client_thread, args=(con,)).start()
