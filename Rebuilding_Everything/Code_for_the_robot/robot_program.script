@@ -7,12 +7,27 @@ global message = ""
 global latest_loop = 0
 
 while True:
-    string_from_server = socket_read_string(port_name)
-    if(string_from_server):
+    i = i + 1
+    global string_from_server = socket_read_string(port_name, timeout=0.5)
+    if(string_from_server != ""):
         message_state = "recieved a message!"
         latest_loop = i
         message = string_from_server
-        textmsg(string_from_server)
+        textmsg("Recieved the following: " + string_from_server)
+
+        if(string_from_server == "testing IO"):
+            socket_send_string("RSM:IO is tested", port_name)
+        elif(string_from_server == "Transmit position"):
+            current_pos = get_actual_tcp_pose()
+            socket_send_string("RSM:" + current_pos)
+        else:
+            socket_send_string("RSM: recieved unrecognized state request")
+        end
+
+    else:
+        message_state = "message was blank!"
+    end
+    socket_send_string("I am alive", port_name)
 end
 
 # TODO: 

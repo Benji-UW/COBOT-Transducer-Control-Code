@@ -46,7 +46,7 @@ class Transducer_homing:
         self.joy_min = 0.01
 
         self.refresh_rate = 112.
-        self.lag = 0.02 #10. / self.refresh_rate #0.1
+        self.lag = 0.2 #10. / self.refresh_rate #0.1
         self.true_refresh_rate = None
         self.button_hold = []
         self.max_disp = 0.5
@@ -263,8 +263,7 @@ class Transducer_homing:
 
 
             print("sending string...")
-            self.robot.send_data_string(b"testing IO")
-            response = self.robot.recv_data_string()
+            response = self.robot.data_string_io(b'RSR')
             print(response)
 
 

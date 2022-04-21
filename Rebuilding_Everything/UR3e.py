@@ -78,7 +78,7 @@ class UR3e:
         self.servo_cmd = np.zeros((3, 4))
         
 
-    def connect(self, robot_ip, robot_port=30020, modbus_port=502, data_ip = "192.168.0.5", data_port=50000):
+    def connect(self, robot_ip, robot_port=30020, modbus_port=502, data_ip = "192.168.0.5", data_port=508):
         """
         Connect to the robot.
 
@@ -540,25 +540,24 @@ class UR3e:
 
         return logstring
 
-    def new_port_response(self):
-        cmds = [b"pos = get_actual_tcp_pos()\n", \
-            b"trans = wrench_trans(init_pos, pos)\n", \
-            b"socket_set_var(\"Rx\", trans[3]*1000, \"data_socket\")\n", \
-            b"socket_set_var(\"Ry\", trans[4]*1000, \"data_socket\")\n", \
-            b"socket_set_var(\"Rx\", trans[5]*1000, \"data_socket\")\n"]
+    # def new_port_response(self):
+    #     cmds = [b"pos = get_actual_tcp_pos()\n", \
+    #         b"trans = wrench_trans(init_pos, pos)\n", \
+    #         b"socket_set_var(\"Rx\", trans[3]*1000, \"data_socket\")\n", \
+    #         b"socket_set_var(\"Ry\", trans[4]*1000, \"data_socket\")\n", \
+    #         b"socket_set_var(\"Rx\", trans[5]*1000, \"data_socket\")\n"]
 
-        for cmd in cmds:
-            self.robot_socket.send(cmd)
+    #     for cmd in cmds:
+    #         self.robot_socket.send(cmd)
         
-        self.data_socket.recv(1024)
+    #     self.data_socket.recv(1024)
 
-    def send_data_string(self, to_send):
+    def data_string_io(self, to_send):
         '''Recieves a bytes-like object and sends it to the data port on the robot.
         Return strue if the transmission is successful.'''
-        return self.data_socket.send(to_send)
-
-    def recv_data_string(self):
+        self.data_socket.send(to_send)
         return self.data_socket.recv(1024)
+    
 
     def test_URScript_API(self):
         '''This experiment has failed. The following code should now power off the robot,
