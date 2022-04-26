@@ -5,6 +5,7 @@ global port_name = "data_port"
 global message_state = "No message"
 global message = ""
 global latest_loop = 0
+global current_origin = get_actual_tcp_pose()
 
 while True:
     i = i + 1
@@ -17,6 +18,10 @@ while True:
 
         if(string_from_server == "testing IO"):
             socket_send_string("RSM:IO is tested", port_name)
+        elif(string_from_server == "set_origin"):
+            current_origin = get_actual_tcp_pose()
+        elif(string_from_server == "test_wrench_trans"):
+            my_pose_translate(current_origin, p[0,0,0,1,1,0], 0.5, 2))
         elif(string_from_server == "Transmit position"):
             current_pos = get_actual_tcp_pose()
             global to_send = str_cat("RSM:",current_pos)
@@ -28,8 +33,13 @@ while True:
     else:
         message_state = "message was blank!"
     end
+    socket_set_var("loops", i, port_name)
     socket_send_string("I am alive", port_name)
 end
+
+def my_pose_translate(pos1, rotation_vector,vel, acc):
+    global vec=wrench_trans(pos1, rotation_vector)
+    speedl(vec,1)
 
 # TODO: 
 # - Test that I can recieve and process data on the robot from the computer

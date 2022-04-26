@@ -1,3 +1,4 @@
+from http import client
 import socket
 import numpy as np
 import time
@@ -23,6 +24,7 @@ flag = 0
 motion = 'gdfdhfjhgvj'
 condition = 0
 robot_state_message = b"no state"
+shitty_sql = {"loopback": 1}
 
 
 def client_thread(conn): 
@@ -30,6 +32,7 @@ def client_thread(conn):
     global motion
     global condition
     global robot_state_message
+    global shitty_sql
     number = flag
     flag = flag + 1
     t = time.time()
@@ -46,6 +49,16 @@ def client_thread(conn):
             print('received motion:')
             print(motion)
             conn.send(motion)
+        elif client_input[:3] == b"SET":
+            '''Should be a message in the format "SET <name> <value>", can only be an integer'''
+            cli_input = client_input.split()
+            var_name = cli_input[1]
+            var_val = cli_input[2]
+            shitty_sql[var_name] = var_val
+        elif client_input[:3] == b"GET":
+            '''Should be a message in the format "GET <name>", only sending integers tho'''
+            cli_input = client_input.split()
+            conn.send(shitty_sql[cli_input[1]], default="-1")
         elif client_input[:4] == b'RSM:':
             robot_state_message = client_input[4:] + b" your server touched this :)))"
             print(robot_state_message)
@@ -60,7 +73,7 @@ def client_thread(conn):
             is_alive = False
         else:
             motion = client_input
-            #print(motion)
+            print(shitty_sql)
             # debugging type step:
             cl = str(client_input)
             print('client ' + str(conn) + ' just sent ' + cl)

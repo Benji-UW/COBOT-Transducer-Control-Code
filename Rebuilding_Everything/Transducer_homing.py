@@ -208,6 +208,8 @@ class Transducer_homing:
             if keys[pygame.key.key_code("k")] == 1 and not router:
                 router = True
                 self.pathfinder = FullScan((0.5,5),20,60,60)
+            if keys[pygame.key.key_code("y")] == 1:
+                self.robot.data_string_io(b"test_wrench_trans")
             # Press x to stop the running pathfinder
             if keys[pygame.key.key_code("x")] == 1 and router:
                 router = False
