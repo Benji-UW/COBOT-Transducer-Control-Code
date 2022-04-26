@@ -204,34 +204,6 @@ class UR3e:
         speed_vect = self._change_base(speed_vect)
         rotation_vect = self._change_base(rotation_vect)
 
-        # cmds = []
-        # cmds.append(b"dir=get_actual_tcp_pose()\n")
-        # cmds.append(b"rot=p[0,0,0,dir[3],dir[4],dir[5]]\n")
-        # # cmds.append(b"vec = wrench_trans(rot, [%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f])\n" % \
-        # #     (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2]))
-        # cmds.append(b"vec = wrench_trans(rot, [0,0,0,%2.3f,%2.3f,%2.3f])\n" % \
-        #     (rotation_vect[0], rotation_vect[1], rotation_vect[2]))
-        
-        # cmds.append(b"vec_1 = [%1.3f, %1.3f, %1.3f, vec[3],vec[4],vec[5]]\n" % (speed_vect[0], speed_vect[1], speed_vect[2]))
-        # cmds.append(b"speedl(vec_1,%1.3f,%2.3f,%1.3f)\n" % (self.acc, lag, self.acc_rot))
-
-        # for cmd in cmds:
-        #     self.robot_socket.send(cmd)
-
-            # If this code works, delete the stuff down below
-        
-        # cmd = b"dir=get_actual_tcp_pose()\n"
-        # self.robot_socket.send(cmd)
-        # cmd = b"rot=p[0,0,0,dir[3],dir[4],dir[5]]\n"
-        # self.robot_socket.send(cmd)
-        # cmd = b"vec = wrench_trans(rot, [%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f])\n" % \
-        #     (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2])
-        # self.robot_socket.send(cmd)
-        # cmd = b"vec_1 = [%1.3f, %1.3f, %1.3f, vec[3],vec[4],vec[5]]\n" % (speed_vect[0], speed_vect[1], speed_vect[2])
-        # self.robot_socket.send(cmd)
-        # cmd = b"speedl(vec_1,%1.3f,%2.3f,%1.3f)\n" % (self.acc, lag, self.acc_rot)
-        # self.robot_socket.send(cmd)
-
         cmd = b"dir=get_actual_tcp_pose()\nrot=p[0,0,0,dir[3],dir[4],dir[5]]\nvec = wrench_trans(rot, [%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f])\nvec_1 = [%1.3f, %1.3f, %1.3f, vec[3],vec[4],vec[5]]\nspeedl(vec_1,%1.3f,%2.3f,%1.3f)\n" % \
             (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2], speed_vect[0], speed_vect[1], speed_vect[2], self.acc, lag, self.acc_rot)
         self.robot_socket.send(cmd)
