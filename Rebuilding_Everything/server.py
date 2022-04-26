@@ -24,7 +24,7 @@ flag = 0
 motion = 'gdfdhfjhgvj'
 condition = 0
 robot_state_message = b"no state"
-shitty_sql = {"loopback": 1}
+shitty_sql = {b"loopback": 420}
 
 
 def client_thread(conn): 
