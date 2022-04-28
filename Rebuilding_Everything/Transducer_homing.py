@@ -178,7 +178,7 @@ class Transducer_homing:
                 self.mag_loc.add(((pos,angle), new_mag))
 
                 if router:
-                    self.pathfinder.newMag(((pos,angle), latest_mag))
+                    self.pathfinder.newMag(((pos,angle), latest_mag), self.robot.at_tar())
                     # You are here                
 
             pygame.event.pump()
@@ -203,13 +203,11 @@ class Transducer_homing:
             # Starts a demo pathfinder if the 'd' key is pressed
             if keys[pygame.key.key_code("d")] == 1 and not router:
                 router = True
-                self.pathfinder = Pathfinder(20,30,30)
+                self.pathfinder = Pathfinder(20,25,25)
                 self.robot.set_initial_pos()
             if keys[pygame.key.key_code("k")] == 1 and not router:
                 router = True
-                self.pathfinder = FullScan((0.5,5),20,60,60)
-            if keys[pygame.key.key_code("y")] == 1:
-                self.robot.data_string_io(b"test_wrench_trans")
+                self.pathfinder = FullScan((0.5,5),20,25,25)
             # Press x to stop the running pathfinder
             if keys[pygame.key.key_code("x")] == 1 and router:
                 router = False
@@ -240,11 +238,14 @@ class Transducer_homing:
             rot_vect = np.zeros((3,1))
             if router:
                 nextpoint = self.pathfinder.next()
-                #print(nextpoint)
-                (speed_vect,rot_vect) = self.interpolate_motion(nextpoint)
-                
-                logging.debug("Transmitting to the robot the following motion vectors: ")
-                logging.debug(f"Translate: {speed_vect} \nRotate: {rot_vect}")
+                if nextpoint == 1:
+                    router = False
+                    path = os.path.dirname(__file__)
+                    path = path + '\\' + date_time_str + '_test.json'
+                    self.pathfinder.save_points(path)
+                else:
+                    self.robot.movel_to_target(nextpoint)
+                # Do something else entirely
             else:
                 joy_vect = self.controller.get_hat(keys)
                 if translate:
@@ -263,10 +264,6 @@ class Transducer_homing:
             logging.debug(f"Current pos/angle: ({self.robot.pos.T}, {self.robot.angle.T}")
             logging.debug("----------------------------------------------")
 
-
-            print("sending string...")
-            response = self.robot.data_string_io(b'RSR')
-            print(response)
 
 
             for event in pygame.event.get():

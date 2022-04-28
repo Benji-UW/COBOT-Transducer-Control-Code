@@ -138,7 +138,9 @@ class UR3e:
         self.initial_pos = np.copy(self.pos)
         self.initial_angle = np.copy(self.angle)
 
-        self.robot_socket.send(b"init_pos = get_actual_tcp_pose()\n")
+        self.data_socket.send(b"TODO set_origin ")
+        print('THIS IS HUGE WHY ISNT IT GOING')
+        time.sleep(0.1)
 
     def movel(self, pos_to, angle_to, t=0.0):
         if self._check_move_displacement(pos_to):
@@ -529,7 +531,6 @@ class UR3e:
         Return strue if the transmission is successful.'''
         self.data_socket.send(to_send)
         return self.data_socket.recv(1024)
-    
 
     def test_URScript_API(self):
         '''This experiment has failed. The following code should now power off the robot,
@@ -542,6 +543,36 @@ class UR3e:
 
         for cmd in cmds:
             self.robot_socket.send(cmd)
+
+    def movel_to_target(self, next_point):
+        
+        t_pos,t_angle = (next_point[0],next_point[1])
+        tx,ty,tz = t_pos
+        tRx,tRy,tRz = t_angle
+
+        # Note: The Tar_x values on the python side are in mm, and they'll
+        # need to be converted to m on the robot end
+        self.data_socket.send(b'SET TAR_X %i ' % (tx * 10))
+        self.data_socket.send(b'SET TAR_Y %i ' % (ty * 10))
+        self.data_socket.send(b'SET TAR_Z %i ' % (tz * 10))
+        self.data_socket.send(b'SET TAR_Rx %i ' % (np.deg2rad(tRx) * 10000))
+        self.data_socket.send(b'SET TAR_Ry %i ' % (np.deg2rad(tRy) * 10000))
+        self.data_socket.send(b'SET TAR_Rz %i ' % (np.deg2rad(tRz) * 10000))
+
+        self.data_socket.send(b'TODO move2tar ')
+        time.sleep(0.005)
+        self.data_socket.send(b'SET atTar %i ' % (-1))
+        time.sleep(0.5)
+
+    def at_tar(self):
+        self.data_socket.send(b"GET atTar")
+        response = self.data_socket.recv(1024)
+
+        print(b"Debugging atTar: " + response)
+        return (response == b"atTar 1")
+
+
+        
                 
 
 

@@ -15,3 +15,6 @@ Method implementations:
    - This will require the parsing of numbers embedded in a string from the robot
    - I anticipate this will be a challenge :/
    - Perhaps the GET/SET commands can offer a solution? I don't know how URScript encodes the integers it sets however, maybe I need to research that.
+
+
+Achievement get: I can send/retrieve integers from the robot.

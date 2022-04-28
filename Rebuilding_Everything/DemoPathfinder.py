@@ -36,14 +36,14 @@ class Pathfinder:
         self.degrees_of_freedom = {'X': x_range!=0,'Y': y_range!=0,'Z':z_range!=0,'Rx':Rx_range!=0,'Ry':Ry_range!=0,'Rz':Rz_range!=0}
         self.starting_point_loader()
 
-    def newMag(self, point_mag):
+    def newMag(self, point_mag, override = False):
         '''Accepts as in put a tuple in the form (((X,Y,Z),(Rx,Ry,Rz)), mag), 
         where the first element in the tuple is a 6-member tuple representing
         the point in 6D space, and the second element is a float representing
         the signal magnitude at that point.'''
         self.points.append(point_mag)
         latest_point = point_mag[0]
-        if self.close_enough(latest_point):
+        if self.close_enough(latest_point, override):
             self.to_travel.pop(0)
 
     def pointYielder(self):
@@ -51,7 +51,10 @@ class Pathfinder:
             yield self.to_travel[0]
 
     def next(self):
-        return self.to_travel[0]
+        if (len(self.to_travel) != 0):
+            return self.to_travel[0]
+        else:
+            return 1
 
     def starting_point_loader(self):
         '''This method gets called when the pathfinder is initializes, and adds the center of 
@@ -72,10 +75,12 @@ class Pathfinder:
             self.to_travel.append(pt)
             # print(pt)
         
-    def close_enough(self, point, tolerance=(0.5,2)):
+    def close_enough(self, point, override, tolerance=(0.5,2)):
         '''Accepts as input a point and a tuple containing the dimensional tolerances,
         in the form of (mm, deg), where the first element is the toleranace of linear
         dimensions and the second is the angular tolerance. They default to 0.5 mm and 2 degrees.'''
+        if override:
+            return True
         for i in range(3):
             try:
                 if abs(self.to_travel[0][0][i] - point[0][i]) > tolerance[0]:
@@ -124,9 +129,9 @@ class FullScan(Pathfinder):
                         for Ry in np.linspace(r_o_m['Ry'][forwards], r_o_m['Ry'][not forwards], int((r_o_m['Ry'][1]-r_o_m['Ry'][0])/res[1]) + 1):
                             for Rz in np.linspace(r_o_m['Rz'][0], r_o_m['Rz'][1], int((r_o_m['Rz'][1]-r_o_m['Rz'][0])/res[1]) + 1):
                                 yield ((x,y,z),(Rx,Ry,Rz))
-        yield False   
+        yield 1   
         
-    def close_enough(self, point, tolerance=(0.5,2)):
+    def close_enough(self, point, override, tolerance=(0.5,2)):
         tolerance = (min(self.resolution[0] / 2, tolerance[0]), min(self.resolution[1] / 2, tolerance[1]))
         popped = super().close_enough(point, tolerance)
         if popped:
