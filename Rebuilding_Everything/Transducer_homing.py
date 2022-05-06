@@ -137,8 +137,8 @@ class Transducer_homing:
         router = False
         translate = True
 
-        # self.listener = self.MATLAB_listener()
-        self.listener = self.fake_MATLAB_listener()
+        self.listener = self.MATLAB_listener()
+        # self.listener = self.fake_MATLAB_listener()
 
         self.last_ten_refresh_rate = np.zeros((10,0))
         self.mag_loc = set()
@@ -170,10 +170,7 @@ class Transducer_homing:
                 # Log how much time has elapsed since the previous reading
                 self.last_ten_refresh_rate[self.i%10] = time.time() - self.t
                 self.t = time.time()
-                pos,angle = self.get_delta_pos()
-
-                pos = tuple(map(tuple, pos.T))[0]
-                angle = tuple(map(tuple, angle.T))[0]
+                pos,angle = self.robot.get_current_rel_target()
 
                 self.mag_loc.add(((pos,angle), new_mag))
 
@@ -207,7 +204,7 @@ class Transducer_homing:
                 self.robot.set_initial_pos()
             if keys[pygame.key.key_code("k")] == 1 and not router:
                 router = True
-                self.pathfinder = FullScan((0.5,5),20,25,25)
+                self.pathfinder = FullScan((1,2),10,20,20)
             # Press x to stop the running pathfinder
             if keys[pygame.key.key_code("x")] == 1 and router:
                 router = False
@@ -461,7 +458,7 @@ class Transducer_homing:
         #                       (pos[2]*1000, np.rad2deg(angle[2])))
         # self.robot_gui.unindent()
 
-        if current_target is not None:
+        if current_target is not None and current_target != 1:
             self.robot_gui.skip_line(1)
             t_pos = current_target[0]
             t_ang = current_target[1]
@@ -545,10 +542,18 @@ class Transducer_homing:
         #     logging.debug(f"\nPackage length: {packlen}\nTimestamp: {timestamp}\nPackage type (supposed to be an unsigned int): {packtype}")
 
         
-robot = Transducer_homing()
-robot.initialize()
 
-robot.connect_to_matlab()
- 
-# robot.test_functions()
-robot.start()
+
+def main():
+  robot = Transducer_homing()
+  robot.initialize()
+
+  robot.connect_to_matlab()
+  
+  # robot.test_functions()
+  robot.start()
+
+if __name__=="__main__":
+  main()
+else:
+  print("run from import")

@@ -123,7 +123,7 @@ class FullScan(Pathfinder):
         forwards = True
         for x in np.linspace(r_o_m['X'][0], r_o_m['X'][1], int((r_o_m['X'][1]-r_o_m['X'][0])/res[0]) + 1):
             for y in np.linspace(r_o_m['Y'][0], r_o_m['Y'][1], int((r_o_m['Y'][1]-r_o_m['Y'][0])/res[0]) + 1):
-                for z in np.linspace(r_o_m['Z'][0], r_o_m['Z'][1], int((r_o_m['Z'][1]-r_o_m['Z'][0])/res[0]) + 1):
+                for z in np.linspace(r_o_m['Z'][0], r_o_m['Z'][1], abs(int((r_o_m['Z'][1]-r_o_m['Z'][0])/res[0])) + 1):
                     for Rx in np.linspace(r_o_m['Rx'][0], r_o_m['Rx'][1], int((r_o_m['Rx'][1]-r_o_m['Rx'][0])/res[1]) + 1):
                         forwards = not forwards
                         for Ry in np.linspace(r_o_m['Ry'][forwards], r_o_m['Ry'][not forwards], int((r_o_m['Ry'][1]-r_o_m['Ry'][0])/res[1]) + 1):

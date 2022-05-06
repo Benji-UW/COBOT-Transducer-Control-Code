@@ -57,6 +57,7 @@ class UR3e:
         self.data_socket = None
 
         self.base = 'tcp'
+        self.current_relative_target = ((0,0,0),(0,0,0))
 
         self.rotation_matrix = np.zeros((3, 3))
         self.rotation_matrix_inv = np.zeros((3, 3))
@@ -550,6 +551,8 @@ class UR3e:
         tx,ty,tz = t_pos
         tRx,tRy,tRz = t_angle
 
+        self.current_relative_target = next_point
+
         # Note: The Tar_x values on the python side are in mm, and they'll
         # need to be converted to m on the robot end
         self.data_socket.send(b'SET TAR_X %i ' % (tx * 10))
@@ -563,6 +566,9 @@ class UR3e:
         time.sleep(0.005)
         self.data_socket.send(b'SET atTar %i ' % (-1))
         time.sleep(0.5)
+
+    def get_current_rel_target(self):
+        return self.current_relative_target
 
     def at_tar(self):
         self.data_socket.send(b"GET atTar")

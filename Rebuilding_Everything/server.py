@@ -92,8 +92,11 @@ def client_thread(conn):
             print('Connection to process %d ended.' % number)
             conn.close()
             is_alive = False
-        else:
+        elif client_input[0] == 84:
             motion = client_input
+            print(client_input)
+        else:
+            # motion = client_input
             print(shitty_sql)
             # debugging type step:
             cl = str(client_input)
@@ -116,7 +119,7 @@ while True:
     con, addr = s.accept()
     print('Connected: ' + str(addr))
     Thread(target=client_thread, args=(con,)).start()
-    
+
     con, addr = s.accept()
     print('Connected: ' + str(addr))
     Thread(target=client_thread, args=(con,)).start()
