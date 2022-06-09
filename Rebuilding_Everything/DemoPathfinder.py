@@ -34,7 +34,6 @@ class Pathfinder:
 
         '''Sets the degrees of freedom of this pathfinder, only Z defaults to true.'''
         self.degrees_of_freedom = {'X': x_range!=0,'Y': y_range!=0,'Z':z_range!=0,'Rx':Rx_range!=0,'Ry':Ry_range!=0,'Rz':Rz_range!=0}
-        self.starting_point_loader()
 
     def newMag(self, point_mag, override = False):
         '''Accepts as in put a tuple in the form (((X,Y,Z),(Rx,Ry,Rz)), mag), 
@@ -45,10 +44,6 @@ class Pathfinder:
         latest_point = point_mag[0]
         if self.close_enough(latest_point, override):
             self.to_travel.pop(0)
-
-    def pointYielder(self):
-        while True:
-            yield self.to_travel[0]
 
     def next(self):
         if (len(self.to_travel) != 0):
@@ -74,6 +69,8 @@ class Pathfinder:
         for pt in corners:
             self.to_travel.append(pt)
             # print(pt)
+
+        self.to_travle.append(1)
         
     def close_enough(self, point, override, tolerance=(0.5,2)):
         '''Accepts as input a point and a tuple containing the dimensional tolerances,
@@ -94,7 +91,6 @@ class Pathfinder:
         return True
 
 #TODO: there are some points coming through to close-enough that are wrapped up in too many tuples
-
     def save_points(self, path):
         with open(path, 'w+') as outfile:
             json.dump(self.points, outfile, indent=4)
@@ -140,3 +136,20 @@ class FullScan(Pathfinder):
             except:
                 self.to_travel.append(False)
         return popped
+
+
+class DivisionSearch(Pathfinder):
+    def __init__(self, divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
+        '''This pathfinder divides the searchspace into a set number of pieces (at least three),
+        scans those points, and then defines another, smaller searchspace around the highest 
+        value it finds of those points. The advantage of this is a very global search of the
+        entire space, the downside is it winds up moving a lot. Remains to be seen if it's useful.'''
+
+        max_res = (0.05,0.5) # Maximum resolution of the robot (roughly) 0.05 mm and 0.5 deg (eyeballing)
+        super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
+        self.yielder = self.division_search(divisions)
+
+    def division_search(divisions, max_res):
+        
+
+    def next():
