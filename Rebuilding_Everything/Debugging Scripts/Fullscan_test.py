@@ -4,11 +4,15 @@ import time
 import json
 import random
 print(sys.path)
-# sys.path.append('..\\')
-sys.path.insert(0,r"C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything")
+
+path = os.path.abspath('')
+print("======================")
+print(path)
+sys.path.append(path + '\\Rebuilding_Everything')
+
 print("======================")
 print(sys.path)
-# sys.path.insert(0,'C:/Users/ander/Documents/COBOT-Transducer-Control-Code')
+
 import DemoPathfinder
 from DemoPathfinder import *
 a = FullScan((0.5,5),8,50,50)
@@ -19,8 +23,9 @@ a = FullScan((0.5,5),8,50,50)
 #    a.newMag((p,5))
 
 p = a.next()
+print(p)
 
-while p is not False:
+while p is not 1:
     a.newMag((p,round(random.random()*1000)))
     p = a.next()
 

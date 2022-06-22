@@ -11,6 +11,11 @@ import numpy as np
 import logging
 
 date_time_str = time.strftime(r"%Y-%m-%d_%H-%M-%S")
+
+file_itr = 0
+while os.path.exists("test_%s.json" % file_itr):
+    file_itr += 1
+
 path = os.path.dirname(__file__)
 
 logging.basicConfig(filename = path + "\logging\debug_log " + date_time_str + ".log", encoding='utf-8',\
@@ -240,8 +245,7 @@ class Transducer_homing:
                 nextpoint = self.pathfinder.next()
                 if nextpoint == 1:
                     router = False
-                    path = os.path.dirname(__file__)
-                    path = path + '\\' + date_time_str + '_test.json'
+                    path = path + '\\test_' + file_itr + '.json'
                     self.pathfinder.save_points(path)
                 else:
                     self.robot.movel_to_target(nextpoint)
@@ -287,8 +291,7 @@ class Transducer_homing:
             self.disconnect_from_matlab()
             print('Disconnected from server.')
         if router:
-            path = os.path.dirname(__file__)
-            path = path + '\\test.json'
+            path = path + '\\test_' + file_itr + '.json'
             self.pathfinder.save_points(path)
 
     def get_delta_pos(self):
