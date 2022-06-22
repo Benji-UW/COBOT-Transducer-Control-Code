@@ -6,7 +6,7 @@ from xml.sax.xmlreader import IncrementalParser
 import numpy as np
 import json
 
-from regex import D
+# from regex import D
 
 class Pathfinder:
     '''A class for controlling where the arm goes. The tl;dr is you define a search space,
@@ -104,6 +104,7 @@ class Pathfinder:
 #TODO: there are some points coming through to close-enough that are wrapped up in too many tuples
     def save_points(self, path):
         with open(path, 'w+') as outfile:
+            json.dump(self, outfile, indent=4)
             json.dump(self.points, outfile, indent=4)
 
 class FullScan(Pathfinder):
@@ -185,19 +186,21 @@ class DivisionSearch(Pathfinder):
         while keep_going:
             for DoF in bounds.keys():
                 # If the bounds of this degree of freedom are not the same (this is a free axis):
+                inc_size = dict()
                 if bounds[DoF][0] != bounds[DoF][1]:
                     # Store all the points along this axis we will visit
                     temp[DoF] = np.linspace(bounds[DoF][0], bounds[DoF][1], divisions)
                     # Terminate the loop if the spacing between those points is too small
-                    inc_size = (bounds[DoF][1] - bounds[DoF][0]) / divisions
-                    if ({'X','Y','Z'}.issuperset(DoF) and inc_size < max_res[0]) or ({'Rx','Ry','Rz'}.issuperset(DoF) and inc_size < max_res[1]):
+                    inc_size[DoF] = (bounds[DoF][1] - bounds[DoF][0]) / divisions
+                    if ({'X','Y','Z'}.issuperset(DoF) and inc_size[DoF] < max_res[0]) or ({'Rx','Ry','Rz'}.issuperset(DoF) and inc_size[DoF] < max_res[1]):
                         keep_going = False
                 else:
                     # Otherwise keep that bound where it is (should be zero)
                     temp[DoF] = bounds[DoF][0]
             
             # Permute them (sets should prevent the occurence of duplicates)
-            all_points_visited_this_round = set()
+            # all_points_visited_this_round = set()
+
             for x in temp['X']:
                 for y in temp['Y']:
                     for z in temp['Z']:
@@ -216,7 +219,7 @@ class DivisionSearch(Pathfinder):
 
             for DoF in bounds.keys():
                 if bounds[DoF][0] != bounds[DoF][1]:
-                    bounds[DoF] = [temp[DoF] - ]
+                    bounds[DoF] = [temp[DoF] - inc_size[DoF], temp[DoF] + inc_size[DoF]]
 
 
         # Define the current working boundaries
