@@ -3,10 +3,14 @@ import os
 import time
 import json
 import random
-sys.path.insert(0,'C:/Users/ander/Documents/COBOT-Transducer-Control-Code/Rebuilding_Everything')
-
+print(sys.path)
+# sys.path.append('..\\')
+sys.path.insert(0,r"C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything")
+print("======================")
+print(sys.path)
+# sys.path.insert(0,'C:/Users/ander/Documents/COBOT-Transducer-Control-Code')
+import DemoPathfinder
 from DemoPathfinder import *
-
 a = FullScan((0.5,5),8,50,50)
 
 #for i in range(24):
