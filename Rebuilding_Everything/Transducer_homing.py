@@ -9,11 +9,14 @@ import os
 import numpy as np
 
 import logging
+
 date_time_str = time.strftime(r"%Y-%m-%d_%H-%M-%S")
 path = os.path.dirname(__file__)
+
 logging.basicConfig(filename = path + "\logging\debug_log " + date_time_str + ".log", encoding='utf-8',\
      level=logging.DEBUG, format='%(levelname)s:%(message)s')
 logging.debug("Debug log for the robot starting on " + date_time_str)
+
 np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
 
 from pygame.locals import *
