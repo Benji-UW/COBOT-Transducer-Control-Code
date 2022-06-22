@@ -2,8 +2,11 @@
 Unit convention: mm/kg/s/deg
 '''
 import math
+from xml.sax.xmlreader import IncrementalParser
 import numpy as np
 import json
+
+from regex import D
 
 class Pathfinder:
     '''A class for controlling where the arm goes. The tl;dr is you define a search space,
@@ -32,6 +35,11 @@ class Pathfinder:
         self.points = []
         self.to_travel = []
 
+        '''max_point stores the point and magnitude of the highest magnitude yet scanned,
+        stored in a tuple of the form (((X,Y,Z, (Rx,Ry,Rz)), mag), initialized to (-1,-1,-1)
+        for simplicity.'''
+        self.max_point = (-1,-1,-1)
+
         '''Sets the degrees of freedom of this pathfinder, only Z defaults to true.'''
         self.degrees_of_freedom = {'X': x_range!=0,'Y': y_range!=0,'Z':z_range!=0,'Rx':Rx_range!=0,'Ry':Ry_range!=0,'Rz':Rz_range!=0}
 
@@ -41,6 +49,9 @@ class Pathfinder:
         the point in 6D space, and the second element is a float representing
         the signal magnitude at that point.'''
         self.points.append(point_mag)
+        if (point_mag[2] > self.max_point[2]):
+            self.max_point = point_mag
+        
         latest_point = point_mag[0]
         if self.close_enough(latest_point, override):
             self.to_travel.pop(0)
@@ -145,11 +156,75 @@ class DivisionSearch(Pathfinder):
         value it finds of those points. The advantage of this is a very global search of the
         entire space, the downside is it winds up moving a lot. Remains to be seen if it's useful.'''
 
-        max_res = (0.05,0.5) # Maximum resolution of the robot (roughly) 0.05 mm and 0.5 deg (eyeballing)
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
         self.yielder = self.division_search(divisions)
 
-    def division_search(divisions, max_res):
-        
+    def division_search(self, divisions):
+        max_res = (0.05,0.5) # Maximum resolution of the robot (roughly) 0.05 mm and 0.5 deg (eyeballing)
+        keep_going = True
 
-    def next():
+        # Alternate psuedocode
+        """ Current implementation uses np.linspace to generate a dictionary
+        of temp for each of the degrees of freedom. For instance with a 
+        10x10x10 mm search vol with 5 divisions, it'll create
+        X: -5,-2.5,0,2.5,5
+        Y: ',','
+        Z: ',','
+        And then in a later nested loop, a new point is created for each permuation
+        of those divisions.
+        
+        Alternatively, I could define 'temp' to represent the spacing between
+        each stop, this would allow regular checking that the maximum resolution hasn't
+        been reached."""
+
+
+        # Pseudocode
+        bounds = self.range_of_motion.copy()
+        temp = dict()
+
+        while keep_going:
+            for DoF in bounds.keys():
+                # If the bounds of this degree of freedom are not the same (this is a free axis):
+                if bounds[DoF][0] != bounds[DoF][1]:
+                    # Store all the points along this axis we will visit
+                    temp[DoF] = np.linspace(bounds[DoF][0], bounds[DoF][1], divisions)
+                    # Terminate the loop if the spacing between those points is too small
+                    inc_size = (bounds[DoF][1] - bounds[DoF][0]) / divisions
+                    if ({'X','Y','Z'}.issuperset(DoF) and inc_size < max_res[0]) or ({'Rx','Ry','Rz'}.issuperset(DoF) and inc_size < max_res[1]):
+                        keep_going = False
+                else:
+                    # Otherwise keep that bound where it is (should be zero)
+                    temp[DoF] = bounds[DoF][0]
+            
+            # Permute them (sets should prevent the occurence of duplicates)
+            all_points_visited_this_round = set()
+            for x in temp['X']:
+                for y in temp['Y']:
+                    for z in temp['Z']:
+                        for Rx in temp['Rx']:
+                            for Ry in temp['Ry']:
+                                for Rz in temp['Rz']:
+                                    yield ((x,y,z), (Rx,Ry,Rz))
+                                    # all_points_visited_this_round.add(((x,y,z), (Rx,Ry,Rz)))
+            
+            # while len(all_points_visited_this_round) > 0:
+            #     yield all_points_visited_this_round.pop()
+
+            # Represents the 6D point that was highest among the previously scanned
+            # ((X,Y,Z), (Rx,Ry,Rz))
+            ((temp['X'], temp['Y'], temp['Z']), (temp['Rx'], temp['Ry'], temp['Rz'])) = self.max_point[0]
+
+            for DoF in bounds.keys():
+                if bounds[DoF][0] != bounds[DoF][1]:
+                    bounds[DoF] = [temp[DoF] - ]
+
+
+        # Define the current working boundaries
+        # divide up the working boundaries by #divisions
+        # Iterate through them, center the new search around the highest value
+        #       That's gonna require storing the max amplitude so far
+        # Set the new working boundaries to the divisions next to the highest
+        # Repeat until the space between divisions is smaller than
+        
+    def next(self):
+        return next(self.yielder)
