@@ -3,34 +3,38 @@ import os
 import time
 import json
 import random
-print(sys.path)
-
 path = os.path.abspath('')
-print("======================")
-print(path)
+# print("======================")
+# print(path)
 sys.path.append(path + '\\Rebuilding_Everything')
-
-print("======================")
-print(sys.path)
-
+# print("======================")
+# print(sys.path)
 import DemoPathfinder
 from DemoPathfinder import *
+
 a = FullScan((0.5,5),8,50,50)
 
-#for i in range(24):
-#    p = next(points)
-#    print(p)
-#    a.newMag((p,5))
 
 p = a.next()
 print(p)
 
-while p is not 1:
-    a.newMag((p,round(random.random()*1000)))
+while p != 1:
+    ((x,y,z),(Rx,Ry,Rz)) = p
+
+    mag = round(10 - (x + 1)**2 - ((Rx - 15)/10)**2 - (Ry/10)**2 + (random.random() * 2))
+    
+
+    a.newMag((p,mag))
     p = a.next()
 
 path = os.path.dirname(__file__)
 #path = path + '\\' + time.ctime(time.time())
-path = path + '\\ugh.json'
+
+file_itr = 0
+while os.path.exists(path + "\\test_%s.json" % file_itr):
+    file_itr += 1
+
+path = path + '\\test_%s.json' % file_itr
+
 a.save_points(path)
 

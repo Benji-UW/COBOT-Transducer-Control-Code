@@ -24,7 +24,7 @@ class Pathfinder:
         default to zero. Z also defines the range to give more room to move backwards
         than forwards, in order to reduce the chances of the robot moving into the
         sample.'''
-        z_r = [z_range * 0.75, z_range * -1.25]
+        z_r = [-z_range * 1.25, z_range * 0.75]
         Rx_r = [-Rx_range, Rx_range]
         Ry_r = [-Ry_range, Ry_range]
         x_r = [-x_range, x_range]
@@ -34,6 +34,8 @@ class Pathfinder:
 
         self.points = []
         self.to_travel = []
+
+        self.yielder = self.internal_point_yielder()
 
         '''max_point stores the point and magnitude of the highest magnitude yet scanned,
         stored in a tuple of the form (((X,Y,Z, (Rx,Ry,Rz)), mag), initialized to (-1,-1,-1)
@@ -49,20 +51,15 @@ class Pathfinder:
         the point in 6D space, and the second element is a float representing
         the signal magnitude at that point.'''
         self.points.append(point_mag)
-        if (point_mag[2] > self.max_point[2]):
+        if (point_mag[1] > self.max_point[1]):
             self.max_point = point_mag
         
         latest_point = point_mag[0]
-        if self.close_enough(latest_point, override):
-            self.to_travel.pop(0)
 
     def next(self):
-        if (len(self.to_travel) != 0):
-            return self.to_travel[0]
-        else:
-            return 1
+        return next(self.yielder)
 
-    def starting_point_loader(self):
+    def internal_point_yielder(self):
         '''This method gets called when the pathfinder is initializes, and adds the center of 
         the search space as well as all the corners to the "to-travel" list.'''
         center_pt = [np.mean(self.range_of_motion[a]) for a in self.range_of_motion.keys()]
@@ -78,10 +75,11 @@ class Pathfinder:
             corners.add((pos,ang))
         
         for pt in corners:
-            self.to_travel.append(pt)
+            yield pt
+            # self.to_travel.append(pt)
             # print(pt)
 
-        self.to_travle.append(1)
+        yield 1
         
     def close_enough(self, point, override, tolerance=(0.5,2)):
         '''Accepts as input a point and a tuple containing the dimensional tolerances,
@@ -103,8 +101,10 @@ class Pathfinder:
 
 #TODO: there are some points coming through to close-enough that are wrapped up in too many tuples
     def save_points(self, path):
-        with open(path, 'w+') as outfile:
-            json.dump(self, outfile, indent=4)
+        '''Called at the end of the test or when the pathfinder has finished, outputs the points
+        collected to a json file at a given path, meant to be superceded in each custom class
+        in order to save additional information specific to that mode of pathfinder.'''
+        with open(path, 'a+') as outfile:
             json.dump(self.points, outfile, indent=4)
 
 class FullScan(Pathfinder):
@@ -114,7 +114,7 @@ class FullScan(Pathfinder):
         form (mm, deg) where the mm represents the linear mm tolerance for the full scan and the
         deg represents the angular degree tolerance for the full scan. There is a minimum tolerance
         based on the limitations of the robot, those are subject to change experimentally.'''
-        self.internal_yielder = self.internal_point_yielder()
+        # self.yielder = self.internal_point_yielder()
         min_tolerance = (0.2, 2)
         self.resolution = (max(resolution[0],min_tolerance[0]), max(resolution[1],min_tolerance[1]))
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
@@ -149,6 +149,15 @@ class FullScan(Pathfinder):
                 self.to_travel.append(False)
         return popped
 
+    def save_points(self, path):
+        json_data = { \
+            'range of motion' : self.range_of_motion, \
+            'resolution' : self.resolution, \
+            'points' : self.points\
+        } 
+
+        with open(path, 'a+') as outfile:
+            json.dump(json_data, outfile, indent=3)
 
 class DivisionSearch(Pathfinder):
     def __init__(self, divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
@@ -156,7 +165,7 @@ class DivisionSearch(Pathfinder):
         scans those points, and then defines another, smaller searchspace around the highest 
         value it finds of those points. The advantage of this is a very global search of the
         entire space, the downside is it winds up moving a lot. Remains to be seen if it's useful.'''
-
+        self.divisions = divisions
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
         self.yielder = self.division_search(divisions)
 
@@ -184,9 +193,13 @@ class DivisionSearch(Pathfinder):
         temp = dict()
 
         while keep_going:
-            for DoF in bounds.keys():
+            # print("I'm in")
+            # print(bounds)
+            inc_size = dict()
+            keys = bounds.keys()
+
+            for DoF in keys:
                 # If the bounds of this degree of freedom are not the same (this is a free axis):
-                inc_size = dict()
                 if bounds[DoF][0] != bounds[DoF][1]:
                     # Store all the points along this axis we will visit
                     temp[DoF] = np.linspace(bounds[DoF][0], bounds[DoF][1], divisions)
@@ -196,11 +209,9 @@ class DivisionSearch(Pathfinder):
                         keep_going = False
                 else:
                     # Otherwise keep that bound where it is (should be zero)
-                    temp[DoF] = bounds[DoF][0]
+                    temp[DoF] = [bounds[DoF][0]]
             
-            # Permute them (sets should prevent the occurence of duplicates)
-            # all_points_visited_this_round = set()
-
+            # Permute them
             for x in temp['X']:
                 for y in temp['Y']:
                     for z in temp['Z']:
@@ -219,10 +230,14 @@ class DivisionSearch(Pathfinder):
 
             for DoF in bounds.keys():
                 if bounds[DoF][0] != bounds[DoF][1]:
-                    bounds[DoF] = [temp[DoF] - inc_size[DoF], temp[DoF] + inc_size[DoF]]
+                    if temp[DoF] == bounds[DoF][0]:
+                        bounds[DoF] = [temp[DoF], temp[DoF] + (2 * inc_size[DoF])]
+                    elif temp[DoF] == bounds[DoF][1]:
+                        bounds[DoF] = [temp[DoF] - (2 * inc_size[DoF]), temp[DoF]]
+                    else:
+                        bounds[DoF] = [temp[DoF] - inc_size[DoF], temp[DoF] + inc_size[DoF]]
 
-
-        # Define the current working boundaries
+        yield 1
         # divide up the working boundaries by #divisions
         # Iterate through them, center the new search around the highest value
         #       That's gonna require storing the max amplitude so far
@@ -231,3 +246,13 @@ class DivisionSearch(Pathfinder):
         
     def next(self):
         return next(self.yielder)
+
+    def save_points(self, path):
+        json_data = { \
+            'range of motion' : self.range_of_motion, \
+            'divisions' : self.divisions, \
+            'points' : self.points\
+        } 
+
+        with open(path, 'a+') as outfile:
+            json.dump(json_data, outfile, indent=3)
