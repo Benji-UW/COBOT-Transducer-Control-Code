@@ -18,8 +18,8 @@ def my_move_to_tar():
     coord_sys = current_origin
     # The xyz coords were in mm times ten, now being converted to m
     tar_x = socket_get_var("TAR_X") / 10000
-    tar_y = socket_get_var("TAR_X") / 10000
-    tar_z = socket_get_var("TAR_X") / 10000
+    tar_y = socket_get_var("TAR_Y") / 10000
+    tar_z = socket_get_var("TAR_Z") / 10000
     # the RxRyRz coords were in rads times 10000, now being converted back to rads
     tar_Rx = socket_get_var("TAR_Rx") / 10000
     tar_Ry = socket_get_var("TAR_Ry") / 10000

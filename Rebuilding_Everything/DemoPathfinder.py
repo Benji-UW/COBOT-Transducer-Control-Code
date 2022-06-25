@@ -32,6 +32,13 @@ class Pathfinder:
         Rz_r = [-Rz_range, Rz_range]
         self.range_of_motion = {'X': x_r,'Y': y_r,'Z':z_r,'Rx':Rx_r,'Ry':Ry_r,'Rz':Rz_r}
 
+        # Should be a list of the string representations of the active degrees
+        # of freedom.
+        self.active_rom = []
+        for degree in self.range_of_motion.keys():
+            if self.range_of_motion[degree] != [0,0]:
+                self.active_rom.append(degree)
+
         self.points = []
         self.to_travel = []
 
@@ -61,7 +68,8 @@ class Pathfinder:
 
     def internal_point_yielder(self):
         '''This method gets called when the pathfinder is initializes, and adds the center of 
-        the search space as well as all the corners to the "to-travel" list.'''
+        the search space as well as all the corners to the "to-travel" list. When all the points
+        have been visited it returns the integer 1 to indicate the search is complete.'''
         center_pt = [np.mean(self.range_of_motion[a]) for a in self.range_of_motion.keys()]
         self.to_travel.append((tuple(center_pt[:3]),tuple(center_pt[3:])))
 
@@ -118,11 +126,6 @@ class FullScan(Pathfinder):
         min_tolerance = (0.2, 2)
         self.resolution = (max(resolution[0],min_tolerance[0]), max(resolution[1],min_tolerance[1]))
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
-        
-    def starting_point_loader(self):
-        '''For object-oriented reasons I can't go back '''
-        for i in range(10):
-            self.to_travel.append(next(self.internal_yielder))
 
     def internal_point_yielder(self):
         '''The full scan iterates through every point in the searchspace'''
@@ -153,6 +156,7 @@ class FullScan(Pathfinder):
         json_data = { \
             'range of motion' : self.range_of_motion, \
             'resolution' : self.resolution, \
+            'max_point' : self.max_point,
             'points' : self.points\
         } 
 
@@ -167,28 +171,15 @@ class DivisionSearch(Pathfinder):
         entire space, the downside is it winds up moving a lot. Remains to be seen if it's useful.'''
         self.divisions = divisions
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
-        self.yielder = self.division_search(divisions)
 
-    def division_search(self, divisions):
+    def internal_point_yielder(self):
+        '''Divides the search space into n divisions along each of the active dimensions,
+        checking each of them, then shrinks the search space to the box surrounding
+        just the highest point, and then repeats until the problem converges to below
+        the resolution of the robot.'''
         max_res = (0.05,0.5) # Maximum resolution of the robot (roughly) 0.05 mm and 0.5 deg (eyeballing)
         keep_going = True
 
-        # Alternate psuedocode
-        """ Current implementation uses np.linspace to generate a dictionary
-        of temp for each of the degrees of freedom. For instance with a 
-        10x10x10 mm search vol with 5 divisions, it'll create
-        X: -5,-2.5,0,2.5,5
-        Y: ',','
-        Z: ',','
-        And then in a later nested loop, a new point is created for each permuation
-        of those divisions.
-        
-        Alternatively, I could define 'temp' to represent the spacing between
-        each stop, this would allow regular checking that the maximum resolution hasn't
-        been reached."""
-
-
-        # Pseudocode
         bounds = self.range_of_motion.copy()
         temp = dict()
 
@@ -202,9 +193,9 @@ class DivisionSearch(Pathfinder):
                 # If the bounds of this degree of freedom are not the same (this is a free axis):
                 if bounds[DoF][0] != bounds[DoF][1]:
                     # Store all the points along this axis we will visit
-                    temp[DoF] = np.linspace(bounds[DoF][0], bounds[DoF][1], divisions)
+                    temp[DoF] = np.linspace(bounds[DoF][0], bounds[DoF][1], self.divisions)
                     # Terminate the loop if the spacing between those points is too small
-                    inc_size[DoF] = (bounds[DoF][1] - bounds[DoF][0]) / divisions
+                    inc_size[DoF] = (bounds[DoF][1] - bounds[DoF][0]) / self.divisions
                     if ({'X','Y','Z'}.issuperset(DoF) and inc_size[DoF] < max_res[0]) or ({'Rx','Ry','Rz'}.issuperset(DoF) and inc_size[DoF] < max_res[1]):
                         keep_going = False
                 else:
@@ -221,11 +212,6 @@ class DivisionSearch(Pathfinder):
                                     yield ((x,y,z), (Rx,Ry,Rz))
                                     # all_points_visited_this_round.add(((x,y,z), (Rx,Ry,Rz)))
             
-            # while len(all_points_visited_this_round) > 0:
-            #     yield all_points_visited_this_round.pop()
-
-            # Represents the 6D point that was highest among the previously scanned
-            # ((X,Y,Z), (Rx,Ry,Rz))
             ((temp['X'], temp['Y'], temp['Z']), (temp['Rx'], temp['Ry'], temp['Rz'])) = self.max_point[0]
 
             for DoF in bounds.keys():
@@ -238,21 +224,24 @@ class DivisionSearch(Pathfinder):
                         bounds[DoF] = [temp[DoF] - inc_size[DoF], temp[DoF] + inc_size[DoF]]
 
         yield 1
-        # divide up the working boundaries by #divisions
-        # Iterate through them, center the new search around the highest value
-        #       That's gonna require storing the max amplitude so far
-        # Set the new working boundaries to the divisions next to the highest
-        # Repeat until the space between divisions is smaller than
-        
-    def next(self):
-        return next(self.yielder)
 
     def save_points(self, path):
         json_data = { \
             'range of motion' : self.range_of_motion, \
             'divisions' : self.divisions, \
+            'max_point' : self.max_point,
             'points' : self.points\
-        } 
+        }
 
         with open(path, 'a+') as outfile:
             json.dump(json_data, outfile, indent=3)
+
+class Discrete_degree(Pathfinder):
+    def __init__(self,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
+        '''This pathfinder uses a naive approximation of the search space where it optimizes
+        one dimensions at a time, and loops until it converges on the apparent global max.'''
+        super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
+
+    def internal_point_yielder(self):
+        '''This yielder optimizes one degree of freedom at a time, looping in case optimizing
+        along more than one direction '''

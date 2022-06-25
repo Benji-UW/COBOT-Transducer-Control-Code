@@ -12,7 +12,7 @@ sys.path.append(path + '\\Rebuilding_Everything')
 import DemoPathfinder
 from DemoPathfinder import *
 
-a = FullScan((0.5,5),8,50,50)
+a = FullScan((0.5,1),8,50,50)
 
 
 p = a.next()
@@ -21,7 +21,7 @@ print(p)
 while p != 1:
     ((x,y,z),(Rx,Ry,Rz)) = p
 
-    mag = round(10 - (x + 1)**2 - ((Rx - 15)/10)**2 - (Ry/10)**2 + (random.random() * 2))
+    mag = round(10 - (z + 1)**2 - ((Rx - 35)/10)**2 - ((Ry + 25)/10)**2)# + (random.random() * 5))
     
 
     a.newMag((p,mag))
