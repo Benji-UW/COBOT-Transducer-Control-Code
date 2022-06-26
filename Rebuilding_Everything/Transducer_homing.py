@@ -1,23 +1,18 @@
 '''
 Unit convention: mm/kg/s/deg
 '''
-import socket, struct
+import socket
 import time
 import pygame
-import math
 import os
 import numpy as np
-
 import logging
 
 date_time_str = time.strftime(r"%Y-%m-%d_%H-%M-%S")
-
 file_itr = 0
 while os.path.exists("test_%s.json" % file_itr):
     file_itr += 1
-
 path = os.path.dirname(__file__)
-
 logging.basicConfig(filename = path + "\logging\debug_log " + date_time_str + ".log", encoding='utf-8',\
      level=logging.DEBUG, format='%(levelname)s:%(message)s')
 logging.debug("Debug log for the robot starting on " + date_time_str)
@@ -28,8 +23,7 @@ from pygame.locals import *
 from Controller_2 import Controller_2
 from UR3e import *
 from RobotGUI import *
-from datetime import datetime
-from DemoPathfinder import *
+from Pathfinders import *
 
 BLACK = pygame.Color('black')
 WHITE = pygame.Color('white')
