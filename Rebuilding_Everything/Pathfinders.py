@@ -216,7 +216,6 @@ class DivisionSearch(Pathfinder):
                             for Ry in temp['Ry']:
                                 for Rz in temp['Rz']:
                                     yield ((x,y,z), (Rx,Ry,Rz))
-                                    # all_points_visited_this_round.add(((x,y,z), (Rx,Ry,Rz)))
             
             ((temp['X'], temp['Y'], temp['Z']), (temp['Rx'], temp['Ry'], temp['Rz'])) = self.max_point[0]
 
@@ -243,10 +242,8 @@ class DivisionSearch(Pathfinder):
             json.dump(json_data, outfile, indent=3)
 
 class Discrete_degree(Pathfinder):
-    def __init__(self,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
-        '''This pathfinder uses a naive approximation of the search space where it optimizes
-        one dimensions at a time, and loops until it converges on the apparent global max.'''
-        super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
+    '''This pathfinder uses a naive approximation of the search space where it optimizes
+    one dimensions at a time, and loops until it converges on the apparent global max.'''
 
     def internal_point_yielder(self):
         '''This yielder optimizes one degree of freedom at a time, looping in case optimizing
@@ -280,6 +277,7 @@ class Discrete_degree(Pathfinder):
                     yield ((g['X'],g['Y'],g['Z']),(g['Rx'],g['Ry'],g['Rz']))
 
                 # print(self.max_point)
+                # print("I've been reloaded")
                 current_best[slider] = self.max_point[0][indeces[slider][0]][indeces[slider][1]]
                 # print(current_best)
 
@@ -297,4 +295,83 @@ class Discrete_degree(Pathfinder):
         # set that as the current best along that axis
         # go to the next axis of freedom and repeat the process
         # exit the loop when you've gone a couple loops without changing the current best
+        yield 1
+
+class DivisionDiscreteDegree(Pathfinder):
+    def __init__(self, divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
+        '''This pathfinder balances the '''
+        self.divisions = divisions
+        self.second_stage = -1
+        super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
+
+    def newMag(self, point_mag, override=False):
+        if self.second_stage != -1:
+            self.second_stage.newMag(point_mag, override)
+
+        # self.points.append(point_mag)
+        # if (point_mag[1] > self.max_point[1]):
+        #     self.max_point = point_mag
+        super().newMag(point_mag)
+
+    def internal_point_yielder(self):
+        bounds = self.range_of_motion.copy()
+        temp = dict()
+
+        inc_size = dict()
+        keys = bounds.keys()
+
+        for DoF in keys:
+            # If the bounds of this degree of freedom are not the same (this is a free axis):
+            if bounds[DoF][0] != bounds[DoF][1]:
+                # Store all the points along this axis we will visit
+                temp[DoF] = np.linspace(bounds[DoF][0], bounds[DoF][1], self.divisions)
+                inc_size[DoF] = (bounds[DoF][1] - bounds[DoF][0]) / self.divisions
+            else:
+                temp[DoF] = [bounds[DoF][0]]
+                inc_size[DoF] = 0
+        
+        # Permute them
+        for x in temp['X']:
+            for y in temp['Y']:
+                for z in temp['Z']:
+                    for Rx in temp['Rx']:
+                        for Ry in temp['Ry']:
+                            for Rz in temp['Rz']:
+                                yield ((x,y,z), (Rx,Ry,Rz))
+        
+        ((temp['X'], temp['Y'], temp['Z']), (temp['Rx'], temp['Ry'], temp['Rz'])) = self.max_point[0]
+        deg_range = dict()
+
+        print("======================")
+        print(f"Bounds: {bounds}")
+        print(f"Temp: {temp}")
+        print(f"Inc_size: {inc_size}")
+        print("======================")
+
+        for DoF in bounds.keys():
+            print(DoF)
+            print(bounds[DoF])
+            if bounds[DoF][0] != bounds[DoF][1]:
+                if temp[DoF] == bounds[DoF][0]:
+                    bounds[DoF] = [temp[DoF], temp[DoF] + (2 * inc_size[DoF])]
+                elif temp[DoF] == bounds[DoF][1]:
+                    bounds[DoF] = [temp[DoF] - (2 * inc_size[DoF]), temp[DoF]]
+                else:
+                    bounds[DoF] = [temp[DoF] - inc_size[DoF], temp[DoF] + inc_size[DoF]]
+
+        m = ((np.mean(bounds['X']), np.mean(bounds['Y']),np.mean(bounds['Z'])),(np.mean(bounds['Rx']), np.mean(bounds['Ry']),np.mean(bounds['Rz'])))
+
+        print(inc_size)
+
+        self.second_stage = Discrete_degree(inc_size['Z'],inc_size['Rx'],inc_size['Ry'],inc_size['X'],inc_size['Y'],inc_size['Rz'])
+        p = self.second_stage.next()
+
+        # print(f"Internal maximum point: {m}")
+
+        while p != 1:
+            print(f"Current second stage search point: {p}")
+            yield ((m[0][0] + p[0][0],m[0][1] + p[0][1],m[0][2] + p[0][2]),(m[1][0] + p[1][0],m[1][1] + p[1][1],m[1][2] + p[1][2]))
+            # yield(p)
+            p = self.second_stage.next()
+        
         yield 1
