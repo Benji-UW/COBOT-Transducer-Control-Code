@@ -1,6 +1,7 @@
 '''
 Unit convention: mm/kg/s/deg
 '''
+from argparse import ArgumentError
 import math
 from xml.sax.xmlreader import IncrementalParser
 import numpy as np
@@ -51,6 +52,11 @@ class Pathfinder:
 
         '''Sets the degrees of freedom of this pathfinder, only Z defaults to true.'''
         self.degrees_of_freedom = {'X': x_range!=0,'Y': y_range!=0,'Z':z_range!=0,'Rx':Rx_range!=0,'Ry':Ry_range!=0,'Rz':Rz_range!=0}
+
+    def __str__(self):
+        return "Basic, boilerplate version of a pathfinder module.\n" + \
+            f"\tRange of motion: {self.range_of_motion}\n" + \
+            f"\tHighest magnitude found: {self.max_point}"
 
     def newMag(self, point_mag, override = False):
         '''Accepts as in put a tuple in the form (((X,Y,Z),(Rx,Ry,Rz)), mag), 
@@ -244,73 +250,99 @@ class DivisionSearch(Pathfinder):
 class Discrete_degree(Pathfinder):
     '''This pathfinder uses a naive approximation of the search space where it optimizes
     one dimensions at a time, and loops until it converges on the apparent global max.'''
+    def __init__(self, z_range=None, Rx_range=0, Ry_range=0, \
+        x_range=0, y_range=0, Rz_range=0,r_o_m=None,max_point=(-1,-1,-1)):
 
+        if r_o_m is None:
+            if z_range is None:
+                raise ArgumentError("Please supply a working argument :/")
+            super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
+        else:
+            self.range_of_motion = r_o_m
+
+            # Should be a list of the string representations of the active degrees
+            # of freedom.
+            self.active_rom = []
+            for degree in self.range_of_motion.keys():
+                if self.range_of_motion[degree] != [0,0]:
+                    self.active_rom.append(degree)
+
+            self.points = []
+            self.to_travel = []
+
+            self.yielder = self.internal_point_yielder()
+
+            '''max_point stores the point and magnitude of the highest magnitude yet scanned,
+            stored in a tuple of the form (((X,Y,Z, (Rx,Ry,Rz)), mag), initialized to (-1,-1,-1)
+            for simplicity.'''
+            self.max_point = max_point
+        
     def internal_point_yielder(self):
-        '''This yielder optimizes one degree of freedom at a time, looping in case optimizing
-        along more than one direction '''
-
-        starting_res = (1,5) # 2 mm, 5 deg
+        '''This yielder optimizes one degree of freedom at a time, looping in case
+        optimizing along more than one direction isn't appropriate.
+        
+        Pseudocode:
+        1. Start with an internal list of all of the active ranges of motion in this module
+            1a. Set the current best to the center of the full range of motion
+        2. Select one active axis and move along the entire range of motion in that
+        direction. All of the non-active degrees of freedom are kept at their
+        "current best" value.
+        3. Save the highest magnitude from that span, and update that axis' "current best" value
+        4. Move to the next degree of freedom and do the same thing'''
+        starting_res = (2,5) # 2 mm, 5 deg
         max_res = (0.05,0.5)
 
-        keep_going = True
-        length = len(self.active_rom)
-        print(self.active_rom)
-        i = 0
-
-        current_best = {'X': 0,'Y': 0,'Z':0,'Rx':0,'Ry':0,'Rz':0}
         indeces = {'X': (0,0), 'Y': (0,1), 'Z': (0,2), 'Rx': (1,0), 'Ry': (1,1), 'Rz': (1,2)}
+        current_best = dict()
 
-        while keep_going and i < 15:
+        if self.max_point != (-1,-1,-1):
+            for i in indeces.keys():
+                current_best[i] = self.max_point[0][indeces[i][0]][indeces[i][1]]
+        else:
+            for i in indeces.keys():
+                current_best[i] = np.mean(self.range_of_motion[i])
+
+        i = 1
+        while i < 9:
             last_best = current_best.copy()
             for slider in self.active_rom:
-                # print(slider)
                 if {'X','Y','Z'}.issuperset(slider):
-                    res = max(starting_res[0] * (1 / (1 + i)), max_res[0])
+                    res = max(starting_res[0] * (1 / (i**2)), max_res[0])
                 else:
-                    res = max(starting_res[1] * (1 / (1 + i)), max_res[1])
+                    res = max(starting_res[1] * (1 / (i**2)), max_res[1])
 
                 steps = int((self.range_of_motion[slider][1] - self.range_of_motion[slider][0]) / res)
                 g = current_best.copy()
+                cent = g[slider]
 
-                for j in np.linspace(self.range_of_motion[slider][0] * (20/(20+i)),self.range_of_motion[slider][1] * (20/ (20+i)), steps):
+                # for j in np.linspace(self.range_of_motion[slider][0] * (2/(2+i)),self.range_of_motion[slider][1] * (2/ (2+i)), steps):
+                for j in np.linspace(cent + (np.mean(self.range_of_motion[slider]) / i),cent - (np.mean(self.range_of_motion[slider]) / i), steps):
                     g[slider] = j
                     yield ((g['X'],g['Y'],g['Z']),(g['Rx'],g['Ry'],g['Rz']))
 
-                # print(self.max_point)
-                # print("I've been reloaded")
                 current_best[slider] = self.max_point[0][indeces[slider][0]][indeces[slider][1]]
-                # print(current_best)
-
-            i += 1
 
             keep_going = False
+            i += 1
             for k in last_best.keys():
-                if last_best[k] != current_best[k]:
-                    keep_going  = True
-
-        # yield points at certain increments along the entire range of motion for that one
-        #   while yielding those points, all the other points are the "current best" along
-        #   that axis
-        # find the highest magnitude from that previous run
-        # set that as the current best along that axis
-        # go to the next axis of freedom and repeat the process
-        # exit the loop when you've gone a couple loops without changing the current best
+                if abs(last_best[k] - current_best[k]) > 0.5:
+                    keep_going = True
+            if not keep_going:
+                i = 8
         yield 1
 
 class DivisionDiscreteDegree(Pathfinder):
-    def __init__(self, divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
-        '''This pathfinder balances the '''
+    def __init__(self,divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0,cutoff_mag=-1):
+        '''This pathfinder balances the breadth of search of the division search method while
+        using the discrete degree method when a peak has been found'''
         self.divisions = divisions
         self.second_stage = -1
+        self.cutoff_mag = cutoff_mag
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
 
     def newMag(self, point_mag, override=False):
         if self.second_stage != -1:
             self.second_stage.newMag(point_mag, override)
-
-        # self.points.append(point_mag)
-        # if (point_mag[1] > self.max_point[1]):
-        #     self.max_point = point_mag
         super().newMag(point_mag)
 
     def internal_point_yielder(self):
@@ -337,10 +369,11 @@ class DivisionDiscreteDegree(Pathfinder):
                     for Rx in temp['Rx']:
                         for Ry in temp['Ry']:
                             for Rz in temp['Rz']:
-                                yield ((x,y,z), (Rx,Ry,Rz))
+                                if self.cutoff_mag == -1 or self.max_point[1] < self.cutoff_mag:
+                                    yield ((x,y,z), (Rx,Ry,Rz))
         
+        print(self.max_point)
         ((temp['X'], temp['Y'], temp['Z']), (temp['Rx'], temp['Ry'], temp['Rz'])) = self.max_point[0]
-        deg_range = dict()
 
         print("======================")
         print(f"Bounds: {bounds}")
@@ -361,17 +394,15 @@ class DivisionDiscreteDegree(Pathfinder):
 
         m = ((np.mean(bounds['X']), np.mean(bounds['Y']),np.mean(bounds['Z'])),(np.mean(bounds['Rx']), np.mean(bounds['Ry']),np.mean(bounds['Rz'])))
 
+        print(f"center of the second stage rom: {m}")
+        print(f"Bounds of the second stage: {bounds}")
         print(inc_size)
 
-        self.second_stage = Discrete_degree(inc_size['Z'],inc_size['Rx'],inc_size['Ry'],inc_size['X'],inc_size['Y'],inc_size['Rz'])
+        self.second_stage = Discrete_degree(r_o_m=bounds, max_point=self.max_point)
         p = self.second_stage.next()
 
-        # print(f"Internal maximum point: {m}")
-
         while p != 1:
-            print(f"Current second stage search point: {p}")
-            yield ((m[0][0] + p[0][0],m[0][1] + p[0][1],m[0][2] + p[0][2]),(m[1][0] + p[1][0],m[1][1] + p[1][1],m[1][2] + p[1][2]))
-            # yield(p)
+            yield(p)
             p = self.second_stage.next()
         
         yield 1
