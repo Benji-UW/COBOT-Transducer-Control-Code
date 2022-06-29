@@ -2,12 +2,8 @@
 Unit convention: mm/kg/s/deg
 '''
 from argparse import ArgumentError
-import math
-from xml.sax.xmlreader import IncrementalParser
 import numpy as np
 import json
-
-# from regex import D
 
 class Pathfinder:
     '''A class for controlling where the arm goes. The tl;dr is you define a search space,
@@ -290,7 +286,7 @@ class Discrete_degree(Pathfinder):
         3. Save the highest magnitude from that span, and update that axis' "current best" value
         4. Move to the next degree of freedom and do the same thing'''
         starting_res = (2,5) # 2 mm, 5 deg
-        max_res = (0.05,0.5)
+        max_res = (0.03,0.5)
 
         indeces = {'X': (0,0), 'Y': (0,1), 'Z': (0,2), 'Rx': (1,0), 'Ry': (1,1), 'Rz': (1,2)}
         current_best = dict()
