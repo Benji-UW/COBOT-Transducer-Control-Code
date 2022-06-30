@@ -34,8 +34,6 @@ def my_move_to_tar():
 end
 
 
-
-
 while True:
     i = i + 1
     global string_from_server = socket_read_string(timeout=0.5)
@@ -63,7 +61,7 @@ while True:
         else:
             socket_send_string("RSM: recieved unrecognized state request")
         end
-
+        string_from_server = ""
     else:
         message_state = "message was blank!"
     end
