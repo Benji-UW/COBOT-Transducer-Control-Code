@@ -11,7 +11,16 @@ sys.path.append(path + '\\Rebuilding_Everything')
 # print(sys.path)
 from Pathfinders import *
 
-a = FullScan((0.5,2),10,40,40)
+path = os.path.dirname(__file__)
+#path = path + '\\' + time.ctime(time.time())
+
+file_itr = 0
+while os.path.exists(path + "\\test_%s.json" % file_itr):
+    file_itr += 1
+
+path = path + '\\test_%s.json' % file_itr
+
+a = FullScan((0.25,2),10,40,40,path=path)
 
 
 p = a.next()
@@ -26,14 +35,7 @@ while p != 1:
     a.newMag((p,mag))
     p = a.next()
 
-path = os.path.dirname(__file__)
-#path = path + '\\' + time.ctime(time.time())
 
-file_itr = 0
-while os.path.exists(path + "\\test_%s.json" % file_itr):
-    file_itr += 1
-
-path = path + '\\test_%s.json' % file_itr
 
 a.save_points(path)
 

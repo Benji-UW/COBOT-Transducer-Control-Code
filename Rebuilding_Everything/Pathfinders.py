@@ -13,7 +13,7 @@ class Pathfinder:
     position, so the initial position, as far as this is concerned, is ((0,0,0),(0deg,0deg,0deg))
     All internal points are stored as tuples in the form ((X,Y,Z),(Rx,Ry,Rz))'''
 
-    def __init__(self,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
+    def __init__(self,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0,path=None):
         '''Accepts as input a series of values indicating the range of different
         points in space it is allowed to exist between. This defines the search
         space of the object. It will not investigate any points outside these bounds.
@@ -40,11 +40,23 @@ class Pathfinder:
         self.to_travel = []
 
         self.yielder = self.internal_point_yielder()
+        self.path = path
+        self.outfile = None
 
         '''max_point stores the point and magnitude of the highest magnitude yet scanned,
         stored in a tuple of the form (((X,Y,Z, (Rx,Ry,Rz)), mag), initialized to (-1,-1,-1)
         for simplicity.'''
         self.max_point = (-1,-10000,-1000)
+
+        if self.path is not None:
+            self.outfile = open(path, 'a+')
+            json.dump(self.range_of_motion, self.outfile, indent=3)
+
+        self.json_data = { \
+            'range of motion' : self.range_of_motion,
+            'max_point' : self.max_point,
+            'points' : self.points
+        } 
 
         '''Sets the degrees of freedom of this pathfinder, only Z defaults to true.'''
         self.degrees_of_freedom = {'X': x_range!=0,'Y': y_range!=0,'Z':z_range!=0,'Rx':Rx_range!=0,'Ry':Ry_range!=0,'Rz':Rz_range!=0}
@@ -63,6 +75,9 @@ class Pathfinder:
         self.points.append(point_mag)
         if (point_mag[1] > self.max_point[1]):
             self.max_point = point_mag
+
+        if self.outfile is not None:
+            json.dump(point_mag, self.outfile, indent=3)
         
         latest_point = point_mag[0]
 
@@ -111,21 +126,18 @@ class Pathfinder:
         return True
 
 #TODO: there are some points coming through to close-enough that are wrapped up in too many tuples
-    def save_points(self, path):
+    def save_points(self, path=None):
         '''Called at the end of the test or when the pathfinder has finished, outputs the points
         collected to a json file at a given path, meant to be superceded in each custom class
         in order to save additional information specific to that mode of pathfinder.'''
-        json_data = { \
-            'range of motion' : self.range_of_motion,
-            'max_point' : self.max_point,
-            'points' : self.points
-        } 
-
-        with open(path, 'a+') as outfile:
-            json.dump(json_data, outfile, indent=3)
+        if self.path is not None:
+            path = self.path
+        else:
+            with open(path, 'a+') as outfile:
+                json.dump(self.json_data, outfile, indent=3)
 
 class FullScan(Pathfinder):
-    def __init__(self, resolution, z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
+    def __init__(self, resolution, z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0,path=None):
         '''Acts almost identical to the regular pathfinder module, except it contains an additional
         field for the resolution of the scan. The resolution should be passed in as a tuple in the
         form (mm, deg) where the mm represents the linear mm tolerance for the full scan and the
@@ -134,7 +146,7 @@ class FullScan(Pathfinder):
         # self.yielder = self.internal_point_yielder()
         min_tolerance = (0.2, 1)
         self.resolution = (max(resolution[0],min_tolerance[0]), max(resolution[1],min_tolerance[1]))
-        super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
+        super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range,path)
 
     def internal_point_yielder(self):
         '''The full scan iterates through every point in the searchspace'''
