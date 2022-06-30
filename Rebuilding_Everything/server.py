@@ -4,6 +4,15 @@ import socket
 import numpy as np
 import time
 from threading import Thread
+import os
+import logging
+
+date_time_str = time.strftime(r"%m-$d_%H%M")
+path = os.path.dirname(__file__)
+FORMAT = '%(asctime)s %(clientip)-15s %(user)-8s %(message)s'
+logging.basicConfig(filename = path + "\logging\server_logs\\" + date_time_str + ".log", encoding='utf-8',
+        level=logging.DEBUG, format=FORMAT)
+
 
 HOST = ''
 PORT = 508
@@ -11,7 +20,6 @@ PORT = 508
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
 s.listen(6)
-
 
 # HOST = "192.168.0.5"
 # PORT = 50000
@@ -47,19 +55,27 @@ def client_thread(conn):
     while is_alive:
         # print(f'RSM: {robot_state_message}')
         client_input = conn.recv(4096)
+        logging.INFO(client_input)
         # print(str(client_input))
+        # print(shitty_sql)
         t = time.time()
         if client_input == b'motion':
-            print('received motion:')
-            print(motion)
+            # print('received motion:')
+            # print(motion)
             conn.send(motion)
-        elif client_input[:3] == b"SET":
+            logging.INFO("Reply: " + motion)
+        # elif client_input[:3] == b"SET":
+        # #     pass
+        elif b'SET' in client_input:
             '''Should be a message in the format "SET <name> <value>", can only be an integer'''
+            '''Might instead be a series of strings like that'''
             cli_input = client_input.split()
-            var_name = cli_input[1]
-            var_val = cli_input[2]
+            for i in range(int(len(cli_input) / 3)):
+                if cli_input[i*3] == b'SET':
+                    var_name = cli_input[3*i + 1]
+                    var_val = cli_input[3*i + 2]
             # The shitty SQL data gets stored as ints in a dictionary
-            shitty_sql[var_name] = int(var_val)
+                shitty_sql[var_name] = int(var_val)
         elif client_input[:3] == b"GET":
             '''Should be a message in the format "GET <name>", only sending integers tho'''
             cli_input = client_input.split()
@@ -68,24 +84,26 @@ def client_thread(conn):
             except KeyError as e:
                 dat = b'Key not found' 
             conn.send(dat)
+            logging.INFO("Reply: " + dat)
         elif client_input[:4] == b"TODO":
             '''Makes a shity todo-list for passing tasks back and forth'''
             cli_input = client_input.split()
-            print(b"adding item to the todo list: " + cli_input[1])
-            todo_list.append(cli_input[1])
-            print(todo_list)
+            if len(todo_list) < 5:
+                # print(b"adding item to the todo list: " + cli_input[1])
+                todo_list.append(cli_input[1])
+                # print(todo_list)
         elif client_input[:4] == b'RSM:':
             robot_state_message = client_input[4:] + b" your server touched this :)))"
             # print(robot_state_message)
         elif client_input == b'RSR':
             conn.send(robot_state_message)
-        elif client_input == b'I am alive':
+        elif b'I am alive' in client_input:
             if len(todo_list) != 0:
                 a = todo_list.pop()
                 print(b"sending todo item " + a)
-                time.sleep(0.005)
+                # time.sleep(0.01)
                 conn.send(a)
-                time.sleep(0.005)
+                time.sleep(0.01)
             else:
                 conn.send(b"Transmit position")
         elif client_input == b'end':
@@ -94,13 +112,13 @@ def client_thread(conn):
             is_alive = False
         elif client_input[0] == 84:
             motion = client_input
-            print(client_input)
+            # print(client_input)
         else:
             # motion = client_input
             print(shitty_sql)
             # debugging type step:
             cl = str(client_input)
-            print('client ' + str(conn) + ' just sent ' + cl)
+            # print('client ' + str(conn) + ' just sent ' + cl)
         if i_rr >= 250:
             i_rr = 0
             print('Refresh rate of process %d: %3.1f' % (number, (1. / np.mean(refresh_rate))))
@@ -115,7 +133,7 @@ def client_thread(conn):
 
 
 while True:
-    print("entered while loop")
+    # print("entered while loop")
     con, addr = s.accept()
     print('Connected: ' + str(addr))
     Thread(target=client_thread, args=(con,)).start()

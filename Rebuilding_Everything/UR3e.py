@@ -563,9 +563,9 @@ class UR3e:
         self.data_socket.send(b'SET TAR_Rz %i ' % (np.deg2rad(tRz) * 10000))
 
         self.data_socket.send(b'TODO move2tar ')
-        time.sleep(0.005)
+        time.sleep(0.01)
         self.data_socket.send(b'SET atTar %i ' % (-1))
-        time.sleep(0.5)
+        time.sleep(0.01)
 
     def get_current_rel_target(self):
         return self.current_relative_target
@@ -574,8 +574,23 @@ class UR3e:
         self.data_socket.send(b"GET atTar")
         response = self.data_socket.recv(1024)
 
-        print(b"Debugging atTar: " + response)
+        # print(b"Debugging atTar: " + response)
         return (response == b"atTar 1")
+
+    def wait_for_at_tar(self):
+        at_tar = False
+        i = 0
+        while not at_tar and i < 1000:
+            time.sleep(0.02)
+            self.data_socket.send(b"GET atTar")
+            at_tar = (self.data_socket.recv(1024) == b"atTar 1")
+            i+=1
+            if i % 4 == 0:
+                self.data_socket.send(b'TODO move2tar ')
+
+        return i
+
+
 
 
         
