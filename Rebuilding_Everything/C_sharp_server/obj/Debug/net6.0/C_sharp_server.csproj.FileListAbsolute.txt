@@ -1,0 +1,15 @@
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\bin\Debug\net6.0\C_sharp_server.exe
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\bin\Debug\net6.0\C_sharp_server.deps.json
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\bin\Debug\net6.0\C_sharp_server.runtimeconfig.json
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\bin\Debug\net6.0\C_sharp_server.dll
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\bin\Debug\net6.0\ref\C_sharp_server.dll
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\bin\Debug\net6.0\C_sharp_server.pdb
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\obj\Debug\net6.0\C_sharp_server.csproj.AssemblyReference.cache
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\obj\Debug\net6.0\C_sharp_server.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\obj\Debug\net6.0\C_sharp_server.AssemblyInfoInputs.cache
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\obj\Debug\net6.0\C_sharp_server.AssemblyInfo.cs
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\obj\Debug\net6.0\C_sharp_server.csproj.CoreCompileInputs.cache
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\obj\Debug\net6.0\C_sharp_server.dll
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\obj\Debug\net6.0\ref\C_sharp_server.dll
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\obj\Debug\net6.0\C_sharp_server.pdb
+C:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Rebuilding_Everything\C_sharp_server\obj\Debug\net6.0\C_sharp_server.genruntimeconfig.cache
