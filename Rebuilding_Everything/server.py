@@ -4,6 +4,15 @@ import socket
 import numpy as np
 import time
 from threading import Thread
+import os
+import logging
+
+date_time_str = time.strftime(r"%m-$d_%H%M")
+path = os.path.dirname(__file__)
+FORMAT = '%(asctime)s %(clientip)-15s %(user)-8s %(message)s'
+logging.basicConfig(filename = path + "\logging\server_logs\\" + date_time_str + ".log", encoding='utf-8',
+        level=logging.DEBUG, format=FORMAT)
+
 
 HOST = ''
 PORT = 508
@@ -46,6 +55,7 @@ def client_thread(conn):
     while is_alive:
         # print(f'RSM: {robot_state_message}')
         client_input = conn.recv(4096)
+        logging.INFO(client_input)
         # print(str(client_input))
         # print(shitty_sql)
         t = time.time()
@@ -53,6 +63,7 @@ def client_thread(conn):
             # print('received motion:')
             # print(motion)
             conn.send(motion)
+            logging.INFO("Reply: " + motion)
         # elif client_input[:3] == b"SET":
         # #     pass
         elif b'SET' in client_input:
@@ -73,19 +84,20 @@ def client_thread(conn):
             except KeyError as e:
                 dat = b'Key not found' 
             conn.send(dat)
+            logging.INFO("Reply: " + dat)
         elif client_input[:4] == b"TODO":
             '''Makes a shity todo-list for passing tasks back and forth'''
             cli_input = client_input.split()
             if len(todo_list) < 5:
-                print(b"adding item to the todo list: " + cli_input[1])
+                # print(b"adding item to the todo list: " + cli_input[1])
                 todo_list.append(cli_input[1])
-                print(todo_list)
+                # print(todo_list)
         elif client_input[:4] == b'RSM:':
             robot_state_message = client_input[4:] + b" your server touched this :)))"
             # print(robot_state_message)
         elif client_input == b'RSR':
             conn.send(robot_state_message)
-        elif client_input == b'I am alive':
+        elif b'I am alive' in client_input:
             if len(todo_list) != 0:
                 a = todo_list.pop()
                 print(b"sending todo item " + a)
