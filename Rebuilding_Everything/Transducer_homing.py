@@ -9,7 +9,7 @@ import numpy as np
 import logging
 
 date_time_str = time.strftime(r"%Y-%m-%d_%H-%M-%S")
-file_itr = 0
+file_itr = 6
 while os.path.exists("test_%s.json" % file_itr):
     file_itr += 1
 path = os.path.dirname(__file__)
@@ -156,6 +156,7 @@ class Transducer_homing:
 
         self.i=-1
         print('About to start the main loop')
+        go_next = True
 
         while run_bool:
             t0 = time.time()
@@ -174,10 +175,8 @@ class Transducer_homing:
                 self.t = time.time()
                 pos,angle = self.robot.get_current_rel_target()
 
-                self.mag_loc.add(((pos,angle), new_mag))
-
                 if router:
-                    self.pathfinder.newMag(((pos,angle), latest_mag), self.robot.at_tar())
+                    self.pathfinder.newMag(((pos,angle), latest_mag), go_next)
                     # You are here                
 
             pygame.event.pump()
@@ -206,19 +205,25 @@ class Transducer_homing:
                 self.robot.set_initial_pos()
             if keys[pygame.key.key_code("k")] == 1 and not router:
                 router = True
-                self.pathfinder = FullScan((1,2),10,20,20)
+                self.pathfinder = FullScan((0.75,2.5),10,20,20)
+                nextpoint = self.pathfinder.next()
             # Press x to stop the running pathfinder
             if keys[pygame.key.key_code("x")] == 1 and router:
                 router = False
-            if keys[pygame.key.key_code("m")] == 1 and router:
-                t_pos,t_angle = (nextpoint[0],nextpoint[1])
-                t_pos,t_angle = np.array([t_pos]).T,np.array([t_angle]).T
+                path = os.path.dirname(__file__)
+                path = path + f'\\test_{file_itr}.json'
+                self.pathfinder.save_points(path)
+                logging.debug(f"triggering movel to {nextpoint}")
+                self.robot.movel_to_target(nextpoint)
+            # if keys[pygame.key.key_code("m")] == 1 and router:
+            #     t_pos,t_angle = (nextpoint[0],nextpoint[1])
+            #     t_pos,t_angle = np.array([t_pos]).T,np.array([t_angle]).T
 
-                self.robot.movel(self.starting_pos[0] + t_pos,self.starting_pos[1] +  t_angle)
+            #     self.robot.movel(self.starting_pos[0] + t_pos,self.starting_pos[1] +  t_angle)
                 
-                print("movel engaged")
-                print("Target set to the following point:")
-                print(self.starting_pos[0] + t_pos,self.starting_pos[1] +  t_angle)
+            #     print("movel engaged")
+            #     print("Target set to the following point:")
+                # print(self.starting_pos[0] + t_pos,self.starting_pos[1] +  t_angle)
             if keys[pygame.key.key_code("a")] == 1 and not router:
                 self.change_range_gui()
             if keys[pygame.key.key_code("h")] == 1 and not router:
@@ -236,14 +241,20 @@ class Transducer_homing:
             speed_vect = np.zeros((3,1))
             rot_vect = np.zeros((3,1))
             if router:
+                print("waiting...")
+                v = self.robot.wait_for_at_tar()
+                print(f"Made it in {v} loops")
                 nextpoint = self.pathfinder.next()
                 if nextpoint == 1:
                     router = False
-                    path = path + '\\test_' + file_itr + '.json'
+                    path = path + f'\\test_{file_itr}.json'
                     self.pathfinder.save_points(path)
                 else:
+                    logging.debug(f"triggering movel to {nextpoint}")
                     self.robot.movel_to_target(nextpoint)
-                # Do something else entirely
+                    # literally do not pass go, do not collect $200 until
+                    # the target has been reached.
+
             else:
                 joy_vect = self.controller.get_hat(keys)
                 if translate:
@@ -285,6 +296,7 @@ class Transducer_homing:
             self.disconnect_from_matlab()
             print('Disconnected from server.')
         if router:
+            path = os.path.dirname(__file__)
             path = path + '\\test_' + file_itr + '.json'
             self.pathfinder.save_points(path)
 
@@ -368,11 +380,11 @@ class Transducer_homing:
         magnitude.'''   
         mag,self.latest_loop = -1,-1        
         while True:
-            print('here i am')
+            # print('here i am')
             self.matlab_socket.send(b'motion')
 
             msg = self.matlab_socket.recv(1024)
-            print(msg)
+            # print(msg)
             mag = float(msg[4:13]) / 1.0E3
             loop = int(msg[1:3])
             if loop == self.latest_loop:
@@ -482,8 +494,8 @@ class Transducer_homing:
             self.robot_gui.tprint(self.screen, 'Beware this will override the controller until the pathfinder is cancelled or has finished the task.')
             self.robot_gui.unindent()
         else:
-            next_target = self.pathfinder.next()
-            t_pos,t_angle = (next_target[0],next_target[1])
+            # next_target = self.pathfinder.next()
+            t_pos,t_angle = (current_target[0],current_target[1])
             self.robot_gui.tprint(self.screen, 'Press (x) to cancel the running pathfinder')
             self.robot_gui.tprint(self.screen, "Press (m) to movel to the next target point.")
             self.robot_gui.skip_line(2)

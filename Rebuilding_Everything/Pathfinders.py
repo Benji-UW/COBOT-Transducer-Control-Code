@@ -59,6 +59,7 @@ class Pathfinder:
         where the first element in the tuple is a 6-member tuple representing
         the point in 6D space, and the second element is a float representing
         the signal magnitude at that point.'''
+        
         self.points.append(point_mag)
         if (point_mag[1] > self.max_point[1]):
             self.max_point = point_mag
@@ -131,7 +132,7 @@ class FullScan(Pathfinder):
         deg represents the angular degree tolerance for the full scan. There is a minimum tolerance
         based on the limitations of the robot, those are subject to change experimentally.'''
         # self.yielder = self.internal_point_yielder()
-        min_tolerance = (0.2, 2)
+        min_tolerance = (0.2, 1)
         self.resolution = (max(resolution[0],min_tolerance[0]), max(resolution[1],min_tolerance[1]))
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
 

@@ -44,6 +44,8 @@ close all;
 
 PS5000aConfig;
 
+socket = tcpclient('localhost', 508);
+
 %% Device connection
 
 % Check if an Instrument session using the device object |ps5000aDeviceObj|
@@ -79,11 +81,18 @@ connect(ps5000aDeviceObj);
 % Default driver settings applied to channels are listed below - use the
 % Instrument Driver's |ps5000aSetChannel()| function to turn channels on or
 % off and set voltage ranges, coupling, as well as analog offset.
+channelSettings(1).enabled = PicoConstants.TRUE;
+channelSettings(1).coupling = ps5000aEnuminfo.enPS5000ACoupling.PS5000A_DC;
+channelSettings(1).range = ps5000aEnuminfo.enPS5000ARange.PS5000A_500MV;
+channelSettings(1).analogueOffset = 0.0;
+
+% Set device property to hide display output during data collection.
+set(ps5000aDeviceObj, 'displayOutput', PicoConstants.FALSE);
 
 %% Set device resolution
 
 % Max. resolution with 2 channels enabled is 15 bits.
-[status.setResolution, resolution] = invoke(ps5000aDeviceObj, 'ps5000aSetDeviceResolution', 15);
+[status.setResolution, resolution] = invoke(ps5000aDeviceObj, 'ps5000aSetDeviceResolution', 12);
 
 %% Verify timebase index and maximum number of samples
 % Use the |ps5000aGetTimebase2()| function to query the driver as to the
@@ -104,7 +113,7 @@ connect(ps5000aDeviceObj);
 % segment index : 0
 
 status.getTimebase2 = PicoStatus.PICO_INVALID_TIMEBASE;
-timebaseIndex = 65;
+timebaseIndex = 1;
 
 while (status.getTimebase2 == PicoStatus.PICO_INVALID_TIMEBASE)
     
@@ -156,10 +165,14 @@ set(triggerGroupObj, 'autoTriggerMs', 1000);
 blockGroupObj = get(ps5000aDeviceObj, 'Block');
 blockGroupObj = blockGroupObj(1);
 
+% Target sample period: 1e-4 seconds
+% Target sample quantity: sample period / timeIntervalNanoseconds
+total_samples = 100000 / timeIntervalNanoseconds;
+
 % Set pre-trigger samples.
-set(ps5000aDeviceObj, 'numPreTriggerSamples', 1024);
+set(ps5000aDeviceObj, 'numPreTriggerSamples', total_samples * 0.05);
 % Set post-trigger samples.
-set(ps5000aDeviceObj, 'numPostTriggerSamples', 10000);
+set(ps5000aDeviceObj, 'numPostTriggerSamples', total_samples * 0.95);
 
 %%
 % This example uses the |runBlock()| function in order to collect a block of
@@ -168,26 +181,73 @@ set(ps5000aDeviceObj, 'numPostTriggerSamples', 10000);
 % the |ps5000aIsReady()| function.
 
 % Capture a block of data:
-%
 % segment index: 0 (The buffer memory is not segmented in this example)
 
-[status.runBlock] = invoke(blockGroupObj, 'runBlock', 0);
+% Display a 'Stop' button.
+[stopFig.h, stopFig.h] = stopButton();             
+             
+flag = 1; % Use flag variable to indicate if stop button has been clicked (0).
+setappdata(gcf, 'run', flag);
 
-% Retrieve data values:
 
-startIndex              = 0;
-segmentIndex            = 0;
-downsamplingRatio       = 1;
-downsamplingRatioMode   = ps5000aEnuminfo.enPS5000ARatioMode.PS5000A_RATIO_MODE_NONE;
+ind = 0;
+update_frequency = zeros(101,1);
 
-[numSamples, overflow, chA, chB] = invoke(blockGroupObj, 'getBlockData', startIndex, segmentIndex, ...
-                                            downsamplingRatio, downsamplingRatioMode);
+while 1
+    clear chA
+    tic
+    [status.runBlock] = invoke(blockGroupObj, 'runBlock', 0);
+    
+    % Retrieve data values:
 
+    startIndex              = 0;
+    segmentIndex            = 0;
+    downsamplingRatio       = 1;
+    downsamplingRatioMode   = ps5000aEnuminfo.enPS5000ARatioMode.PS5000A_RATIO_MODE_NONE;
+
+    [numSamples, overflow, chA, chB] = invoke(blockGroupObj, 'getBlockData', startIndex, segmentIndex, ...
+                                                downsamplingRatio, downsamplingRatioMode);
+    
+    chA = chA(total_samples*0.1:end);
+%     fprintf('max val in block: %f', max(chA))
+    ind = ind + 1;
+    update_frequency(mod(ind,100) + 1) = 1/toc;
+    
+    amp = max(chA)*1E3;
+    
+    msg_format = 'T%02dZ%09d\n';
+    msg = sprintf(msg_format, [mod(ind,100), max(round(amp), 1)]);
+
+    write(socket, msg);
+    
+    % Check if 'STOP' button has been clicked.
+    flag = getappdata(gcf, 'run');
+    drawnow;
+
+    if mod(ind,100)==0
+        fprintf("Update frequency: %f Hz", mean(update_frequency))
+    end
+    
+    if (flag == 0)
+
+        disp('STOP button clicked - aborting data collection.')
+        break;
+        
+    end
+end
+                                        
+% Close the STOP button window.
+if (exist('stopFig', 'var'))
+    
+    close('Stop Button');
+    clear stopFig;
+        
+end                                  
 %% Process data
 % Plot data values, calculate and plot FFT.
 
-figure1 = figure('Name','PicoScope 5000 Series (A API) Example - Block Mode Capture with FFT', ...
-    'NumberTitle','off');
+% figure1 = figure('Name','PicoScope 5000 Series (A API) Example - Block Mode Capture with FFT', ...
+%     'NumberTitle','off');
 
 % Calculate time (nanoseconds) and convert to milliseconds
 % Use |timeIntervalNanoseconds| output from the |ps5000aGetTimebase2()|
@@ -197,38 +257,43 @@ figure1 = figure('Name','PicoScope 5000 Series (A API) Example - Block Mode Capt
 timeNs = double(timeIntervalNanoseconds) * downsamplingRatio * double(0:numSamples - 1);
 timeMs = timeNs / 1e6;
 
+% chA = chA(total_samples*0.08:end);
+timeMs = timeMs(total_samples*0.1:end);
+
+mean(update_frequency)
+
 % Channel A
-chAAxes = subplot(2,1,1); 
-plot(chAAxes, timeMs, chA);
-ylim(chAAxes, [-2500 2500]); % Adjust vertical axis for signal
+% chAAxes = subplot(2,1,1); 
+plot(timeMs, chA);
+ylim([-500 500]); % Adjust vertical axis for signal
 
-title(chAAxes, 'Block Data Acquisition');
-xlabel(chAAxes, 'Time (ms)');
-ylabel(chAAxes, 'Voltage (mV)');
-grid(chAAxes, 'on');
-legend(chAAxes, 'Channel A');
-
-% Calculate FFT of Channel A and plot - based on <matlab:doc('fft') fft documentation>.
-L = length(chA);
-n = 2 ^ nextpow2(L); % Next power of 2 from length of chA
-
-Y = fft(chA, n);
-
-% Obtain the single-sided spectrum of the signal.
-P2 = abs(Y/n);
-P1 = P2(1:n/2+1);
-P1(2:end-1) = 2 * P1(2:end-1);
-
-Fs = 1 / (timeIntervalNanoseconds * 1e-9);
-f = 0:(Fs/n):(Fs/2 - Fs/n);
-
-chAFFTAxes = subplot(2,1,2);
-plot(chAFFTAxes, f, P1(1:n/2)); 
-
-title(chAFFTAxes, 'Single-Sided Amplitude Spectrum of y(t)');
-xlabel(chAFFTAxes, 'Frequency (Hz)');
-ylabel(chAFFTAxes, '|Y(f)|');
-grid(chAFFTAxes, 'on');
+title('Block Data Acquisition');
+xlabel('Time (ms)');
+ylabel('Voltage (mV)');
+grid('on');
+legend('Channel A');
+% 
+% % Calculate FFT of Channel A and plot - based on <matlab:doc('fft') fft documentation>.
+% L = length(chA);
+% n = 2 ^ nextpow2(L); % Next power of 2 from length of chA
+% 
+% Y = fft(chA, n);
+% 
+% % Obtain the single-sided spectrum of the signal.
+% P2 = abs(Y/n);
+% P1 = P2(1:n/2+1);
+% P1(2:end-1) = 2 * P1(2:end-1);
+% 
+% Fs = 1 / (timeIntervalNanoseconds * 1e-9);
+% f = 0:(Fs/n):(Fs/2 - Fs/n);
+% 
+% chAFFTAxes = subplot(2,1,2);
+% plot(chAFFTAxes, f, P1(1:n/2)); 
+% 
+% title(chAFFTAxes, 'Single-Sided Amplitude Spectrum of y(t)');
+% xlabel(chAFFTAxes, 'Frequency (Hz)');
+% ylabel(chAFFTAxes, '|Y(f)|');
+% grid(chAFFTAxes, 'on');
 
 %% Stop the device
 

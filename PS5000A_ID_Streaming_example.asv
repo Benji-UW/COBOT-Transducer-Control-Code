@@ -561,7 +561,7 @@ grid(chAAxes, 'on');
 
 movegui(finalFigure, 'east');
 
-fprintf('%i loops with %i peaks, triggered %i times, fraction %f \n', loops, contains_peak, triggers, (contains_peak/loops))
+fprintf('%f loops with %f peaks, printed %i times, fraction %f \n', loops, contains_peak, (contains_peak/loops))
 
 %% Disconnect device
 % Disconnect device object from hardware.

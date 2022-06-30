@@ -77,11 +77,11 @@ maxADCCount = get(ps5000aDeviceObj, 'maxADCValue');
 triggerGroupObj = get(ps5000aDeviceObj, 'Trigger');
 triggerGroupObj = triggerGroupObj(1);
 
-set(triggerGroupObj, 'autoTriggerMs', 10);
+set(triggerGroupObj, 'autoTriggerMs', 100);
 
 channel = ps5000aEnuminfo.enPS5000AChannel.PS5000A_EXTERNAL;
 [status.setSimpleTrigger] = invoke(triggerGroupObj, 'setSimpleTrigger', ...
-    0, 200, 2);
+    0, 400, 2);
 
 %% Resolution settings
 
@@ -242,7 +242,6 @@ while(hasAutoStopOccurred == PicoConstants.FALSE && ...
             channelARangeMv, maxADCCount);      
         
         %max(bufferChAmV)
-        
         if (max(bufferChAmV) == 500)% && startIndex == 0)
             LoadTime = toc;
             ind = ind + 1;
