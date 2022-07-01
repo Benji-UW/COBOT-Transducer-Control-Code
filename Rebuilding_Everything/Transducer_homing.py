@@ -205,7 +205,7 @@ class Transducer_homing:
                 self.robot.set_initial_pos()
             if keys[pygame.key.key_code("k")] == 1 and not router:
                 router = True
-                self.pathfinder = FullScan((0.75,2.5),10,20,20)
+                self.pathfinder = FullScan((1,3),4,18,18)
                 nextpoint = self.pathfinder.next()
             # Press x to stop the running pathfinder
             if keys[pygame.key.key_code("x")] == 1 and router:
@@ -246,6 +246,7 @@ class Transducer_homing:
                 nextpoint = self.pathfinder.next()
                 if nextpoint == 1:
                     router = False
+                    path = os.path.dirname(__file__)
                     self.pathfinder.save_points(path + f'\\Scans\\test_{file_itr}.json')
                 else:
                     logging.debug(f"triggering movel to {nextpoint}")
@@ -471,7 +472,7 @@ class Transducer_homing:
             self.robot_gui.skip_line(1)
             t_pos = current_target[0]
             t_ang = current_target[1]
-            self.robot_gui.tprint(self.screen, "Next target: ((%4.1f, %4.1f, %4.1f), (%3.0f,%3.0f,%3.0f))" % 
+            self.robot_gui.tprint(self.screen, "Next target: ((%4.2f, %4.2f, %4.2f), (%3.1f,%3.1f,%3.1f))" % 
                                 (t_pos[0],t_pos[1],t_pos[2],t_ang[0],t_ang[1],t_ang[2]))
 
 

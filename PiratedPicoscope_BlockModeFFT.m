@@ -225,7 +225,7 @@ while 1
     drawnow;
 
     if mod(ind,100)==0
-        fprintf("Update frequency: %f Hz", mean(update_frequency))
+        fprintf("Update frequency: %f H\n", mean(update_frequency))
     end
     
     if (flag == 0)
