@@ -4,6 +4,7 @@ Unit convention: mm/kg/s/deg
 from argparse import ArgumentError
 import numpy as np
 import json
+import time
 
 class Pathfinder:
     '''A class for controlling where the arm goes. The tl;dr is you define a search space,
@@ -139,12 +140,13 @@ class FullScan(Pathfinder):
         self.resolution = (max(resolution[0],min_tolerance[0]), max(resolution[1],min_tolerance[1]))
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
         self.will_visit = 1
+        self.start_time = time.time()
         
         for d in self.active_rom:
             if {'X','Y','Z'}.issuperset(d):
-                self.will_visit *= (self.range_of_motion[d][1] - self.range_of_motion[d][2]) / self.resolution[0]
+                self.will_visit *= (self.range_of_motion[d][1] - self.range_of_motion[d][0]) / self.resolution[0]
             else:
-                self.will_visit *= (self.range_of_motion[d][1] - self.range_of_motion[d][2]) / self.resolution[1]
+                self.will_visit *= (self.range_of_motion[d][1] - self.range_of_motion[d][0]) / self.resolution[1]
 
     def internal_point_yielder(self):
         '''The full scan iterates through every point in the searchspace'''
@@ -164,7 +166,13 @@ class FullScan(Pathfinder):
         yield 1   
         
     def progress_report(self):
-        return f"Visited {self.visited_so_far}/{self.will_visit} points."
+        now = time.time()
+        elapsed = now - self.start_time
+        projected = elapsed * (self.will_visit / self.visited_so_far)
+
+        finish_time = time.strftime("%H:%M:%S", time.localtime(self.start_time + projected))
+
+        return f"Visited {self.visited_so_far}/{self.will_visit} points.\nEstimated completion time: {finish_time}"
 
     def close_enough(self, point, override, tolerance=(0.5,2)):
         tolerance = (min(self.resolution[0] / 2, tolerance[0]), min(self.resolution[1] / 2, tolerance[1]))
