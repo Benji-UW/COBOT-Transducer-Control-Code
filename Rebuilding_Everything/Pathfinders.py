@@ -69,6 +69,9 @@ class Pathfinder:
     def next(self):
         return next(self.yielder)
 
+    def progress_report(self):
+        return "Progress report not implemented!"
+
     def internal_point_yielder(self):
         '''This method gets called when the pathfinder is initializes, and adds the center of 
         the search space as well as all the corners to the "to-travel" list. When all the points
@@ -135,12 +138,19 @@ class FullScan(Pathfinder):
         min_tolerance = (0.2, 1)
         self.resolution = (max(resolution[0],min_tolerance[0]), max(resolution[1],min_tolerance[1]))
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
+        self.will_visit = 1
+        for d in self.active_rom.keys():
+            if {'X','Y','Z'}.issuperset(d):
+                self.will_visit *= (self.range_of_motion[d][1] - self.range_of_motion[d][2]) / self.resolution[0]
+            else:
+                self.will_visit *= (self.range_of_motion[d][1] - self.range_of_motion[d][2]) / self.resolution[1]
 
     def internal_point_yielder(self):
         '''The full scan iterates through every point in the searchspace'''
         r_o_m = self.range_of_motion
         res = self.resolution
         forwards = True
+        self.visited_so_far = 0
         for x in np.linspace(r_o_m['X'][0], r_o_m['X'][1], int((r_o_m['X'][1]-r_o_m['X'][0])/res[0]) + 1):
             for y in np.linspace(r_o_m['Y'][0], r_o_m['Y'][1], int((r_o_m['Y'][1]-r_o_m['Y'][0])/res[0]) + 1):
                 for z in np.linspace(r_o_m['Z'][0], r_o_m['Z'][1], abs(int((r_o_m['Z'][1]-r_o_m['Z'][0])/res[0])) + 1):
@@ -148,9 +158,13 @@ class FullScan(Pathfinder):
                         forwards = not forwards
                         for Ry in np.linspace(r_o_m['Ry'][forwards], r_o_m['Ry'][not forwards], int((r_o_m['Ry'][1]-r_o_m['Ry'][0])/res[1]) + 1):
                             for Rz in np.linspace(r_o_m['Rz'][0], r_o_m['Rz'][1], int((r_o_m['Rz'][1]-r_o_m['Rz'][0])/res[1]) + 1):
+                                self.visited_so_far += 1
                                 yield ((x,y,z),(Rx,Ry,Rz))
         yield 1   
         
+    def progress_report(self):
+        return f"Visited {self.visited_so_far}/{self.will_visit} points."
+
     def close_enough(self, point, override, tolerance=(0.5,2)):
         tolerance = (min(self.resolution[0] / 2, tolerance[0]), min(self.resolution[1] / 2, tolerance[1]))
         popped = super().close_enough(point, tolerance)

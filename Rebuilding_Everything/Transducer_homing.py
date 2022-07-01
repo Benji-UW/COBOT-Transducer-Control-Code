@@ -471,7 +471,7 @@ class Transducer_homing:
             self.robot_gui.skip_line(1)
             t_pos = current_target[0]
             t_ang = current_target[1]
-            self.robot_gui.tprint(self.screen, "Next target: ((%4.1f, %4.1f, %4.1f), (%3.0f,%3.0f,%3.0f))" % 
+            self.robot_gui.tprint(self.screen, "Next target: ((%4.2f, %4.2f, %4.2f), (%3.1f,%3.1f,%3.1f))" % 
                                 (t_pos[0],t_pos[1],t_pos[2],t_ang[0],t_ang[1],t_ang[2]))
 
 
@@ -498,12 +498,16 @@ class Transducer_homing:
             self.robot_gui.skip_line(2)
             self.robot_gui.tprint(self.screen, 'Current target:')
             self.robot_gui.indent()
-            self.robot_gui.tprint(self.screen, 'x= %4.1f mm, Rx= %3.0f deg' %
+            self.robot_gui.tprint(self.screen, 'x= %4.2f mm, Rx= %3.1f deg' %
                                 (t_pos[0], t_angle[0]))
-            self.robot_gui.tprint(self.screen, 'y= %4.1f mm, Ry= %3.0f deg' %
+            self.robot_gui.tprint(self.screen, 'y= %4.2f mm, Ry= %3.1f deg' %
                                 (t_pos[1], t_angle[1]))
-            self.robot_gui.tprint(self.screen, 'z= %4.1f mm, Rz= %3.0f deg' %
+            self.robot_gui.tprint(self.screen, 'z= %4.2f mm, Rz= %3.1f deg' %
                                 (t_pos[2], t_angle[2]))
+            self.robot_gui.unindent()
+            self.robot_gui.tprint(self.screen, 'Progress of the current running pathfinder:')
+            self.robot_gui.indent()
+            self.robot_gui.tprint(self.screen, self.pathfinder.progress_report())
             self.robot_gui.unindent()
 
         
