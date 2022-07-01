@@ -240,7 +240,7 @@ class Transducer_homing:
             speed_vect = np.zeros((3,1))
             rot_vect = np.zeros((3,1))
             if router:
-                print("waiting...")
+                # print("waiting...")
                 v = self.robot.wait_for_at_tar()
                 print(f"Made it in {v} loops")
                 nextpoint = self.pathfinder.next()
