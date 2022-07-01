@@ -9,10 +9,10 @@ import numpy as np
 import logging
 
 date_time_str = time.strftime(r"%Y-%m-%d_%H-%M-%S")
-file_itr = 6
-while os.path.exists("test_%s.json" % file_itr):
-    file_itr += 1
+file_itr = 0
 path = os.path.dirname(__file__)
+while os.path.exists(path + "\\Scans\\test_%s.json" % file_itr):
+    file_itr += 1
 logging.basicConfig(filename = path + "\logging\debug_log " + date_time_str + ".log", encoding='utf-8',\
      level=logging.DEBUG, format='%(levelname)s:%(message)s')
 logging.debug("Debug log for the robot starting on " + date_time_str)
@@ -211,8 +211,7 @@ class Transducer_homing:
             if keys[pygame.key.key_code("x")] == 1 and router:
                 router = False
                 path = os.path.dirname(__file__)
-                path = path + f'\\test_{file_itr}.json'
-                self.pathfinder.save_points(path)
+                self.pathfinder.save_points(path + f"\\Scans\\test_{file_itr}.json")
                 logging.debug(f"triggering movel to {nextpoint}")
                 self.robot.movel_to_target(nextpoint)
             # if keys[pygame.key.key_code("m")] == 1 and router:
@@ -247,8 +246,7 @@ class Transducer_homing:
                 nextpoint = self.pathfinder.next()
                 if nextpoint == 1:
                     router = False
-                    path = path + f'\\test_{file_itr}.json'
-                    self.pathfinder.save_points(path)
+                    self.pathfinder.save_points(path + f'\\Scans\\test_{file_itr}.json')
                 else:
                     logging.debug(f"triggering movel to {nextpoint}")
                     self.robot.movel_to_target(nextpoint)
@@ -297,8 +295,7 @@ class Transducer_homing:
             print('Disconnected from server.')
         if router:
             path = os.path.dirname(__file__)
-            path = path + '\\test_' + file_itr + '.json'
-            self.pathfinder.save_points(path)
+            self.pathfinder.save_points(path + '\\Scans\\test_' + file_itr + '.json')
 
     def get_delta_pos(self):
         '''Converts the get_delta_pos method built into the UR3e method into

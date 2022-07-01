@@ -7,9 +7,9 @@ from threading import Thread
 import os
 import logging
 
-date_time_str = time.strftime(r"%m-$d_%H%M")
+date_time_str = time.strftime(r"%m-%d_%H%M")
 path = os.path.dirname(__file__)
-FORMAT = '%(asctime)s %(clientip)-15s %(user)-8s %(message)s'
+FORMAT = '%(asctime)s %(message)s'
 logging.basicConfig(filename = path + "\logging\server_logs\\" + date_time_str + ".log", encoding='utf-8',
         level=logging.DEBUG, format=FORMAT)
 
@@ -55,7 +55,11 @@ def client_thread(conn):
     while is_alive:
         # print(f'RSM: {robot_state_message}')
         client_input = conn.recv(4096)
-        logging.INFO(client_input)
+        try:
+            logging.info(client_input)
+        except e:
+            logging.error("Client input was not loggable :/")
+
         # print(str(client_input))
         # print(shitty_sql)
         t = time.time()
@@ -63,7 +67,7 @@ def client_thread(conn):
             # print('received motion:')
             # print(motion)
             conn.send(motion)
-            logging.INFO("Reply: " + motion)
+            logging.info(b"Reply: " + motion)
         # elif client_input[:3] == b"SET":
         # #     pass
         elif b'SET' in client_input:
@@ -84,7 +88,7 @@ def client_thread(conn):
             except KeyError as e:
                 dat = b'Key not found' 
             conn.send(dat)
-            logging.INFO("Reply: " + dat)
+            logging.info(b"Reply: " + dat)
         elif client_input[:4] == b"TODO":
             '''Makes a shity todo-list for passing tasks back and forth'''
             cli_input = client_input.split()
@@ -119,6 +123,13 @@ def client_thread(conn):
             # debugging type step:
             cl = str(client_input)
             # print('client ' + str(conn) + ' just sent ' + cl)
+        if b'I am alive' in client_input:
+            if len(todo_list) != 0:
+                a = todo_list.pop()
+                print(b"sending todo item " + a)
+                # time.sleep(0.01)
+                conn.send(a)
+                time.sleep(0.01)
         if i_rr >= 250:
             i_rr = 0
             print('Refresh rate of process %d: %3.1f' % (number, (1. / np.mean(refresh_rate))))

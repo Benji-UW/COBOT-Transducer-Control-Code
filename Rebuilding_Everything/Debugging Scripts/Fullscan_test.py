@@ -30,10 +30,10 @@ path = os.path.dirname(__file__)
 #path = path + '\\' + time.ctime(time.time())
 
 file_itr = 0
-while os.path.exists(path + "\\test_%s.json" % file_itr):
+while os.path.exists(path + "\\Scans\\test_%s.json" % file_itr):
     file_itr += 1
 
-path = path + '\\test_%s.json' % file_itr
+path = path + '\\Scans\\test_%s.json' % file_itr
 
 a.save_points(path)
 

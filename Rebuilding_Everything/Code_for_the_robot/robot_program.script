@@ -63,7 +63,7 @@ while True:
         else:
             socket_send_string("RSM: recieved unrecognized state request")
         end
-
+        string_from_server = ""
     else:
         message_state = "message was blank!"
     end
