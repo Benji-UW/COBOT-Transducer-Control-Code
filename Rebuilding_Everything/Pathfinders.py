@@ -139,7 +139,8 @@ class FullScan(Pathfinder):
         self.resolution = (max(resolution[0],min_tolerance[0]), max(resolution[1],min_tolerance[1]))
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
         self.will_visit = 1
-        for d in self.active_rom.keys():
+        
+        for d in self.active_rom:
             if {'X','Y','Z'}.issuperset(d):
                 self.will_visit *= (self.range_of_motion[d][1] - self.range_of_motion[d][2]) / self.resolution[0]
             else:

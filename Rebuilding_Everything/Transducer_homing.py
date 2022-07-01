@@ -205,7 +205,7 @@ class Transducer_homing:
                 self.robot.set_initial_pos()
             if keys[pygame.key.key_code("k")] == 1 and not router:
                 router = True
-                self.pathfinder = FullScan((1,3),4,18,18)
+                self.pathfinder = FullScan((1,2),12,15,15)
                 nextpoint = self.pathfinder.next()
             # Press x to stop the running pathfinder
             if keys[pygame.key.key_code("x")] == 1 and router:
