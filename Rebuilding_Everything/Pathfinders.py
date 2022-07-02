@@ -71,7 +71,7 @@ class Pathfinder:
         return next(self.yielder)
 
     def progress_report(self):
-        return "Progress report not implemented!"
+        return ["Progress report not implemented!"]
 
     def internal_point_yielder(self):
         '''This method gets called when the pathfinder is initializes, and adds the center of 
@@ -129,7 +129,7 @@ class Pathfinder:
             json.dump(json_data, outfile, indent=3)
 
 class FullScan(Pathfinder):
-    def __init__(self, resolution, z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
+    def __init__(self, resolution, z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0,path=None):
         '''Acts almost identical to the regular pathfinder module, except it contains an additional
         field for the resolution of the scan. The resolution should be passed in as a tuple in the
         form (mm, deg) where the mm represents the linear mm tolerance for the full scan and the
@@ -141,6 +141,7 @@ class FullScan(Pathfinder):
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
         self.will_visit = 1
         self.start_time = time.time()
+        self.path = path
         
         for d in self.active_rom:
             if {'X','Y','Z'}.issuperset(d):
@@ -163,7 +164,14 @@ class FullScan(Pathfinder):
                             for Rz in np.linspace(r_o_m['Rz'][0], r_o_m['Rz'][1], int((r_o_m['Rz'][1]-r_o_m['Rz'][0])/res[1]) + 1):
                                 self.visited_so_far += 1
                                 yield ((x,y,z),(Rx,Ry,Rz))
+                    if self.path is not None:
+                        self.periodic_dump()
         yield 1   
+
+    def periodic_dump(self):
+        with open(self.path, 'a+') as outfile:
+            json.dump(self.points, outfile, indent=3)
+        self.points = []
         
     def progress_report(self):
         now = time.time()
@@ -172,7 +180,7 @@ class FullScan(Pathfinder):
 
         finish_time = time.strftime("%H:%M:%S", time.localtime(self.start_time + projected))
 
-        return f"Visited {self.visited_so_far}/{self.will_visit} points.\nEstimated completion time: {finish_time}"
+        return [f"Visited {self.visited_so_far}/{self.will_visit} points. ({self.visited_so_far/self.will_visit:1.3f}%)", f"Estimated completion time: {finish_time}"]
 
     def close_enough(self, point, override, tolerance=(0.5,2)):
         tolerance = (min(self.resolution[0] / 2, tolerance[0]), min(self.resolution[1] / 2, tolerance[1]))
@@ -185,6 +193,10 @@ class FullScan(Pathfinder):
         return popped
 
     def save_points(self, path):
+        if self.path is not None:
+            with open(self.path, 'r+') as infile:
+                self.points = json.load(infile, indent=3)
+
         json_data = { \
             'range of motion' : self.range_of_motion, \
             'resolution' : self.resolution, \

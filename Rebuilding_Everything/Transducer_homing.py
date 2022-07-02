@@ -157,6 +157,7 @@ class Transducer_homing:
         self.i=-1
         print('About to start the main loop')
         go_next = True
+        path = os.path.dirname(__file__)
 
         while run_bool:
             t0 = time.time()
@@ -205,7 +206,8 @@ class Transducer_homing:
                 self.robot.set_initial_pos()
             if keys[pygame.key.key_code("k")] == 1 and not router:
                 router = True
-                self.pathfinder = FullScan((1,2),12,15,15)
+                self.pathfinder.save_points(path + f"\\Scans\\test_{file_itr}_dump.json")
+                self.pathfinder = FullScan((0.8,1),20,16,16)
                 nextpoint = self.pathfinder.next()
             # Press x to stop the running pathfinder
             if keys[pygame.key.key_code("x")] == 1 and router:
@@ -508,7 +510,8 @@ class Transducer_homing:
             self.robot_gui.unindent()
             self.robot_gui.tprint(self.screen, 'Progress of the current running pathfinder:')
             self.robot_gui.indent()
-            self.robot_gui.tprint(self.screen, self.pathfinder.progress_report())
+            for i in self.pathfinder.progress_report():
+                self.robot_gui.tprint(self.screen, i)
             self.robot_gui.unindent()
 
         
