@@ -1,11 +1,18 @@
+import os
 import sys
-sys.path.insert(0,'C:/Users/ander/Documents/COBOT-Transducer-Control-Code/Rebuilding_Everything')
+path = os.path.abspath('')
+# print("======================")
+# print(path)
+sys.path.append(path + '\\Rebuilding_Everything')
+from Pathfinders import *
 
-from DemoPathfinder import *
-a = Pathfinder(8,45,45)
+path = os.path.abspath('')
+print(path)
 
-pointer = a.pointYielder()
-print(next(pointer))
+file_itr = 4
 
-# well this is a piece of crap :/
+pathfinder = FullScan((0.8,1),20,16,16,path=path + f"\\Rebuilding_Everything\\Scans\\test_{file_itr}.json")
+pathfinder.max_point = ((0,0,0),(0,0,0),500)
 
+
+pathfinder.save_points(path + f"\\Rebuilding_Everything\\Scans\\test_5.json")

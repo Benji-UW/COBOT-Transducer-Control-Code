@@ -195,7 +195,7 @@ class FullScan(Pathfinder):
     def save_points(self, path):
         if self.path is not None:
             with open(self.path, 'r+') as infile:
-                self.points = json.load(infile, indent=3)
+                self.points = json.load(infile)
 
         json_data = { \
             'range of motion' : self.range_of_motion, \
