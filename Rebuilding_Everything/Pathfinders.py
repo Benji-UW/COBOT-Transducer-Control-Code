@@ -169,9 +169,17 @@ class FullScan(Pathfinder):
         yield 1   
 
     def periodic_dump(self):
-        with open(self.path, 'a+') as outfile:
+        now = time.time()
+        # try:
+        #     with open(self.path, 'r') as infile:
+        #         old_points = json.load(infile)
+        #         self.points.extend(old_points)
+        # except:
+        #     pass
+        with open(self.path, 'w') as outfile:
             json.dump(self.points, outfile, indent=3)
-        self.points = []
+        # self.points = []
+        print(time.time() - now)
         
     def progress_report(self):
         now = time.time()
@@ -193,18 +201,18 @@ class FullScan(Pathfinder):
         return popped
 
     def save_points(self, path):
-        if self.path is not None:
-            with open(self.path, 'r+') as infile:
-                self.points = json.load(infile)
+        # if self.path is not None:
+        #     with open(self.path, 'r+') as infile:
+        #         self.points = json.load(infile)
 
         json_data = { \
             'range of motion' : self.range_of_motion, \
             'resolution' : self.resolution, \
             'max_point' : self.max_point,
             'points' : self.points\
-        } 
+        }
 
-        with open(path, 'a+') as outfile:
+        with open(path, 'w+') as outfile:
             json.dump(json_data, outfile, indent=3)
 
 class DivisionSearch(Pathfinder):

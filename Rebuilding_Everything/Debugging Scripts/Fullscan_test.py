@@ -11,21 +11,6 @@ sys.path.append(path + '\\Rebuilding_Everything')
 # print(sys.path)
 from Pathfinders import *
 
-a = FullScan((0.5,2),10,40,40)
-
-
-p = a.next()
-print(p)
-
-while p != 1:
-    ((x,y,z),(Rx,Ry,Rz)) = p
-
-    # mag = round(10 - (z + 1)**2 - ((Rx - 35)/10)**2 - ((Ry + 25)/10)**2)# + (random.random() * 5))
-    mag = max((500 - (5.2*(z + 7))**2 - ((Rx - 35)/0.8)**2 - ((Ry + 25)/0.8)**2), random.random() * 15)
-
-    a.newMag((p,mag))
-    p = a.next()
-
 path = os.path.dirname(__file__)
 #path = path + '\\' + time.ctime(time.time())
 
@@ -35,5 +20,25 @@ while os.path.exists(path + "\\Scans\\test_%s.json" % file_itr):
 
 path = path + '\\Scans\\test_%s.json' % file_itr
 
+
+a = FullScan((0.5,2),10,20,20,path=path)
+
+
+p = a.next()
+print(p)
+
+start = time.time()
+
+while p != 1:
+    ((x,y,z),(Rx,Ry,Rz)) = p
+
+    # mag = round(10 - (z + 1)**2 - ((Rx - 35)/10)**2 - ((Ry + 25)/10)**2)# + (random.random() * 5))
+    mag = max((500 - (5.2*(z + 7))**2 - ((Rx - 35)/0.8)**2 - ((Ry + 25)/0.8)**2), random.random() * 30)
+
+    a.newMag((p,mag))
+    p = a.next()
+
+
 a.save_points(path)
 
+print(time.time() - start)
