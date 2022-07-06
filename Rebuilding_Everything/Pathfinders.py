@@ -22,7 +22,7 @@ class Pathfinder:
         default to zero. Z also defines the range to give more room to move backwards
         than forwards, in order to reduce the chances of the robot moving into the
         sample.'''
-        z_r = [-z_range * 1.25, z_range * 0.75]
+        z_r = [-z_range, z_range]
         Rx_r = [-Rx_range, Rx_range]
         Ry_r = [-Ry_range, Ry_range]
         x_r = [-x_range, x_range]
@@ -185,10 +185,14 @@ class FullScan(Pathfinder):
         now = time.time()
         elapsed = now - self.start_time
         projected = elapsed * (self.will_visit / self.visited_so_far)
+        remaining = elapsed * (1 - (self.will_visit/self.visited_so_far))
 
         finish_time = time.strftime("%H:%M:%S", time.localtime(self.start_time + projected))
+        remaining = f"{int(remaining/3600)}:{int((remaining%3600)/60)}:{remaining%60:2.2f}"
 
-        return [f"Visited {self.visited_so_far}/{self.will_visit} points. ({self.visited_so_far/self.will_visit:1.3f}%)", f"Estimated completion time: {finish_time}"]
+        return [f"Visited {self.visited_so_far}/{self.will_visit} points. ({self.visited_so_far/self.will_visit:1.3f}%)",\
+             f"Estimated completion time: {finish_time}", \
+                f"Estimated time remaining: {remaining}"]
 
     def close_enough(self, point, override, tolerance=(0.5,2)):
         tolerance = (min(self.resolution[0] / 2, tolerance[0]), min(self.resolution[1] / 2, tolerance[1]))
