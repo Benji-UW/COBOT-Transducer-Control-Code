@@ -310,6 +310,8 @@ class Discrete_degree(Pathfinder):
             self.points = []
             self.to_travel = []
 
+            print(self.active_rom)
+
             self.yielder = self.internal_point_yielder()
 
             '''max_point stores the point and magnitude of the highest magnitude yet scanned,
@@ -335,8 +337,9 @@ class Discrete_degree(Pathfinder):
         indeces = {'X': (0,0), 'Y': (0,1), 'Z': (0,2), 'Rx': (1,0), 'Ry': (1,1), 'Rz': (1,2)}
         current_best = dict()
 
-        if self.max_point != (-1,-1,-1):
+        if self.max_point != (-1,-10000,-1000):
             for i in indeces.keys():
+                # print(self.max_point)
                 current_best[i] = self.max_point[0][indeces[i][0]][indeces[i][1]]
         else:
             for i in indeces.keys():
@@ -352,11 +355,15 @@ class Discrete_degree(Pathfinder):
                     res = max(starting_res[1] * (1 / (i**2)), max_res[1])
 
                 steps = int((self.range_of_motion[slider][1] - self.range_of_motion[slider][0]) / res)
+                # print(slider)
+
                 g = current_best.copy()
                 cent = g[slider]
 
-                # for j in np.linspace(self.range_of_motion[slider][0] * (2/(2+i)),self.range_of_motion[slider][1] * (2/ (2+i)), steps):
-                for j in np.linspace(cent + (np.mean(self.range_of_motion[slider]) / i),cent - (np.mean(self.range_of_motion[slider]) / i), steps):
+                # print(np.mean(self.range_of_motion[slider]) / i)
+
+                for j in np.linspace(self.range_of_motion[slider][0] * (2/(2+i)),self.range_of_motion[slider][1] * (2/ (2+i)), steps):
+                # for j in np.linspace(cent + (np.mean(abs(self.range_of_motion[slider])) / i),cent - (np.mean(abs(self.range_of_motion[slider])) / i), steps):
                     g[slider] = j
                     yield ((g['X'],g['Y'],g['Z']),(g['Rx'],g['Ry'],g['Rz']))
 
@@ -412,18 +419,18 @@ class DivisionDiscreteDegree(Pathfinder):
                                 if self.cutoff_mag == -1 or self.max_point[1] < self.cutoff_mag:
                                     yield ((x,y,z), (Rx,Ry,Rz))
         
-        print(self.max_point)
+        # print(self.max_point)
         ((temp['X'], temp['Y'], temp['Z']), (temp['Rx'], temp['Ry'], temp['Rz'])) = self.max_point[0]
 
-        print("======================")
-        print(f"Bounds: {bounds}")
-        print(f"Temp: {temp}")
-        print(f"Inc_size: {inc_size}")
-        print("======================")
+        # print("======================")
+        # print(f"Bounds: {bounds}")
+        # print(f"Temp: {temp}")
+        # print(f"Inc_size: {inc_size}")
+        # print("======================")
 
         for DoF in bounds.keys():
-            print(DoF)
-            print(bounds[DoF])
+            # print(DoF)
+            # print(bounds[DoF])
             if bounds[DoF][0] != bounds[DoF][1]:
                 if temp[DoF] == bounds[DoF][0]:
                     bounds[DoF] = [temp[DoF], temp[DoF] + (2 * inc_size[DoF])]
