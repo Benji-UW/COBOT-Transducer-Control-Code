@@ -16,7 +16,7 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "Rebuilding_Everything\\Transducer_homing.py",
+            "program": "Transducer_homing.py",
             "console": "integratedTerminal"
         }
     ]
