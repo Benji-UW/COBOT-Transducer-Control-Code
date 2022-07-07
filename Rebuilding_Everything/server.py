@@ -7,10 +7,7 @@ from threading import Thread
 import os
 import logging
 
-
-
 logger = logging.getLogger(__name__)
-
 
 HOST = ''
 PORT = 508
