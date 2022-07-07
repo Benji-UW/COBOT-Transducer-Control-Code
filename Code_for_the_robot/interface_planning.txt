@@ -1,0 +1,20 @@
+What sort of interface do I want between my code and the robot?
+
+
+As of now, return messages have to start with the phrase "RSM:" in order for the server to handle it properly. That phrase doesn't get to the robot code, it gets cut out of the message my the socket server handler.
+
+I am concerned that this means we need to commit to string IO from the robot, as I don't currently have a plan for handling non-string input. There's also a huge amount of string concatenation that needs to happen, since URScript doesn't have a pythonic-method of string additon :/
+
+I need the following methods at my disposal in order for my current control scheme to work, and I need to keep in mind that Interpreter mode can't create globals (although maybe through sockets I can?)
+
+Method implementations:
+ - Set origin
+   - Send a string to the robot that tells it we need to set the origin of the robot
+   - The robot can transmit the coordinates of that origin back to the controller, but that isn't necessary so long as it can be stored in a global.
+ - Transform in (X,Y,Z,Rx,Ry,Rz) using the local coordinate system defined at the origin
+   - This will require the parsing of numbers embedded in a string from the robot
+   - I anticipate this will be a challenge :/
+   - Perhaps the GET/SET commands can offer a solution? I don't know how URScript encodes the integers it sets however, maybe I need to research that.
+
+
+Achievement get: I can send/retrieve integers from the robot.
