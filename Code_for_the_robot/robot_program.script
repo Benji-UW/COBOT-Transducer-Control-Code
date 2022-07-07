@@ -71,6 +71,6 @@ while True:
     socket_send_string("I am alive")
 end
 
-# TODO: 
+# DONE: 
 # - Test that I can recieve and process data on the robot from the computer
 # - Test that I can send data from the robot and process it on the computer

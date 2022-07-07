@@ -15,10 +15,6 @@ from UR3e import *
 from RobotGUI import *
 from Pathfinders import *
 
-# TODO delete these if commenting them out makes no difference.
-# # Magic constants for the pygame interface
-# BLACK = pygame.Color('black')
-# WHITE = pygame.Color('white')
 
 date_time_str = time.strftime(r"%Y-%m-%d_%H-%M-%S")
 file_itr = 0
@@ -79,34 +75,10 @@ class Transducer_homing:
                             (0.8,2.0,1.0,2.0)]
 
         self.speed_preset = 3
-        # TODO Delete excess self.variables if commenting them out has no impact
-        # self.joy_min = 0.01
-
+        
         self.refresh_rate = 112.
         self.lag = 0.2 #10. / self.refresh_rate #0.1
-        # self.true_refresh_rate = None
-        # self.button_hold = []
         self.max_disp = 0.5
-
-        # self.motion_comp = 0
-        # self.z_adjust = 0
-        # self.z_jerk_coeff = 3
-        # self.amp_hist = []
-
-        # self.Kp = 10.
-        # self.Ki = 0.0
-        # self.Kd = 0.1  # 0.01
-        # self.servo_lag = self.lag / 2.
-
-        # self.servo_error = 0.0
-
-        # self.t_pred = 0.126
-        # self.mp_t_upd = 0.1
-        # self.mp_t_lu = 0.
-
-        # self.servo_t = 0.02
-        # self.servo_lh_t = 0.035
-        # self.servo_gain = 1000
 
         self.range_of_motion = {'X': 0,'Y': 0,'Z':8,'Rx':30,'Ry':30,'Rz':0}
 
@@ -148,11 +120,6 @@ class Transducer_homing:
         logger.info("robot successfully connected to all ports!")
         
         self.robot.initialize()
-        # TODO: delete the excess lists if this works
-        # v = self.v_list[self.speed_preset]
-        # vR = self.vR_list[self.speed_preset]
-        # a = self.a_list[self.speed_preset]
-        # aR = self.aR_list[self.speed_preset]
 
         v,vR,a,aR = self.speed_presets[self.speed_preset]
         
@@ -333,61 +300,6 @@ class Transducer_homing:
         #print(d_pos, d_angle)
         return (d_pos,d_angle)
 
-# TODO: Fully delete interpolate motion method if it causes no problems by deleting.
-    # def interpolate_motion(self,next_target):
-    #     '''The bug is in here'''
-    #     # This data is in mm and deg thanks to internal positioning methods
-    #     c_pos,c_angle = self.get_delta_pos()
-
-    #     logger.debug("\n\n-------------------------------------------------")
-    #     logger.debug("Entering a new round of motion interpolation")
-    #     logger.debug("-------------------------------------------------")
-
-    #     logger.debug("1. Current change in position from the origin: ")
-    #     logger.debug(f"\n{c_pos}, {c_angle}")
-        
-    #     # This data is also in mm and deg due to convention
-    #     t_pos,t_angle = (next_target[0],next_target[1])
-    #     t_pos,t_angle = np.array([t_pos]).T,np.array([t_angle]).T
-
-    #     logger.debug("2. Current target position relative to the origin: \n (Should be the same shape)")
-    #     logger.debug(f"\n{t_pos}, {t_angle}")
-
-    #     #print('target pos:')
-    #     #print(t_pos, t_angle)
-    #     delta_pos = t_pos - c_pos
-        
-    #     logger.debug("3. Change in position required to get from the current to the target position")
-    #     logger.debug(f"{delta_pos}")
-
-    #     if (np.max(np.abs(delta_pos)) != 0):
-    #         speed_vect = delta_pos / max(np.max(np.abs(delta_pos)),5)
-    #         logger.debug("4. Calculated speed-vector to reach that delta_pos in a decent amount of time:")
-    #         logger.debug(f"{speed_vect}")
-    #     else:
-    #         speed_vect = delta_pos
-
-    #     delta_ang = t_angle - c_angle
-
-    #     logger.debug("5. Change in angle required to get from the current to the target position")
-    #     logger.debug(delta_ang.T)
-
-    #     rot_vect = np.zeros((3,1))
-        
-    #     if (np.max(np.abs(delta_ang)) != 0):
-    #         delta_ang = delta_ang / np.max(np.abs(delta_ang))
-    #         rot_vect[0] = 1 * delta_ang[0] # 1 - Rx
-    #         rot_vect[1] = -1 * delta_ang[1] 
-    #         # rot_vect[2] = -0 * delta_ang[1]# 0 - Rz
-    #         rot_vect[2] = 0
-    #         logger.debug("6. Calculated angular-speed to reach that delta_pos in a decent amount of time:")
-    #         logger.debug(f"{rot_vect}")
-        
-    #     # logger.debug("7. Translation vector about to be sent to the robot for execution: (trans, rot)")
-    #     # logger.debug(f"{speed_vect}, {rot_vect}")
-
-    #     return speed_vect,rot_vect
-
     def MATLAB_listener(self):
         '''This method creates a generator for listening to the server for new data from
         MATLAB. At each yield statement it returns a tuple containing a boolean and a float,
@@ -414,20 +326,6 @@ class Transducer_homing:
             mag = round(time.time()) % 59
             yield (True, mag)
 
-#TODO: Delete following method if code can be run with it commented out
-    # def MATLAB_next(self):
-    #     '''Hopefully can be deprecated once the generator is used successfully.'''
-    #     self.matlab_socket.send(b'motion')
-    #     msg = self.matlab_socket.recv(1024)
-    #     print(msg)
-    #     mag = float(msg[4:13]) * 1.0E3
-    #     loop = int(msg[1:3])
-    #     if loop == self.latest_loop:
-    #         return (False, mag)
-    #     else:
-    #         self.latest_loop = loop
-    #         return (True, mag)
-
     def main_menu_GUI(self,router_bool,current_target):
         self.screen.fill(WHITE)
         self.robot_gui.reset()
@@ -450,15 +348,7 @@ class Transducer_homing:
     def write_pos_info(self, router, current_target):
         pos = self.robot.pos
         angle = self.robot.angle
-        #TODO: Delete commented things if I don't wind up using them :)
-        # tcp_offset = self.robot.tcp_offset
-        # tcp_angle = self.robot.tcp_rot
         delta_pos,delta_angle = self.get_delta_pos()
-
-        # v = self.v_list[self.speed_preset]
-        # vR = self.vR_list[self.speed_preset]
-        # a = self.a_list[self.speed_preset]
-        # aR = self.aR_list[self.speed_preset]
 
         # v,vR,a,aR = self.speed_presets[self.speed_preset]
 

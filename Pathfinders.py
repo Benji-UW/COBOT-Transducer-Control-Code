@@ -117,7 +117,6 @@ class Pathfinder:
                 return False
         return True
 
-#TODO: there are some points coming through to close-enough that are wrapped up in too many tuples
     def save_points(self, path):
         '''Called at the end of the test or when the pathfinder has finished, outputs the points
         collected to a json file at a given path, meant to be superceded in each custom class
