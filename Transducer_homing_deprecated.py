@@ -1,6 +1,9 @@
 '''
 Unit convention: mm/kg/s/deg
 '''
+'''This is a deprecated module that still contains methods for controlling the arm
+with a joystick, this is not compatible with the robot's current mode of functionality,
+but this module has been preserved in case I return to using "speedl" based methods.'''
 import socket
 import time
 import pygame
@@ -10,7 +13,7 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 from logging import Formatter
 from pygame.locals import *
-# from Controller import Controller
+from Controller import Controller
 from UR3e import *
 from RobotGUI import *
 from Pathfinders import *
@@ -56,7 +59,7 @@ class Transducer_homing:
         self.matlab_socket = None
         self.screen = None
         self.screen_resolution = (480, 940)
-        # self.controller = None
+        self.controller = None
         self.robot_gui = None
         self.latest_loop = -1
 
@@ -91,10 +94,6 @@ class Transducer_homing:
         except socket.gaierror as e:
             logger.debug(f'Connection error to robot: {e}')
             return (False,e)
-        except ConnectionRefusedError as e:
-            logger.error("Connection was fuckin refused :/ fuck me")
-            return (False,e)
-        
         logger.debug('Connected to MATLAB')
         return (True,'')
 
@@ -114,7 +113,7 @@ class Transducer_homing:
             joystick.init()
         except pygame.error:
             joystick = -1
-        # self.controller = Controller(joystick)
+        self.controller = Controller(joystick)
 
         self.robot_gui = RobotGUI()
 
@@ -180,19 +179,23 @@ class Transducer_homing:
 
             pygame.event.pump()
             keys = pygame.key.get_pressed()
-            # pressed_buttons=self.controller.get_buttons(keys)
+            pressed_buttons=self.controller.get_buttons(keys)
 
             # Press esc to escape the program and close out everything.
-            if keys[pygame.key.key_code("q")] == 1:
+            if pressed_buttons["exit"] or keys[pygame.key.key_code("q")] == 1:
                 run_bool = False
-            if keys[pygame.key.key_code("]")] == 1:
+            if pressed_buttons["speed_preset_up"] or keys[pygame.key.key_code("]")] == 1:
                 if self.speed_preset < len(self.v_list) - 1:
                     self.speed_preset += 1
                     changed_preset = True
-            elif keys[pygame.key.key_code("[")] == 1:
+            elif pressed_buttons["speed_preset_down"] or keys[pygame.key.key_code("[")] == 1:
                 if self.speed_preset > 0:
                     self.speed_preset -= 1
                     changed_preset = True
+            
+            # Press d to trigger the demo pathfinder
+            if pressed_buttons["switch_space"]:
+                translate = not translate
             # Starts a demo pathfinder if the 'd' key is pressed
             if keys[pygame.key.key_code("d")] == 1 and not router:
                 router = True
@@ -214,8 +217,12 @@ class Transducer_homing:
             if keys[pygame.key.key_code("h")] == 1 and not router:
                 self.robot.movel(self.starting_pos[0], self.starting_pos[1])
 
-
+            # changes the speed preset of the robot if that occured.
             if changed_preset:
+                # v = self.v_list[self.speed_preset]
+                # vR = self.vR_list[self.speed_preset]
+                # a = self.a_list[self.speed_preset]
+                # aR = self.aR_list[self.speed_preset]
                 v,vR,a,aR = self.speed_presets[self.speed_preset]
 
                 self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
@@ -234,6 +241,19 @@ class Transducer_homing:
                     self.robot.movel_to_target(nextpoint)
                     # literally do not pass go, do not collect $200 until
                     # the target has been reached.
+
+            else:
+                speed_vect = np.zeros((3,1))
+                rot_vect = np.zeros((3,1))
+                joy_vect = self.controller.get_hat(keys)
+                if translate:
+                    speed_vect = joy_vect
+                else:
+                    rot_vect[0] = joy_vect[1]
+                    rot_vect[1] = joy_vect[0]
+                    rot_vect[2] = joy_vect[2]
+                self.robot.speedl(speed_vect,rot_vect,self.lag)
+
 
             logger.debug("----------------------------------------------")
             logger.debug("Position info about the robot:")

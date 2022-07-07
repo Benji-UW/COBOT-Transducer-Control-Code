@@ -93,12 +93,13 @@ class UR3e:
         :return:
         """
         self.robot_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.robot_socket.settimeout(5)
         try:
             self.robot_socket.connect((robot_ip, robot_port))
         except socket.gaierror as e:
             self.logger.error('Connection error to robot: %s' % e)
             return (False, e)
-        except TimeoutError as e:
+        except socket.timeout as e:
             self.logger.error("Connection timed out")
             return (False,e)
 
