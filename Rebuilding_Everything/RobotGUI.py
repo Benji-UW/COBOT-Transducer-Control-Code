@@ -4,7 +4,6 @@ import pygame
 BLACK = pygame.Color('black')
 WHITE = pygame.Color('white')
 
-
 class RobotGUI:
     def __init__(self):
         self.x = 12

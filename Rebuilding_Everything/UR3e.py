@@ -94,6 +94,9 @@ class UR3e:
         except socket.gaierror as e:
             print('Connection error to robot: %s' % e)
             return (False, e)
+        except TimeoutError as e:
+            print("Connection timed out")
+            return (False,e)
 
         self.modbus_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:

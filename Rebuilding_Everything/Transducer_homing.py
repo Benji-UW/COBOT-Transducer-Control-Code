@@ -31,7 +31,7 @@ while os.path.exists(path + "\\Scans\\test_%s.json" % file_itr):
 # Configure the root logger to a particular folder, format, and level. Lower the level when things
 # are working better or worse.
 root_logger = logging.getLogger()
-handler = TimedRotatingFileHandler(filename=f"Rebuilding_Everything\logging\runtime_test.log",\
+handler = TimedRotatingFileHandler(filename=f"Rebuilding_Everything\logging\\runtime_test.log",\
     when='D',backupCount=8,encoding="utf-8")
 formatter = Formatter(fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
@@ -68,6 +68,16 @@ class Transducer_homing:
         self.vR_list = [0.025, 0.05, 0.1, 0.2, 0.4, 0.8, 1.0, 2.0]
         self.a_list = [0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 1.0]
         self.aR_list = [0.1, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 2.0]
+
+        self.speed_presets = [(0.005, 0.025,0.025,0.1),\
+                            (0.0125,0.05,0.05,0.2),\
+                            (0.025,0.1,0.1,0.4),\
+                            (0.05,0.2,0.2,0.6),\
+                            (0.1,0.4,0.3,0.8),
+                            (0.2,0.8,0.4,1),
+                            (0.4,1.0,0.5,1.2),
+                            (0.8,2.0,1.0,2.0)]
+
         self.speed_preset = 3
         # TODO Delete excess self.variables if commenting them out has no impact
         # self.joy_min = 0.01
@@ -135,13 +145,16 @@ class Transducer_homing:
         self.robot = UR3e()
         if not self.robot.connect(ip_robot)[0]:
             return False
-        print("robot successfully connected to all ports!")
+        logger.info("robot successfully connected to all ports!")
         
         self.robot.initialize()
-        v = self.v_list[self.speed_preset]
-        vR = self.vR_list[self.speed_preset]
-        a = self.a_list[self.speed_preset]
-        aR = self.aR_list[self.speed_preset]
+        # TODO: delete the excess lists if this works
+        # v = self.v_list[self.speed_preset]
+        # vR = self.vR_list[self.speed_preset]
+        # a = self.a_list[self.speed_preset]
+        # aR = self.aR_list[self.speed_preset]
+
+        v,vR,a,aR = self.speed_presets[self.speed_preset]
         
         self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
         self.robot.set_max_displacement(self.max_disp)
@@ -158,7 +171,6 @@ class Transducer_homing:
         # self.listener = self.fake_MATLAB_listener()
 
         self.last_ten_refresh_rate = np.zeros((10,0))
-        self.mag_loc = set()
 
         self.starting_pos = [np.copy(self.robot.pos), np.copy(self.robot.angle)]
         changed_preset = False
@@ -230,15 +242,6 @@ class Transducer_homing:
                 self.pathfinder.save_points(path + f"\\Scans\\test_{file_itr}.json")
                 logger.debug(f"triggering movel to {nextpoint}")
                 self.robot.movel_to_target(nextpoint)
-            # if keys[pygame.key.key_code("m")] == 1 and router:
-            #     t_pos,t_angle = (nextpoint[0],nextpoint[1])
-            #     t_pos,t_angle = np.array([t_pos]).T,np.array([t_angle]).T
-
-            #     self.robot.movel(self.starting_pos[0] + t_pos,self.starting_pos[1] +  t_angle)
-                
-            #     print("movel engaged")
-            #     print("Target set to the following point:")
-                # print(self.starting_pos[0] + t_pos,self.starting_pos[1] +  t_angle)
             if keys[pygame.key.key_code("a")] == 1 and not router:
                 self.change_range_gui()
             if keys[pygame.key.key_code("h")] == 1 and not router:
@@ -246,10 +249,12 @@ class Transducer_homing:
 
             # changes the speed preset of the robot if that occured.
             if changed_preset:
-                v = self.v_list[self.speed_preset]
-                vR = self.vR_list[self.speed_preset]
-                a = self.a_list[self.speed_preset]
-                aR = self.aR_list[self.speed_preset]
+                # v = self.v_list[self.speed_preset]
+                # vR = self.vR_list[self.speed_preset]
+                # a = self.a_list[self.speed_preset]
+                # aR = self.aR_list[self.speed_preset]
+                v,vR,a,aR = self.speed_presets[self.speed_preset]
+
                 self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
 
 
@@ -278,8 +283,8 @@ class Transducer_homing:
                     rot_vect[0] = joy_vect[1]
                     rot_vect[1] = joy_vect[0]
                     rot_vect[2] = joy_vect[2]
+                self.robot.speedl(speed_vect,rot_vect,self.lag)
 
-            self.robot.speedl(speed_vect,rot_vect,self.lag)
 
             logger.debug("----------------------------------------------")
             logger.debug("Position info about the robot:")
@@ -303,10 +308,10 @@ class Transducer_homing:
 
         # loop is exited
         self.robot.disconnect()
-        print('Robot disconnected.')
+        logger.info('Robot disconnected.')
         if self.matlab_socket is not None:
             self.disconnect_from_matlab()
-            print('Disconnected from server.')
+            logger.info('Disconnected from server.')
         if router:
             path = os.path.dirname(__file__)
             self.pathfinder.save_points(path + '\\Scans\\test_' + file_itr + '.json')
@@ -328,61 +333,60 @@ class Transducer_homing:
         #print(d_pos, d_angle)
         return (d_pos,d_angle)
 
-    def interpolate_motion(self,next_target):
-        '''The bug is in here'''
-        # This data is in mm and deg thanks to internal positioning methods
-        c_pos,c_angle = self.get_delta_pos()
+# TODO: Fully delete interpolate motion method if it causes no problems by deleting.
+    # def interpolate_motion(self,next_target):
+    #     '''The bug is in here'''
+    #     # This data is in mm and deg thanks to internal positioning methods
+    #     c_pos,c_angle = self.get_delta_pos()
 
-        logger.debug("\n\n-------------------------------------------------")
-        logger.debug("Entering a new round of motion interpolation")
-        logger.debug("-------------------------------------------------")
+    #     logger.debug("\n\n-------------------------------------------------")
+    #     logger.debug("Entering a new round of motion interpolation")
+    #     logger.debug("-------------------------------------------------")
 
-        logger.debug("1. Current change in position from the origin: ")
-        logger.debug(f"\n{c_pos}, {c_angle}")
+    #     logger.debug("1. Current change in position from the origin: ")
+    #     logger.debug(f"\n{c_pos}, {c_angle}")
         
-        # This data is also in mm and deg due to convention
-        t_pos,t_angle = (next_target[0],next_target[1])
-        t_pos,t_angle = np.array([t_pos]).T,np.array([t_angle]).T
+    #     # This data is also in mm and deg due to convention
+    #     t_pos,t_angle = (next_target[0],next_target[1])
+    #     t_pos,t_angle = np.array([t_pos]).T,np.array([t_angle]).T
 
-        logger.debug("2. Current target position relative to the origin: \n (Should be the same shape)")
-        logger.debug(f"\n{t_pos}, {t_angle}")
+    #     logger.debug("2. Current target position relative to the origin: \n (Should be the same shape)")
+    #     logger.debug(f"\n{t_pos}, {t_angle}")
 
-        #print('target pos:')
-        #print(t_pos, t_angle)
-        delta_pos = t_pos - c_pos
+    #     #print('target pos:')
+    #     #print(t_pos, t_angle)
+    #     delta_pos = t_pos - c_pos
         
-        logger.debug("3. Change in position required to get from the current to the target position")
-        logger.debug(f"{delta_pos}")
+    #     logger.debug("3. Change in position required to get from the current to the target position")
+    #     logger.debug(f"{delta_pos}")
 
-        if (np.max(np.abs(delta_pos)) != 0):
-            speed_vect = delta_pos / max(np.max(np.abs(delta_pos)),5)
-            logger.debug("4. Calculated speed-vector to reach that delta_pos in a decent amount of time:")
-            logger.debug(f"{speed_vect}")
-        else:
-            speed_vect = delta_pos
+    #     if (np.max(np.abs(delta_pos)) != 0):
+    #         speed_vect = delta_pos / max(np.max(np.abs(delta_pos)),5)
+    #         logger.debug("4. Calculated speed-vector to reach that delta_pos in a decent amount of time:")
+    #         logger.debug(f"{speed_vect}")
+    #     else:
+    #         speed_vect = delta_pos
 
-        delta_ang = t_angle - c_angle
+    #     delta_ang = t_angle - c_angle
 
-        logger.debug("5. Change in angle required to get from the current to the target position")
-        logger.debug(delta_ang.T)
+    #     logger.debug("5. Change in angle required to get from the current to the target position")
+    #     logger.debug(delta_ang.T)
 
-        rot_vect = np.zeros((3,1))
+    #     rot_vect = np.zeros((3,1))
         
-        if (np.max(np.abs(delta_ang)) != 0):
-            delta_ang = delta_ang / np.max(np.abs(delta_ang))
-            rot_vect[0] = 1 * delta_ang[0] # 1 - Rx
-            rot_vect[1] = -1 * delta_ang[1] 
-            # rot_vect[2] = -0 * delta_ang[1]# 0 - Rz
-            rot_vect[2] = 0
-            logger.debug("6. Calculated angular-speed to reach that delta_pos in a decent amount of time:")
-            logger.debug(f"{rot_vect}")
+    #     if (np.max(np.abs(delta_ang)) != 0):
+    #         delta_ang = delta_ang / np.max(np.abs(delta_ang))
+    #         rot_vect[0] = 1 * delta_ang[0] # 1 - Rx
+    #         rot_vect[1] = -1 * delta_ang[1] 
+    #         # rot_vect[2] = -0 * delta_ang[1]# 0 - Rz
+    #         rot_vect[2] = 0
+    #         logger.debug("6. Calculated angular-speed to reach that delta_pos in a decent amount of time:")
+    #         logger.debug(f"{rot_vect}")
         
-        
-        # logger.debug("7. Translation vector about to be sent to the robot for execution: (trans, rot)")
-        # logger.debug(f"{speed_vect}, {rot_vect}")
+    #     # logger.debug("7. Translation vector about to be sent to the robot for execution: (trans, rot)")
+    #     # logger.debug(f"{speed_vect}, {rot_vect}")
 
-        return speed_vect,rot_vect
-
+    #     return speed_vect,rot_vect
 
     def MATLAB_listener(self):
         '''This method creates a generator for listening to the server for new data from
@@ -446,14 +450,17 @@ class Transducer_homing:
     def write_pos_info(self, router, current_target):
         pos = self.robot.pos
         angle = self.robot.angle
-        tcp_offset = self.robot.tcp_offset
-        tcp_angle = self.robot.tcp_rot
+        #TODO: Delete commented things if I don't wind up using them :)
+        # tcp_offset = self.robot.tcp_offset
+        # tcp_angle = self.robot.tcp_rot
         delta_pos,delta_angle = self.get_delta_pos()
-        v = self.v_list[self.speed_preset]
-        vR = self.vR_list[self.speed_preset]
-        a = self.a_list[self.speed_preset]
-        aR = self.aR_list[self.speed_preset]
 
+        # v = self.v_list[self.speed_preset]
+        # vR = self.vR_list[self.speed_preset]
+        # a = self.a_list[self.speed_preset]
+        # aR = self.aR_list[self.speed_preset]
+
+        # v,vR,a,aR = self.speed_presets[self.speed_preset]
 
         self.robot_gui.tprint(self.screen, 'Current base: %s' % self.robot.base)
 
@@ -528,31 +535,6 @@ class Transducer_homing:
         
         self.robot_gui.skip_line(2)
         self.robot_gui.tprint(self.screen, time.ctime())
-
-        #print('gonna update the gui')
-
-
-    
-    def test_functions(self):
-        '''Sends a series of test functions to the robot and then logs them,
-        I'm doing this to try to learn more about how to trigger events remotely.
-        Each command contains a bytestring with the name of the command we're
-        attempting to trigger, and an expected value that we're hoping to get back.'''
-        commands = []
-        commands.append((b'get_freedrive_status()\n', 'int'))
-        commands.append((b'get_freedrive_status()\n', 'int but with less'))
-        commands.append((b'force()\n', 'float'))
-        commands.append((b'get_actual_joint_positions()\n', 'array of six floats'))
-        commands.append((b'get_actual_tcp_pose()\n', 'array of six floats'))
-        commands.append((b'get_controller_temp()\n', 'float'))
-        commands.append((b'get_tcp_force()\n', 'array of six floats, maybe preceded with a p'))
-        commands.append((b'is_steady()\n', 'boolean'))
-        commands.append((b'wrench_trans(p[0,0,0,1,1,1], [0,0,0,1,1,2])\n', 'list of floats again'))
-        commands.append((b'wrench_trans(p[0,0,0,1,1,1], [0,0,0,1,2,1])\n', 'list of floats again'))
-
-        for command in commands:
-            logstring = self.robot.generic_io_response(command[0])
-            logger.debug(logstring)
 
 
 if __name__=="__main__":
