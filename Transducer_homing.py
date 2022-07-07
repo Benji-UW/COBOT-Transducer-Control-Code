@@ -224,7 +224,6 @@ class Transducer_homing:
 
                 self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
 
-
             if router:
                 # print("waiting...")
                 v = self.robot.wait_for_at_tar()
