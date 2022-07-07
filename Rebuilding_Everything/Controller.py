@@ -1,108 +1,93 @@
 import numpy as np
+import json
+import pygame
 
 class Controller:
-    def __init__(self, joystick):
-        self.joystick = joystick
-        self.name = self.joystick.get_name()
+    def __init__(self,joystick):
         self.joy_min = 0.1
-        if 'HORI' in self.name:
-            self.A = 0
-            self.B = 1
-            self.X = 2
-            self.Y = 3
-            self.L = 4
-            self.R = 5
-            self.M = 6
-            self.P = 7 
-            self.L3 = 8
-            self.R3 = 9
-            self.ZL = 10
-            self.ZR = 11
-            self.PAD = 12
-            self.max_buttons = 10
-        elif 'Game' in self.name:
-            self.B = 0 # B Button
-            self.A = 1 # A Button
-            self.Y = 2 # Y Button
-            self.X = 3 # X Button
-            self.L = 4
-            self.R = 5
-            self.ZL = 6 # Z-Left trigger, 
-            self.ZR = 7 #
-            self.M = 8 # Minus button
-            self.P = 9 # Plus button
-            self.L3 = 10 # Pushing down on the left joystick
-            self.R3 = 11 # Pushing down on the right joystick
-            self.H = 12
-            self.S = 13
-            self.PAD = 14
-            self.max_buttons = 14
-        elif 'Pro' in self.name:
-            self.A = 0
-            self.B = 1
-            self.X = 2
-            self.Y = 3
-            self.M = 4
-            self.home = 5
-            self.P = 6
-            self.L3 = 7
-            self.R3 = 8
-            self.L = 9
-            self.R = 10
-            self.D_up = 11
-            self.D_down = 12
-            self.D_right = 13
-            self.D_lef = 14
-            self.capture = 15
+        self.buttons = {}
+        self.mapping = {}
+        #joystick = -1
+
+        # Go into this if statement if the joystick is a joystick
+        if (joystick != -1):
+            self.joystick = joystick
+            self.name = self.joystick.get_name()
+            controller_file = open(r'Rebuilding_Everything\controllers.json')
+            data = json.load(controller_file)
+            keep_going = True
             
+            try:
+                short_name = self.short_name(self.name, data.keys())
+            except KeyError as e:
+                print("That controller isn't saved, you will have to configure it yourself.")
+                print("For now we're sticking to keyboard mode :)")
+                self.joystick = None
+                #keep_going = False
 
-    def get_buttons(self):
-        buttons = []
-        if 'HORI' in self.name:
-            for i in range(0, self.max_buttons):
-                if self.joystick.get_button(i):
-                    buttons.append(i)
-            if self.joystick.get_axis(2) > 0.1:
-                buttons.append(self.ZL)
-            elif self.joystick.get_axis(2) < -0.1:
-                buttons.append(self.ZR)
-        elif 'Game' in self.name:
-            for i in range(0, self.max_buttons):
-                if self.joystick.get_button(i):
-                    buttons.append(i)
-        elif  'Pro' in self.name:
-            for i in range(self.max_buttons):
-                if self.joystick.get_button(i):
-                    buttons.append(i)
-            # Equivalent l
-            #buttons = [i for i in range(self.max_buttons) if self.joystick.get_button(i)]
-            if self.joystick.get_axis(4) > 0.1:
-                buttons.append(self.ZL)
-            elif self.joystick.get_axis(5) > 0.1:
-                buttons.append(self.ZR)
-        return buttons
+            if (keep_going):
+                self.buttons = data[short_name]
+                mapping_file = open(r'Rebuilding_Everything\mapping.json')
+                data = json.load(mapping_file)
 
-    def get_sticks(self):
-        joy_vect = np.zeros((4, 1))
-        if 'HORI' in self.name:
-            if abs(self.joystick.get_axis(0)) > self.joy_min:
-                joy_vect[0] = self.joystick.get_axis(0)
-            if abs(self.joystick.get_axis(1)) > self.joy_min:
-                joy_vect[1] = -self.joystick.get_axis(1)
-            if abs(self.joystick.get_axis(4)) > self.joy_min:
-                joy_vect[2] = self.joystick.get_axis(4)
-            if abs(self.joystick.get_axis(3)) > self.joy_min:
-                joy_vect[3] = -self.joystick.get_axis(3)
-        elif 'Game' in self.name or 'Pro' in self.name:
-            if abs(self.joystick.get_axis(0)) > self.joy_min:
-                joy_vect[0] = self.joystick.get_axis(0)
-            if abs(self.joystick.get_axis(1)) > self.joy_min:
-                joy_vect[1] = -self.joystick.get_axis(1)
-            if abs(self.joystick.get_axis(2)) > self.joy_min:
-                joy_vect[2] = self.joystick.get_axis(2)
-            if abs(self.joystick.get_axis(3)) > self.joy_min:
-                joy_vect[3] = -self.joystick.get_axis(3)
+                if short_name == 'Pro':
+                    self.mapping = data['default_Pro']
+                else:
+                    print("You're going to need to configure a mapping for that controller :/")
+                    print("For now we're sticking to keyboard mode :)")
+                    self.joystick = None
+        else:
+            self.name = 'keyboard'
+            mapping_file = open(r'Rebuilding_Everything\mapping.json')
+            data = json.load(mapping_file)
+
+            self.mapping = data["default_keyboard"]
+            
+    def short_name(self, name, options):
+        for shortened in options:
+            if shortened in name:
+                return shortened
+        raise KeyError("Mapping key not found")
+
+    def get_buttons(self, keys):
+        pressed_buttons = {}
+        funcs = list(self.mapping.keys())[3:] # Skips the first three because they're joystick axes
+        
+        if self.name == 'keyboard':
+            butts = [keys[pygame.key.key_code(self.mapping[a])] for a in funcs]
+            pressed_buttons = dict(zip(funcs, butts))
+            print(pressed_buttons)
+            # pressed_buttons["switch space"] = keys[pygame.key.key_code(self.mapping["switch_space"])]
+            # pressed_buttons["speed up"] = keys[pygame.key.key_code(self.mapping["speed_preset_up"])]
+            # pressed_buttons["speed down"] = keys[pygame.key.key_code(self.mapping["speed_preset_down"])]
+            # pressed_buttons["set origin"] = keys[pygame.key.key_code(self.mapping["set_o"])]
+            # pressed_buttons["toggle freedrive"] = keys[pygame.key.key_code(self.mapping["toggle_freedrive"])]
+            # pressed_buttons["goto origin"] = keys[pygame.key.key_code(self.mapping["goto_o"])]
+            # pressed_buttons["change base"] = keys[pygame.key.key_code(self.mapping["change_base"])]
+            # pressed_buttons["exit"] = keys[pygame.key.key_code(self.mapping["exit"])]
+        else:
+            butts = [self.joystick.get_button(self.buttons[self.mapping[a]]) for a in funcs]
+            pressed_buttons = dict(zip(funcs, butts))
+        
+        return pressed_buttons
+
+    def get_hat(self,keys):
+        joy_vect = np.zeros((3,1))
+        axes = list(self.mapping.keys())[:3]
+        if self.name == 'keyboard':
+            joy_vect[0] = keys[pygame.key.key_code(axes['x-axis'][0])] - keys[pygame.key.key_code(axes['x-axis'][1])]
+            joy_vect[0] = keys[pygame.key.key_code(axes['y-axis'][0])] - keys[pygame.key.key_code(axes['y-axis'][1])]
+            joy_vect[0] = keys[pygame.key.key_code(axes['z-axis'][0])] - keys[pygame.key.key_code(axes['z-axis'][1])]
+            joy_vect = joy_vect / np.linalg.norm(joy_vect)
+        else:
+            joy_vect[0]=self.joystick.get_axis(self.mapping['x-axis'])
+            joy_vect[1]=self.joystick.get_axis(self.mapping['y-axis'])
+            joy_vect[2]=self.joystick.get_axis(self.mapping['z-axis'])
+            if np.linalg.norm(joy_vect) < self.joy_min:
+                joy_vect = np.zeros((3,1))
+            else:
+                pass
+                #print(joy_vect)
+        
         return joy_vect
-
-    def get_hat(self):
-        return self.joystick.get_hat(0)
+    

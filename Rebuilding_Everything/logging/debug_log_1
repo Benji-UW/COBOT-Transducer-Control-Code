@@ -1,0 +1,20 @@
+DEBUG:__main__:Debug log for the robot starting on 2022-07-06_19-20-36
+INFO:root:Initialized the foo module
+INFO:root:Recieved string from main:
+INFO:root:Hey here's a string I passed in from main!!!
+WARNING:root:Recieved string from main:
+WARNING:root:Hey here's a string I passed in from main!!!
+INFO:root:Recieved string from main:
+INFO:root:This is the updated kind where I did more things!!!!
+WARNING:root:Recieved string from main:
+WARNING:root:This is the updated kind where I did more things!!!!
+2022-07-06 19:21:13,252 - __main__ - DEBUG - Debug log for the robot starting on 2022-07-06_19-21-13
+2022-07-06 19:21:13,255 - root - INFO - Initialized the foo module
+2022-07-06 19:21:13,255 - root - INFO - Recieved string from main:
+2022-07-06 19:21:13,255 - root - INFO - Hey here's a string I passed in from main!!!
+2022-07-06 19:21:13,255 - root - WARNING - Recieved string from main:
+2022-07-06 19:21:13,255 - root - WARNING - Hey here's a string I passed in from main!!!
+2022-07-06 19:21:13,256 - root - INFO - Recieved string from main:
+2022-07-06 19:21:13,256 - root - INFO - This is the updated kind where I did more things!!!!
+2022-07-06 19:21:13,256 - root - WARNING - Recieved string from main:
+2022-07-06 19:21:13,256 - root - WARNING - This is the updated kind where I did more things!!!!

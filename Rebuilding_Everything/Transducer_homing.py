@@ -7,26 +7,50 @@ import pygame
 import os
 import numpy as np
 import logging
-
-date_time_str = time.strftime(r"%Y-%m-%d_%H-%M-%S")
-file_itr = 0
-path = os.path.dirname(__file__)
-while os.path.exists(path + "\\Scans\\test_%s.json" % file_itr):
-    file_itr += 1
-logging.basicConfig(filename = path + "\logging\debug_log " + date_time_str + ".log", encoding='utf-8',\
-     level=logging.DEBUG, format='%(levelname)s:%(message)s')
-logging.debug("Debug log for the robot starting on " + date_time_str)
-
-np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
-
+from logging.handlers import TimedRotatingFileHandler
+from logging import Formatter
 from pygame.locals import *
-from Controller_2 import Controller_2
+from Controller import Controller
 from UR3e import *
 from RobotGUI import *
 from Pathfinders import *
 
-BLACK = pygame.Color('black')
-WHITE = pygame.Color('white')
+# TODO delete these if commenting them out makes no difference.
+# # Magic constants for the pygame interface
+# BLACK = pygame.Color('black')
+# WHITE = pygame.Color('white')
+
+date_time_str = time.strftime(r"%Y-%m-%d_%H-%M-%S")
+file_itr = 0
+
+path = os.path.dirname(__file__)
+
+while os.path.exists(path + "\\Scans\\test_%s.json" % file_itr):
+    file_itr += 1
+
+# Configure the root logger to a particular folder, format, and level. Lower the level when things
+# are working better or worse.
+root_logger = logging.getLogger()
+handler = TimedRotatingFileHandler(filename=f"Rebuilding_Everything\logging\runtime_test.log",\
+    when='D',backupCount=8,encoding="utf-8")
+formatter = Formatter(fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+root_logger.addHandler(handler)
+root_logger.setLevel(logging.INFO)
+logger = logging.getLogger(__name__)
+logger.debug("Debug log for the robot starting on " + date_time_str)
+
+np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
+
+def main():
+    '''Initialize a transducer_homing object and run that mf'''
+    robot = Transducer_homing()
+    robot.initialize()
+
+    robot.connect_to_matlab()
+
+    # robot.test_functions()
+    robot.start()
 
 class Transducer_homing:
     '''The UR3e robot keeps the position and angle of the TCP in meters/radians, 
@@ -45,56 +69,48 @@ class Transducer_homing:
         self.a_list = [0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 1.0]
         self.aR_list = [0.1, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 2.0]
         self.speed_preset = 3
-        self.joy_min = 0.01
+        # TODO Delete excess self.variables if commenting them out has no impact
+        # self.joy_min = 0.01
 
         self.refresh_rate = 112.
         self.lag = 0.2 #10. / self.refresh_rate #0.1
-        self.true_refresh_rate = None
-        self.button_hold = []
+        # self.true_refresh_rate = None
+        # self.button_hold = []
         self.max_disp = 0.5
 
-        self.motion_comp = 0
-        self.z_adjust = 0
-        self.z_jerk_coeff = 3
-        self.amp_hist = []
+        # self.motion_comp = 0
+        # self.z_adjust = 0
+        # self.z_jerk_coeff = 3
+        # self.amp_hist = []
 
-        self.Kp = 10.
-        self.Ki = 0.0
-        self.Kd = 0.1  # 0.01
-        self.servo_lag = self.lag / 2.
+        # self.Kp = 10.
+        # self.Ki = 0.0
+        # self.Kd = 0.1  # 0.01
+        # self.servo_lag = self.lag / 2.
 
-        self.servo_error = 0.0
+        # self.servo_error = 0.0
 
-        self.t_pred = 0.126
-        self.mp_t_upd = 0.1
-        self.mp_t_lu = 0.
+        # self.t_pred = 0.126
+        # self.mp_t_upd = 0.1
+        # self.mp_t_lu = 0.
 
-        self.servo_t = 0.02
-        self.servo_lh_t = 0.035
-        self.servo_gain = 1000
+        # self.servo_t = 0.02
+        # self.servo_lh_t = 0.035
+        # self.servo_gain = 1000
 
         self.range_of_motion = {'X': 0,'Y': 0,'Z':8,'Rx':30,'Ry':30,'Rz':0}
 
     def connect_to_matlab(self, server_ip='localhost', port=508):
+        '''Connects to the central socket server that coordinates information between
+        this module and the MATLAB signal processing info.'''
         self.matlab_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.matlab_socket.connect((server_ip, port))
         except socket.gaierror as e:
-            print(f'Connection error to robot: {e}')
+            logger.debug(f'Connection error to robot: {e}')
             return (False,e)
-        print('Connected to MATLAB')
+        logger.debug('Connected to MATLAB')
         return (True,'')
-
-# DELETE IF CONNECTION WORKS IN UR3 MODULE
-    # def connect_to_data_port(self, server_ip='192.168.0.5', port=50000):
-    #     self.data_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    #     try:
-    #         self.data_socket.connect((server_ip, port))
-    #     except socket.gaierror as e:
-    #         print(f'Connection error due to data port: {e}')
-    #         return (False, e)
-    #     print('Connected to data_port')
-    #     return (True, '')
 
     def disconnect_from_matlab(self):
         self.matlab_socket.send(b'end')
@@ -112,7 +128,7 @@ class Transducer_homing:
             joystick.init()
         except pygame.error:
             joystick = -1
-        self.controller = Controller_2(joystick)
+        self.controller = Controller(joystick)
 
         self.robot_gui = RobotGUI()
 
@@ -120,7 +136,6 @@ class Transducer_homing:
         if not self.robot.connect(ip_robot)[0]:
             return False
         print("robot successfully connected to all ports!")
-        
         
         self.robot.initialize()
         v = self.v_list[self.speed_preset]
@@ -213,7 +228,7 @@ class Transducer_homing:
                 router = False
                 path = os.path.dirname(__file__)
                 self.pathfinder.save_points(path + f"\\Scans\\test_{file_itr}.json")
-                logging.debug(f"triggering movel to {nextpoint}")
+                logger.debug(f"triggering movel to {nextpoint}")
                 self.robot.movel_to_target(nextpoint)
             # if keys[pygame.key.key_code("m")] == 1 and router:
             #     t_pos,t_angle = (nextpoint[0],nextpoint[1])
@@ -238,8 +253,6 @@ class Transducer_homing:
                 self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
 
 
-            speed_vect = np.zeros((3,1))
-            rot_vect = np.zeros((3,1))
             if router:
                 # print("waiting...")
                 v = self.robot.wait_for_at_tar()
@@ -250,12 +263,14 @@ class Transducer_homing:
                     path = os.path.dirname(__file__)
                     self.pathfinder.save_points(path + f'\\Scans\\test_{file_itr}.json')
                 else:
-                    logging.debug(f"triggering movel to {nextpoint}")
+                    logger.debug(f"triggering movel to {nextpoint}")
                     self.robot.movel_to_target(nextpoint)
                     # literally do not pass go, do not collect $200 until
                     # the target has been reached.
 
             else:
+                speed_vect = np.zeros((3,1))
+                rot_vect = np.zeros((3,1))
                 joy_vect = self.controller.get_hat(keys)
                 if translate:
                     speed_vect = joy_vect
@@ -264,16 +279,13 @@ class Transducer_homing:
                     rot_vect[1] = joy_vect[0]
                     rot_vect[2] = joy_vect[2]
 
-            
             self.robot.speedl(speed_vect,rot_vect,self.lag)
 
-            logging.debug("----------------------------------------------")
-            logging.debug("Position info about the robot:")
-            logging.debug(f"Initial pos/angle: ({self.robot.initial_pos.T}, {self.robot.initial_angle.T})")
-            logging.debug(f"Current pos/angle: ({self.robot.pos.T}, {self.robot.angle.T}")
-            logging.debug("----------------------------------------------")
-
-
+            logger.debug("----------------------------------------------")
+            logger.debug("Position info about the robot:")
+            logger.debug(f"Initial pos/angle: ({self.robot.initial_pos.T}, {self.robot.initial_angle.T})")
+            logger.debug(f"Current pos/angle: ({self.robot.pos.T}, {self.robot.angle.T}")
+            logger.debug("----------------------------------------------")
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -321,38 +333,38 @@ class Transducer_homing:
         # This data is in mm and deg thanks to internal positioning methods
         c_pos,c_angle = self.get_delta_pos()
 
-        logging.debug("\n\n-------------------------------------------------")
-        logging.debug("Entering a new round of motion interpolation")
-        logging.debug("-------------------------------------------------")
+        logger.debug("\n\n-------------------------------------------------")
+        logger.debug("Entering a new round of motion interpolation")
+        logger.debug("-------------------------------------------------")
 
-        logging.debug("1. Current change in position from the origin: ")
-        logging.debug(f"\n{c_pos}, {c_angle}")
+        logger.debug("1. Current change in position from the origin: ")
+        logger.debug(f"\n{c_pos}, {c_angle}")
         
         # This data is also in mm and deg due to convention
         t_pos,t_angle = (next_target[0],next_target[1])
         t_pos,t_angle = np.array([t_pos]).T,np.array([t_angle]).T
 
-        logging.debug("2. Current target position relative to the origin: \n (Should be the same shape)")
-        logging.debug(f"\n{t_pos}, {t_angle}")
+        logger.debug("2. Current target position relative to the origin: \n (Should be the same shape)")
+        logger.debug(f"\n{t_pos}, {t_angle}")
 
         #print('target pos:')
         #print(t_pos, t_angle)
         delta_pos = t_pos - c_pos
         
-        logging.debug("3. Change in position required to get from the current to the target position")
-        logging.debug(f"{delta_pos}")
+        logger.debug("3. Change in position required to get from the current to the target position")
+        logger.debug(f"{delta_pos}")
 
         if (np.max(np.abs(delta_pos)) != 0):
             speed_vect = delta_pos / max(np.max(np.abs(delta_pos)),5)
-            logging.debug("4. Calculated speed-vector to reach that delta_pos in a decent amount of time:")
-            logging.debug(f"{speed_vect}")
+            logger.debug("4. Calculated speed-vector to reach that delta_pos in a decent amount of time:")
+            logger.debug(f"{speed_vect}")
         else:
             speed_vect = delta_pos
 
         delta_ang = t_angle - c_angle
 
-        logging.debug("5. Change in angle required to get from the current to the target position")
-        logging.debug(delta_ang.T)
+        logger.debug("5. Change in angle required to get from the current to the target position")
+        logger.debug(delta_ang.T)
 
         rot_vect = np.zeros((3,1))
         
@@ -362,12 +374,12 @@ class Transducer_homing:
             rot_vect[1] = -1 * delta_ang[1] 
             # rot_vect[2] = -0 * delta_ang[1]# 0 - Rz
             rot_vect[2] = 0
-            logging.debug("6. Calculated angular-speed to reach that delta_pos in a decent amount of time:")
-            logging.debug(f"{rot_vect}")
+            logger.debug("6. Calculated angular-speed to reach that delta_pos in a decent amount of time:")
+            logger.debug(f"{rot_vect}")
         
         
-        # logging.debug("7. Translation vector about to be sent to the robot for execution: (trans, rot)")
-        # logging.debug(f"{speed_vect}, {rot_vect}")
+        # logger.debug("7. Translation vector about to be sent to the robot for execution: (trans, rot)")
+        # logger.debug(f"{speed_vect}, {rot_vect}")
 
         return speed_vect,rot_vect
 
@@ -379,13 +391,12 @@ class Transducer_homing:
         magnitude.'''   
         mag,self.latest_loop = -1,-1        
         while True:
-            # print('here i am')
             self.matlab_socket.send(b'motion')
-
             msg = self.matlab_socket.recv(1024)
-            # print(msg)
+
             mag = float(msg[4:13]) / 1.0E3
             loop = int(msg[1:3])
+
             if loop == self.latest_loop:
                 yield (False, mag)
             else:
@@ -399,18 +410,19 @@ class Transducer_homing:
             mag = round(time.time()) % 59
             yield (True, mag)
 
-    def MATLAB_next(self):
-        '''Hopefully can be deprecated once the generator is used successfully.'''
-        self.matlab_socket.send(b'motion')
-        msg = self.matlab_socket.recv(1024)
-        print(msg)
-        mag = float(msg[4:13]) * 1.0E3
-        loop = int(msg[1:3])
-        if loop == self.latest_loop:
-            return (False, mag)
-        else:
-            self.latest_loop = loop
-            return (True, mag)
+#TODO: Delete following method if code can be run with it commented out
+    # def MATLAB_next(self):
+    #     '''Hopefully can be deprecated once the generator is used successfully.'''
+    #     self.matlab_socket.send(b'motion')
+    #     msg = self.matlab_socket.recv(1024)
+    #     print(msg)
+    #     mag = float(msg[4:13]) * 1.0E3
+    #     loop = int(msg[1:3])
+    #     if loop == self.latest_loop:
+    #         return (False, mag)
+    #     else:
+    #         self.latest_loop = loop
+    #         return (True, mag)
 
     def main_menu_GUI(self,router_bool,current_target):
         self.screen.fill(WHITE)
@@ -540,34 +552,8 @@ class Transducer_homing:
 
         for command in commands:
             logstring = self.robot.generic_io_response(command[0])
-            logging.debug(logstring)
-        #     responses = self.robot.generic_test_command_response(command[0])
-        #     logging.debug(f"Testing the {command[0]} command, expecting output as {command[1]}.")
-        #     logging.debug(f"\nBytestring response:\n{responses[0]}\nHex responses:\n{responses[1]}")
-        #     data = responses[0]
+            logger.debug(logstring)
 
-        #     # struct.unpack notes: ! represents the byte order (server = (big-endian))
-        #     # B represents an unsigned char (b is signed)
-        #     # i represents an int (I would be unsigned)
-        #     # q represents a long long (Q would be unsigned)
-            
-        #     packlen = struct.unpack('!i', data[0:4])
-        #     timestamp = struct.unpack('!Q', data[10:18])
-        #     packtype = struct.unpack('!B', data[4:5])
-
-        #     logging.debug(f"\nPackage length: {packlen}\nTimestamp: {timestamp}\nPackage type (supposed to be an unsigned int): {packtype}")
-
-        
-
-
-def main():
-  robot = Transducer_homing()
-  robot.initialize()
-
-  robot.connect_to_matlab()
-  
-  # robot.test_functions()
-  robot.start()
 
 if __name__=="__main__":
   main()

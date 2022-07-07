@@ -7,11 +7,9 @@ from threading import Thread
 import os
 import logging
 
-date_time_str = time.strftime(r"%m-%d_%H%M")
-path = os.path.dirname(__file__)
-FORMAT = '%(asctime)s %(message)s'
-logging.basicConfig(filename = path + "\logging\server_logs\\" + date_time_str + ".log", encoding='utf-8',
-        level=logging.DEBUG, format=FORMAT)
+
+
+logger = logging.getLogger(__name__)
 
 
 HOST = ''
@@ -56,9 +54,9 @@ def client_thread(conn):
         # print(f'RSM: {robot_state_message}')
         client_input = conn.recv(4096)
         try:
-            logging.info(client_input)
+            logger.info(client_input)
         except e:
-            logging.error("Client input was not loggable :/")
+            logger.error("Client input was not loggable :/")
 
         # print(str(client_input))
         # print(shitty_sql)
@@ -67,7 +65,7 @@ def client_thread(conn):
             # print('received motion:')
             # print(motion)
             conn.send(motion)
-            logging.info(b"Reply: " + motion)
+            logger.info(b"Reply: " + motion)
         # elif client_input[:3] == b"SET":
         # #     pass
         elif b'SET' in client_input:
@@ -88,7 +86,7 @@ def client_thread(conn):
             except KeyError as e:
                 dat = b'Key not found' 
             conn.send(dat)
-            logging.info(b"Reply: " + dat)
+            logger.info(b"Reply: " + dat)
         elif client_input[:4] == b"TODO":
             '''Makes a shity todo-list for passing tasks back and forth'''
             cli_input = client_input.split()
