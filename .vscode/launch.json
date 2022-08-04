@@ -13,7 +13,7 @@
             "justMyCode": true
         },
         {
-            "name": "Python: Current File",
+            "name": "Python: Target file",
             "type": "python",
             "request": "launch",
             "program": "Transducer_homing.py",

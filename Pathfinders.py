@@ -77,7 +77,7 @@ class Pathfinder:
         return ["Progress report not implemented!"]
 
     def internal_point_yielder(self):
-        '''This method gets called when the pathfinder is initializes, and adds the center of 
+        '''This method gets called when the pathfinder is ini tializes, and adds the center of 
         the search space as well as all the corners to the "to-travel" list. When all the points
         have been visited it returns the integer 1 to indicate the search is complete.'''
         center_pt = [np.mean(self.range_of_motion[a]) for a in self.range_of_motion.keys()]
@@ -94,8 +94,6 @@ class Pathfinder:
         
         for pt in corners:
             yield pt
-            # self.to_travel.append(pt)
-            # print(pt)
 
         yield 1
         
@@ -187,12 +185,13 @@ class FullScan(Pathfinder):
         now = time.time()
         elapsed = now - self.start_time
         projected = elapsed * (self.will_visit / self.visited_so_far)
-        remaining = elapsed * (1 - (self.will_visit/self.visited_so_far))
+        remaining = projected - elapsed
 
         finish_time = time.strftime("%H:%M:%S", time.localtime(self.start_time + projected))
-        remaining = f"{int(remaining/3600)}:{int((remaining%3600)/60)}:{remaining%60:2.2f}"
+        remaining = time.strftime("%H:%M:%S", time.gmtime(remaining))
+        # remaining = f"{int(remaining/3600)}:{int((remaining%3600)/60)}:{remaining%60:2.2f}"
 
-        return [f"Visited {self.visited_so_far}/{self.will_visit} points. ({self.visited_so_far/self.will_visit:1.3f}%)",\
+        return [f"Visited {self.visited_so_far}/{self.will_visit} points. ({self.visited_so_far/self.will_visit:1.2f}%)",\
              f"Estimated completion time: {finish_time}", \
                 f"Estimated time remaining: {remaining}"]
 

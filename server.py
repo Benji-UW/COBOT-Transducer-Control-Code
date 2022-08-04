@@ -8,7 +8,6 @@ import os
 import logging
 
 logger = logging.getLogger(__name__)
-
 HOST = ''
 PORT = 508
 
@@ -31,7 +30,6 @@ robot_state_message = b"no state"
 shitty_sql = {b"loopback": 420}
 todo_list = []
 
-
 def client_thread(conn): 
     global flag
     global motion
@@ -48,7 +46,6 @@ def client_thread(conn):
     refresh_rate = np.zeros((250,))
     i_rr = 0
     while is_alive:
-        # print(f'RSM: {robot_state_message}')
         client_input = conn.recv(4096)
         try:
             logger.info(client_input)
@@ -138,20 +135,25 @@ def client_thread(conn):
         t_nm1 = t
 
 
-while True:
-    # print("entered while loop")
-    con, addr = s.accept()
-    print('Connected: ' + str(addr))
-    Thread(target=client_thread, args=(con,)).start()
+def start_server():
+    while True:
+        print("entered while loop")
+        con, addr = s.accept()
+        print('Connected: ' + str(addr))
+        Thread(target=client_thread, args=(con,)).start()
 
-    con, addr = s.accept()
-    print('Connected: ' + str(addr))
-    Thread(target=client_thread, args=(con,)).start()
-
-    # print("waiting for s2 connection")
-    # con, addr = s2.accept()
-    # print('Connected on server 2 ' + str(addr))
-    # Thread(target=client_thread, args=(con,)).start()
+        # print("waiting for s2 connection")
+        # con, addr = s2.accept()
+        # print('Connected on server 2 ' + str(addr))
+        # Thread(target=client_thread, args=(con,)).start()
 
 
-    
+def test_import():
+    print("You've successfully accessed a method within this file.")
+
+
+if __name__ == "__main__":
+    start_server()
+else:
+    print(__name__)
+    print("server.py is being imported into another module")

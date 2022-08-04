@@ -1,18 +1,22 @@
 import os
 import sys
+import time
+from threading import Thread
+
 path = os.path.abspath('')
-# print("======================")
-# print(path)
 sys.path.append(path)
-from Pathfinders import *
 
-path = os.path.abspath('')
-print(path)
+import server
 
-file_itr = 4
-
-pathfinder = FullScan((0.8,1),20,16,16,path=path + f"\\Scans\\test_{file_itr}.json")
-pathfinder.max_point = ((0,0,0),(0,0,0),500)
+server.test_import()
 
 
-pathfinder.save_points(path + f"\\Scans\\test_5.json")
+print("Starting the server in a thread...")
+
+Thread(target=server.start_server).start()
+
+print("Now some other code is running...")
+
+for i in range(40):
+    print(i)
+    time.sleep(0.1)
