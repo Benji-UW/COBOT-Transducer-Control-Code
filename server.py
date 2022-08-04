@@ -24,7 +24,8 @@ s.listen(6)
 # s2.listen(2)
 
 flag = 0
-motion = b'gdfdhfjhgvj'
+# motion = b'gdfdhfjhgvj'
+motion = b'T00Z000000000' #T%02dZ%09d
 condition = 0
 robot_state_message = b"no state"
 shitty_sql = {b"loopback": 420}

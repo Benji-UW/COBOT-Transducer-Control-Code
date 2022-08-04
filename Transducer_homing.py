@@ -7,15 +7,15 @@ import time
 import os
 import numpy as np
 import logging
-import server
+# import server
 from pynput import keyboard
-from logging.handlers import TimedRotatingFileHandler
+from logging.handlers import RotatingFileHandler
 from logging import Formatter
 # from pygame.locals import *
 from threading import Thread
 # from Controller import Controller
 from UR3e import *
-from RobotGUI import *
+# from RobotGUI import *
 from Pathfinders import *
 
 def logger_setup():
@@ -30,12 +30,14 @@ def logger_setup():
     # Configure the root logger to a particular folder, format, and level. Lower the level when things
     # are working better or worse.
     root_logger = logging.getLogger()
-    handler = TimedRotatingFileHandler(filename=path+f"\\logging\\runtime_test_.log",\
-        when='D',backupCount=8,encoding="utf-8")
+    
+    handler = RotatingFileHandler(filename=path+f"\\logging\\runtime_test.log",\
+        backupCount=8,encoding="utf-8")
+
     formatter = Formatter(fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     root_logger.addHandler(handler)
-    root_logger.setLevel(logging.INFO)
+    root_logger.setLevel(logging.DEBUG)
     logger = logging.getLogger(__name__)
     logger.debug("Debug log for the robot starting on " + date_time_str)
     return logger,file_i
@@ -46,7 +48,7 @@ logger,file_itr = logger_setup()
 np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
 
 def main():
-    Thread(target=server.start_server).start()
+    # Thread(target=server.start_server).start()
 
     '''Initialize a transducer_homing object and run that mf'''
     robot = Transducer_homing()
@@ -81,7 +83,7 @@ class Transducer_homing:
         #                     'h': False}
         self.keys_pressed = set()
 
-        self.headless_test = True
+        self.headless_test = False
 
 #TODO Maybe delete this if no problems are caused by commenting them out.
         # self.v_list = [0.005, 0.0125, 0.025, 0.05, 0.1, 0.2, 0.4, 0.8]
@@ -143,7 +145,7 @@ class Transducer_homing:
         #     joystick = -1
         # # self.controller = Controller(joystick)
 
-        self.robot_gui = RobotGUI()
+        # self.robot_gui = RobotGUI()
 
         if self.headless_test:
             self.robot = Fake_UR3e()
@@ -163,13 +165,13 @@ class Transducer_homing:
         logger.info("Robot initialized :)")
 
     def start(self):
-        self.robot_gui.reset()
+        # self.robot_gui.reset()
         run_bool = True
         router = False
         translate = True
 
-        # self.listener = self.MATLAB_listener()
-        self.listener = self.fake_MATLAB_listener()
+        self.listener = self.MATLAB_listener()
+        # self.listener = self.fake_MATLAB_listener()
 
         self.last_ten_refresh_rate = np.zeros((10,0))
 
@@ -202,19 +204,15 @@ class Transducer_homing:
                 self.last_ten_refresh_rate[self.i%10] = time.time() - self.t
                 self.t = time.time()
 #TODO: Do I need this method? Or can I access the variable directly? Check get_current_rel_target
-                pos,angle = self.robot.get_current_rel_target()
+                pos,angle = self.robot.current_relative_target
 
                 if router:
                     self.pathfinder.newMag(((pos,angle), latest_mag), go_next)
                     # You are here                
 
-            # pygame.event.pump()
-            # keys = pygame.key.get_pressed()
-
             # Press esc to escape the program and close out everything.
             logger.debug(f"In-loop keys pressed: {self.keys_pressed}")
             logger.debug(f"Q in pressed keys: {'q' in self.keys_pressed}")
-
 
             if 'q' in self.keys_pressed:
                 run_bool = False
@@ -233,7 +231,7 @@ class Transducer_homing:
                 self.robot.set_initial_pos()
             if "k" in self.keys_pressed and not router:
                 router = True
-                self.pathfinder = FullScan((0.4,1),14,13,13,path=path + f"\\Scans\\test_{file_itr}.json")
+                self.pathfinder = FullScan((0.5,0.5),14,0,20,path=path + f"\\Scans\\test_{file_itr}.json")
                 nextpoint = self.pathfinder.next()
             # Press x to stop the running pathfinder
             if 'x' in self.keys_pressed and router:
@@ -257,6 +255,10 @@ class Transducer_homing:
                     router = False
                     path = os.path.dirname(__file__)
                     self.pathfinder.save_points(path + f'\\Scans\\test_{file_itr}.json')
+
+                    self.robot.movel_to_target(((0,0,0),(0,0,0)))
+                    
+                    file_itr = file_itr + 1
                 else:
                     logger.debug(f"triggering movel to {nextpoint}")
                     self.robot.movel_to_target(nextpoint)
@@ -281,7 +283,6 @@ class Transducer_homing:
         #-----------------------------Bottom of loop-----------------------------------#
 
         # Return robot to starting position (comment out when you don't wanna do this)
-        self.robot.movel_to_target(((0,0,0),(0,0,0)))
 
         # loop is exited
         self.robot.disconnect()

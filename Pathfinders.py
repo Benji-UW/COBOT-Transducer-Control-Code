@@ -136,7 +136,8 @@ class FullScan(Pathfinder):
         deg represents the angular degree tolerance for the full scan. There is a minimum tolerance
         based on the limitations of the robot, those are subject to change experimentally.'''
         # self.yielder = self.internal_point_yielder()
-        min_tolerance = (0.2, 1)
+        # min_tolerance = (0.2, 1)
+        min_tolerance = (0.05,0.5)
         self.resolution = (max(resolution[0],min_tolerance[0]), max(resolution[1],min_tolerance[1]))
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
         self.will_visit = 1
@@ -191,7 +192,7 @@ class FullScan(Pathfinder):
         remaining = time.strftime("%H:%M:%S", time.gmtime(remaining))
         # remaining = f"{int(remaining/3600)}:{int((remaining%3600)/60)}:{remaining%60:2.2f}"
 
-        return [f"Visited {self.visited_so_far}/{self.will_visit} points. ({self.visited_so_far/self.will_visit:1.2f}%)",\
+        return [f"Visited {self.visited_so_far}/{self.will_visit} points. ({100 * self.visited_so_far/self.will_visit:1.2f}%)",\
              f"Estimated completion time: {finish_time}", \
                 f"Estimated time remaining: {remaining}"]
 
