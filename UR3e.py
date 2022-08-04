@@ -603,9 +603,58 @@ class UR3e:
         return i
 
 
+class Fake_UR3e:
+    '''This class is a bare-minimum skeleton of the UR3 module, meant
+    only to allow headless tests to run without crashing or heavily
+    modifying my code elsewhere.'''
+    def __init__(self):
+        # Initialize variables
+        self.pos = np.ones((3, 1)) *-1
+        self.angle = np.ones((3, 1)) *-1
 
-
+        self.initial_pos = np.ones((3, 1))*-1
+        self.initial_angle = np.ones((3, 1))*-1
         
+        self.base = 'your imagination'
+        self.current_relative_target = ((-1,-1,-1),(-1,-1,-1))
+
+
+        self.logger = logging.getLogger(__name__)
+        self.logger.info("Robot fully initialized")
+
+    def disconnect(self):
+        pass
+    
+    def set_parameters(self, acc=None, velocity=None, acc_rot=None, vel_rot=None, base=None):
+        pass
+
+    def set_initial_pos(self):
+        pass
+
+    def movel(self, pos_to, angle_to, t=0.0):
+        return True
+
+    def update(self):
+        pass
+
+    def get_delta_pos(self):
+        '''Returns a pair of vertical (3,1) sized
+        numpy matrices defaulting to -1'''
+        a = np.ones((3, 1))*-1
+        return a,a
+
+    def movel_to_target(self, next_point):
+        self.current_relative_target = next_point
+        time.sleep(0.1)
+
+    def get_current_rel_target(self):
+        return self.current_relative_target
+
+    def wait_for_at_tar(self):
+        time.sleep(0.05)
+        self.logger.info(f"Robot travsered to target in {-1} seconds. (Tenet-style :))")
+
+        return -1
                 
 
 

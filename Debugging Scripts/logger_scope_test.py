@@ -1,7 +1,7 @@
 import time
 import os
 import logging
-from logging.handlers import TimedRotatingFileHandler
+from logging import FileHandler
 from logging import Formatter
 # from test_file import *
 import test_file
@@ -15,8 +15,7 @@ while os.path.exists(path + "\\Scans\\test_%s.json" % file_itr):
 file_itr = 4
 
 root_logger = logging.getLogger()
-handler = TimedRotatingFileHandler(f"logging\debug_log_test{file_itr}.log",\
-    when='D',backupCount=8,encoding="utf-8")
+handler = FileHandler(path + f"\\..\\logging\\debug_log_test{file_itr}.log",encoding="utf-8")
 handler.setLevel(logging.DEBUG)
 
 ch = logging.StreamHandler()
@@ -27,7 +26,7 @@ handler.setFormatter(formatter)
 ch.setFormatter(formatter)
 
 root_logger.addHandler(handler)
-root_logger.addHandler(ch)
+# root_logger.addHandler(ch)
 root_logger.setLevel(logging.DEBUG)
 
 logger = logging.getLogger(__name__)
@@ -43,5 +42,7 @@ def main():
     thing = test_file.Foo()
     thing.log_something("Hey here's a string I passed in from main!!!")
     thing.log_something("This is the updated kind where I did more things!!!!")
+
+    logger
 
 main()

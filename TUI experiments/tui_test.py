@@ -1,13 +1,6 @@
-import rich
-from tqdm import tqdm
 import time
-from rich.console import Console
-from rich.progress import track
-
-console = Console()
-
-
-console.print("Wee I made a terminal")
+import os
+from time import sleep
 # console.
 
 # console.render()
@@ -15,12 +8,29 @@ console.print("Wee I made a terminal")
 i = 0
 # pbar = tqdm(total=100)
 
-def update_console():
-    pbar.update()
+t = time.time()
 
-while i < 100:
-    # update_console()
-    console.clear()
-    pbar = tqdm(total=100, initial=i)
-    time.sleep(0.05)
+
+while i < 500:
+    this_loop = time.time()
+    a = i**2 - 6*i -5000
+    os.system('cls||clear')
+    output = ""
+
+    output += f"According to my calculus, a = {a}\n"
+    output +="That's interesting.\n"
+    output +=f"i itself is actually {i} right now\n"
+    output +="foo\n"
+    output +=f"f-strings can do math too! {i**2}\n"
+    output +="baz\n"
+    output +="bar\n"
+    output +=f"Time elapsed: {time.time() - t}\n"
+    d = time.time() - this_loop
+    output +=f"Length of this loop: {d}\n"
+
+    print(output)
+    sleep(0.05 - d)
     i += 1
+
+print(f"Total time to run through everything: {time.time() - t} seconds")
+

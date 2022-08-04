@@ -7,6 +7,7 @@ import pygame
 import os
 import numpy as np
 import logging
+from pynput import keyboard
 from logging.handlers import TimedRotatingFileHandler
 from logging import Formatter
 from pygame.locals import *
@@ -27,7 +28,7 @@ while os.path.exists(path + "\\Scans\\test_%s.json" % file_itr):
 # Configure the root logger to a particular folder, format, and level. Lower the level when things
 # are working better or worse.
 root_logger = logging.getLogger()
-handler = TimedRotatingFileHandler(filename=f"logging\\runtime_test.log",\
+handler = TimedRotatingFileHandler(filename=path+f"\\logging\\runtime_test_.log",\
     when='D',backupCount=8,encoding="utf-8")
 formatter = Formatter(fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
@@ -54,11 +55,23 @@ class Transducer_homing:
     def __init__(self):
         self.robot = None
         self.matlab_socket = None
-        self.screen = None
-        self.screen_resolution = (480, 940)
+        # self.scree n = None
+        # self.scre en_resolution = (480, 940)
         # self.controller = None
         self.robot_gui = None
         self.latest_loop = -1
+
+        self.key_listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
+        self.key_listener.start()
+        self.keys_pressed = {'q': False, \
+                            ']': False,
+                            '[': False,
+                            'd': False,
+                            'x': False,
+                            'a': False,
+                            'h': False}
+
+        self.headless_test = True
 
         self.v_list = [0.005, 0.0125, 0.025, 0.05, 0.1, 0.2, 0.4, 0.8]
         self.vR_list = [0.025, 0.05, 0.1, 0.2, 0.4, 0.8, 1.0, 2.0]
@@ -98,39 +111,45 @@ class Transducer_homing:
         logger.debug('Connected to MATLAB')
         return (True,'')
 
-    def disconnect_from_matlab(self):
+    def _disconnect_from_matlab(self):
         self.matlab_socket.send(b'end')
         self.matlab_socket.close()
 
     def initialize(self, ip_robot='192.168.0.10'):
         pygame.init()
 
-        self.screen = pygame.display.set_mode(self.screen_resolution)
-        pygame.display.set_caption('Transducer homing')
+        os.system("title " + 'Transducer homing')
 
-        pygame.joystick.init()
-        try:
-            joystick = pygame.joystick.Joystick(0)
-            joystick.init()
-        except pygame.error:
-            joystick = -1
-        # self.controller = Controller(joystick)
+        # self.scree n = pygame.display.set_mode(self.scree n_resolution)
+        # pygame.display.set_caption('Transducer homing')
+
+#TODO Old pygame stuff, delete the commented-out items as soon as it's working
+        # pygame.joystick.init()
+        # try:
+        #     joystick = pygame.joystick.Joystick(0)
+        #     joystick.init()
+        # except pygame.error:
+        #     joystick = -1
+        # # self.controller = Controller(joystick)
 
         self.robot_gui = RobotGUI()
 
-        self.robot = UR3e()
-        if not self.robot.connect(ip_robot)[0]:
-            return False
-        logger.info("robot successfully connected to all ports!")
-        
-        self.robot.initialize()
+        if self.headless_test:
+            self.robot = Fake_UR3e()
+        else:
+            self.robot = UR3e()
+            if not self.robot.connect(ip_robot)[0]:
+                return False
+            logger.info("robot successfully connected to all ports!")
+            
+            self.robot.initialize()
 
-        v,vR,a,aR = self.speed_presets[self.speed_preset]
-        
-        self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
-        self.robot.set_max_displacement(self.max_disp)
-        self.robot.set_parameters(base='base')
-        print("Robot initialized :)")
+            v,vR,a,aR = self.speed_presets[self.speed_preset]
+            
+            self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
+            self.robot.set_max_displacement(self.max_disp)
+            self.robot.set_parameters(base='base')
+        logger.info("Robot initialized :)")
 
     def start(self):
         self.robot_gui.reset()
@@ -138,8 +157,8 @@ class Transducer_homing:
         router = False
         translate = True
 
-        self.listener = self.MATLAB_listener()
-        # self.listener = self.fake_MATLAB_listener()
+        # self.listener = self.MATLAB_listener()
+        self.listener = self.fake_MATLAB_listener()
 
         self.last_ten_refresh_rate = np.zeros((10,0))
 
@@ -153,7 +172,7 @@ class Transducer_homing:
         (new_mag, latest_mag) = next(self.listener)
 
         self.i=-1
-        print('About to start the main loop')
+        logger.info('About to start the main loop')
         go_next = True
         path = os.path.dirname(__file__)
 
@@ -161,7 +180,6 @@ class Transducer_homing:
             t0 = time.time()
             self.robot.update()
             self.main_menu_GUI(router, nextpoint)
-            #self.robot.get_tcp_force()
 
             (new_mag, latest_mag) = next(self.listener)
 
@@ -172,6 +190,7 @@ class Transducer_homing:
                 # Log how much time has elapsed since the previous reading
                 self.last_ten_refresh_rate[self.i%10] = time.time() - self.t
                 self.t = time.time()
+#TODO: Do I need this method? Or can I access the variable directly? Check get_current_rel_target
                 pos,angle = self.robot.get_current_rel_target()
 
                 if router:
@@ -180,12 +199,15 @@ class Transducer_homing:
 
             pygame.event.pump()
             keys = pygame.key.get_pressed()
-            # pressed_buttons=self.controller.get_buttons(keys)
 
             # Press esc to escape the program and close out everything.
-            if keys[pygame.key.key_code("q")] == 1:
+
+            logger.info(f"In-loop keys pressed: {self.keys_pressed}")
+            logger.info(f"Q in pressed keys: {self.keys_pressed['q']}")
+
+            if self.keys_pressed['q']:
                 run_bool = False
-            if keys[pygame.key.key_code("]")] == 1:
+            if self.keys_pressed['[']:
                 if self.speed_preset < len(self.v_list) - 1:
                     self.speed_preset += 1
                     changed_preset = True
@@ -198,7 +220,7 @@ class Transducer_homing:
                 router = True
                 self.pathfinder = Pathfinder(20,25,25)
                 self.robot.set_initial_pos()
-            if keys[pygame.key.key_code("k")] == 1 and not router:
+            if "k" in self.keys_pressed:
                 router = True
                 self.pathfinder = FullScan((0.4,1),14,13,13,path=path + f"\\Scans\\test_{file_itr}.json")
                 nextpoint = self.pathfinder.next()
@@ -217,13 +239,12 @@ class Transducer_homing:
 
             if changed_preset:
                 v,vR,a,aR = self.speed_presets[self.speed_preset]
-
                 self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
 
             if router:
                 # print("waiting...")
                 v = self.robot.wait_for_at_tar()
-                print(f"Made it in {v} loops")
+                logger.info(f"Waiting for the at_tar return took {v} loops")
                 nextpoint = self.pathfinder.next()
                 if nextpoint == 1:
                     router = False
@@ -244,7 +265,7 @@ class Transducer_homing:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run_bool = False
-            pygame.display.flip()
+            # pygame.display.flip()
             if i_rr >= self.refresh_rate:
                 i_rr = 0
             t = time.time()
@@ -253,19 +274,19 @@ class Transducer_homing:
         #-----------------------------Bottom of loop-----------------------------------#
 
         # Return robot to starting position (comment out when you don't wanna do this)
-        self.robot.movel(self.starting_pos[0], self.starting_pos[1])
+        self.robot.movel_to_target(((0,0,0),(0,0,0)))
 
         # loop is exited
         self.robot.disconnect()
         logger.info('Robot disconnected.')
         if self.matlab_socket is not None:
-            self.disconnect_from_matlab()
+            self._disconnect_from_matlab()
             logger.info('Disconnected from server.')
         if router:
             path = os.path.dirname(__file__)
             self.pathfinder.save_points(path + '\\Scans\\test_' + file_itr + '.json')
 
-    def get_delta_pos(self):
+    def _get_delta_pos(self):
         '''Converts the get_delta_pos method built into the UR3e method into
         the local units used in the pathfinders, mm/kg/s/deg'''
         d_pos,d_angle = self.robot.get_delta_pos()
@@ -309,8 +330,11 @@ class Transducer_homing:
             yield (True, mag)
 
     def main_menu_GUI(self,router_bool,current_target):
-        self.screen.fill(WHITE)
-        self.robot_gui.reset()
+        # self.screen.fill(WHITE)
+        t = time.time()
+        # os.system('cls||clear')
+        logger.debug(f"Clear-screen takes {time.time() - t} seconds.")
+        # self.robot_gui.reset()
         self.write_pos_info(router_bool,current_target)
 
     def change_range_gui(self):
@@ -322,7 +346,7 @@ class Transducer_homing:
         # not_set = True
         # cursor = 0
         # while not_set:
-        #     self.screen.fill(WHITE)
+        #     self.scr een.fill(WHITE)
 
         #     pygame.event.pump()
         #     keys = pygame.key.get_pressed()
@@ -330,26 +354,24 @@ class Transducer_homing:
     def write_pos_info(self, router, current_target):
         pos = self.robot.pos
         angle = self.robot.angle
-        delta_pos,delta_angle = self.get_delta_pos()
+        d_pos,d_ang = self._get_delta_pos()
 
-        # v,vR,a,aR = self.speed_presets[self.speed_preset]
+        indents = 0
 
-        self.robot_gui.tprint(self.screen, 'Current base: %s' % self.robot.base)
+        # Old news
+        # print(('\t' * indents) + 'Current base: %s' % self.robot.base)
 
-        self.robot_gui.tprint(self.screen, 'TCP position in relation to its initial position:')
-        self.robot_gui.indent()
-        self.robot_gui.tprint(self.screen, 'x= %4.1f mm, Rx= %3.0f deg' %
-                              (delta_pos[0], delta_angle[0]))
-        self.robot_gui.tprint(self.screen, 'y= %4.1f mm, Ry= %3.0f deg' %
-                              (delta_pos[1], delta_angle[2]))
-        self.robot_gui.tprint(self.screen, 'z= %4.1f mm, Rz= %3.0f deg' %
-                              (delta_pos[2], delta_angle[1]))
-        self.robot_gui.unindent()
+        print(('\t' * indents) + 'TCP position in relation to its initial position:')
+        # self.robot_gui.indent()
+        indents += 1
 
-        self.robot_gui.skip_line(1)
+        print(('\t' * indents) + f"({d_pos} (mm),{d_ang} (deg))")
+        indents -= 1
+
+        print("=========================")
 
         # self.robot_gui.tprint(self.screen, 'TCP position in base:')
-        self.robot_gui.tprint(self.screen, "TCP position in base: ((%4.1f, %4.1f, %4.1f), (%3.0f,%3.0f,%3.0f))" % 
+        print(('\t' * indents) + "TCP position in base: ((%4.1f, %4.1f, %4.1f), (%3.0f,%3.0f,%3.0f))" % 
                             (pos[0]*1000,pos[1]*1000,pos[2]*1000,np.rad2deg(angle[0]),np.rad2deg(angle[1]),np.rad2deg(angle[2])))
         # self.robot_gui.indent()
         # self.robot_gui.tprint(self.screen, 'x= %4.1f mm, Rx= %3.0f deg' %
@@ -361,53 +383,68 @@ class Transducer_homing:
         # self.robot_gui.unindent()
 
         if current_target is not None and current_target != 1:
-            self.robot_gui.skip_line(1)
+            print()
             t_pos = current_target[0]
             t_ang = current_target[1]
-            self.robot_gui.tprint(self.screen, "Next target: ((%4.2f, %4.2f, %4.2f), (%3.1f,%3.1f,%3.1f))" % 
+            print(('\t' * indents) + "Next target: ((%4.2f, %4.2f, %4.2f), (%3.1f,%3.1f,%3.1f))" % 
                                 (t_pos[0],t_pos[1],t_pos[2],t_ang[0],t_ang[1],t_ang[2]))
 
+        print(('\t' * indents) + f'Recent refresh rate: {np.mean(self.last_ten_refresh_rate)}')
 
-        self.robot_gui.skip_line(1)
-
-        self.robot_gui.tprint(self.screen, f'Speed preset: {self.speed_preset}')
-
-        self.robot_gui.skip_line(1)
-        self.robot_gui.tprint(self.screen, f'Recent refresh rate: {np.mean(self.last_ten_refresh_rate)}')
-
-        self.robot_gui.skip_line(3)
+        print()
         
         if not router:
-            self.robot_gui.tprint(self.screen, 'Press (d)emo to demonstrate the basic pathrouting module')
-            self.robot_gui.tprint(self.screen, 'Press (k) to trigger a full scan with hard-coded resolution.')
-            self.robot_gui.indent()
-            self.robot_gui.tprint(self.screen, 'Beware this will override the controller until the pathfinder is cancelled or has finished the task.')
-            self.robot_gui.unindent()
+            print(('\t' * indents) + 'Press (d)emo to demonstrate the basic pathrouting module')
+            print(('\t' * indents) + 'Press (k) to trigger a full scan with hard-coded resolution.')
+            # self.robot_gui.indent()
+            indents += 1
+            print(('\t' * indents) + 'Beware this will override the controller until the pathfinder is cancelled or has finished the task.')
+            # self.robot_gui.unindent()
+            indents -= 1
+            print(('\t' * indents) + 'Press (q) to quit')
         else:
             # next_target = self.pathfinder.next()
             t_pos,t_angle = (current_target[0],current_target[1])
-            self.robot_gui.tprint(self.screen, 'Press (x) to cancel the running pathfinder')
-            self.robot_gui.tprint(self.screen, "Press (m) to movel to the next target point.")
-            self.robot_gui.skip_line(2)
-            self.robot_gui.tprint(self.screen, 'Current target:')
-            self.robot_gui.indent()
-            self.robot_gui.tprint(self.screen, 'x= %4.2f mm, Rx= %3.1f deg' %
+            print(('\t' * indents) + 'Press (x) to cancel the running pathfinder')
+            print(('\t' * indents) + "Press (m) to movel to the next target point.")
+            print("\n")
+            print(('\t' * indents) + 'Current target:')
+            # self.robot_gui.indent()
+            indents += 1
+            print(('\t' * indents) + 'x= %4.2f mm, Rx= %3.1f deg' %
                                 (t_pos[0], t_angle[0]))
-            self.robot_gui.tprint(self.screen, 'y= %4.2f mm, Ry= %3.1f deg' %
+            print(('\t' * indents) + 'y= %4.2f mm, Ry= %3.1f deg' %
                                 (t_pos[1], t_angle[1]))
-            self.robot_gui.tprint(self.screen, 'z= %4.2f mm, Rz= %3.1f deg' %
+            print(('\t' * indents) + 'z= %4.2f mm, Rz= %3.1f deg' %
                                 (t_pos[2], t_angle[2]))
-            self.robot_gui.unindent()
-            self.robot_gui.tprint(self.screen, 'Progress of the current running pathfinder:')
-            self.robot_gui.indent()
+            # self.robot_gui.unindent()
+            indents -= 1
+            print(('\t' * indents) + 'Progress of the current running pathfinder:')
+            # self.robot_gui.indent()
+            indents += 1
             for i in self.pathfinder.progress_report():
-                self.robot_gui.tprint(self.screen, i)
-            self.robot_gui.unindent()
+                print(('\t' * indents) + i)
+            # self.robot_gui.unindent()
+            indents -= 1
 
+        print("\n")
+        print(('\t' * indents) + time.ctime())
+        c,l = os.get_terminal_size()
+        print(c * '-')
+
+    def on_press(self, key):
+        logger.info(f"Pressed the key {key}")
+        logger.info(f"Pressed the character {key.char}")
+        logger.info(f"Key type: {type(key)}")
+        logger.info(f"Key type: {key.char}")
         
-        self.robot_gui.skip_line(2)
-        self.robot_gui.tprint(self.screen, time.ctime())
-
+        self.keys_pressed[key.char] = True
+        logger.info(f"Pressed keys: {self.keys_pressed}")
+    
+    def on_release(self, key):
+        logger.info(f"Pressed keysssssssssssssss: {self.keys_pressed}")
+        self.keys_pressed[key] = False
+        logger.info(f"Pressed keyssssssssssssssss: {self.keys_pressed}")
 
 if __name__=="__main__":
   main()
