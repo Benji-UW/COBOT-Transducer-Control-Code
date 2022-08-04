@@ -257,8 +257,6 @@ class Transducer_homing:
                     self.pathfinder.save_points(path + f'\\Scans\\test_{file_itr}.json')
 
                     self.robot.movel_to_target(((0,0,0),(0,0,0)))
-                    
-                    file_itr = file_itr + 1
                 else:
                     logger.debug(f"triggering movel to {nextpoint}")
                     self.robot.movel_to_target(nextpoint)
