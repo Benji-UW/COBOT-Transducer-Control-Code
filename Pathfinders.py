@@ -6,6 +6,10 @@ import numpy as np
 import json
 import time
 import logging
+import os
+
+path = os.path.dirname(__file__)
+print(path)
 
 class Pathfinder:
     '''A class for controlling where the arm goes. The tl;dr is you define a search space,
@@ -115,7 +119,7 @@ class Pathfinder:
                 return False
         return True
 
-    def save_points(self, path):
+    def save_points(self, path, file_itr):
         '''Called at the end of the test or when the pathfinder has finished, outputs the points
         collected to a json file at a given path, meant to be superceded in each custom class
         in order to save additional information specific to that mode of pathfinder.'''
@@ -123,10 +127,21 @@ class Pathfinder:
             'range of motion' : self.range_of_motion,
             'max_point' : self.max_point,
             'points' : self.points
-        } 
+        }
+
+        self.write_json_data(json_data, path, file_itr)
+
+
+    def write_json_data(self, data, path, file_itr):
+        path = os.path.dirname(__file__) + f'\\Scans\\test_{file_itr}.json'
+
+        file_itr = 0
+        while os.path.exists(path + f"\\Scans\\test_{file_itr}.json"):
+            file_itr += 1
 
         with open(path, 'a+') as outfile:
-            json.dump(json_data, outfile, indent=3)
+            json.dump(data, outfile, indent=3)
+
 
 class FullScan(Pathfinder):
     def __init__(self, resolution, z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0,path=None):
@@ -206,7 +221,7 @@ class FullScan(Pathfinder):
                 self.to_travel.append(False)
         return popped
 
-    def save_points(self, path):
+    def save_points(self, path, file_itr):
         # if self.path is not None:
         #     with open(self.path, 'r+') as infile:
         #         self.points = json.load(infile)
@@ -218,8 +233,7 @@ class FullScan(Pathfinder):
             'points' : self.points\
         }
 
-        with open(path, 'w+') as outfile:
-            json.dump(json_data, outfile, indent=3)
+        self.write_json_data(json_data, path, file_itr)
 
 class DivisionSearch(Pathfinder):
     def __init__(self, divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
@@ -282,7 +296,7 @@ class DivisionSearch(Pathfinder):
 
         yield 1
 
-    def save_points(self, path):
+    def save_points(self, path, file_itr):
         json_data = { \
             'range of motion' : self.range_of_motion, \
             'divisions' : self.divisions, \
@@ -290,8 +304,7 @@ class DivisionSearch(Pathfinder):
             'points' : self.points\
         }
 
-        with open(path, 'a+') as outfile:
-            json.dump(json_data, outfile, indent=3)
+        self.write_json_data(json_data, path, file_itr)
 
 class Discrete_degree(Pathfinder):
     '''This pathfinder uses a naive approximation of the search space where it optimizes

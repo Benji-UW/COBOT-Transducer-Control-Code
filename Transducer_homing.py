@@ -3,7 +3,6 @@ Unit convention: mm/kg/s/deg
 '''
 import socket
 import time
-# import pygame
 import os
 import numpy as np
 import logging
@@ -11,11 +10,8 @@ import logging
 from pynput import keyboard
 from logging.handlers import RotatingFileHandler
 from logging import Formatter
-# from pygame.locals import *
-from threading import Thread
-# from Controller import Controller
+# from threading import Thread
 from UR3e import *
-# from RobotGUI import *
 from Pathfinders import *
 
 def logger_setup():
@@ -33,6 +29,7 @@ def logger_setup():
     
     handler = RotatingFileHandler(filename=path+f"\\logging\\runtime_test.log",\
         backupCount=8,encoding="utf-8")
+    handler.doRollover()
 
     formatter = Formatter(fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
@@ -42,23 +39,19 @@ def logger_setup():
     logger.debug("Debug log for the robot starting on " + date_time_str)
     return logger,file_i
 
-
 logger,file_itr = logger_setup()
 
-np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
-
 def main():
+    np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
     # Thread(target=server.start_server).start()
 
     '''Initialize a transducer_homing object and run that mf'''
     robot = Transducer_homing()
     robot.initialize()
-
     robot.connect_to_matlab()
 
     # robot.test_functions()
     robot.start()
-
 
 class Transducer_homing:
     '''The UR3e robot keeps the position and angle of the TCP in meters/radians, 
@@ -66,30 +59,14 @@ class Transducer_homing:
     def __init__(self):
         self.robot = None
         self.matlab_socket = None
-        # self.scree n = None
-        # self.scre en_resolution = (480, 940)
-        # self.controller = None
         self.robot_gui = None
         self.latest_loop = -1
 
         self.key_listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
         self.key_listener.start()
-        # self.keys_pressed = {'q': False, \
-        #                     ']': False,
-        #                     '[': False,
-        #                     'd': False,
-        #                     'x': False,
-        #                     'a': False,
-        #                     'h': False}
         self.keys_pressed = set()
 
         self.headless_test = False
-
-#TODO Maybe delete this if no problems are caused by commenting them out.
-        # self.v_list = [0.005, 0.0125, 0.025, 0.05, 0.1, 0.2, 0.4, 0.8]
-        # self.vR_list = [0.025, 0.05, 0.1, 0.2, 0.4, 0.8, 1.0, 2.0]
-        # self.a_list = [0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 1.0]
-        # self.aR_list = [0.1, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 2.0]
 
         self.speed_presets = [(0.005, 0.025,0.025,0.1),\
                             (0.0125,0.05,0.05,0.2),\
@@ -129,23 +106,7 @@ class Transducer_homing:
         self.matlab_socket.close()
 
     def initialize(self, ip_robot='192.168.0.10'):
-        # pygame.init()
-
         os.system("title " + 'Transducer homing')
-
-        # self.scree n = pygame.display.set_mode(self.scree n_resolution)
-        # pygame.display.set_caption('Transducer homing')
-
-#TODO Old pygame stuff, delete the commented-out items as soon as it's working
-        # pygame.joystick.init()
-        # try:
-        #     joystick = pygame.joystick.Joystick(0)
-        #     joystick.init()
-        # except pygame.error:
-        #     joystick = -1
-        # # self.controller = Controller(joystick)
-
-        # self.robot_gui = RobotGUI()
 
         if self.headless_test:
             self.robot = Fake_UR3e()
@@ -162,18 +123,17 @@ class Transducer_homing:
             self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
             self.robot.set_max_displacement(self.max_disp)
             self.robot.set_parameters(base='base')
+        
         logger.info("Robot initialized :)")
 
     def start(self):
-        # self.robot_gui.reset()
         run_bool = True
         router = False
-        translate = True
 
         self.listener = self.MATLAB_listener()
         # self.listener = self.fake_MATLAB_listener()
 
-        self.last_ten_refresh_rate = np.zeros((10,0))
+        self.last_ten_refresh_rate = np.zeros((10,1))
 
         self.starting_pos = [np.copy(self.robot.pos), np.copy(self.robot.angle)]
         changed_preset = False
@@ -203,12 +163,11 @@ class Transducer_homing:
                 # Log how much time has elapsed since the previous reading
                 self.last_ten_refresh_rate[self.i%10] = time.time() - self.t
                 self.t = time.time()
-#TODO: Do I need this method? Or can I access the variable directly? Check get_current_rel_target
+                
                 pos,angle = self.robot.current_relative_target
 
                 if router:
                     self.pathfinder.newMag(((pos,angle), latest_mag), go_next)
-                    # You are here                
 
             # Press esc to escape the program and close out everything.
             logger.debug(f"In-loop keys pressed: {self.keys_pressed}")
@@ -231,13 +190,12 @@ class Transducer_homing:
                 self.robot.set_initial_pos()
             if "k" in self.keys_pressed and not router:
                 router = True
-                self.pathfinder = FullScan((0.5,0.5),14,0,20,path=path + f"\\Scans\\test_{file_itr}.json")
+                self.pathfinder = FullScan((0.5,0.5),6,0,25,path=path + f"\\Scans\\test_{file_itr}.json")
                 nextpoint = self.pathfinder.next()
-            # Press x to stop the running pathfinder
-            if 'x' in self.keys_pressed and router:
+            if 'x' in self.keys_pressed and router: # stop the running pathfinder
                 router = False
                 path = os.path.dirname(__file__)
-                self.pathfinder.save_points(path + f"\\Scans\\test_{file_itr}.json")
+                self.pathfinder.save_points(path,file_itr)
                 logger.debug(f"triggering movel to {nextpoint}")
                 self.robot.movel_to_target(nextpoint)
             if 'a' in self.keys_pressed and not router:
@@ -251,11 +209,10 @@ class Transducer_homing:
                 v = self.robot.wait_for_at_tar()
                 logger.info(f"Waiting for the at_tar return took {v} loops")
                 nextpoint = self.pathfinder.next()
-                if nextpoint == 1:
+                if nextpoint == 1: # End of path reached
                     router = False
                     path = os.path.dirname(__file__)
-                    self.pathfinder.save_points(path + f'\\Scans\\test_{file_itr}.json')
-
+                    self.pathfinder.save_points(path,file_itr)
                     self.robot.movel_to_target(((0,0,0),(0,0,0)))
                 else:
                     logger.debug(f"triggering movel to {nextpoint}")
@@ -269,10 +226,6 @@ class Transducer_homing:
             logger.debug(f"Current pos/angle: ({self.robot.pos.T}, {self.robot.angle.T}")
             logger.debug("----------------------------------------------")
 
-            # for event in pygame.event.get():
-            #     if event.type == pygame.QUIT:
-            #         run_bool = False
-            # pygame.display.flip()
             if i_rr >= self.refresh_rate:
                 i_rr = 0
             t = time.time()
@@ -290,7 +243,7 @@ class Transducer_homing:
             logger.info('Disconnected from server.')
         if router:
             path = os.path.dirname(__file__)
-            self.pathfinder.save_points(path + '\\Scans\\test_' + file_itr + '.json')
+            self.pathfinder.save_points(path,file_itr)
 
     def _get_delta_pos(self):
         '''Converts the get_delta_pos method built into the UR3e method into
@@ -334,13 +287,8 @@ class Transducer_homing:
             mag = round(time.time()) % 59
             yield (True, mag)
 
-    def main_menu_GUI(self,router_bool,current_target):
-        # self.screen.fill(WHITE)
-        # t = time.time()
-        # os.system('cls||clear')
-        # logger.debug(f"Clear-screen takes {time.time() - t} seconds.")
-        # self.robot_gui.reset()
-        self.write_pos_info(router_bool,current_target)
+    # def main_menu_GUI(self,router_bool,current_target):
+    #     self.write_pos_info(router_bool,current_target)
 
     def change_range_gui(self):
         '''It is not a priority right now but I would ultimately like there to be
@@ -356,7 +304,7 @@ class Transducer_homing:
         #     pygame.event.pump()
         #     keys = pygame.key.get_pressed()
 
-    def write_pos_info(self, router, current_target):
+    def main_menu_GUI(self, router, current_target):
         pos = self.robot.pos
         angle = self.robot.angle
         d_pos,d_ang = self._get_delta_pos()
@@ -418,25 +366,10 @@ class Transducer_homing:
     def on_press(self, key):
         # logger.debug(f"Pressed the key {key}")
         # logger.debug(f"Pressed the character {key.char}")
-        # logger.debug(f"Key type: {type(key)}")
-        # logger.debug(f"Key type: {key.char}")
-        
-        # Dictionary mode
-        # self.keys_pressed[key.char] = True
-
         self.keys_pressed.add(key.char)
-
-        # logger.debug(f"Pressed keys: {self.keys_pressed}")
     
     def on_release(self, key):
-        # logger.debug(f"Pressed keysssssssssssssss: {self.keys_pressed}")
-        
-        # Dictionary mode
-        # self.keys_pressed[key] = False
-        
         self.keys_pressed.remove(key.char)
-
-        # logger.debug(f"Pressed keyssssssssssssssss: {self.keys_pressed}")
 
 if __name__=="__main__":
   main()

@@ -49,7 +49,7 @@ def client_thread(conn):
     while is_alive:
         client_input = conn.recv(4096)
         try:
-            logger.info(client_input)
+            logger.debug(client_input)
         except e:
             logger.error("Client input was not loggable :/")
 
@@ -60,7 +60,7 @@ def client_thread(conn):
             # print('received motion:')
             # print(motion)
             conn.send(motion)
-            logger.info(b"Reply: " + motion)
+            logger.debug(b"Reply: " + motion)
         # elif client_input[:3] == b"SET":
         # #     pass
         elif b'SET' in client_input:
@@ -97,14 +97,14 @@ def client_thread(conn):
         elif b'I am alive' in client_input:
             if len(todo_list) != 0:
                 a = todo_list.pop()
-                print(b"sending todo item " + a)
+                logger.info(b"sending todo item " + a)
                 # time.sleep(0.01)
                 conn.send(a)
                 time.sleep(0.01)
             else:
                 conn.send(b"Transmit position")
         elif client_input == b'end':
-            print('Connection to process %d ended.' % number)
+            logger.info('Connection to process %d ended.' % number)
             conn.close()
             is_alive = False
         elif client_input[0] == 84:
@@ -112,20 +112,20 @@ def client_thread(conn):
             # print(client_input)
         else:
             # motion = client_input
-            print(shitty_sql)
+            logger.debug(shitty_sql)
             # debugging type step:
             cl = str(client_input)
             # print('client ' + str(conn) + ' just sent ' + cl)
         if b'I am alive' in client_input:
             if len(todo_list) != 0:
                 a = todo_list.pop()
-                print(b"sending todo item " + a)
+                logger.debug(b"sending todo item " + a)
                 # time.sleep(0.01)
                 conn.send(a)
                 time.sleep(0.01)
         if i_rr >= 250:
             i_rr = 0
-            print('Refresh rate of process %d: %3.1f' % (number, (1. / np.mean(refresh_rate))))
+            logger.info('Refresh rate of process %d: %3.1f' % (number, (1. / np.mean(refresh_rate))))
             if (1. / np.mean(refresh_rate)) > 2000:
                 conn.close()
                 is_alive = False
@@ -138,9 +138,9 @@ def client_thread(conn):
 
 def start_server():
     while True:
-        print("entered while loop")
+        logger.info("entered while loop")
         con, addr = s.accept()
-        print('Connected: ' + str(addr))
+        logger.info('Connected: ' + str(addr))
         Thread(target=client_thread, args=(con,)).start()
 
         # print("waiting for s2 connection")
@@ -148,13 +148,12 @@ def start_server():
         # print('Connected on server 2 ' + str(addr))
         # Thread(target=client_thread, args=(con,)).start()
 
-
 def test_import():
-    print("You've successfully accessed a method within this file.")
+    logger.info("You've successfully accessed a method within this file.")
 
 
 if __name__ == "__main__":
     start_server()
 else:
-    print(__name__)
-    print("server.py is being imported into another module")
+    logger.info(__name__)
+    logger.info("server.py is being imported into another module")
