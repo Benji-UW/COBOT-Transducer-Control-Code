@@ -8,9 +8,6 @@ import time
 import logging
 import os
 
-path = os.path.dirname(__file__)
-print(path)
-
 class Pathfinder:
     '''A class for controlling where the arm goes. The tl;dr is you define a search space,
     with a starting and ending value for each degree of freedom. It can do between one and
@@ -71,8 +68,6 @@ class Pathfinder:
         self.points.append(point_mag)
         if (point_mag[1] > self.max_point[1]):
             self.max_point = point_mag
-        
-        latest_point = point_mag[0]
 
     def next(self):
         return next(self.yielder)
@@ -100,26 +95,27 @@ class Pathfinder:
             yield pt
 
         yield 1
-        
-    def close_enough(self, point, override, tolerance=(0.5,2)):
-        '''Accepts as input a point and a tuple containing the dimensional tolerances,
-        in the form of (mm, deg), where the first element is the toleranace of linear
-        dimensions and the second is the angular tolerance. They default to 0.5 mm and 2 degrees.'''
-        if override:
-            return True
-        for i in range(3):
-            try:
-                if abs(self.to_travel[0][0][i] - point[0][i]) > tolerance[0]:
-                    return False
-            except TypeError:
-                print(self.to_travel[0])
-                print(point)
-                raise TypeError
-            if abs(self.to_travel[0][1][i % 2] - point[1][i % 2]) > tolerance[1]:
-                return False
-        return True
 
-    def save_points(self, path, file_itr):
+# TODO: Maybe delete the _close_enough module since it's been rendered obselete by the current functionality.        
+    # def _close_enough(self, point, override, tolerance=(0.5,2)):
+    #     '''Accepts as input a point and a tuple containing the dimensional tolerances,
+    #     in the form of (mm, deg), where the first element is the toleranace of linear
+    #     dimensions and the second is the angular tolerance. They default to 0.5 mm and 2 degrees.'''
+    #     if override:
+    #         return True
+    #     for i in range(3):
+    #         try:
+    #             if abs(self.to_travel[0][0][i] - point[0][i]) > tolerance[0]:
+    #                 return False
+    #         except TypeError:
+    #             print(self.to_travel[0])
+    #             print(point)
+    #             raise TypeError
+    #         if abs(self.to_travel[0][1][i % 2] - point[1][i % 2]) > tolerance[1]:
+    #             return False
+    #     return True
+
+    def save_points(self):
         '''Called at the end of the test or when the pathfinder has finished, outputs the points
         collected to a json file at a given path, meant to be superceded in each custom class
         in order to save additional information specific to that mode of pathfinder.'''
@@ -129,36 +125,39 @@ class Pathfinder:
             'points' : self.points
         }
 
-        self.write_json_data(json_data, path, file_itr)
+        self.write_json_data(json_data)
 
-
-    def write_json_data(self, data, path, file_itr):
-        path = os.path.dirname(__file__) + f'\\Scans\\test_{file_itr}.json'
-
+    def write_json_data(self, data):
         file_itr = 0
+        path = os.path.dirname(__file__)
         while os.path.exists(path + f"\\Scans\\test_{file_itr}.json"):
             file_itr += 1
 
-        with open(path, 'a+') as outfile:
+        path = path + f'\\Scans\\test_{file_itr}.json'
+
+        with open(path, 'w+') as outfile:
             json.dump(data, outfile, indent=3)
 
-
 class FullScan(Pathfinder):
-    def __init__(self, resolution, z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0,path=None):
+    def __init__(self, resolution, z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
         '''Acts almost identical to the regular pathfinder module, except it contains an additional
         field for the resolution of the scan. The resolution should be passed in as a tuple in the
         form (mm, deg) where the mm represents the linear mm tolerance for the full scan and the
         deg represents the angular degree tolerance for the full scan. There is a minimum tolerance
         based on the limitations of the robot, those are subject to change experimentally.'''
-        # self.yielder = self.internal_point_yielder()
-        # min_tolerance = (0.2, 1)
-        min_tolerance = (0.05,0.5)
+        min_tolerance = (0.1,0.5)
         self.resolution = (max(resolution[0],min_tolerance[0]), max(resolution[1],min_tolerance[1]))
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
         self.will_visit = 1
         self.start_time = time.time()
-        self.path = path
-        
+
+        file_itr = 0
+        path = os.path.dirname(__file__)
+        while os.path.exists(path + f"\\Scans\\test_{file_itr}.json"):
+            file_itr += 1
+
+        self.path = path + f'\\Scans\\test_{file_itr}.json'
+
         for d in self.active_rom:
             if {'X','Y','Z'}.issuperset(d):
                 self.will_visit *= (self.range_of_motion[d][1] - self.range_of_motion[d][0]) / self.resolution[0]
@@ -180,22 +179,17 @@ class FullScan(Pathfinder):
                             for Rz in np.linspace(r_o_m['Rz'][0], r_o_m['Rz'][1], int((r_o_m['Rz'][1]-r_o_m['Rz'][0])/res[1]) + 1):
                                 self.visited_so_far += 1
                                 yield ((x,y,z),(Rx,Ry,Rz))
-                    if self.path is not None:
+                    if (self.visited_so_far % 2000 == 0):
+                        self.logger.info(f"Doing a dump of the latest 2000 points, at")
                         self.periodic_dump()
-        yield 1   
+        yield 1
 
     def periodic_dump(self):
         now = time.time()
-        # try:
-        #     with open(self.path, 'r') as infile:
-        #         old_points = json.load(infile)
-        #         self.points.extend(old_points)
-        # except:
-        #     pass
+        
         with open(self.path, 'w') as outfile:
             json.dump(self.points, outfile, indent=3)
-        # self.points = []
-        print(time.time() - now)
+        self.logger.info(f"Periodic dumping of the points took {time.time() - now}")
         
     def progress_report(self):
         now = time.time()
@@ -211,29 +205,25 @@ class FullScan(Pathfinder):
              f"Estimated completion time: {finish_time}", \
                 f"Estimated time remaining: {remaining}"]
 
-    def close_enough(self, point, override, tolerance=(0.5,2)):
-        tolerance = (min(self.resolution[0] / 2, tolerance[0]), min(self.resolution[1] / 2, tolerance[1]))
-        popped = super().close_enough(point, tolerance)
-        if popped:
-            try:
-                self.to_travel.append(next(self.internal_yielder))
-            except:
-                self.to_travel.append(False)
-        return popped
+# TODO: See above, maybe delete this if no problems are caused.
+    # def _close_enough(self, point, override, tolerance=(0.5,2)):
+    #     tolerance = (min(self.resolution[0] / 2, tolerance[0]), min(self.resolution[1] / 2, tolerance[1]))
+    #     popped = super()._close_enough(point, tolerance)
+    #     if popped:
+    #         try:
+    #             self.to_travel.append(next(self.internal_yielder))
+    #         except:
+    #             self.to_travel.append(False)
+    #     return popped
 
-    def save_points(self, path, file_itr):
-        # if self.path is not None:
-        #     with open(self.path, 'r+') as infile:
-        #         self.points = json.load(infile)
-
+    def save_points(self):
         json_data = { \
             'range of motion' : self.range_of_motion, \
             'resolution' : self.resolution, \
             'max_point' : self.max_point,
             'points' : self.points\
         }
-
-        self.write_json_data(json_data, path, file_itr)
+        self.write_json_data(json_data)
 
 class DivisionSearch(Pathfinder):
     def __init__(self, divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
@@ -296,15 +286,14 @@ class DivisionSearch(Pathfinder):
 
         yield 1
 
-    def save_points(self, path, file_itr):
+    def save_points(self):
         json_data = { \
             'range of motion' : self.range_of_motion, \
             'divisions' : self.divisions, \
             'max_point' : self.max_point,
             'points' : self.points\
         }
-
-        self.write_json_data(json_data, path, file_itr)
+        self.write_json_data(json_data)
 
 class Discrete_degree(Pathfinder):
     '''This pathfinder uses a naive approximation of the search space where it optimizes
@@ -448,8 +437,6 @@ class DivisionDiscreteDegree(Pathfinder):
         # print("======================")
 
         for DoF in bounds.keys():
-            # print(DoF)
-            # print(bounds[DoF])
             if bounds[DoF][0] != bounds[DoF][1]:
                 if temp[DoF] == bounds[DoF][0]:
                     bounds[DoF] = [temp[DoF], temp[DoF] + (2 * inc_size[DoF])]

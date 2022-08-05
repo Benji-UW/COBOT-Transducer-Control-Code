@@ -16,16 +16,11 @@ from Pathfinders import *
 
 def logger_setup():
     date_time_str = time.strftime(r"%Y-%m-%d_%H-%M-%S")
-    file_i = 0
-
-    path = os.path.dirname(__file__)
-
-    while os.path.exists(path + "\\Scans\\test_%s.json" % file_i):
-        file_i += 1
 
     # Configure the root logger to a particular folder, format, and level. Lower the level when things
     # are working better or worse.
     root_logger = logging.getLogger()
+    path = os.path(__file__)
     
     handler = RotatingFileHandler(filename=path+f"\\logging\\runtime_test.log",\
         backupCount=8,encoding="utf-8")
@@ -34,12 +29,12 @@ def logger_setup():
     formatter = Formatter(fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     root_logger.addHandler(handler)
-    root_logger.setLevel(logging.DEBUG)
+    root_logger.setLevel(logging.INFO)
     logger = logging.getLogger(__name__)
-    logger.debug("Debug log for the robot starting on " + date_time_str)
-    return logger,file_i
+    logger.info("Debug log for the robot starting on " + date_time_str)
+    return logger
 
-logger,file_itr = logger_setup()
+logger = logger_setup()
 
 def main():
     np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
@@ -50,7 +45,6 @@ def main():
     robot.initialize()
     robot.connect_to_matlab()
 
-    # robot.test_functions()
     robot.start()
 
 class Transducer_homing:
@@ -59,7 +53,6 @@ class Transducer_homing:
     def __init__(self):
         self.robot = None
         self.matlab_socket = None
-        self.robot_gui = None
         self.latest_loop = -1
 
         self.key_listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
@@ -98,7 +91,7 @@ class Transducer_homing:
             logger.warning("Connection was fuckin refused :/ fuck me")
             return (False,e)
         
-        logger.debug('Connected to MATLAB')
+        logger.info('Connected to MATLAB')
         return (True,'')
 
     def _disconnect_from_matlab(self):
@@ -133,10 +126,9 @@ class Transducer_homing:
         self.listener = self.MATLAB_listener()
         # self.listener = self.fake_MATLAB_listener()
 
-        self.last_ten_refresh_rate = np.zeros((10,1))
+        self.last_ten_refresh_rate = np.zeros((40,1))
 
         self.starting_pos = [np.copy(self.robot.pos), np.copy(self.robot.angle)]
-        changed_preset = False
         nextpoint = None
 
         i_rr = 0
@@ -147,7 +139,6 @@ class Transducer_homing:
         self.i=-1
         logger.info('About to start the main loop')
         go_next = True
-        path = os.path.dirname(__file__)
 
         while run_bool:
             t0 = time.time()
@@ -161,7 +152,7 @@ class Transducer_homing:
                 # Iterate a counter that keeps track of the magnitude readings we've recieved
                 self.i+=1
                 # Log how much time has elapsed since the previous reading
-                self.last_ten_refresh_rate[self.i%10] = time.time() - self.t
+                self.last_ten_refresh_rate[self.i%40] = time.time() - self.t
                 self.t = time.time()
                 
                 pos,angle = self.robot.current_relative_target
@@ -178,11 +169,9 @@ class Transducer_homing:
             elif '[' in self.keys_pressed:
                 if self.speed_preset < len(self.v_list) - 1:
                     self.speed_preset += 1
-                    changed_preset = True
             elif ']' in self.keys_pressed:
                 if self.speed_preset > 0:
                     self.speed_preset -= 1
-                    changed_preset = True
             # Starts a demo pathfinder if the 'd' key is pressed
             if 'd' in self.keys_pressed and not router:
                 router = True
@@ -190,20 +179,15 @@ class Transducer_homing:
                 self.robot.set_initial_pos()
             if "k" in self.keys_pressed and not router:
                 router = True
-                self.pathfinder = FullScan((0.5,0.5),6,0,25,path=path + f"\\Scans\\test_{file_itr}.json")
+                self.pathfinder = FullScan((0.5,0.5),6,0,25)
                 nextpoint = self.pathfinder.next()
             if 'x' in self.keys_pressed and router: # stop the running pathfinder
                 router = False
-                path = os.path.dirname(__file__)
-                self.pathfinder.save_points(path,file_itr)
-                logger.debug(f"triggering movel to {nextpoint}")
-                self.robot.movel_to_target(nextpoint)
+                self.pathfinder.save_points()
+                logger.debug(f"triggering movel to {((0,0,0),(0,0,0))}")
+                self.robot.movel_to_target(((0,0,0),(0,0,0)))
             if 'a' in self.keys_pressed and not router:
                 self.change_range_gui()
-
-            if changed_preset:
-                v,vR,a,aR = self.speed_presets[self.speed_preset]
-                self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
 
             if router:
                 v = self.robot.wait_for_at_tar()
@@ -211,8 +195,7 @@ class Transducer_homing:
                 nextpoint = self.pathfinder.next()
                 if nextpoint == 1: # End of path reached
                     router = False
-                    path = os.path.dirname(__file__)
-                    self.pathfinder.save_points(path,file_itr)
+                    self.pathfinder.save_points()
                     self.robot.movel_to_target(((0,0,0),(0,0,0)))
                 else:
                     logger.debug(f"triggering movel to {nextpoint}")
@@ -242,8 +225,7 @@ class Transducer_homing:
             self._disconnect_from_matlab()
             logger.info('Disconnected from server.')
         if router:
-            path = os.path.dirname(__file__)
-            self.pathfinder.save_points(path,file_itr)
+            self.pathfinder.save_points()
 
     def _get_delta_pos(self):
         '''Converts the get_delta_pos method built into the UR3e method into
@@ -287,9 +269,6 @@ class Transducer_homing:
             mag = round(time.time()) % 59
             yield (True, mag)
 
-    # def main_menu_GUI(self,router_bool,current_target):
-    #     self.write_pos_info(router_bool,current_target)
-
     def change_range_gui(self):
         '''It is not a priority right now but I would ultimately like there to be
         a GUI option for adjusting the default range of motion for the pathfinder.
@@ -303,49 +282,26 @@ class Transducer_homing:
         d_pos,d_ang = self._get_delta_pos()
 
         indents = 0
-        print(f'TCP position in relation to its initial position:\t({d_pos.T} (mm),{d_ang.T} (deg))')
+        print(f'TCP position in relation to its initial position: ({d_pos.T}(mm),{d_ang.T}(deg))')
         print("=========================")
-
-        # print("TCP position in base: ((%4.1f, %4.1f, %4.1f), (%3.0f,%3.0f,%3.0f))" % 
-        #                     (pos[0]*1000,pos[1]*1000,pos[2]*1000,np.rad2deg(angle[0]),np.rad2deg(angle[1]),np.rad2deg(angle[2])))
-
         print(f"TCP position in base: ({pos.T * 1000}, {np.rad2deg(angle.T)}")
-
         print(f'Recent refresh rate: {np.mean(self.last_ten_refresh_rate)}')
         print()
         
         if not router:
             print('Press (d)emo to demonstrate the basic pathrouting module')
             print('Press (k) to trigger a full scan with hard-coded resolution.')
-            # self.robot_gui.indent()
-            indents += 1
             print('\tBeware this will override the controller until the pathfinder is cancelled or has finished the task.')
-            # self.robot_gui.unindent()
-            indents -= 1
             print('Press (q) to quit')
         else:
             if current_target is not None and current_target != 1:
                 print()
-                # t_pos = current_target[0]
-                # t_ang = current_target[1]
-                # t_pos,t_ang = (current_target[0],current_target[1])
                 t_pos,t_ang = current_target
                 print(f"Next target: ({[format(a,'1.2f') for a in t_pos]},{[format(a,'1.2f') for a in t_ang]})")
-                # print("Next target: ((%4.2f, %4.2f, %4.2f), (%3.1f,%3.1f,%3.1f))" % 
-                #                     (t_pos[0],t_pos[1],t_pos[2],t_ang[0],t_ang[1],t_ang[2]))
 
             print('Press (x) to cancel the running pathfinder')
             print("Press (m) to movel to the next target point.")
             print("\n")
-            # print('Current target:')
-            # indents += 1
-            # print('\tx= %4.2f mm, Rx= %3.1f deg' %
-            #                     (t_pos[0], t_angle[0]))
-            # print('\ty= %4.2f mm, Ry= %3.1f deg' %
-            #                     (t_pos[1], t_angle[1]))
-            # print('\tz= %4.2f mm, Rz= %3.1f deg' %
-            #                     (t_pos[2], t_angle[2]))
-            
             print('Progress of the current running pathfinder:')
             
             for i in self.pathfinder.progress_report():
@@ -357,8 +313,8 @@ class Transducer_homing:
         print(c * '-')
 
     def on_press(self, key):
-        # logger.debug(f"Pressed the key {key}")
-        # logger.debug(f"Pressed the character {key.char}")
+        logger.debug(f"Pressed the key {key}")
+        logger.debug(f"Pressed the character {key.char}")
         self.keys_pressed.add(key.char)
     
     def on_release(self, key):
