@@ -92,10 +92,10 @@ class Transducer_homing:
         try:
             self.matlab_socket.connect((server_ip, port))
         except socket.gaierror as e:
-            logger.debug(f'Connection error to robot: {e}')
+            logger.warning(f'Connection error to robot: {e}')
             return (False,e)
         except ConnectionRefusedError as e:
-            logger.error("Connection was fuckin refused :/ fuck me")
+            logger.warning("Connection was fuckin refused :/ fuck me")
             return (False,e)
         
         logger.debug('Connected to MATLAB')
@@ -296,13 +296,6 @@ class Transducer_homing:
         By default the range is +/- 8 mm along the z axis and +/- 45 degrees along
         the Rx and Ry axes.'''
         pass
-        # not_set = True
-        # cursor = 0
-        # while not_set:
-        #     self.scr een.fill(WHITE)
-
-        #     pygame.event.pump()
-        #     keys = pygame.key.get_pressed()
 
     def main_menu_GUI(self, router, current_target):
         pos = self.robot.pos
