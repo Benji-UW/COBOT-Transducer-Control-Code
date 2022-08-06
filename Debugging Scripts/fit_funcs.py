@@ -31,3 +31,7 @@ def rational_3(x,a,b,c,d):
 def absolute(x,a,b,c):
     '''Simple absolute value function'''
     return a * np.abs((x-b)) + c
+
+def inv_absolute(x,a,b,c):
+    '''Rational absolute value function'''
+    return a / (np.abs((x-b)) + c)
