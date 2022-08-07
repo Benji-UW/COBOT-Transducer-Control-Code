@@ -35,3 +35,40 @@ def absolute(x,a,b,c):
 def inv_absolute(x,a,b,c):
     '''Rational absolute value function'''
     return a / (np.abs((x-b)) + c)
+
+def inv_abs_poly(x,a,b,c):
+    '''Rational absolute value polynomial'''
+    return a / (np.abs((x-b)**2 + c))
+
+def inv_abs_poly_4(x,a,b,c,d,e,f,g,h):
+    '''Rational absolute value 4th degree polynomial'''
+    return (a / (np.abs(x**4 + (x*c)**3 + (x*d)**2 + (x*e) + f) + g)) + h
+
+
+
+
+
+def ang_plus_z(data,a,b,c,d,e,f,g):
+    '''The inv_absolute should be applied to the Z data, gauss to the Ry data'''
+    y=data[0]
+    x=data[1]
+
+    return (gauss(x,a,b,c) * inv_absolute(y,d,e,f)) + g
+
+def double_ang(data,a,b,c,d):
+    # print(data)
+    x=data[0]
+    y=data[1]
+    print(x[0:10])
+    print(y[0:10])
+    print(np.deg2rad(x)[0:10])
+    print(np.deg2rad(y)[0:10])
+    print(np.cos(np.deg2rad(x)[0:10]))
+    print(np.cos(np.deg2rad(y)[0:10]))
+    t = np.rad2deg(np.arccos(np.cos(np.deg2rad(y)) * np.cos(np.deg2rad(x))))
+    
+    print('------------------')
+    print(t[0:10])
+
+
+    return (a * (np.e)**(-b * (np.arccos(np.cos(np.deg2rad(x)) * np.cos(np.deg2rad(y))))**2))

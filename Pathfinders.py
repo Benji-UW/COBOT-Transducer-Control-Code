@@ -30,6 +30,7 @@ class Pathfinder:
         x_r = [-x_range, x_range]
         y_r = [-y_range, y_range]
         Rz_r = [-Rz_range, Rz_range]
+        self.notes = "No notes passed from setup"
         self.range_of_motion = {'X': x_r,'Y': y_r,'Z':z_r,'Rx':Rx_r,'Ry':Ry_r,'Rz':Rz_r}
 
         # Should be a list of the string representations of the active degrees
@@ -134,6 +135,8 @@ class Pathfinder:
             file_itr += 1
 
         path = path + f'\\Scans\\test_{file_itr}.json'
+
+        data['notes'] = self.notes
 
         with open(path, 'w+') as outfile:
             json.dump(data, outfile, indent=3)

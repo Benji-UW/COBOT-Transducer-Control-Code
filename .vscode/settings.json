@@ -1,3 +1,10 @@
 {
-    "python.pythonPath": "c:\\Users\\Odonnell_Lab\\AppData\\Local\\Programs\\Python\\Python310\\python.exe"
+    "python.pythonPath": "~\\AppData\\Local\\Programs\\Python\\Python310\\python.exe",
+    "python.autoComplete.extraPaths": ["c:\\Users\\ander\\OneDrive - UW\\Robotics lab material\\Robotics Control Code\\Ben's Control Code\\Debugging Scripts",
+    "c:\\Users\\ander\\OneDrive - UW\\Robotics lab material\\Robotics Control Code\\Ben's Control Code"
+],
+"python.analysis.extraPaths": [
+    "c:\\Users\\ander\\OneDrive - UW\\Robotics lab material\\Robotics Control Code\\Ben's Control Code\\Debugging Scripts",
+    "c:\\Users\\ander\\OneDrive - UW\\Robotics lab material\\Robotics Control Code\\Ben's Control Code"
+]
 }

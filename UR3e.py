@@ -34,8 +34,9 @@ class UR3e:
     def __init__(self):
         # Initialize variables
         self.pos = np.zeros((3, 1))
-        
         self.angle = np.zeros((3, 1))
+
+        self.joints = np.zeros((6,1))
         
         # TCP offset and rotation refer to the displacement of the TCP from 
         # the end effector, they are constant throughout the operation of 
@@ -333,35 +334,54 @@ class UR3e:
         return self._change_base(self.pos - self.initial_pos, inv=True), \
                self._change_base(self.angle - self.initial_angle, inv=True)
 
+    def get_joint_angles(self):
+        # Get registry 270 to 275 in modbus, ie 0x190 w/ read size of 6
+        cmd = b'\x00\x04\x00\x00\x00\x06\x00\x03\x01\x0E\x00\x06'
+        self.modbus_socket.send(cmd)
+        reg = self.modbus_socket.recv(1024)
+        self.logger.debug(f"Joint angle modbus reply recieved: {reg}")
+        
+        # Get x, registry 270 in modbus, ie 0x190
+        self.joints[0] = _reg_convert(reg[-12:-10].hex(), 'angle')
+
+        # Get y, registry 271 in modbus, ie 0x191
+        self.joints[1] = _reg_convert(reg[-10:-8].hex(), 'angle')
+
+        # Get z, registry 272 in modbus, ie 0x192
+        self.joints[2] = _reg_convert(reg[-8:-6].hex(), 'angle')
+
+        # Get Rx, registry 273 in modbus, ie 0x193
+        self.joints[3] = _reg_convert(reg[-6:-4].hex(), 'angle')
+
+        # Get Ry, registry 274 in modbus, ie 0x194
+        self.joints[4] = _reg_convert(reg[-4:-2].hex(), 'angle')
+
+        # Get Rz, registry 275 in modbus, ie 0x195
+        self.joints[5] = _reg_convert(reg[-2:].hex(), 'angle')
 
     def _get_pos(self):
         # Get registry 400 to 405 in modbus, ie 0x190 w/ read size of 6
         cmd = b'\x00\x04\x00\x00\x00\x06\x00\x03\x01\x90\x00\x06'
         self.modbus_socket.send(cmd)
         reg = self.modbus_socket.recv(1024)
+        self.logger.debug(f"Position modbus reply recieved: {reg}")
         
         # Get x, registry 400 in modbus, ie 0x190
-        #self.pos[0] = _reg_convert(reg[-12:-10].encode('hex'), 'pos')
         self.pos[0] = _reg_convert(reg[-12:-10].hex(), 'pos')
 
         # Get y, registry 401 in modbus, ie 0x191
-        #self.pos[1] = _reg_convert(reg[-10:-8].encode('hex'), 'pos')
         self.pos[1] = _reg_convert(reg[-10:-8].hex(), 'pos')
 
         # Get z, registry 402 in modbus, ie 0x192
-        #self.pos[2] = _reg_convert(reg[-8:-6].encode('hex'), 'pos')
         self.pos[2] = _reg_convert(reg[-8:-6].hex(), 'pos')
 
         # Get Rx, registry 403 in modbus, ie 0x193
-        # self.angle[0] = _reg_convert(reg[-6:-4].encode('hex'), 'angle')
         self.angle[0] = _reg_convert(reg[-6:-4].hex(), 'angle')
 
         # Get Ry, registry 404 in modbus, ie 0x194
-        #self.angle[1] = _reg_convert(reg[-4:-2].encode('hex'), 'angle')
         self.angle[1] = _reg_convert(reg[-4:-2].hex(), 'angle')
 
         # Get Rz, registry 405 in modbus, ie 0x195
-        #self.angle[2] = _reg_convert(reg[-2:].encode('hex'), 'angle')
         self.angle[2] = _reg_convert(reg[-2:].hex(), 'angle')
 
     def _get_tcp_offset(self):
