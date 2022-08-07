@@ -55,20 +55,28 @@ def ang_plus_z(data,a,b,c,d,e,f,g):
 
     return (gauss(x,a,b,c) * inv_absolute(y,d,e,f)) + g
 
-def double_ang(data,a,b,c,d):
+def double_ang(data,a,b,c):
     # print(data)
     x=data[0]
     y=data[1]
-    print(x[0:10])
-    print(y[0:10])
-    print(np.deg2rad(x)[0:10])
-    print(np.deg2rad(y)[0:10])
-    print(np.cos(np.deg2rad(x)[0:10]))
-    print(np.cos(np.deg2rad(y)[0:10]))
-    t = np.rad2deg(np.arccos(np.cos(np.deg2rad(y)) * np.cos(np.deg2rad(x))))
+    # print(x[0:10])
+    # print(y[0:10])
+    # print(np.deg2rad(x)[0:10])
+    # print(np.deg2rad(y)[0:10])
+    # print(np.cos(np.deg2rad(x)[0:10]))
+    # print(np.cos(np.deg2rad(y)[0:10]))
+    # t = np.rad2deg(np.arccos(np.cos(np.deg2rad(y)) * np.cos(np.deg2rad(x))))
     
-    print('------------------')
-    print(t[0:10])
+    # print('------------------')
+    # print(t[0:10])
 
 
-    return (a * (np.e)**(-b * (np.arccos(np.cos(np.deg2rad(x)) * np.cos(np.deg2rad(y))))**2))
+    return (a * (np.e)**(-b * (np.arccos(np.cos(np.deg2rad(x)) * np.cos(np.deg2rad(y))))**2)) + c
+
+def Z_Rx_Ry(data,a,b,c,d,e,f,g):
+    '''Must be passed the data in the form [Z,Rx,Ry]'''
+    z=data[0]
+    Rx=data[1]
+    Ry=data[2]
+
+    return (double_ang([Rx,Ry], a,b,c) * inv_absolute(z,d,e,f)) + g
