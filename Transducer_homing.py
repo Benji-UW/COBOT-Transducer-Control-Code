@@ -6,11 +6,12 @@ import time
 import os
 import numpy as np
 import logging
-# import server
+import json
+import server
 from pynput import keyboard
 from logging.handlers import RotatingFileHandler
 from logging import Formatter
-# from threading import Thread
+from threading import Thread
 from UR3e import *
 from Pathfinders import *
 
@@ -20,7 +21,7 @@ def logger_setup():
     # Configure the root logger to a particular folder, format, and level. Lower the level when things
     # are working better or worse.
     root_logger = logging.getLogger()
-    path = os.path(__file__)
+    path = os.path.dirname(__file__)
     
     handler = RotatingFileHandler(filename=path+f"\\logging\\runtime_test.log",\
         backupCount=8,encoding="utf-8")
@@ -38,7 +39,7 @@ logger = logger_setup()
 
 def main():
     np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
-    # Thread(target=server.start_server).start()
+    Thread(target=server.start_server).start()
 
     '''Initialize a transducer_homing object and run that mf'''
     robot = Transducer_homing()
@@ -54,6 +55,9 @@ class Transducer_homing:
         self.robot = None
         self.matlab_socket = None
         self.latest_loop = -1
+
+        self.joint_history = []
+        self.starting_joints = None
 
         self.key_listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
         self.key_listener.start()
@@ -175,8 +179,9 @@ class Transducer_homing:
             # Starts a demo pathfinder if the 'd' key is pressed
             if 'd' in self.keys_pressed and not router:
                 router = True
-                self.pathfinder = Pathfinder(20,25,25)
+                self.pathfinder = Pathfinder(25,15,15,12,18,30)
                 self.robot.set_initial_pos()
+                self.starting_joints = np.copy(self.robot.initial_joints).tolist()
             if "k" in self.keys_pressed and not router:
                 router = True
                 self.pathfinder = FullScan((0.5,0.5),6,0,25)
@@ -192,11 +197,24 @@ class Transducer_homing:
             if router:
                 v = self.robot.wait_for_at_tar()
                 logger.info(f"Waiting for the at_tar return took {v} loops")
+                self.robot.get_joint_angles()
+                self.joint_history.append((nextpoint, np.copy(self.robot.joints).tolist()))
+
                 nextpoint = self.pathfinder.next()
+                
                 if nextpoint == 1: # End of path reached
                     router = False
                     self.pathfinder.save_points()
                     self.robot.movel_to_target(((0,0,0),(0,0,0)))
+
+                    data={"Start joints": self.starting_joints,\
+                        "joints_at_points": self.joint_history,\
+                        "TCP_offset": np.copy(self.robot.tcp_offset).tolist(),\
+                        "Notes": "No notes yet"}
+
+                    path = os.path.dirname(__file__) + f"\\IK_Scans\\Test_{time.strftime('%m_%d__%H_%M')}.json"
+                    with open(path, 'w+') as outfile:
+                        json.dump(data, outfile, indent=3)
                 else:
                     logger.debug(f"triggering movel to {nextpoint}")
                     self.robot.movel_to_target(nextpoint)
@@ -279,12 +297,14 @@ class Transducer_homing:
     def main_menu_GUI(self, router, current_target):
         pos = self.robot.pos
         angle = self.robot.angle
+        joints = self.robot.joints
         d_pos,d_ang = self._get_delta_pos()
 
         indents = 0
         print(f'TCP position in relation to its initial position: ({d_pos.T}(mm),{d_ang.T}(deg))')
         print("=========================")
         print(f"TCP position in base: ({pos.T * 1000}, {np.rad2deg(angle.T)}")
+        print(f"Current joint position in degrees: ({np.rad2deg(joints.T)})")
         print(f'Recent refresh rate: {np.mean(self.last_ten_refresh_rate)}')
         print()
         

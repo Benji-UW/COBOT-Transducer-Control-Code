@@ -37,6 +37,7 @@ class UR3e:
         self.angle = np.zeros((3, 1))
 
         self.joints = np.zeros((6,1))
+        self.initial_joints = np.zeros((6,1))
         
         # TCP offset and rotation refer to the displacement of the TCP from 
         # the end effector, they are constant throughout the operation of 
@@ -147,6 +148,7 @@ class UR3e:
     def set_initial_pos(self):
         self.initial_pos = np.copy(self.pos)
         self.initial_angle = np.copy(self.angle)
+        self.initial_joints = np.copy(self.joints)
 
         self.data_socket.send(b"TODO set_origin ")
         self.logger.info('THIS IS HUGE WHY ISNT IT GOING')
@@ -295,12 +297,14 @@ class UR3e:
     def end_freedrive(self):
         self.robot_socket.send(b'end_freedrive_mode()\n')
         self._get_pos()
+        self.get_joint_angles()
         self.initial_pos = np.copy(self.pos)
         self.initial_angle = np.copy(self.angle)
         return True
 
     def update(self):
         self._get_pos()
+        self.get_joint_angles()
 
         # UR uses the axis-angle system for rotation vectors
         total_angle = np.add(self.angle, self.tcp_rot)
