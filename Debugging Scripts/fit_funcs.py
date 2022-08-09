@@ -12,13 +12,17 @@ def polynomial_2(x, a, b, c):
     '''2nd order polynomial (is terrible)'''
     return (a*(x**2)) + (b*x) + c
 
-def rational_2(x,a,b,c):
-    '''2nd Order rational function :)'''
+def rational_2(x,a,b,c,d):
+    '''2nd Order rational function'''
     return (1/((a*(x**2)) + (b*x) + c))
 
 def gauss(x,a,b,c):
-    '''Simplified Gaussian'''
+    '''Gaussian'''
     return (a * (np.e)**(-b * (x-c)**2))
+
+def gauss_plus(x,a,b,c,d):
+    '''Gaussian plus'''
+    return (a * (np.e)**(-b * (x-c)**2)) + d
 
 def arctan(x,a,b,c):
     '''b * arctan(c/(x-a)^2)'''
@@ -34,7 +38,7 @@ def absolute(x,a,b,c):
 
 def inv_absolute(x,a,b,c):
     '''Rational absolute value function'''
-    return a / (np.abs((x-b)) + c)
+    return (a / (np.abs((x-b)) + c))
 
 def inv_abs_poly(x,a,b,c):
     '''Rational absolute value polynomial'''
