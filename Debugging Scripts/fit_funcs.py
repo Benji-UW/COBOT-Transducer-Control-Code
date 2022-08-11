@@ -48,12 +48,12 @@ def inv_abs_poly_4(x,a,b,c,d,e,f,y_offset):
 
 
 
-def ang_plus_z(data,a,b,c,d,x_offset,y_offset,z_offset):
+def ang_plus_z(data,a,b,c,x_offset,y_offset,z_offset):
     '''The inv_absolute should be applied to the Z data, gauss to the Ry data'''
-    y=data[0]
-    x=data[1]
+    x=data[0]
+    y=data[1]
 
-    return (gauss(x,a,b,x_offset,z_offset) * inv_absolute(y,c,d,y_offset,0))
+    return (gauss(x,a,b,x_offset,z_offset) * inv_absolute(y,1,c,y_offset,0))
 
 def double_ang(data,a,b,x_offset,y_offset,z_offset):
     x=data[0]
