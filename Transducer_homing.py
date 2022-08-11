@@ -149,9 +149,9 @@ class Transducer_homing:
             self.robot.update()
             self.main_menu_GUI(router, nextpoint)
 
+
             (new_mag, latest_mag) = next(self.listener)
 
-            # This section of code is entirely for handling a new signal reading from MATLAB
             if new_mag:
                 # Iterate a counter that keeps track of the magnitude readings we've recieved
                 self.i+=1
@@ -164,77 +164,45 @@ class Transducer_homing:
                 if router:
                     self.pathfinder.newMag(((pos,angle), latest_mag), go_next)
 
-            # Press esc to escape the program and close out everything.
-            logger.debug(f"In-loop keys pressed: {self.keys_pressed}")
-            logger.debug(f"Q in pressed keys: {'q' in self.keys_pressed}")
+            # For clarity, the response to key prseses has been moved to another method
+            run_bool,router,nextpoint = self.key_press_actions(run_bool,router,nextpoint)
 
-            if 'q' in self.keys_pressed:
-                run_bool = False
-            elif '[' in self.keys_pressed:
-                if self.speed_preset < len(self.v_list) - 1:
-                    self.speed_preset += 1
-            elif ']' in self.keys_pressed:
-                if self.speed_preset > 0:
-                    self.speed_preset -= 1
-            # Starts a demo pathfinder if the 'd' key is pressed
-            if 'd' in self.keys_pressed and not router:
-                router = True
-                self.pathfinder = Pathfinder(25,15,15,12,18,30)
-                self.robot.set_initial_pos()
-                self.starting_joints = np.copy(self.robot.initial_joints).tolist()
-            if "k" in self.keys_pressed and not router:
-                router = True
-                self.pathfinder = FullScan((0.5,0.5),6,0,25)
-                nextpoint = self.pathfinder.next()
-            if 'x' in self.keys_pressed and router: # stop the running pathfinder
-                router = False
-                self.pathfinder.save_points()
-                logger.debug(f"triggering movel to {((0,0,0),(0,0,0))}")
-                self.robot.movel_to_target(((0,0,0),(0,0,0)))
-            if 'a' in self.keys_pressed and not router:
-                self.change_range_gui()
-
+            # If there is a running pathfinder:
             if router:
+                # Wait for the robot to arrive at current target (log how long it took)
                 v = self.robot.wait_for_at_tar()
                 logger.info(f"Waiting for the at_tar return took {v} loops")
+#TODO Delete joint history items after IK has been understood
+                # Store the joint angles of the robot in the joint_history for analysis
                 self.robot.get_joint_angles()
                 self.joint_history.append((nextpoint, np.copy(self.robot.joints).tolist()))
 
+                # Find the next point
                 nextpoint = self.pathfinder.next()
                 
-                if nextpoint == 1: # End of path reached
+                if nextpoint == 1: # nextpoint = 1 means end of path reached
                     router = False
+
+                    # Save points
                     self.pathfinder.save_points()
+
+                    # Return robot to starting position (comment out when you don't wanna do this)
                     self.robot.movel_to_target(((0,0,0),(0,0,0)))
 
+                    
                     data={"Start joints": self.starting_joints,\
                         "joints_at_points": self.joint_history,\
                         "TCP_offset": np.copy(self.robot.tcp_offset).tolist(),\
                         "Notes": "No notes yet"}
-
                     path = os.path.dirname(__file__) + f"\\IK_Scans\\Test_{time.strftime('%m_%d__%H_%M')}.json"
                     with open(path, 'w+') as outfile:
                         json.dump(data, outfile, indent=3)
                 else:
                     logger.debug(f"triggering movel to {nextpoint}")
                     self.robot.movel_to_target(nextpoint)
-                    # literally do not pass go, do not collect $200 until
-                    # the target has been reached.
-
-            logger.debug("----------------------------------------------")
-            logger.debug("Position info about the robot:")
-            logger.debug(f"Initial pos/angle: ({self.robot.initial_pos.T}, {self.robot.initial_angle.T})")
-            logger.debug(f"Current pos/angle: ({self.robot.pos.T}, {self.robot.angle.T}")
-            logger.debug("----------------------------------------------")
-
-            if i_rr >= self.refresh_rate:
-                i_rr = 0
-            t = time.time()
-            if 1.0 / self.refresh_rate - (t - t0) > 0:
-                time.sleep(1.0 / self.refresh_rate - (t - t0))
+            # Post things to the logs.
+            self.main_loop_logs()
         #-----------------------------Bottom of loop-----------------------------------#
-
-        # Return robot to starting position (comment out when you don't wanna do this)
 
         # loop is exited
         self.robot.disconnect()
@@ -244,6 +212,60 @@ class Transducer_homing:
             logger.info('Disconnected from server.')
         if router:
             self.pathfinder.save_points()
+
+    def key_press_actions(self, run_bool, router, nextpoint):
+        '''
+        Each run through the main loop, listen for actions triggered
+        by key input.
+        q - Quit the program and exit (saving first)
+        [ - Increment the robot speed preset (deprecated)
+        ] - Decrement the "     "     "      (")
+        d - Start the baseline, demonstration pathfinder (visits each
+            corner of the search space once)
+        k - Start the full-scan pathfinder (traverses the entire search
+            space at a given resoltion (slow))
+        x - Cancel the running pathfinder (robot should go home)
+        a - change the range of the full-scan pathfinder 
+            (not implemented)
+        '''
+        if 'q' in self.keys_pressed: # Quit
+            run_bool = False
+        elif '[' in self.keys_pressed: # Increment
+            if self.speed_preset < len(self.v_list) - 1:
+                self.speed_preset += 1
+        elif ']' in self.keys_pressed: # Decrement
+            if self.speed_preset > 0:
+                self.speed_preset -= 1
+        if 'd' in self.keys_pressed and not router: # Start basic pathfinder
+            router = True
+            self.pathfinder = Pathfinder(25,15,15,12,18,30)
+            self.robot.set_initial_pos()
+            self.starting_joints = np.copy(self.robot.initial_joints).tolist()
+        if "k" in self.keys_pressed and not router: # Start fullscan pathfinder
+            router = True
+            self.pathfinder = FullScan((0.5,0.5),6,0,25)
+            nextpoint = self.pathfinder.next()
+        if 'x' in self.keys_pressed and router: # stop the running pathfinder
+            router = False
+            self.pathfinder.save_points()
+            logger.debug(f"triggering movel to {((0,0,0),(0,0,0))}")
+            self.robot.movel_to_target(((0,0,0),(0,0,0)))
+        if 'a' in self.keys_pressed and not router: # Change operating range
+            self.change_range_gui()
+
+        return run_bool,router,nextpoint
+
+    def main_loop_logs(self):
+        '''Log information that gets posted every single loop, 
+        moved here to reduce crowding on the main screen.'''
+        logger.debug(f"In-loop keys pressed: {self.keys_pressed}")
+        logger.debug(f"Q in pressed keys: {'q' in self.keys_pressed}")
+        logger.debug("----------------------------------------------")
+        logger.debug("Position info about the robot:")
+        logger.debug(f"Initial pos/angle: ({self.robot.initial_pos.T}, {self.robot.initial_angle.T})")
+        logger.debug(f"Current pos/angle: ({self.robot.pos.T}, {self.robot.angle.T}")
+        logger.debug(f"Current joint positions (radians): {self.robot.joints.T}")
+        logger.debug("----------------------------------------------")
 
     def _get_delta_pos(self):
         '''Converts the get_delta_pos method built into the UR3e method into
@@ -274,9 +296,10 @@ class Transducer_homing:
             mag = float(msg[4:13]) / 1.0E3
             loop = int(msg[1:3])
 
-            if loop == self.latest_loop:
-                yield (False, mag)
-            else:
+            # if loop == self.latest_loop:
+            #     yield (False, mag)
+            #TODO if this causes no problems, delete all instances of the "latest_loop" boolean
+            if loop != self.latest_loop:
                 self.latest_loop = loop
                 yield (True, mag)
     
