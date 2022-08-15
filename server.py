@@ -44,12 +44,8 @@ def client_thread(conn):
         except e:
             logger.error("Client input was not loggable :/")
 
-        # print(str(client_input))
-        # print(shitty_sql)
         t = time.time()
         if client_input == b'motion':
-            # print('received motion:')
-            # print(motion)
             conn.send(motion)
             logger.debug(b"Reply: " + motion)
         # elif client_input[:3] == b"SET":
@@ -64,6 +60,7 @@ def client_thread(conn):
                     var_val = cli_input[3*i + 2]
             # The shitty SQL data gets stored as ints in a dictionary
                 shitty_sql[var_name] = int(var_val)
+            logger.debug(f"Current data content: {shitty_sql}")
         elif client_input[:3] == b"GET":
             '''Should be a message in the format "GET <name>", only sending integers tho'''
             cli_input = client_input.split()
@@ -77,12 +74,9 @@ def client_thread(conn):
             '''Makes a shity todo-list for passing tasks back and forth'''
             cli_input = client_input.split()
             if len(todo_list) < 5:
-                # print(b"adding item to the todo list: " + cli_input[1])
                 todo_list.append(cli_input[1])
-                # print(todo_list)
         elif client_input[:4] == b'RSM:':
             robot_state_message = client_input[4:] + b" your server touched this :)))"
-            # print(robot_state_message)
         elif client_input == b'RSR':
             conn.send(robot_state_message)
         elif b'I am alive' in client_input:
@@ -100,13 +94,12 @@ def client_thread(conn):
             is_alive = False
         elif client_input[0] == 84:
             motion = client_input
-            # print(client_input)
         else:
             # motion = client_input
             logger.debug(shitty_sql)
             # debugging type step:
             cl = str(client_input)
-            # print('client ' + str(conn) + ' just sent ' + cl)
+            logger.debug('client ' + str(conn) + ' just sent ' + cl)
         if b'I am alive' in client_input:
             if len(todo_list) != 0:
                 a = todo_list.pop()
@@ -133,11 +126,6 @@ def start_server():
         con, addr = s.accept()
         logger.info('Connected: ' + str(addr))
         Thread(target=client_thread, args=(con,)).start()
-
-        # print("waiting for s2 connection")
-        # con, addr = s2.accept()
-        # print('Connected on server 2 ' + str(addr))
-        # Thread(target=client_thread, args=(con,)).start()
 
 def test_import():
     logger.info("You've successfully accessed a method within this file.")

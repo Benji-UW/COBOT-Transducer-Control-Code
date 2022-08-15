@@ -45,6 +45,8 @@ class UR3e:
         self.tcp_offset = np.zeros((3, 1))
         self.tcp_rot = np.zeros((3, 1))
 
+        self.freedrive_active = False
+
         self.max_disp = 0.1
         self.initial_pos = np.zeros((3, 1))
         self.initial_angle = np.zeros((3, 1))
@@ -547,17 +549,13 @@ class UR3e:
 
         return logstring
 
-    # def new_port_response(self):
-    #     cmds = [b"pos = get_actual_tcp_pos()\n", \
-    #         b"trans = wrench_trans(init_pos, pos)\n", \
-    #         b"socket_set_var(\"Rx\", trans[3]*1000, \"data_socket\")\n", \
-    #         b"socket_set_var(\"Ry\", trans[4]*1000, \"data_socket\")\n", \
-    #         b"socket_set_var(\"Rx\", trans[5]*1000, \"data_socket\")\n"]
-
-    #     for cmd in cmds:
-    #         self.robot_socket.send(cmd)
-        
-    #     self.data_socket.recv(1024)
+    def toggle_freedrive(self):
+        if self.freedrive_active:
+            self.data_socket.send(b'SET FREE %i ' % 1)
+        else:
+            self.data_socket.send(b'SET FREE %i ' % 0)
+        self.data_socket.send(b'TODO check_free ')
+        self.freedrive_active = not self.freedrive_active
 
     def data_string_io(self, to_send):
         '''Recieves a bytes-like object and sends it to the data port on the robot.
@@ -578,7 +576,6 @@ class UR3e:
             self.robot_socket.send(cmd)
 
     def movel_to_target(self, next_point):
-        
         t_pos,t_angle = (next_point[0],next_point[1])
         tx,ty,tz = t_pos
         tRx,tRy,tRz = t_angle

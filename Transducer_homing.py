@@ -30,7 +30,7 @@ def logger_setup():
     formatter = Formatter(fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     root_logger.addHandler(handler)
-    root_logger.setLevel(logging.INFO)
+    root_logger.setLevel(logging.DEBUG)
     logger = logging.getLogger(__name__)
     logger.info("Debug log for the robot starting on " + date_time_str)
     return logger
@@ -126,9 +126,10 @@ class Transducer_homing:
     def start(self):
         run_bool = True
         router = False
+        freedrive = False
 
-        self.listener = self.MATLAB_listener()
-        # self.listener = self.fake_MATLAB_listener()
+        # self.listener = self.MATLAB_listener()
+        self.listener = self.fake_MATLAB_listener()
 
         self.last_ten_refresh_rate = np.zeros((40,1))
 
@@ -147,7 +148,7 @@ class Transducer_homing:
         while run_bool:
             t0 = time.time()
             self.robot.update()
-            self.main_menu_GUI(router, nextpoint)
+            self.main_menu_GUI(router, nextpoint, freedrive)
 
 
             (new_mag, latest_mag) = next(self.listener)
@@ -165,17 +166,18 @@ class Transducer_homing:
                     self.pathfinder.newMag(((pos,angle), latest_mag), go_next)
 
             # For clarity, the response to key prseses has been moved to another method
-            run_bool,router,nextpoint = self.key_press_actions(run_bool,router,nextpoint)
+            run_bool,router,nextpoint,freedrive = self.key_press_actions(run_bool,router,nextpoint,freedrive)
 
             # If there is a running pathfinder:
-            if router:
+            if router and not freedrive:
                 # Wait for the robot to arrive at current target (log how long it took)
                 v = self.robot.wait_for_at_tar()
                 logger.info(f"Waiting for the at_tar return took {v} loops")
 #TODO Delete joint history items after IK has been understood
                 # Store the joint angles of the robot in the joint_history for analysis
                 self.robot.get_joint_angles()
-                self.joint_history.append((nextpoint, np.copy(self.robot.joints).tolist()))
+                self.joint_history.append((nextpoint, np.copy(self.robot.joints).tolist(), \
+                    (np.copy(self.robot.pos).tolist(), np.copy(self.robot.angle).tolist())))
 
                 # Find the next point
                 nextpoint = self.pathfinder.next()
@@ -189,7 +191,7 @@ class Transducer_homing:
                     # Return robot to starting position (comment out when you don't wanna do this)
                     self.robot.movel_to_target(((0,0,0),(0,0,0)))
 
-                    
+
                     data={"Start joints": self.starting_joints,\
                         "joints_at_points": self.joint_history,\
                         "TCP_offset": np.copy(self.robot.tcp_offset).tolist(),\
@@ -213,7 +215,7 @@ class Transducer_homing:
         if router:
             self.pathfinder.save_points()
 
-    def key_press_actions(self, run_bool, router, nextpoint):
+    def key_press_actions(self, run_bool, router, nextpoint, freedrive):
         '''
         Each run through the main loop, listen for actions triggered
         by key input.
@@ -227,6 +229,7 @@ class Transducer_homing:
         x - Cancel the running pathfinder (robot should go home)
         a - change the range of the full-scan pathfinder 
             (not implemented)
+        f - toggle Freedrive
         '''
         if 'q' in self.keys_pressed: # Quit
             run_bool = False
@@ -238,7 +241,7 @@ class Transducer_homing:
                 self.speed_preset -= 1
         if 'd' in self.keys_pressed and not router: # Start basic pathfinder
             router = True
-            self.pathfinder = Pathfinder(25,15,15,12,18,30)
+            self.pathfinder = Pathfinder(25,15,15,12,18)
             self.robot.set_initial_pos()
             self.starting_joints = np.copy(self.robot.initial_joints).tolist()
         if "k" in self.keys_pressed and not router: # Start fullscan pathfinder
@@ -252,8 +255,11 @@ class Transducer_homing:
             self.robot.movel_to_target(((0,0,0),(0,0,0)))
         if 'a' in self.keys_pressed and not router: # Change operating range
             self.change_range_gui()
+        if 'f' in self.keys_pressed:
+            self.robot.toggle_freedrive()
+            freedrive = not freedrive
 
-        return run_bool,router,nextpoint
+        return run_bool,router,nextpoint,freedrive
 
     def main_loop_logs(self):
         '''Log information that gets posted every single loop, 
@@ -317,24 +323,25 @@ class Transducer_homing:
         the Rx and Ry axes.'''
         pass
 
-    def main_menu_GUI(self, router, current_target):
+    def main_menu_GUI(self, router, current_target,freedrive):
         pos = self.robot.pos
         angle = self.robot.angle
         joints = self.robot.joints
         d_pos,d_ang = self._get_delta_pos()
 
-        indents = 0
         print(f'TCP position in relation to its initial position: ({d_pos.T}(mm),{d_ang.T}(deg))')
         print("=========================")
         print(f"TCP position in base: ({pos.T * 1000}, {np.rad2deg(angle.T)}")
         print(f"Current joint position in degrees: ({np.rad2deg(joints.T)})")
         print(f'Recent refresh rate: {np.mean(self.last_ten_refresh_rate)}')
         print()
+        print(f"Freedrive active: {freedrive}")
+        print("Press (f) to toggle (f)reedrive mode :)")
+        print()
         
         if not router:
             print('Press (d)emo to demonstrate the basic pathrouting module')
             print('Press (k) to trigger a full scan with hard-coded resolution.')
-            print('\tBeware this will override the controller until the pathfinder is cancelled or has finished the task.')
             print('Press (q) to quit')
         else:
             if current_target is not None and current_target != 1:
@@ -344,16 +351,14 @@ class Transducer_homing:
 
             print('Press (x) to cancel the running pathfinder')
             print("Press (m) to movel to the next target point.")
-            print("\n")
+            print("")
             print('Progress of the current running pathfinder:')
-            
             for i in self.pathfinder.progress_report():
                 print('\t'+ i)
 
-        print("\n")
-        print(('\t' * indents) + time.ctime())
-        c,l = os.get_terminal_size()
-        print(c * '-')
+        print()
+        print(time.ctime())
+        print('----------------------')
 
     def on_press(self, key):
         logger.debug(f"Pressed the key {key}")
