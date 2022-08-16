@@ -33,25 +33,26 @@ class Pathfinder:
         self.notes = "No notes passed from setup"
         self.range_of_motion = {'X': x_r,'Y': y_r,'Z':z_r,'Rx':Rx_r,'Ry':Ry_r,'Rz':Rz_r}
 
-        # Should be a list of the string representations of the active degrees
-        # of freedom.
         self.active_rom = []
+        '''Stores the character representations of the active degrees of freedom.
+        e.g. ['Z', 'Rx', 'Ry']'''
         for degree in self.range_of_motion.keys():
             if self.range_of_motion[degree] != [0,0]:
                 self.active_rom.append(degree)
 
         self.points = []
-        self.to_travel = []
+        '''Records the point/magnitude pairs that the pathfinder has been given
+        in a tuple of the form (((X,Y,Z),(Rx,Ry,Rz)),mag)'''
 
         self.yielder = self.internal_point_yielder()
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger(__name__) 
         self.logger.info("Pathfinder initialized")
 
+        self.max_point = (-1,-10000,-1000)
         '''max_point stores the point and magnitude of the highest magnitude yet scanned,
         stored in a tuple of the form (((X,Y,Z, (Rx,Ry,Rz)), mag), initialized to (-1,-1,-1)
         for simplicity.'''
-        self.max_point = (-1,-10000,-1000)
-
+        
         '''Sets the degrees of freedom of this pathfinder, only Z defaults to true.'''
         self.degrees_of_freedom = {'X': x_range!=0,'Y': y_range!=0,'Z':z_range!=0,'Rx':Rx_range!=0,'Ry':Ry_range!=0,'Rz':Rz_range!=0}
 
@@ -81,7 +82,6 @@ class Pathfinder:
         the search space as well as all the corners to the "to-travel" list. When all the points
         have been visited it returns the integer 1 to indicate the search is complete.'''
         center_pt = [np.mean(self.range_of_motion[a]) for a in self.range_of_motion.keys()]
-        self.to_travel.append((tuple(center_pt[:3]),tuple(center_pt[3:])))
 
         corners = set()
         q = (0,0,1)
@@ -303,31 +303,19 @@ class Discrete_degree(Pathfinder):
     one dimensions at a time, and loops until it converges on the apparent global max.'''
     def __init__(self, z_range=None, Rx_range=0, Ry_range=0, \
         x_range=0, y_range=0, Rz_range=0,r_o_m=None,max_point=(-1,-1,-1)):
+        
+        super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
+        
         if r_o_m is None:
             if z_range is None:
                 raise ArgumentError("Please supply a working argument :/")
-            super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
-        else:
-            self.range_of_motion = r_o_m
+        
+        self.range_of_motion = r_o_m
 
-            # Should be a list of the string representations of the active degrees
-            # of freedom.
-            self.active_rom = []
-            for degree in self.range_of_motion.keys():
-                if self.range_of_motion[degree] != [0,0]:
-                    self.active_rom.append(degree)
-
-            self.points = []
-            self.to_travel = []
-
-            print(self.active_rom)
-
-            self.yielder = self.internal_point_yielder()
-
-            '''max_point stores the point and magnitude of the highest magnitude yet scanned,
-            stored in a tuple of the form (((X,Y,Z, (Rx,Ry,Rz)), mag), initialized to (-1,-1,-1)
-            for simplicity.'''
-            self.max_point = max_point
+        '''max_point stores the point and magnitude of the highest magnitude yet scanned,
+        stored in a tuple of the form (((X,Y,Z, (Rx,Ry,Rz)), mag), initialized to (-1,-1,-1)
+        for simplicity.'''
+        self.max_point = max_point
         
     def internal_point_yielder(self):
         '''This yielder optimizes one degree of freedom at a time, looping in case
@@ -392,92 +380,110 @@ class Greedy_discrete_degree(Pathfinder):
     '''This pathfinder uses a naive approximation of the search space where it optimizes
     one dimensions at a time, and loops until it converges on the apparent global max.
     Unlike the standard discrete degree, this one doesn't scan the entire space.'''
-    def __init__(self, z_range=None, Rx_range=0, Ry_range=0, \
-        x_range=0, y_range=0, Rz_range=0,r_o_m=None,max_point=(-1,-1,-1)):
-        if r_o_m is None:
-            if z_range is None:
-                raise ArgumentError("Please supply a working argument :/")
-            super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
-        else:
-            self.range_of_motion = r_o_m
-
-            # Should be a list of the string representations of the active degrees
-            # of freedom.
-            self.active_rom = []
-            for degree in self.range_of_motion.keys():
-                if self.range_of_motion[degree] != [0,0]:
-                    self.active_rom.append(degree)
-
-            self.points = []
-            self.to_travel = []
-
-            print(self.active_rom)
-
-            self.yielder = self.internal_point_yielder()
-
-            '''max_point stores the point and magnitude of the highest magnitude yet scanned,
-            stored in a tuple of the form (((X,Y,Z, (Rx,Ry,Rz)), mag), initialized to (-1,-1,-1)
-            for simplicity.'''
-            self.max_point = max_point
-
+    def __init__(self, z_range, Rx_range=0, Ry_range=0, \
+        x_range=0, y_range=0, Rz_range=0,bias=10,steps=3,inc=3.2):
+        super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
+        self.bias=bias
+        self.steps = steps
+        self.inc = inc
+    
     def internal_point_yielder(self):
         '''This yielder optimizes one degree of freedom at a time, looping in case
         optimizing along more than one direction isn't appropriate.
-        
+
+        min_tolerance = (0.1,0.5)
+
         Pseudocode:
         1. Start with an internal list of all of the active ranges of motion in this module
-            1a. Set the current best to the center of the full range of motion
-        2. Select one active axis and move along the entire range of motion in that
-        direction. All of the non-active degrees of freedom are kept at their
-        "current best" value.
-        3. Save the highest magnitude from that span, and update that axis' "current best" value
-        4. Move to the next degree of freedom and do the same thing'''
-        starting_res = (2,5) # 2 mm, 5 deg
-        max_res = (0.03,0.5)
+        2. Start with one axis and move in a direction until the magnitude goes down twice in a row
+            2a. If this happens from the point you started at, move in the other direction with the
+            same logic
+        3. After you've found the local maximum of the magnitude, repeat the process with the other
+            degrees of freedom
+        4. Repeat and reduce the resolution to the minimum
+        '''
+        # First find the magnitude at the origin (don't move)
+        yield ((0,0,0),(0,0,0))
 
-        indeces = {'X': (0,0), 'Y': (0,1), 'Z': (0,2), 'Rx': (1,0), 'Ry': (1,1), 'Rz': (1,2)}
-        current_best = dict()
+        # Iterate through each D_o_f thrice
+        l = len(self.active_rom)
 
-        if self.max_point != (-1,-10000,-1000):
-            for i in indeces.keys():
-                # print(self.max_point)
-                current_best[i] = self.max_point[0][indeces[i][0]][indeces[i][1]]
-        else:
-            for i in indeces.keys():
-                current_best[i] = np.mean(self.range_of_motion[i])
+        for i in range(l*5):
+            if i%l == 0:
+                self.inc = self.inc / 2
+                print(self.inc)
+            # Set the starting point to the point with the current max magnitude
+            t = self.max_point[0]
 
-        i = 1
-        while i < 9:
-            last_best = current_best.copy()
-            for slider in self.active_rom:
-                if {'X','Y','Z'}.issuperset(slider):
-                    res = max(starting_res[0] * (1 / (i**2)), max_res[0])
-                else:
-                    res = max(starting_res[1] * (1 / (i**2)), max_res[1])
+            # Iterate through the active degrees of freedom
+            axis = self.active_rom[i % l]
+            # Start moving in the positive direction
+            positive=False
 
-                steps = int((self.range_of_motion[slider][1] - self.range_of_motion[slider][0]) / res)
-                # print(slider)
+            # Iterate self.steps in the positive direction, exploratory
+            for i in range(self.steps):
+                t = self.increment_appropriate_axis(t,axis,positive)
+                yield t
+            
+            # If you went downhill twice in a row, that's a bunk direction
+            while not self.recent_downhill():
+                t = self.increment_appropriate_axis(t,axis,positive)
+                yield t
+            
+            positive = True
+            t = self.max_point[0]
 
-                g = current_best.copy()
-                cent = g[slider]
+            # Iterate self.steps in the negative direction, exploratory
+            for i in range(self.steps):
+                t = self.increment_appropriate_axis(t,axis,positive)
+                yield t
 
-                # print(np.mean(self.range_of_motion[slider]) / i)
-
-                for j in np.linspace(self.range_of_motion[slider][0] * (2/(2+i)),self.range_of_motion[slider][1] * (2/ (2+i)), steps):
-                # for j in np.linspace(cent + (np.mean(abs(self.range_of_motion[slider])) / i),cent - (np.mean(abs(self.range_of_motion[slider])) / i), steps):
-                    g[slider] = j
-                    yield ((g['X'],g['Y'],g['Z']),(g['Rx'],g['Ry'],g['Rz']))
-
-                current_best[slider] = self.max_point[0][indeces[slider][0]][indeces[slider][1]]
-
-            keep_going = False
-            i += 1
-            for k in last_best.keys():
-                if abs(last_best[k] - current_best[k]) > 0.5:
-                    keep_going = True
-            if not keep_going:
-                i = 8
+            # As long as you don't go downhill twice in a row, keep going in this direction
+            while not self.recent_downhill():
+                t = self.increment_appropriate_axis(t,axis,positive)
+                yield t
+            
+            # Go back to start of the loop and try again with another degree of freedom.
         yield 1
+
+    def recent_downhill(self):
+        '''Returns True if the pathfinder has gone downhill constantly for the past
+        'self.steps' points
+        Returns False if any of the past 'self.steps' points increased. '''
+
+        for i in range(self.steps):
+            if (self.points[-1 - i][1] + self.bias > self.points[-2- i][1]):
+                return False
+        
+        return True
+
+    def increment_appropriate_axis(self,max_point,axis,positive):
+        # print(max_point)
+        try:
+            ((x,y,z),(Rx,Ry,Rz))=max_point
+        except ValueError as e:
+            print(max_point)
+            print(e)
+        
+        inc = self.inc
+
+        if not positive:
+            inc = inc * -1
+        
+        if axis=='X':
+            x+=inc
+        elif axis=='Y':
+            y+=inc
+        elif axis=='Z':
+            z+=inc
+        elif axis=='Rx':
+            Rx+=inc
+        elif axis=='Ry':
+            Ry+=inc
+        elif axis=='Rz':
+            Rx+=inc
+
+        return ((x,y,z),(Rx,Ry,Rz))
 
 class DivisionDiscreteDegree(Pathfinder):
     def __init__(self,divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0,cutoff_mag=-1):

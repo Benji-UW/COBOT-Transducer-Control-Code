@@ -226,6 +226,7 @@ class Transducer_homing:
             corner of the search space once)
         k - Start the full-scan pathfinder (traverses the entire search
             space at a given resoltion (slow))
+        g - Start the greedy_discrete_degree pathfinder
         x - Cancel the running pathfinder (robot should go home)
         a - change the range of the full-scan pathfinder 
             (not implemented)
@@ -342,6 +343,7 @@ class Transducer_homing:
         if not router:
             print('Press (d)emo to demonstrate the basic pathrouting module')
             print('Press (k) to trigger a full scan with hard-coded resolution.')
+            print('Press (g) to trigger a amplitude max-finding pathrouter.')
             print('Press (q) to quit')
         else:
             if current_target is not None and current_target != 1:

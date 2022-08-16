@@ -554,7 +554,9 @@ class UR3e:
             self.data_socket.send(b'SET FREE %i ' % 1)
         else:
             self.data_socket.send(b'SET FREE %i ' % 0)
+        time.sleep(0.01)
         self.data_socket.send(b'TODO check_free ')
+        time.sleep(0.01)
         self.freedrive_active = not self.freedrive_active
 
     def data_string_io(self, to_send):
