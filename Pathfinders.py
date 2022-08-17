@@ -381,11 +381,12 @@ class Greedy_discrete_degree(Pathfinder):
     one dimensions at a time, and loops until it converges on the apparent global max.
     Unlike the standard discrete degree, this one doesn't scan the entire space.'''
     def __init__(self, z_range, Rx_range=0, Ry_range=0, \
-        x_range=0, y_range=0, Rz_range=0,bias=10,steps=3,inc=3.2):
+        x_range=0, y_range=0, Rz_range=0,bias=10,steps=3,inc=1.6):
         super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
         self.bias=bias
         self.steps = steps
         self.inc = inc
+        self.max_point = (((0,0,0),(0,0,0)),-1)
     
     def internal_point_yielder(self):
         '''This yielder optimizes one degree of freedom at a time, looping in case
@@ -407,8 +408,9 @@ class Greedy_discrete_degree(Pathfinder):
 
         # Iterate through each D_o_f thrice
         l = len(self.active_rom)
+        yield self.max_point[0]
 
-        for i in range(l*5):
+        for i in range(l*4):
             if i%l == 0:
                 self.inc = self.inc / 2
                 print(self.inc)

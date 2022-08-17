@@ -30,7 +30,7 @@ def logger_setup():
     formatter = Formatter(fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     root_logger.addHandler(handler)
-    root_logger.setLevel(logging.DEBUG)
+    root_logger.setLevel(logging.INFO)
     logger = logging.getLogger(__name__)
     logger.info("Debug log for the robot starting on " + date_time_str)
     return logger
@@ -128,8 +128,8 @@ class Transducer_homing:
         router = False
         freedrive = False
 
-        # self.listener = self.MATLAB_listener()
-        self.listener = self.fake_MATLAB_listener()
+        self.listener = self.MATLAB_listener()
+        # self.listener = self.fake_MATLAB_listener()
 
         self.last_ten_refresh_rate = np.zeros((40,1))
 
@@ -140,16 +140,17 @@ class Transducer_homing:
 
         self.t = time.time()
         (new_mag, latest_mag) = next(self.listener)
-
+        # latest_mag = 1
+        
         self.i=-1
         logger.info('About to start the main loop')
         go_next = True
 
+        time.sleep(0.05)
         while run_bool:
             t0 = time.time()
             self.robot.update()
-            self.main_menu_GUI(router, nextpoint, freedrive)
-
+            self.main_menu_GUI(router, nextpoint, freedrive, latest_mag)
 
             (new_mag, latest_mag) = next(self.listener)
 
@@ -188,8 +189,9 @@ class Transducer_homing:
                     # Save points
                     self.pathfinder.save_points()
 
-                    # Return robot to starting position (comment out when you don't wanna do this)
-                    self.robot.movel_to_target(((0,0,0),(0,0,0)))
+                    # # Return robot to starting position (comment out when you don't wanna do this)
+                    # self.robot.movel_to_target(((0,0,0),(0,0,0)))
+                    self.robot.movel_to_target(self.pathfinder.max_point[0])
 
 
                     data={"Start joints": self.starting_joints,\
@@ -205,6 +207,7 @@ class Transducer_homing:
             # Post things to the logs.
             self.main_loop_logs()
         #-----------------------------Bottom of loop-----------------------------------#
+        self.robot.movel_to_target(((0,0,0),(0,0,0)))
 
         # loop is exited
         self.robot.disconnect()
@@ -234,31 +237,44 @@ class Transducer_homing:
         '''
         if 'q' in self.keys_pressed: # Quit
             run_bool = False
+            self.keys_pressed.remove('q')
         elif '[' in self.keys_pressed: # Increment
             if self.speed_preset < len(self.v_list) - 1:
                 self.speed_preset += 1
+            self.keys_pressed.remove('[')
         elif ']' in self.keys_pressed: # Decrement
             if self.speed_preset > 0:
                 self.speed_preset -= 1
+            self.keys_pressed.remove(']')
         if 'd' in self.keys_pressed and not router: # Start basic pathfinder
             router = True
             self.pathfinder = Pathfinder(25,15,15,12,18)
             self.robot.set_initial_pos()
             self.starting_joints = np.copy(self.robot.initial_joints).tolist()
+            self.keys_pressed.remove('d')
         if "k" in self.keys_pressed and not router: # Start fullscan pathfinder
             router = True
             self.pathfinder = FullScan((0.5,0.5),6,0,25)
             nextpoint = self.pathfinder.next()
+            self.keys_pressed.remove('k')
+        if "g" in self.keys_pressed and not router: # Start fullscan pathfinder
+            router = True
+            self.pathfinder = Greedy_discrete_degree(20,15,15,bias=1,steps=4)
+            nextpoint = self.pathfinder.next()
+            self.keys_pressed.remove('g')
         if 'x' in self.keys_pressed and router: # stop the running pathfinder
             router = False
             self.pathfinder.save_points()
             logger.debug(f"triggering movel to {((0,0,0),(0,0,0))}")
             self.robot.movel_to_target(((0,0,0),(0,0,0)))
+            self.keys_pressed.remove('x')
         if 'a' in self.keys_pressed and not router: # Change operating range
             self.change_range_gui()
+            self.keys_pressed.remove('a')
         if 'f' in self.keys_pressed:
             self.robot.toggle_freedrive()
             freedrive = not freedrive
+            self.keys_pressed.remove('f')
 
         return run_bool,router,nextpoint,freedrive
 
@@ -295,20 +311,23 @@ class Transducer_homing:
         MATLAB. At each yield statement it returns a tuple containing a boolean and a float,
         the boolean indicating whether the magnitude is new and the float representing the
         magnitude.'''   
-        mag,self.latest_loop = -1,-1        
+        mag,self.latest_loop = -1,-1
+        i=0
         while True:
             self.matlab_socket.send(b'motion')
             msg = self.matlab_socket.recv(1024)
+            i += 1
 
             mag = float(msg[4:13]) / 1.0E3
             loop = int(msg[1:3])
 
-            # if loop == self.latest_loop:
-            #     yield (False, mag)
+            if loop == self.latest_loop:
+                yield (False, mag)
             #TODO if this causes no problems, delete all instances of the "latest_loop" boolean
             if loop != self.latest_loop:
                 self.latest_loop = loop
                 yield (True, mag)
+            # yield (True,mag)
     
     def fake_MATLAB_listener(self):
         '''This method fakes the input from the MATLAB listener, can be used to debug the
@@ -324,7 +343,7 @@ class Transducer_homing:
         the Rx and Ry axes.'''
         pass
 
-    def main_menu_GUI(self, router, current_target,freedrive):
+    def main_menu_GUI(self, router, current_target, freedrive, latest_mag):
         pos = self.robot.pos
         angle = self.robot.angle
         joints = self.robot.joints
@@ -335,7 +354,12 @@ class Transducer_homing:
         print(f"TCP position in base: ({pos.T * 1000}, {np.rad2deg(angle.T)}")
         print(f"Current joint position in degrees: ({np.rad2deg(joints.T)})")
         print(f'Recent refresh rate: {np.mean(self.last_ten_refresh_rate)}')
-        print()
+        print("------------------------")
+        bars = int((latest_mag/750) * 80)
+        spaces = 80 - bars
+        print(f"Latest mag:{latest_mag}")
+        print((bars*'|') + (spaces*' ') + '|')
+
         print(f"Freedrive active: {freedrive}")
         print("Press (f) to toggle (f)reedrive mode :)")
         print()
@@ -364,11 +388,12 @@ class Transducer_homing:
 
     def on_press(self, key):
         logger.debug(f"Pressed the key {key}")
-        logger.debug(f"Pressed the character {key.char}")
+        logger.info(f"Pressed the character {key.char}")
         self.keys_pressed.add(key.char)
     
     def on_release(self, key):
-        self.keys_pressed.remove(key.char)
+        pass
+        # self.keys_pressed.remove(key.char)
 
 if __name__=="__main__":
   main()

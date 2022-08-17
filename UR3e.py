@@ -551,9 +551,9 @@ class UR3e:
 
     def toggle_freedrive(self):
         if self.freedrive_active:
-            self.data_socket.send(b'SET FREE %i ' % 1)
-        else:
             self.data_socket.send(b'SET FREE %i ' % 0)
+        else:
+            self.data_socket.send(b'SET FREE %i ' % 1)
         time.sleep(0.01)
         self.data_socket.send(b'TODO check_free ')
         time.sleep(0.01)

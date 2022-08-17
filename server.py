@@ -38,7 +38,7 @@ def client_thread(conn):
     refresh_rate = np.zeros((250,))
     i_rr = 0
     while is_alive:
-        client_input = conn.recv(4096)
+        client_input = conn.recv(1024)
         try:
             logger.debug(client_input)
         except e:
@@ -47,7 +47,7 @@ def client_thread(conn):
         t = time.time()
         if client_input == b'motion':
             conn.send(motion)
-            logger.debug(b"Reply: " + motion)
+            logger.info(b"Reply: " + motion)
         # elif client_input[:3] == b"SET":
         # #     pass
         elif b'SET' in client_input:
@@ -129,7 +129,6 @@ def start_server():
 
 def test_import():
     logger.info("You've successfully accessed a method within this file.")
-
 
 if __name__ == "__main__":
     start_server()
