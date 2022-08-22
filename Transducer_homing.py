@@ -1,6 +1,7 @@
 '''
 Unit convention: mm/kg/s/deg
 '''
+from pyexpat import ErrorString
 import socket
 import time
 import os
@@ -15,15 +16,15 @@ from threading import Thread
 from UR3e import *
 from Pathfinders import *
 
-def logger_setup():
+def logger_setup() -> logging.Logger:
     date_time_str = time.strftime(r"%Y-%m-%d_%H-%M-%S")
 
-    # Configure the root logger to a particular folder, format, and level. Lower the level when things
-    # are working better or worse.
+    # Configure the root logger to a particular folder, format, and level.
+    # Lower the level when things are working better or worse.
     root_logger = logging.getLogger()
     path = os.path.dirname(__file__)
     
-    handler = RotatingFileHandler(filename=path+f"\\logging\\runtime_test.log",\
+    handler = RotatingFileHandler(filename=path+f"\\logging\\runtime_test.log",
         backupCount=8,encoding="utf-8")
     handler.doRollover()
 
@@ -52,37 +53,42 @@ class Transducer_homing:
     '''The UR3e robot keeps the position and angle of the TCP in meters/radians, 
     this class mostly stores them in mm/deg'''
     def __init__(self):
-        self.robot = None
-        self.matlab_socket = None
-        self.latest_loop = -1
+        self.robot: UR3e = None
+        self.matlab_socket: socket.socket = None
+        self.latest_loop:int = -1
 
-        self.joint_history = []
-        self.starting_joints = None
+        self.joint_history: list[tuple] = []
+        self.starting_joints: list[float] = None
 
-        self.key_listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
+        self.key_listener = keyboard.Listener(on_press=self.on_press,
+            on_release=self.on_release)
         self.key_listener.start()
-        self.keys_pressed = set()
+        self.keys_pressed:set[str] = set()
 
         self.headless_test = True
 
-        self.speed_presets = [(0.005, 0.025,0.025,0.1),\
-                            (0.0125,0.05,0.05,0.2),\
-                            (0.025,0.1,0.1,0.4),\
-                            (0.05,0.2,0.2,0.6),\
+        self.speed_presets = [(0.005, 0.025,0.025,0.1),
+                            (0.0125,0.05,0.05,0.2),
+                            (0.025,0.1,0.1,0.4),
+                            (0.05,0.2,0.2,0.6),
                             (0.1,0.4,0.3,0.8),
                             (0.2,0.8,0.4,1),
                             (0.4,1.0,0.5,1.2),
                             (0.8,2.0,1.0,2.0)]
 
-        self.speed_preset = 3
+        # 'self.speed_preset' is an int representing the current speed setting
+        self.speed_preset: int = 3
         
-        self.refresh_rate = 112.
+        self.refresh_rate:float = 112.
         self.lag = 0.2 #10. / self.refresh_rate #0.1
-        self.max_disp = 0.5
 
         self.range_of_motion = {'X': 0,'Y': 0,'Z':8,'Rx':30,'Ry':30,'Rz':0}
 
-    def connect_to_matlab(self, server_ip='localhost', port=508):
+    def connect_to_matlab(
+                        self,
+                        server_ip:str='localhost',
+                        port:int=508
+                        ) -> tuple[bool, str]:
         '''Connects to the central socket server that coordinates information between
         this module and the MATLAB signal processing info.'''
         self.matlab_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -118,7 +124,8 @@ class Transducer_homing:
             v,vR,a,aR = self.speed_presets[self.speed_preset]
             
             self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
-            self.robot.set_max_displacement(self.max_disp)
+            #TODO: Delete following if no problems
+            # self.robot.set_max_displacement(self.max_disp)
             self.robot.set_parameters(base='base')
         
         logger.info("Robot initialized :)")
@@ -133,20 +140,20 @@ class Transducer_homing:
         else:
             self.listener = self.MATLAB_listener()
 
-        self.last_ten_refresh_rate = np.zeros((40,1))
+        self.last_ten_refresh_rate:np.array = np.zeros((40,1))
 
         self.starting_pos = [np.copy(self.robot.pos), np.copy(self.robot.angle)]
-        nextpoint = None
+        nextpoint:tuple[tuple,tuple] | int = None
 
         i_rr = 0
 
-        self.t = time.time()
-        (new_mag, latest_mag) = next(self.listener)
+        self.t:float = time.time()
+        (new_mag, latest_mag):tuple[bool,float] = next(self.listener)
         # latest_mag = 1
         
         self.i=-1
         logger.info('About to start the main loop')
-        go_next = True
+        go_next:bool = True
         t0 = time.time()
 
         time.sleep(0.05)
@@ -164,7 +171,7 @@ class Transducer_homing:
                 self.t = time.time()
                 
                 pos,angle = self.robot.current_relative_target
-
+                
                 if router:
                     self.pathfinder.newMag(((pos,angle), latest_mag), go_next)
 
@@ -179,7 +186,7 @@ class Transducer_homing:
 #TODO Delete joint history items after IK has been understood
                 # Store the joint angles of the robot in the joint_history for analysis
                 self.robot.get_joint_angles()
-                self.joint_history.append((nextpoint, np.copy(self.robot.joints).tolist(), \
+                self.joint_history.append((nextpoint, np.copy(self.robot.joints).tolist(),
                     (np.copy(self.robot.pos).tolist(), np.copy(self.robot.angle).tolist())))
 
                 # Find the next point
@@ -195,11 +202,12 @@ class Transducer_homing:
                     # self.robot.movel_to_target(((0,0,0),(0,0,0)))
                     self.robot.movel_to_target(self.pathfinder.max_point[0])
 
-                    data={"Start joints": self.starting_joints,\
-                        "joints_at_points": self.joint_history,\
-                        "TCP_offset": np.copy(self.robot.tcp_offset).tolist(),\
+                    data={"Start joints": self.starting_joints,
+                        "joints_at_points": self.joint_history,
+                        "TCP_offset": np.copy(self.robot.tcp_offset).tolist(),
                         "Notes": "No notes yet"}
-                    path = os.path.dirname(__file__) + f"\\IK_Scans\\Test_{time.strftime('%m_%d__%H_%M')}.json"
+                    path = (os.path.dirname(__file__) + "\\IK_Scans" + 
+                        f"\\Test_{time.strftime('%m_%d__%H_%M')}.json")
                     with open(path, 'w+') as outfile:
                         json.dump(data, outfile, indent=3)
                 else:
@@ -212,7 +220,7 @@ class Transducer_homing:
                 t0 = t1
             # Post things to the logs.
             self.main_loop_logs()
-        #-----------------------------Bottom of loop-----------------------------------#
+        #-------------------------Bottom of loop-------------------------------#
         self.robot.movel_to_target(((0,0,0),(0,0,0)))
 
         # loop is exited
@@ -224,7 +232,12 @@ class Transducer_homing:
         if router:
             self.pathfinder.save_points()
 
-    def key_press_actions(self, run_bool, router, nextpoint, freedrive):
+    def key_press_actions(
+            self,
+            run_bool:bool,
+            router:Pathfinder,
+            nextpoint:tuple[tuple[float,float,float],tuple[float,float,float]],
+            freedrive:bool) -> tuple[bool,Pathfinder,tuple,bool]:
         '''
         Each run through the main loop, listen for actions triggered
         by key input.
@@ -291,12 +304,13 @@ class Transducer_homing:
         logger.debug(f"Q in pressed keys: {'q' in self.keys_pressed}")
         logger.debug("----------------------------------------------")
         logger.debug("Position info about the robot:")
-        logger.debug(f"Initial pos/angle: ({self.robot.initial_pos.T}, {self.robot.initial_angle.T})")
+        logger.debug(f"Initial pos/angle: ({self.robot.initial_pos.T},".join(
+            f"{self.robot.initial_angle.T})"))
         logger.debug(f"Current pos/angle: ({self.robot.pos.T}, {self.robot.angle.T}")
         logger.debug(f"Current joint positions (radians): {self.robot.joints.T}")
         logger.debug("----------------------------------------------")
 
-    def _get_delta_pos(self):
+    def _get_delta_pos(self) -> tuple[float,float]:
         '''Converts the get_delta_pos method built into the UR3e method into
         the local units used in the pathfinders, mm/kg/s/deg'''
         d_pos,d_angle = self.robot.get_delta_pos()
@@ -312,11 +326,11 @@ class Transducer_homing:
 
         return (d_pos,d_angle)
 
-    def MATLAB_listener(self):
-        '''This method creates a generator for listening to the server for new data from
-        MATLAB. At each yield statement it returns a tuple containing a boolean and a float,
-        the boolean indicating whether the magnitude is new and the float representing the
-        magnitude.'''   
+    def MATLAB_listener(self) -> tuple[bool, float]:
+        '''This method creates a generator for listening to the server for new
+        data from MATLAB. At each yield statement it returns a tuple containing
+        a boolean and a float, the boolean indicating whether the magnitude is
+        new and the float representing the magnitude.'''   
         mag,self.latest_loop = -1,-1
         i=0
         while True:
@@ -337,17 +351,18 @@ class Transducer_homing:
             # yield (True,mag)
     
     def fake_MATLAB_listener(self):
-        '''This method fakes the input from the MATLAB listener, can be used to debug the
-        motion of the robotic arm on occasions when we aren't using the transducer itself yet.'''
+        '''This method fakes the input from the MATLAB listener, can be used 
+        to debug the motion of the robotic arm on occasions when we aren't using
+        the transducer itself yet.'''
         while True:
             mag = round(time.time()) % 59
             yield (True, mag)
 
     def change_range_gui(self):
-        '''It is not a priority right now but I would ultimately like there to be
-        a GUI option for adjusting the default range of motion for the pathfinder.
-        By default the range is +/- 8 mm along the z axis and +/- 45 degrees along
-        the Rx and Ry axes.'''
+        '''It is not a priority right now but I would ultimately like there to
+        be a GUI option for adjusting the default range of motion for the
+        pathfinder. By default the range is +/- 8 mm along the z axis and +/- 45
+        degrees along the Rx and Ry axes.'''
         pass
 
     def main_menu_GUI(self, router, current_target, freedrive, latest_mag):
@@ -356,46 +371,48 @@ class Transducer_homing:
         joints = self.robot.joints
         d_pos,d_ang = self._get_delta_pos()
 
-        prin = f"TCP position in relation to its initial position: ({d_pos.T}(mm),{d_ang.T}(deg))\n"
-        prin += "=========================\n"
+        prin = "TCP position in relation to its initial position:".join(
+            f" ({d_pos.T}(mm),{d_ang.T}(deg))\n")
+        prin.join("=========================\n")
         
 
         # print(f'TCP position in relation to its initial position: ({d_pos.T}(mm),{d_ang.T}(deg))')
         # print("=========================")
-        prin += f"TCP position in base: ({pos.T * 1000}, {np.rad2deg(angle.T)}\n"
-        prin += f"Current joint position in degrees: ({np.rad2deg(joints.T)})\n"
-        prin += f'Recent refresh rate: {np.mean(self.last_ten_refresh_rate)}\n'
-        prin += "------------------------\n"
+        prin.join(f"TCP position in base: ({pos.T * 1000}, {np.rad2deg(angle.T)}\n")
+        prin.join(f"Current joint position in degrees: ({np.rad2deg(joints.T)})\n")
+        prin.join(f'Recent refresh rate: {np.mean(self.last_ten_refresh_rate)}\n')
+        prin.join("------------------------\n")
         bars = int((latest_mag/750) * 80)
         spaces = 80 - bars
-        prin += f"Latest mag:{latest_mag}\n"
-        prin += (bars*'|') + (spaces*' ') + '|\n'
+        prin.join(f"Latest mag:{latest_mag}\n")
+        prin.join((bars*'|') + (spaces*' ') + '|\n')
 
-        prin += f"Freedrive active: {freedrive}\n"
-        prin += "Press (f) to toggle (f)reedrive mode :)\n"
-        prin += '\n'
+        prin.join(f"Freedrive active: {freedrive}\n")
+        prin.join("Press (f) to toggle (f)reedrive mode :)\n")
+        prin.join('\n')
         
         if not router:
-            prin += 'Press (d)emo to demonstrate the basic pathrouting module\n'
-            prin += 'Press (k) to trigger a full scan with hard-coded resolution.\n'
-            prin += 'Press (g) to trigger a amplitude max-finding pathrouter.\n'
-            prin += 'Press (q) to quit\n'
+            prin.join('Press (d)emo to demonstrate the basic pathrouting module\n')
+            prin.join('Press (k) to trigger a full scan with hard-coded resolution.\n')
+            prin.join('Press (g) to trigger a amplitude max-finding pathrouter.\n')
+            prin.join('Press (q) to quit\n')
         else:
             if current_target is not None and current_target != 1:
-                prin += '\n'
+                prin.join('\n')
                 t_pos,t_ang = current_target
-                prin += f"Next target: ({[format(a,'1.2f') for a in t_pos]},{[format(a,'1.2f') for a in t_ang]})\n"
+                prin.join(f"Next target: ({[format(a,'1.2f') for a in t_pos]},"
+                    f"({[format(a,'1.2f') for a in t_ang]})\n")
 
-            prin += 'Press (x) to cancel the running pathfinder\n'
-            prin += "Press (m) to movel to the next target point.\n"
-            prin += "\n"
-            prin += 'Progress of the current running pathfinder:\n'
+            prin.join('Press (x) to cancel the running pathfinder\n')
+            prin.join("Press (m) to movel to the next target point.\n")
+            prin.join("\n")
+            prin.join('Progress of the current running pathfinder:\n')
             for i in self.pathfinder.progress_report():
-                prin += '\t'+ i + '\n'
+                prin.join('\t'+ i + '\n')
 
-        prin += '\n'
-        prin += time.ctime() + '\n'
-        prin += '----------------------\n'
+        prin.join('\n')
+        prin.join(time.ctime() + '\n')
+        prin.join('----------------------\n')
         print(prin, end='\r')
 
     def on_press(self, key):

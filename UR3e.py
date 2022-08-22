@@ -33,23 +33,23 @@ def _reg_convert(reg, rtype=None):
 class UR3e:
     def __init__(self):
         # Initialize variables
-        self.pos = np.zeros((3, 1))
-        self.angle = np.zeros((3, 1))
+        self.pos:np.array = np.zeros((3, 1))
+        self.angle:np.array = np.zeros((3, 1))
 
-        self.joints = np.zeros((6,1))
-        self.initial_joints = np.zeros((6,1))
+        self.joints:np.array = np.zeros((6,1))
+        self.initial_joints:np.array = np.zeros((6,1))
         
         # TCP offset and rotation refer to the displacement of the TCP from 
         # the end effector, they are constant throughout the operation of 
         # the robot.
-        self.tcp_offset = np.zeros((3, 1))
-        self.tcp_rot = np.zeros((3, 1))
+        self.tcp_offset:np.array = np.zeros((3, 1))
+        self.tcp_rot:np.array = np.zeros((3, 1))
 
-        self.freedrive_active = False
+        self.freedrive_active:bool = False
 
         self.max_disp = 0.1
-        self.initial_pos = np.zeros((3, 1))
-        self.initial_angle = np.zeros((3, 1))
+        self.initial_pos:np.array = np.zeros((3, 1))
+        self.initial_angle:np.array = np.zeros((3, 1))
         self.max_disp_delta = 0.002
 
         self.acc = 0.1
@@ -87,7 +87,12 @@ class UR3e:
         self.logger.info("Robot fully initialized")
         
 
-    def connect(self, robot_ip, robot_port=30020, modbus_port=502, data_ip = "192.168.0.5", data_port=508):
+    def connect(self,
+            robot_ip:str,
+            robot_port:int=30020,
+            modbus_port:int=502,
+            data_ip:str="192.168.0.5",
+            data_port:int=508) -> tuple[bool,str]:
         """
         Connect to the robot.
 
@@ -128,7 +133,12 @@ class UR3e:
     def disconnect(self):
         self.robot_socket.close()
 
-    def set_parameters(self, acc=None, velocity=None, acc_rot=None, vel_rot=None, base=None):
+    def set_parameters(self,
+            acc=None,
+            velocity=None,
+            acc_rot=None,
+            vel_rot=None,
+            base=None):
         if acc is not None:
             self.acc = acc
         if velocity is not None:
@@ -156,10 +166,11 @@ class UR3e:
         self.logger.info('THIS IS HUGE WHY ISNT IT GOING')
         time.sleep(0.01)
 
-    def movel(self, pos_to, angle_to, t=0.0):
+    def movel(self, pos_to, angle_to, t=0.0) -> bool:
         if self._check_move_displacement(pos_to):
-            cmd = b'movel(p[%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f],a=%1.2f,v=%1.2f,t=%2.2f,r=0)' % \
-                  (pos_to[0], pos_to[1], pos_to[2], angle_to[0], angle_to[1], angle_to[2], self.acc, self.velocity, t)
+            cmd = (b'movel(p[%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f],a=%1.2f,v='
+                '%1.2f,t=%2.2f,r=0)' % (pos_to[0], pos_to[1], pos_to[2],
+                angle_to[0], angle_to[1], angle_to[2], self.acc, self.velocity, t))
             self.robot_socket.send(b'sync()\n')
             time.sleep(self.sleep_time)
             self.robot_socket.send(cmd + b'\n')
@@ -173,7 +184,7 @@ class UR3e:
             return True
         return False
 
-    def speedl(self, speed_vect, rotation_vect, lag):
+    def speedl(self, speed_vect, rotation_vect, lag) -> bool:
         if self._check_speed_displacement(speed_vect):
             # multiplies the incoming motion vectors by the velocity
             speed_vect = self.velocity * speed_vect
@@ -194,38 +205,14 @@ class UR3e:
             # cmd = b'speedl([%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f],%1.3f,%2.3f,%1.3f)' % \
             #       (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2],
             #        self.acc, lag, self.acc_rot)
-            cmd = b'speedl([%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f],%1.3f,%2.3f)' % \
-                  (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2],
-                   self.acc, lag)
+            cmd = (b'speedl([%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f],%1.3f,%2.3f)'
+                % (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0],
+                rotation_vect[1], rotation_vect[2], self.acc, lag))
             self.robot_socket.send(cmd + b'\n')
             return True
         else:
             self.stopl()
         return False
-
-    def my_speedl(self, speed_vect, rotation_vect, lag):
-        # multiplies the incoming motion vectors by the velocity
-        speed_vect = self.velocity * speed_vect
-        rotation_vect = self.vel_rot * rotation_vect
-        # magnitude of the vector
-        speed = np.linalg.norm(speed_vect)
-        if speed > self.velocity:
-            speed_vect = (self.velocity / speed) * speed_vect
-        speed = np.linalg.norm(rotation_vect)
-        if speed > self.vel_rot:
-            rotation_vect = (self.vel_rot / speed) * rotation_vect
-        # Normalize the vectors so that the magnitude is equal to vel_rot
-
-        # damn bruh idk what this does
-        speed_vect = self._change_base(speed_vect)
-        rotation_vect = self._change_base(rotation_vect)
-
-        cmd = b"dir=get_actual_tcp_pose()\nrot=p[0,0,0,dir[3],dir[4],dir[5]]\nvec = wrench_trans(rot, [%1.3f,%1.3f,%1.3f,%2.3f,%2.3f,%2.3f])\nvec_1 = [%1.3f, %1.3f, %1.3f, vec[3],vec[4],vec[5]]\nspeedl(vec_1,%1.3f,%2.3f,%1.3f)\n" % \
-            (speed_vect[0], speed_vect[1], speed_vect[2], rotation_vect[0], rotation_vect[1], rotation_vect[2], speed_vect[0], speed_vect[1], speed_vect[2], self.acc, lag, self.acc_rot)
-        self.robot_socket.send(cmd)
-
-        # self.robot_socket.send(cmd + b'\n')
-        return True
 
     def ur_servo(self, dpos, dangle=None, t=0.002, lh_t=0.02, gain=800):
         pos = np.copy(self.initial_pos) + self._change_base(dpos)
@@ -233,8 +220,9 @@ class UR3e:
             angle = np.copy(self.initial_angle) + dangle
         else:
             angle = np.copy(self.initial_angle)
-        cmd = b'servoj(get_inverse_kin(p[%1.4f,%1.4f,%1.4f,%2.4f,%2.4f,%2.4f]),0,0,%2.3f,%2.3f,%d)' % \
-              (pos[0], pos[1], pos[2], angle[0], angle[1], angle[2], t, lh_t, gain)
+        cmd = (b'servoj(get_inverse_kin(p[%1.4f,%1.4f,%1.4f,%2.4f,%2.4f,%2.4f])'
+                b',0,0,%2.3f,%2.3f,%d)' % (pos[0], pos[1], pos[2], angle[0],
+                angle[1], angle[2], t, lh_t, gain))
         self.robot_socket.send(cmd + b'\n')
 
     def init_servo(self, lag, Kp=0.01, Ki=0.0, Kd=0.0, servo_type='delta'):
@@ -269,18 +257,20 @@ class UR3e:
         dt = self.servo_t - self.servo_t_nm1
 
         if self.servo_Ki != 0:
-            self.servo_error_int = self.servo_error_int + 0.5 * (self.servo_error - self.servo_error_nm1) * dt
+            self.servo_error_int = (self.servo_error_int + 0.5 * 
+                (self.servo_error - self.servo_error_nm1) * dt)
 
         servo_prop = self.servo_Kp * self.servo_error
         servo_int = self.servo_Ki * self.servo_error_int
         if dt > 0.001:
-            servo_dev = self.servo_Kd * (self.servo_error - self.servo_error_nm1) / dt
+            servo_dev = (self.servo_Kd * (self.servo_error -
+                self.servo_error_nm1) / dt)
         else:
             servo_dev = 0.0
         servo = servo_prop + servo_int + servo_dev
         if self._check_speed_displacement(-servo):
-            cmd = b'speedl([%1.5f,%1.5f,%1.5f,0,0,0],%1.3f,%2.3f,%1.3f)' % \
-                  (-servo[0], -servo[1], -servo[2], 2.0, self.servo_lag, 2.0)
+            cmd = (b'speedl([%1.5f,%1.5f,%1.5f,0,0,0],%1.3f,%2.3f,%1.3f)' % 
+                (-servo[0], -servo[1], -servo[2], 2.0, self.servo_lag, 2.0))
             self.robot_socket.send(cmd + b'\n')
         else:
             self.stopl()
@@ -288,15 +278,15 @@ class UR3e:
         self.servo_t_nm1 = self.servo_t
         self.servo_error_nm1 = self.servo_error
 
-    def stopl(self, acc=1):
+    def stopl(self, acc=1) -> bool:
         self.robot_socket.send(b'stopl(%2.3f)\n' % acc)
         return True
 
-    def freedrive(self):
+    def freedrive(self) -> bool:
         self.robot_socket.send(b'freedrive_mode()\n')
         return True
 
-    def end_freedrive(self):
+    def end_freedrive(self) -> bool:
         self.robot_socket.send(b'end_freedrive_mode()\n')
         self._get_pos()
         self.get_joint_angles()
@@ -337,8 +327,8 @@ class UR3e:
         '''Returns the current position and angle of either the end effector or the
         tool on the end of the arm, in the form of a pair of vertical (3,1) sized
         numpy matrices.'''
-        return self._change_base(self.pos - self.initial_pos, inv=True), \
-               self._change_base(self.angle - self.initial_angle, inv=True)
+        return (self._change_base(self.pos - self.initial_pos, inv=True), 
+               self._change_base(self.angle - self.initial_angle, inv=True))
 
     def get_joint_angles(self):
         # Get registry 270 to 275 in modbus, ie 0x190 w/ read size of 6
@@ -455,14 +445,14 @@ class UR3e:
                 return np.dot(self.rotation_matrix, vect)
         return None
 
-    def _check_move_displacement(self, pos_to):
+    def _check_move_displacement(self, pos_to) -> bool:
         disp = np.linalg.norm(np.subtract(pos_to, self.initial_pos))
         if disp >= self.max_disp:
             return False
         else:
             return True
 
-    def _check_speed_displacement(self, speed_vect):
+    def _check_speed_displacement(self, speed_vect) -> bool:
         tcp_direction = np.subtract(self.pos, self.initial_pos)
         #print(tcp_direction)
         disp = np.linalg.norm(tcp_direction)
@@ -474,22 +464,24 @@ class UR3e:
             return True
         return False
 
-    def _powerdown(self):
+    def _powerdown(self) -> bool:
         print("attempting to power down")
         self.robot_socket.send(b'powerdown()\n')
         return True
 
-    def generic_test_command_response(self, command, no_bytes=1024):
+    def generic_test_command_response(self, command, no_bytes=1024) \
+            -> tuple[bytes,str]:
         self.robot_socket.send(command)
         reg = self.robot_socket.recv(no_bytes)
         return reg,reg.hex()
 
     def generic_io_response(self, command, no_bytes=4096):
-        '''This is a white whale of the project, send a generic URscript command to the robot
-        and parse all the data that it sends back. This is essential for doing more intricate
-        motions with the end effector.'''
+        '''This is a white whale of the project, send a generic URscript command
+        to the robot and parse all the data that it sends back. This is
+        essential for doing more intricate motions with the end effector.'''
 
-        # Send the transmit requeset and listen for 4096 bytes back (enough to store any packet)
+        # Send the transmit requeset and listen for 4096 bytes back 
+        # (enough to store any packet)
         self.robot_socket.send(command)
         data = self.robot_socket.recv(no_bytes)
 
@@ -500,7 +492,8 @@ class UR3e:
         if data:
             logstring += "Logging new packet.\n"
 
-            #extract packet length, timestamp, and packet type from the start of the packet
+            # extract packet length, timestamp, and packet type from the start
+            # of the packet
             # Length of overall package: 32bit integer
             msglen = (struct.unpack('!i', data[0:4]))[0]
             # Unsigned char messageType (corresponds to hard-coded message types)
@@ -559,18 +552,15 @@ class UR3e:
         time.sleep(0.01)
         self.freedrive_active = not self.freedrive_active
 
-    def data_string_io(self, to_send):
+    def data_string_io(self, to_send) -> bytes:
         '''Recieves a bytes-like object and sends it to the data port on the robot.
         Return strue if the transmission is successful.'''
         self.data_socket.send(to_send)
         return self.data_socket.recv(1024)
 
     def test_URScript_API(self):
-        '''This experiment has failed. The following code should now power off the robot,
-        and yet it does. Something here is clearly wrong.'''
-        # cmds = [b"foo = 1\n", \
-        #     b"bar = foo + 3\n", \
-            # b"if bar < 2:\n\tpowerdown()\nend\n"]
+        '''This experiment has failed. The following code should now power off 
+        the robot, and yet it does. Something here is clearly wrong.'''
         
         cmds = [b"test_script()\n"]
 
@@ -593,7 +583,8 @@ class UR3e:
         self.data_socket.send(b'SET TAR_Ry %i ' % (np.deg2rad(tRy) * 10000))
         self.data_socket.send(b'SET TAR_Rz %i ' % (np.deg2rad(tRz) * 10000))
 
-        self.logger.info(f"Robot requested to go to point (({tx},{ty},{tz}),({tRx},{tRy},{tRz}))")
+        self.logger.info("Robot requested to go to point "
+            f"(({tx},{ty},{tz}),({tRx},{tRy},{tRz}))")
         self.data_socket.send(b'TODO move2tar ')
         time.sleep(0.01)
         self.data_socket.send(b'SET atTar %i ' % (-1))
@@ -602,14 +593,14 @@ class UR3e:
     def get_current_rel_target(self):
         return self.current_relative_target
 
-    def at_tar(self):
+    def at_tar(self) -> bool:
         self.data_socket.send(b"GET atTar")
         response = self.data_socket.recv(1024)
 
         # print(b"Debugging atTar: " + response)
         return (response == b"atTar 1")
 
-    def wait_for_at_tar(self):
+    def wait_for_at_tar(self) -> int:
         at_tar = False
         i = 0
         now = time.time()
@@ -621,7 +612,7 @@ class UR3e:
             if i % 4 == 0:
                 self.data_socket.send(b'TODO move2tar ')
 
-        self.logger.info(f"Robot travsered to target in {time.time() - now} seconds.")
+        self.logger.info(f"Robot moved to target in {time.time() - now} seconds.")
 
         return i
 
@@ -636,7 +627,7 @@ class Fake_UR3e(UR3e):
     def disconnect(self):
         pass
     
-    def set_parameters(self, acc=None, velocity=None, acc_rot=None, vel_rot=None, base=None):
+    def set_parameters(self,acc=None,velocity=None,acc_rot=None,vel_rot=None,base=None):
         pass
 
     def set_initial_pos(self):

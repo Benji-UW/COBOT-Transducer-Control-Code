@@ -16,7 +16,8 @@ class Pathfinder:
     position, so the initial position, as far as this is concerned, is ((0,0,0),(0deg,0deg,0deg))
     All internal points are stored as tuples in the form ((X,Y,Z),(Rx,Ry,Rz))'''
 
-    def __init__(self,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
+    def __init__(self, z_range: float, Rx_range: float = 0., Ry_range: float = 0,
+            x_range: float = 0,y_range: float = 0,Rz_range: float = 0):
         '''Accepts as input a series of values indicating the range of different
         points in space it is allowed to exist between. This defines the search
         space of the object. It will not investigate any points outside these bounds.
@@ -30,17 +31,17 @@ class Pathfinder:
         x_r = [-x_range, x_range]
         y_r = [-y_range, y_range]
         Rz_r = [-Rz_range, Rz_range]
-        self.notes = "No notes passed from setup"
+        self.notes: str = "No notes passed from setup"
         self.range_of_motion = {'X': x_r,'Y': y_r,'Z':z_r,'Rx':Rx_r,'Ry':Ry_r,'Rz':Rz_r}
 
-        self.active_rom = []
+        self.active_rom: list[str] = []
         '''Stores the character representations of the active degrees of freedom.
         e.g. ['Z', 'Rx', 'Ry']'''
         for degree in self.range_of_motion.keys():
             if self.range_of_motion[degree] != [0,0]:
                 self.active_rom.append(degree)
 
-        self.points = []
+        self.points: list[tuple[tuple[float,float,float],tuple[float,float,float],float]] = []
         '''Records the point/magnitude pairs that the pathfinder has been given
         in a tuple of the form (((X,Y,Z),(Rx,Ry,Rz)),mag)'''
 
@@ -48,36 +49,44 @@ class Pathfinder:
         self.logger = logging.getLogger(__name__) 
         self.logger.info("Pathfinder initialized")
 
-        self.max_point = (-1,-10000,-1000)
+        file_itr = 0
+        path = os.path.dirname(__file__)
+        while os.path.exists(path + f"\\Scans\\test_{file_itr}.json"):
+            file_itr += 1
+
+        self.path = path + f'\\Scans\\test_{file_itr}.json'
+
         '''max_point stores the point and magnitude of the highest magnitude yet scanned,
         stored in a tuple of the form (((X,Y,Z, (Rx,Ry,Rz)), mag), initialized to (-1,-1,-1)
         for simplicity.'''
-        
-        '''Sets the degrees of freedom of this pathfinder, only Z defaults to true.'''
+        self.max_point: tuple[float,float,float] = (-1,-10000,-1000)
+
         self.degrees_of_freedom = {'X': x_range!=0,'Y': y_range!=0,'Z':z_range!=0,'Rx':Rx_range!=0,'Ry':Ry_range!=0,'Rz':Rz_range!=0}
+        '''Sets the degrees of freedom of this pathfinder, only Z defaults to true.'''
 
     def __str__(self):
-        return "Basic, boilerplate version of a pathfinder module.\n" + \
-            f"\tRange of motion: {self.range_of_motion}\n" + \
-            f"\tHighest magnitude found: {self.max_point}"
+        return ("Basic, boilerplate version of a pathfinder module.\n" + 
+            f"\tRange of motion: {self.range_of_motion}\n" + 
+            f"\tHighest magnitude found: {self.max_point}")
+
 
     def newMag(self, point_mag, override = False):
-        '''Accepts as in put a tuple in the form (((X,Y,Z),(Rx,Ry,Rz)), mag), 
-        where the first element in the tuple is a 6-member tuple representing
-        the point in 6D space, and the second element is a float representing
-        the signal magnitude at that point.'''
+        '''Input tuple in the form (((X,Y,Z),(Rx,Ry,Rz)), mag), where the first 
+        element in the tuple is a 6-member tuple representing the point in 
+        6D space, and the second element is a float representing the signal
+        magnitude at that point.'''
         
         self.points.append(point_mag)
         if (point_mag[1] > self.max_point[1]):
             self.max_point = point_mag
 
-    def next(self):
+    def next(self) -> tuple[tuple[float,float,float],tuple[float,float,float]]:
         return next(self.yielder)
 
-    def progress_report(self):
+    def progress_report(self) -> list[str]:
         return ["Progress report not implemented!"]
 
-    def internal_point_yielder(self):
+    def internal_point_yielder(self) -> tuple[tuple[float,float,float],tuple[float,float,float]]:
         '''This method gets called when the pathfinder is ini tializes, and adds the center of 
         the search space as well as all the corners to the "to-travel" list. When all the points
         have been visited it returns the integer 1 to indicate the search is complete.'''
@@ -120,7 +129,7 @@ class Pathfinder:
         '''Called at the end of the test or when the pathfinder has finished, outputs the points
         collected to a json file at a given path, meant to be superceded in each custom class
         in order to save additional information specific to that mode of pathfinder.'''
-        json_data = { \
+        json_data = { 
             'range of motion' : self.range_of_motion,
             'max_point' : self.max_point,
             'points' : self.points
@@ -129,21 +138,16 @@ class Pathfinder:
         self.write_json_data(json_data)
 
     def write_json_data(self, data):
-        file_itr = 0
-        path = os.path.dirname(__file__)
-        while os.path.exists(path + f"\\Scans\\test_{file_itr}.json"):
-            file_itr += 1
-
-        path = path + f'\\Scans\\test_{file_itr}.json'
-
         data['notes'] = self.notes
 
-        with open(path, 'w+') as outfile:
+        with open(self.path, 'w+') as outfile:
             json.dump(data, outfile, indent=3)
 
 class FullScan(Pathfinder):
     def __init__(self, resolution, z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
-        '''Acts almost identical to the regular pathfinder module, except it contains an additional
+        '''Initialize a pathfinder object that traverses the searchspace at resolution
+        
+        Acts almost identical to the regular pathfinder module, except it contains an additional
         field for the resolution of the scan. The resolution should be passed in as a tuple in the
         form (mm, deg) where the mm represents the linear mm tolerance for the full scan and the
         deg represents the angular degree tolerance for the full scan. There is a minimum tolerance
@@ -153,13 +157,6 @@ class FullScan(Pathfinder):
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
         self.will_visit = 1
         self.start_time = time.time()
-
-        file_itr = 0
-        path = os.path.dirname(__file__)
-        while os.path.exists(path + f"\\Scans\\test_{file_itr}.json"):
-            file_itr += 1
-
-        self.path = path + f'\\Scans\\test_{file_itr}.json'
 
         for d in self.active_rom:
             if {'X','Y','Z'}.issuperset(d):
@@ -194,19 +191,21 @@ class FullScan(Pathfinder):
             json.dump(self.points, outfile, indent=3)
         self.logger.info(f"Periodic dumping of the points took {time.time() - now}")
         
-    def progress_report(self):
+    def progress_report(self) -> list[str]:
         now = time.time()
         elapsed = now - self.start_time
         projected = elapsed * (self.will_visit / self.visited_so_far)
         remaining = projected - elapsed
 
-        finish_time = time.strftime("%H:%M:%S", time.localtime(self.start_time + projected))
+        finish_time = time.strftime("%H:%M:%S", time.localtime(self.start_time 
+            + projected))
         remaining = time.strftime("%H:%M:%S", time.gmtime(remaining))
         # remaining = f"{int(remaining/3600)}:{int((remaining%3600)/60)}:{remaining%60:2.2f}"
 
-        return [f"Visited {self.visited_so_far}/{self.will_visit} points. ({100 * self.visited_so_far/self.will_visit:1.2f}%)",\
-             f"Estimated completion time: {finish_time}", \
-                f"Estimated time remaining: {remaining}"]
+        return [f"Visited {self.visited_so_far}/{self.will_visit} points. " + 
+            f"({100 * self.visited_so_far/self.will_visit:1.2f}%)",
+            f"Estimated completion time: {finish_time}", 
+            f"Estimated time remaining: {remaining}"]
 
 # TODO: See above, maybe delete this if no problems are caused.
     # def _close_enough(self, point, override, tolerance=(0.5,2)):
@@ -220,20 +219,31 @@ class FullScan(Pathfinder):
     #     return popped
 
     def save_points(self):
-        json_data = { \
-            'range of motion' : self.range_of_motion, \
-            'resolution' : self.resolution, \
+        json_data = { 
+            'range of motion' : self.range_of_motion, 
+            'resolution' : self.resolution, 
             'max_point' : self.max_point,
-            'points' : self.points\
+            'points' : self.points
         }
         self.write_json_data(json_data)
 
+
 class DivisionSearch(Pathfinder):
     def __init__(self, divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
-        '''This pathfinder divides the searchspace into a set number of pieces (at least three),
+        '''Loads a pathfinder implementing a Division Search algorithm
+
+        This pathfinder divides the searchspace into a set number of pieces (at least three),
         scans those points, and then defines another, smaller searchspace around the highest 
         value it finds of those points. The advantage of this is a very global search of the
-        entire space, the downside is it winds up moving a lot. Remains to be seen if it's useful.'''
+        entire space, the downside is it winds up moving a lot. Remains to be seen if it's useful.
+        
+        Keyword arguments:
+        divisions -- the number of divisions each axis of the search space 
+            should be split into
+        z_range -- The distance the pathfinder should move in either direction
+            along the local z axis
+        Rx/Ry/x/y/Rz_range -- Same as z_range in the other directions.
+        '''
         self.divisions = divisions
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
 
@@ -261,7 +271,9 @@ class DivisionSearch(Pathfinder):
                     temp[DoF] = np.linspace(bounds[DoF][0], bounds[DoF][1], self.divisions)
                     # Terminate the loop if the spacing between those points is too small
                     inc_size[DoF] = (bounds[DoF][1] - bounds[DoF][0]) / self.divisions
-                    if ({'X','Y','Z'}.issuperset(DoF) and inc_size[DoF] < max_res[0]) or ({'Rx','Ry','Rz'}.issuperset(DoF) and inc_size[DoF] < max_res[1]):
+                    if (({'X','Y','Z'}.issuperset(DoF) and inc_size[DoF] 
+                            < max_res[0]) or ({'Rx','Ry','Rz'}.issuperset(DoF) 
+                            and inc_size[DoF] < max_res[1])):
                         keep_going = False
                 else:
                     # Otherwise keep that bound where it is (should be zero)
@@ -290,19 +302,20 @@ class DivisionSearch(Pathfinder):
         yield 1
 
     def save_points(self):
-        json_data = { \
-            'range of motion' : self.range_of_motion, \
-            'divisions' : self.divisions, \
+        json_data = {
+            'range of motion' : self.range_of_motion,
+            'divisions' : self.divisions,
             'max_point' : self.max_point,
-            'points' : self.points\
+            'points' : self.points
         }
         self.write_json_data(json_data)
 
 class Discrete_degree(Pathfinder):
     '''This pathfinder uses a naive approximation of the search space where it optimizes
     one dimensions at a time, and loops until it converges on the apparent global max.'''
-    def __init__(self, z_range=None, Rx_range=0, Ry_range=0, \
-        x_range=0, y_range=0, Rz_range=0,r_o_m=None,max_point=(-1,-1,-1)):
+    def __init__(self,z_range=None,Rx_range=0,
+                Ry_range=0,x_range=0, y_range=0,
+                Rz_range=0,r_o_m=None,max_point=(-1,-1,-1)):
         
         super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
         
@@ -380,7 +393,7 @@ class Greedy_discrete_degree(Pathfinder):
     '''This pathfinder uses a naive approximation of the search space where it optimizes
     one dimensions at a time, and loops until it converges on the apparent global max.
     Unlike the standard discrete degree, this one doesn't scan the entire space.'''
-    def __init__(self, z_range, Rx_range=0, Ry_range=0, \
+    def __init__(self, z_range, Rx_range=0, Ry_range=0,
         x_range=0, y_range=0, Rz_range=0,bias=10,steps=3,inc=1.6):
         super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
         self.bias=bias
@@ -448,7 +461,7 @@ class Greedy_discrete_degree(Pathfinder):
             # Go back to start of the loop and try again with another degree of freedom.
         yield 1
 
-    def recent_downhill(self):
+    def recent_downhill(self) -> bool:
         '''Returns True if the pathfinder has gone downhill constantly for the past
         'self.steps' points
         Returns False if any of the past 'self.steps' points increased. '''
@@ -459,7 +472,8 @@ class Greedy_discrete_degree(Pathfinder):
         
         return True
 
-    def increment_appropriate_axis(self,max_point,axis,positive):
+    def increment_appropriate_axis(self,max_point,axis,positive) \
+            -> tuple[tuple[float,float,float],tuple[float,float,float]]:
         # print(max_point)
         try:
             ((x,y,z),(Rx,Ry,Rz))=max_point
