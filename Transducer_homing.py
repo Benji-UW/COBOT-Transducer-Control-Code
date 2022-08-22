@@ -406,6 +406,9 @@ class Transducer_homing:
                 prin.append('\t'+ i)
 
         prin.append('\n' + time.ctime() + '\n' + 16*'-')
+
+        [prin.append('') for i in range(6)]
+
         # print(''.join(prin), end='\r')
         print('\n'.join(prin), end=(len(prin) + 1)*'\033[F')
 
