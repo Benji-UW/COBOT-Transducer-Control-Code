@@ -145,7 +145,7 @@ class Transducer_homing:
         self.starting_pos = [np.copy(self.robot.pos), np.copy(self.robot.angle)]
         nextpoint:tuple[tuple,tuple] | int = None
 
-        i_rr = 0
+        # i_rr = 0
 
         self.t:float = time.time()
         (new_mag, latest_mag):tuple[bool,float] = next(self.listener)
@@ -171,7 +171,7 @@ class Transducer_homing:
                 self.t = time.time()
                 
                 pos,angle = self.robot.current_relative_target
-                
+
                 if router:
                     self.pathfinder.newMag(((pos,angle), latest_mag), go_next)
 
