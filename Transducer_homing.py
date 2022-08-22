@@ -38,7 +38,7 @@ def logger_setup():
 logger = logger_setup()
 
 def main():
-    np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
+    np.set_printoptions(formatter={'float': '{: 0.2f}'.format})
     Thread(target=server.start_server).start()
 
     '''Initialize a transducer_homing object and run that mf'''
@@ -63,7 +63,7 @@ class Transducer_homing:
         self.key_listener.start()
         self.keys_pressed = set()
 
-        self.headless_test = False
+        self.headless_test = True
 
         self.speed_presets = [(0.005, 0.025,0.025,0.1),\
                             (0.0125,0.05,0.05,0.2),\
@@ -128,8 +128,10 @@ class Transducer_homing:
         router = False
         freedrive = False
 
-        self.listener = self.MATLAB_listener()
-        # self.listener = self.fake_MATLAB_listener()
+        if self.headless_test:
+            self.listener = self.fake_MATLAB_listener()
+        else:
+            self.listener = self.MATLAB_listener()
 
         self.last_ten_refresh_rate = np.zeros((40,1))
 
@@ -145,12 +147,12 @@ class Transducer_homing:
         self.i=-1
         logger.info('About to start the main loop')
         go_next = True
+        t0 = time.time()
 
         time.sleep(0.05)
         while run_bool:
-            t0 = time.time()
             self.robot.update()
-            self.main_menu_GUI(router, nextpoint, freedrive, latest_mag)
+            t1=time.time()
 
             (new_mag, latest_mag) = next(self.listener)
 
@@ -193,7 +195,6 @@ class Transducer_homing:
                     # self.robot.movel_to_target(((0,0,0),(0,0,0)))
                     self.robot.movel_to_target(self.pathfinder.max_point[0])
 
-
                     data={"Start joints": self.starting_joints,\
                         "joints_at_points": self.joint_history,\
                         "TCP_offset": np.copy(self.robot.tcp_offset).tolist(),\
@@ -204,6 +205,11 @@ class Transducer_homing:
                 else:
                     logger.debug(f"triggering movel to {nextpoint}")
                     self.robot.movel_to_target(nextpoint)
+
+            # Update the GUI if enough time has elapsed.
+            if (t1 - t0) > (1/60):
+                self.main_menu_GUI(router, nextpoint, freedrive, latest_mag)
+                t0 = t1
             # Post things to the logs.
             self.main_loop_logs()
         #-----------------------------Bottom of loop-----------------------------------#
@@ -321,6 +327,7 @@ class Transducer_homing:
             mag = float(msg[4:13]) / 1.0E3
             loop = int(msg[1:3])
 
+
             if loop == self.latest_loop:
                 yield (False, mag)
             #TODO if this causes no problems, delete all instances of the "latest_loop" boolean
@@ -349,42 +356,47 @@ class Transducer_homing:
         joints = self.robot.joints
         d_pos,d_ang = self._get_delta_pos()
 
-        print(f'TCP position in relation to its initial position: ({d_pos.T}(mm),{d_ang.T}(deg))')
-        print("=========================")
-        print(f"TCP position in base: ({pos.T * 1000}, {np.rad2deg(angle.T)}")
-        print(f"Current joint position in degrees: ({np.rad2deg(joints.T)})")
-        print(f'Recent refresh rate: {np.mean(self.last_ten_refresh_rate)}')
-        print("------------------------")
+        prin = f"TCP position in relation to its initial position: ({d_pos.T}(mm),{d_ang.T}(deg))\n"
+        prin += "=========================\n"
+        
+
+        # print(f'TCP position in relation to its initial position: ({d_pos.T}(mm),{d_ang.T}(deg))')
+        # print("=========================")
+        prin += f"TCP position in base: ({pos.T * 1000}, {np.rad2deg(angle.T)}\n"
+        prin += f"Current joint position in degrees: ({np.rad2deg(joints.T)})\n"
+        prin += f'Recent refresh rate: {np.mean(self.last_ten_refresh_rate)}\n'
+        prin += "------------------------\n"
         bars = int((latest_mag/750) * 80)
         spaces = 80 - bars
-        print(f"Latest mag:{latest_mag}")
-        print((bars*'|') + (spaces*' ') + '|')
+        prin += f"Latest mag:{latest_mag}\n"
+        prin += (bars*'|') + (spaces*' ') + '|\n'
 
-        print(f"Freedrive active: {freedrive}")
-        print("Press (f) to toggle (f)reedrive mode :)")
-        print()
+        prin += f"Freedrive active: {freedrive}\n"
+        prin += "Press (f) to toggle (f)reedrive mode :)\n"
+        prin += '\n'
         
         if not router:
-            print('Press (d)emo to demonstrate the basic pathrouting module')
-            print('Press (k) to trigger a full scan with hard-coded resolution.')
-            print('Press (g) to trigger a amplitude max-finding pathrouter.')
-            print('Press (q) to quit')
+            prin += 'Press (d)emo to demonstrate the basic pathrouting module\n'
+            prin += 'Press (k) to trigger a full scan with hard-coded resolution.\n'
+            prin += 'Press (g) to trigger a amplitude max-finding pathrouter.\n'
+            prin += 'Press (q) to quit\n'
         else:
             if current_target is not None and current_target != 1:
-                print()
+                prin += '\n'
                 t_pos,t_ang = current_target
-                print(f"Next target: ({[format(a,'1.2f') for a in t_pos]},{[format(a,'1.2f') for a in t_ang]})")
+                prin += f"Next target: ({[format(a,'1.2f') for a in t_pos]},{[format(a,'1.2f') for a in t_ang]})\n"
 
-            print('Press (x) to cancel the running pathfinder')
-            print("Press (m) to movel to the next target point.")
-            print("")
-            print('Progress of the current running pathfinder:')
+            prin += 'Press (x) to cancel the running pathfinder\n'
+            prin += "Press (m) to movel to the next target point.\n"
+            prin += "\n"
+            prin += 'Progress of the current running pathfinder:\n'
             for i in self.pathfinder.progress_report():
-                print('\t'+ i)
+                prin += '\t'+ i + '\n'
 
-        print()
-        print(time.ctime())
-        print('----------------------')
+        prin += '\n'
+        prin += time.ctime() + '\n'
+        prin += '----------------------\n'
+        print(prin, end='\r')
 
     def on_press(self, key):
         logger.debug(f"Pressed the key {key}")

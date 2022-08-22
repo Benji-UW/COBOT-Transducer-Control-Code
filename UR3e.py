@@ -626,24 +626,12 @@ class UR3e:
         return i
 
 
-class Fake_UR3e:
+class Fake_UR3e(UR3e):
     '''This class is a bare-minimum skeleton of the UR3 module, meant
     only to allow headless tests to run without crashing or heavily
     modifying my code elsewhere.'''
     def __init__(self):
-        # Initialize variables
-        self.pos = np.ones((3, 1)) *-1
-        self.angle = np.ones((3, 1)) *-1
-
-        self.initial_pos = np.ones((3, 1))*-1
-        self.initial_angle = np.ones((3, 1))*-1
-        
-        self.base = 'your imagination'
-        self.current_relative_target = ((-1,-1,-1),(-1,-1,-1))
-
-
-        self.logger = logging.getLogger(__name__)
-        self.logger.info("Robot fully initialized")
+        super().__init__()
 
     def disconnect(self):
         pass
@@ -678,6 +666,4 @@ class Fake_UR3e:
         self.logger.info(f"Robot travsered to target in {-1} seconds. (Tenet-style :))")
 
         return -1
-                
-
 
