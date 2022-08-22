@@ -148,7 +148,7 @@ class Transducer_homing:
         i_rr = 0
 
         self.t:float = time.time()
-        (new_mag, latest_mag):tuple[bool,float] = next(self.listener)
+        (new_mag, latest_mag) = next(self.listener)
         # latest_mag = 1
         
         self.i=-1
@@ -215,7 +215,7 @@ class Transducer_homing:
                     self.robot.movel_to_target(nextpoint)
 
             # Update the GUI if enough time has elapsed.
-            if (t1 - t0) > (1/60):
+            if (t1 - t0) > (1/30):
                 self.main_menu_GUI(router, nextpoint, freedrive, latest_mag)
                 t0 = t1
             # Post things to the logs.
@@ -371,49 +371,43 @@ class Transducer_homing:
         joints = self.robot.joints
         d_pos,d_ang = self._get_delta_pos()
 
-        prin = "TCP position in relation to its initial position:".join(
-            f" ({d_pos.T}(mm),{d_ang.T}(deg))\n")
-        prin.join("=========================\n")
-        
-
-        # print(f'TCP position in relation to its initial position: ({d_pos.T}(mm),{d_ang.T}(deg))')
-        # print("=========================")
-        prin.join(f"TCP position in base: ({pos.T * 1000}, {np.rad2deg(angle.T)}\n")
-        prin.join(f"Current joint position in degrees: ({np.rad2deg(joints.T)})\n")
-        prin.join(f'Recent refresh rate: {np.mean(self.last_ten_refresh_rate)}\n')
-        prin.join("------------------------\n")
         bars = int((latest_mag/750) * 80)
         spaces = 80 - bars
-        prin.join(f"Latest mag:{latest_mag}\n")
-        prin.join((bars*'|') + (spaces*' ') + '|\n')
 
-        prin.join(f"Freedrive active: {freedrive}\n")
-        prin.join("Press (f) to toggle (f)reedrive mode :)\n")
-        prin.join('\n')
+        prin = ["TCP position in relation to its initial position:",
+        f"\t({d_pos.T}(mm),{d_ang.T}(deg))",
+        "=========================",
+        f"TCP position in base: ({pos.T * 1000}, {np.rad2deg(angle.T)}",
+        f"Current joint position in degrees: ({np.rad2deg(joints.T)})",
+        f'Recent refresh rate: {np.mean(self.last_ten_refresh_rate)}',
+        "------------------------",
+        f"Latest mag:{latest_mag}",
+        (bars*'|') + (spaces*' ') + '|',
+        f"Freedrive active: {freedrive}",
+        "Press (f) to toggle (f)reedrive mode :)",
+        '']
         
         if not router:
-            prin.join('Press (d)emo to demonstrate the basic pathrouting module\n')
-            prin.join('Press (k) to trigger a full scan with hard-coded resolution.\n')
-            prin.join('Press (g) to trigger a amplitude max-finding pathrouter.\n')
-            prin.join('Press (q) to quit\n')
+            [prin.append(i) for i in 
+            ['Press (d)emo to demonstrate the basic pathrouting module',
+            'Press (k) to trigger a full scan with hard-coded resolution.',
+            'Press (g) to trigger a amplitude max-finding pathrouter.',
+            'Press (q) to quit']]
         else:
             if current_target is not None and current_target != 1:
-                prin.join('\n')
+                prin.append('')
                 t_pos,t_ang = current_target
-                prin.join(f"Next target: ({[format(a,'1.2f') for a in t_pos]},"
-                    f"({[format(a,'1.2f') for a in t_ang]})\n")
-
-            prin.join('Press (x) to cancel the running pathfinder\n')
-            prin.join("Press (m) to movel to the next target point.\n")
-            prin.join("\n")
-            prin.join('Progress of the current running pathfinder:\n')
+                prin.append(f"Next target: ({[format(a,'1.2f') for a in t_pos]},"
+                            f"({[format(a,'1.2f') for a in t_ang]})")
+            prin.append(['Press (x) to cancel the running pathfinder',
+            "Press (m) to movel to the next target point.", "",
+            'Progress of the current running pathfinder:'])
             for i in self.pathfinder.progress_report():
-                prin.join('\t'+ i + '\n')
+                prin.append('\t'+ i)
 
-        prin.join('\n')
-        prin.join(time.ctime() + '\n')
-        prin.join('----------------------\n')
-        print(prin, end='\r')
+        prin.append('\n' + time.ctime() + '\n' + 16*'-')
+        # print(''.join(prin), end='\r')
+        print('\n'.join(prin), end=(len(prin) + 1)*'\033[F')
 
     def on_press(self, key):
         logger.debug(f"Pressed the key {key}")

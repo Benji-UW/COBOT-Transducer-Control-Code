@@ -169,7 +169,7 @@ class UR3e:
     def movel(self, pos_to, angle_to, t=0.0) -> bool:
         if self._check_move_displacement(pos_to):
             cmd = (b'movel(p[%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f],a=%1.2f,v='
-                '%1.2f,t=%2.2f,r=0)' % (pos_to[0], pos_to[1], pos_to[2],
+                b'%1.2f,t=%2.2f,r=0)' % (pos_to[0], pos_to[1], pos_to[2],
                 angle_to[0], angle_to[1], angle_to[2], self.acc, self.velocity, t))
             self.robot_socket.send(b'sync()\n')
             time.sleep(self.sleep_time)
