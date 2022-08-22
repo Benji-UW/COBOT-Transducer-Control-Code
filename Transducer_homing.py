@@ -1,7 +1,6 @@
 '''
 Unit convention: mm/kg/s/deg
 '''
-from pyexpat import ErrorString
 import socket
 import time
 import os
@@ -50,8 +49,8 @@ def main():
     robot.start()
 
 class Transducer_homing:
-    '''The UR3e robot keeps the position and angle of the TCP in meters/radians, 
-    this class mostly stores them in mm/deg'''
+    '''The UR3e robot keeps the position and angle of the TCP in 
+    meters/radians, this class mostly stores them in mm/deg'''
     def __init__(self):
         self.robot: UR3e = None
         self.matlab_socket: socket.socket = None
@@ -76,7 +75,8 @@ class Transducer_homing:
                             (0.4,1.0,0.5,1.2),
                             (0.8,2.0,1.0,2.0)]
 
-        # 'self.speed_preset' is an int representing the current speed setting
+        # 'self.speed_preset' is an int representing the current 
+        # speed setting
         self.speed_preset: int = 3
         
         self.refresh_rate:float = 112.
@@ -84,13 +84,11 @@ class Transducer_homing:
 
         self.range_of_motion = {'X': 0,'Y': 0,'Z':8,'Rx':30,'Ry':30,'Rz':0}
 
-    def connect_to_matlab(
-                        self,
-                        server_ip:str='localhost',
-                        port:int=508
-                        ) -> tuple[bool, str]:
-        '''Connects to the central socket server that coordinates information between
-        this module and the MATLAB signal processing info.'''
+    def connect_to_matlab(self, server_ip:str='localhost',
+                        port:int=508) -> tuple[bool, str]:
+        '''Connects to the central socket server that coordinates 
+        information between this module and the MATLAB signal 
+        processing info.'''
         self.matlab_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.matlab_socket.connect((server_ip, port))
@@ -123,7 +121,7 @@ class Transducer_homing:
 
             v,vR,a,aR = self.speed_presets[self.speed_preset]
             
-            self.robot.set_parameters(acc=a, velocity=v, acc_rot=aR, vel_rot=vR)
+            self.robot.set_parameters(acc=a,velocity=v,acc_rot=aR,vel_rot=vR)
             #TODO: Delete following if no problems
             # self.robot.set_max_displacement(self.max_disp)
             self.robot.set_parameters(base='base')
@@ -143,12 +141,12 @@ class Transducer_homing:
         self.last_ten_refresh_rate:np.array = np.zeros((40,1))
 
         self.starting_pos = [np.copy(self.robot.pos), np.copy(self.robot.angle)]
-        nextpoint:tuple[tuple,tuple] | int = None
+        nextpoint:np.ndarray | int = None
 
         # i_rr = 0
 
         self.t:float = time.time()
-        (new_mag, latest_mag):tuple[bool,float] = next(self.listener)
+        (new_mag, latest_mag) = next(self.listener)
         # latest_mag = 1
         
         self.i=-1
@@ -186,7 +184,7 @@ class Transducer_homing:
 #TODO Delete joint history items after IK has been understood
                 # Store the joint angles of the robot in the joint_history for analysis
                 self.robot.get_joint_angles()
-                self.joint_history.append((nextpoint, np.copy(self.robot.joints).tolist(),
+                self.joint_history.append((nextpoint.tolist(), np.copy(self.robot.joints).tolist(),
                     (np.copy(self.robot.pos).tolist(), np.copy(self.robot.angle).tolist())))
 
                 # Find the next point
@@ -199,8 +197,8 @@ class Transducer_homing:
                     self.pathfinder.save_points()
 
                     # # Return robot to starting position (comment out when you don't wanna do this)
-                    # self.robot.movel_to_target(((0,0,0),(0,0,0)))
-                    self.robot.movel_to_target(self.pathfinder.max_point[0])
+                    self.robot.movel_to_target(np.zeros(6))
+                    # self.robot.movel_to_target(self.pathfinder.max_point[:6])
 
                     data={"Start joints": self.starting_joints,
                         "joints_at_points": self.joint_history,
@@ -236,7 +234,7 @@ class Transducer_homing:
             self,
             run_bool:bool,
             router:Pathfinder,
-            nextpoint:tuple[tuple[float,float,float],tuple[float,float,float]],
+            nextpoint:np.ndarray,
             freedrive:bool) -> tuple[bool,Pathfinder,tuple,bool]:
         '''
         Each run through the main loop, listen for actions triggered
@@ -341,16 +339,16 @@ class Transducer_homing:
             mag = float(msg[4:13]) / 1.0E3
             loop = int(msg[1:3])
 
-
             if loop == self.latest_loop:
                 yield (False, mag)
-            #TODO if this causes no problems, delete all instances of the "latest_loop" boolean
-            if loop != self.latest_loop:
+            #TODO if this causes no problems, delete all instances of 
+            # the "latest_loop" boolean
+            else:
                 self.latest_loop = loop
                 yield (True, mag)
             # yield (True,mag)
     
-    def fake_MATLAB_listener(self):
+    def fake_MATLAB_listener(self) -> tuple[bool, float]:
         '''This method fakes the input from the MATLAB listener, can be used 
         to debug the motion of the robotic arm on occasions when we aren't using
         the transducer itself yet.'''

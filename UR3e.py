@@ -33,23 +33,23 @@ def _reg_convert(reg, rtype=None):
 class UR3e:
     def __init__(self):
         # Initialize variables
-        self.pos:np.array = np.zeros((3, 1))
-        self.angle:np.array = np.zeros((3, 1))
+        self.pos:np.ndarray = np.zeros((3, 1))
+        self.angle:np.ndarray = np.zeros((3, 1))
 
-        self.joints:np.array = np.zeros((6,1))
-        self.initial_joints:np.array = np.zeros((6,1))
+        self.joints:np.ndarray = np.zeros((6,1))
+        self.initial_joints:np.ndarray = np.zeros((6,1))
         
         # TCP offset and rotation refer to the displacement of the TCP from 
         # the end effector, they are constant throughout the operation of 
         # the robot.
-        self.tcp_offset:np.array = np.zeros((3, 1))
-        self.tcp_rot:np.array = np.zeros((3, 1))
+        self.tcp_offset: np.ndarray = np.zeros((3, 1))
+        self.tcp_rot: np.ndarray = np.zeros((3, 1))
 
-        self.freedrive_active:bool = False
+        self.freedrive_active: bool = False
 
         self.max_disp = 0.1
-        self.initial_pos:np.array = np.zeros((3, 1))
-        self.initial_angle:np.array = np.zeros((3, 1))
+        self.initial_pos: np.ndarray = np.zeros((3, 1))
+        self.initial_angle: np.ndarray = np.zeros((3, 1))
         self.max_disp_delta = 0.002
 
         self.acc = 0.1
@@ -62,7 +62,8 @@ class UR3e:
         self.data_socket = None
 
         self.base = 'tcp'
-        self.current_relative_target = ((0,0,0),(0,0,0))
+        # self.current_relative_target = ((0,0,0),(0,0,0))
+        self.current_relative_target: np.ndarray = np.zeros(6)
 
         self.rotation_matrix = np.zeros((3, 3))
         self.rotation_matrix_inv = np.zeros((3, 3))
@@ -134,11 +135,11 @@ class UR3e:
         self.robot_socket.close()
 
     def set_parameters(self,
-            acc=None,
-            velocity=None,
-            acc_rot=None,
-            vel_rot=None,
-            base=None):
+                    acc:float = None,
+                    velocity:float = None,
+                    acc_rot:float = None,
+                    vel_rot:float = None,
+                    base=None):
         if acc is not None:
             self.acc = acc
         if velocity is not None:
@@ -169,7 +170,7 @@ class UR3e:
     def movel(self, pos_to, angle_to, t=0.0) -> bool:
         if self._check_move_displacement(pos_to):
             cmd = (b'movel(p[%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f],a=%1.2f,v='
-                '%1.2f,t=%2.2f,r=0)' % (pos_to[0], pos_to[1], pos_to[2],
+                b'%1.2f,t=%2.2f,r=0)' % (pos_to[0], pos_to[1], pos_to[2],
                 angle_to[0], angle_to[1], angle_to[2], self.acc, self.velocity, t))
             self.robot_socket.send(b'sync()\n')
             time.sleep(self.sleep_time)
@@ -567,10 +568,15 @@ class UR3e:
         for cmd in cmds:
             self.robot_socket.send(cmd)
 
-    def movel_to_target(self, next_point):
-        t_pos,t_angle = (next_point[0],next_point[1])
-        tx,ty,tz = t_pos
-        tRx,tRy,tRz = t_angle
+    def movel_to_target(self, next_point: np.ndarray):
+        '''Moves the robot to the given target point in the robot's floating
+        coordinate system.
+        
+        next_point should be given in the form of a (6,) ndarray.
+        '''
+        # t_pos,t_angle = (next_point[0],next_point[1])
+        tx,ty,tz,tRx,tRy,tRz = next_point.tolist()
+        # tRx,tRy,tRz = t_angle
 
         self.current_relative_target = next_point
 
@@ -590,7 +596,8 @@ class UR3e:
         self.data_socket.send(b'SET atTar %i ' % (-1))
         time.sleep(0.01)
 
-    def get_current_rel_target(self):
+    def get_current_rel_target(self) -> np.ndarray:
+        '''Returns the current relative target, in the form of a (6,) ndarray'''
         return self.current_relative_target
 
     def at_tar(self) -> bool:
@@ -645,7 +652,8 @@ class Fake_UR3e(UR3e):
         a = np.ones((3, 1))*-1
         return a,a
 
-    def movel_to_target(self, next_point):
+    def movel_to_target(self, next_point: np.ndarray):
+        '''Fake'''
         self.current_relative_target = next_point
         time.sleep(0.1)
 

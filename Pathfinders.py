@@ -14,7 +14,7 @@ class Pathfinder:
     six degrees of freedom. The units for the linear dimensions are mm, the units for the
     angular dimensions are degrees. Everything is defined relative to the initial starting
     position, so the initial position, as far as this is concerned, is ((0,0,0),(0deg,0deg,0deg))
-    All internal points are stored as tuples in the form ((X,Y,Z),(Rx,Ry,Rz))'''
+    All internal points are stored as np arrays in the form [X,Y,Z,Rx,Ry,Rz]'''
 
     def __init__(self, z_range: float, Rx_range: float = 0., Ry_range: float = 0,
             x_range: float = 0,y_range: float = 0,Rz_range: float = 0):
@@ -25,25 +25,38 @@ class Pathfinder:
         default to zero. Z also defines the range to give more room to move backwards
         than forwards, in order to reduce the chances of the robot moving into the
         sample.'''
-        z_r = [-z_range, z_range]
-        Rx_r = [-Rx_range, Rx_range]
-        Ry_r = [-Ry_range, Ry_range]
-        x_r = [-x_range, x_range]
-        y_r = [-y_range, y_range]
-        Rz_r = [-Rz_range, Rz_range]
+        # z_r = [-z_range, z_range]
+        # Rx_r = [-Rx_range, Rx_range]
+        # Ry_r = [-Ry_range, Ry_range]
+        # x_r = [-x_range, x_range]
+        # y_r = [-y_range, y_range]
+        # Rz_r = [-Rz_range, Rz_range]
+        self.range_of_motion = {'X': [-x_range, x_range],
+                                'Y': [-y_range, y_range],
+                                'Z': [-z_range, z_range],
+                                'Rx': [-Rx_range, Rx_range],
+                                'Ry': [-Ry_range, Ry_range],
+                                'Rz': [-Rz_range, Rz_range]}
+        
         self.notes: str = "No notes passed from setup"
-        self.range_of_motion = {'X': x_r,'Y': y_r,'Z':z_r,'Rx':Rx_r,'Ry':Ry_r,'Rz':Rz_r}
 
         self.active_rom: list[str] = []
+        
+        indices = {'X': 0,'Y': 1,'Z':2,'Rx':3,'Ry':4,'Rz':5,'mag':6}
+        self.save_indices: list[int] = []
+
         '''Stores the character representations of the active degrees of freedom.
         e.g. ['Z', 'Rx', 'Ry']'''
         for degree in self.range_of_motion.keys():
             if self.range_of_motion[degree] != [0,0]:
                 self.active_rom.append(degree)
+                self.save_indices.append(indices[degree])
+        
+        self.save_indices.append(6)
 
-        self.points: list[tuple[tuple[float,float,float],tuple[float,float,float],float]] = []
+        self.points: list[list[float]] = []
         '''Records the point/magnitude pairs that the pathfinder has been given
-        in a tuple of the form (((X,Y,Z),(Rx,Ry,Rz)),mag)'''
+        in a tuple of the form [X,Y,Z,Rx,Ry,Rz,mag]'''
 
         self.yielder = self.internal_point_yielder()
         self.logger = logging.getLogger(__name__) 
@@ -56,50 +69,53 @@ class Pathfinder:
 
         self.path = path + f'\\Scans\\test_{file_itr}.json'
 
-        '''max_point stores the point and magnitude of the highest magnitude yet scanned,
-        stored in a tuple of the form (((X,Y,Z, (Rx,Ry,Rz)), mag), initialized to (-1,-1,-1)
-        for simplicity.'''
-        self.max_point: tuple[float,float,float] = (-1,-10000,-1000)
-
-        self.degrees_of_freedom = {'X': x_range!=0,'Y': y_range!=0,'Z':z_range!=0,'Rx':Rx_range!=0,'Ry':Ry_range!=0,'Rz':Rz_range!=0}
-        '''Sets the degrees of freedom of this pathfinder, only Z defaults to true.'''
+        self.max_point: np.ndarray = np.ones(7) * -1
+        '''max_point stores the point and magnitude of the highest
+        magnitude yet scanned, stored in an np.ndarray of the form
+        [X,Y,Z,Rx,Ry,Rz,mag], initialized to a (6,) array of -1s to
+        distinguish from a real value.'''
 
     def __str__(self):
         return ("Basic, boilerplate version of a pathfinder module.\n" + 
             f"\tRange of motion: {self.range_of_motion}\n" + 
             f"\tHighest magnitude found: {self.max_point}")
 
-
-    def newMag(self, point_mag, override = False):
-        '''Input tuple in the form (((X,Y,Z),(Rx,Ry,Rz)), mag), where the first 
-        element in the tuple is a 6-member tuple representing the point in 
-        6D space, and the second element is a float representing the signal
-        magnitude at that point.'''
+    def newMag(self, point_mag:np.ndarray, override = False):
+        '''Input ndarry in the form [X,Y,Z,Rx,Ry,Rz,mag].'''
         
-        self.points.append(point_mag)
-        if (point_mag[1] > self.max_point[1]):
+        self.points.append(point_mag[self.save_indices].tolist())
+        if (point_mag[6] > self.max_point[6]):
             self.max_point = point_mag
 
-    def next(self) -> tuple[tuple[float,float,float],tuple[float,float,float]]:
+    def next(self) -> np.ndarray:
         return next(self.yielder)
 
     def progress_report(self) -> list[str]:
         return ["Progress report not implemented!"]
 
-    def internal_point_yielder(self) -> tuple[tuple[float,float,float],tuple[float,float,float]]:
-        '''This method gets called when the pathfinder is ini tializes, and adds the center of 
-        the search space as well as all the corners to the "to-travel" list. When all the points
-        have been visited it returns the integer 1 to indicate the search is complete.'''
-        center_pt = [np.mean(self.range_of_motion[a]) for a in self.range_of_motion.keys()]
+    def internal_point_yielder(self) -> np.ndarray:
+        '''This method gets called when the pathfinder is ini tializes,
+        and adds the center of the search space as well as all the
+        corners to the "to-travel" list. When all the points have been
+        visited it returns the integer 1 to indicate the search is
+        complete.'''
+        center_pt = np.array([np.mean(self.range_of_motion[a]) for 
+                                a in self.range_of_motion.keys()])
+        
+        yield center_pt
 
-        corners = set()
+        corners: set[np.ndarray] = set()
         q = (0,0,1)
-
         for i in range(64):
-            pos = (self.range_of_motion['X'][q[((-1)**int(i))]],self.range_of_motion['Y'][q[((-1)**int(i/2))]],self.range_of_motion['Z'][q[((-1)**int(i/4))]])
-            ang = (self.range_of_motion['Rx'][q[((-1)**int(i/8))]],self.range_of_motion['Ry'][q[((-1)**int(i/16))]],self.range_of_motion['Rz'][q[((-1)**int(i/32))]])
+            pt:np.ndarray = np.array((
+                self.range_of_motion['X'][q[((-1)**int(i))]],
+                self.range_of_motion['Y'][q[((-1)**int(i/2))]],
+                self.range_of_motion['Z'][q[((-1)**int(i/4))]],
+                self.range_of_motion['Rx'][q[((-1)**int(i/8))]],
+                self.range_of_motion['Ry'][q[((-1)**int(i/16))]],
+                self.range_of_motion['Rz'][q[((-1)**int(i/32))]]))
             
-            corners.add((pos,ang))
+            corners.add(pt)
         
         for pt in corners:
             yield pt
@@ -131,7 +147,7 @@ class Pathfinder:
         in order to save additional information specific to that mode of pathfinder.'''
         json_data = { 
             'range of motion' : self.range_of_motion,
-            'max_point' : self.max_point,
+            'max_point' : self.max_point.tolist(),
             'points' : self.points
         }
 
@@ -139,6 +155,7 @@ class Pathfinder:
 
     def write_json_data(self, data):
         data['notes'] = self.notes
+        data['active_ROM'] = self.active_rom
 
         with open(self.path, 'w+') as outfile:
             json.dump(data, outfile, indent=3)
@@ -153,35 +170,61 @@ class FullScan(Pathfinder):
         deg represents the angular degree tolerance for the full scan. There is a minimum tolerance
         based on the limitations of the robot, those are subject to change experimentally.'''
         min_tolerance = (0.1,0.5)
-        self.resolution = (max(resolution[0],min_tolerance[0]), max(resolution[1],min_tolerance[1]))
+        self.resolution = (max(resolution[0],min_tolerance[0]), 
+                            max(resolution[1],min_tolerance[1]))
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
         self.will_visit = 1
         self.start_time = time.time()
 
         for d in self.active_rom:
             if {'X','Y','Z'}.issuperset(d):
-                self.will_visit *= (self.range_of_motion[d][1] - self.range_of_motion[d][0]) / self.resolution[0]
+                self.will_visit *= (self.range_of_motion[d][1] - 
+                    self.range_of_motion[d][0]) / self.resolution[0]
             else:
-                self.will_visit *= (self.range_of_motion[d][1] - self.range_of_motion[d][0]) / self.resolution[1]
+                self.will_visit *= (self.range_of_motion[d][1] - 
+                    self.range_of_motion[d][0]) / self.resolution[1]
 
-    def internal_point_yielder(self):
+    def internal_point_yielder(self) -> np.ndarray:
         '''The full scan iterates through every point in the searchspace'''
-        r_o_m = self.range_of_motion
         res = self.resolution
-        forwards = True
-        self.visited_so_far = 0
-        for x in np.linspace(r_o_m['X'][0], r_o_m['X'][1], int((r_o_m['X'][1]-r_o_m['X'][0])/res[0]) + 1):
-            for y in np.linspace(r_o_m['Y'][0], r_o_m['Y'][1], int((r_o_m['Y'][1]-r_o_m['Y'][0])/res[0]) + 1):
-                for z in np.linspace(r_o_m['Z'][0], r_o_m['Z'][1], abs(int((r_o_m['Z'][1]-r_o_m['Z'][0])/res[0])) + 1):
-                    for Rx in np.linspace(r_o_m['Rx'][0], r_o_m['Rx'][1], int((r_o_m['Rx'][1]-r_o_m['Rx'][0])/res[1]) + 1):
-                        forwards = not forwards
-                        for Ry in np.linspace(r_o_m['Ry'][forwards], r_o_m['Ry'][not forwards], int((r_o_m['Ry'][1]-r_o_m['Ry'][0])/res[1]) + 1):
-                            for Rz in np.linspace(r_o_m['Rz'][0], r_o_m['Rz'][1], int((r_o_m['Rz'][1]-r_o_m['Rz'][0])/res[1]) + 1):
-                                self.visited_so_far += 1
-                                yield ((x,y,z),(Rx,Ry,Rz))
-                    if (self.visited_so_far % 2000 == 0):
-                        self.logger.info(f"Doing a dump of the latest 2000 points, at")
-                        self.periodic_dump()
+        # self.visited_so_far = 0
+        (x0,x1) = self.range_of_motion['X']
+        (y0,y1) = self.range_of_motion['Y']
+        (z0,z1) = self.range_of_motion['Z']
+        (Rx0,Rx1) = self.range_of_motion['Rx']
+        (Ry0,Ry1) = self.range_of_motion['Ry']
+        (Rz0,Rz1) = self.range_of_motion['Rz']
+
+        # for x in np.linspace(x0, x1, int((x1-x0)/res[0])+1):
+        #     for y in np.linspace(y0, y1, int((y1-y0)/res[0])+1):
+        #         for z in np.linspace(z0, z1, abs(int((z1-z0)/res[0]))+1):
+        #             for Rx in np.linspace(Rx0, Rx1, int((Rx1-Rx0)/res[1])+1):
+        #                 (Ry0,Ry1) = (Ry1,Ry0)
+        #                 for Ry in np.linspace(Ry0, Ry1, int(abs(Ry1-Ry0)/res[1]) + 1):
+        #                     for Rz in np.linspace(Rz0, Rz1, int((Rz1-Rz0)/res[1]) + 1):
+        #                         self.visited_so_far += 1
+        #                         yield np.array([x,y,z,Rx,Ry,Rz])
+        #             if (self.visited_so_far % 2000 == 0):
+        #                 self.logger.info(f"Doing a dump of the latest 2000 points, at")
+        #                 self.periodic_dump()
+        # yield 1
+        all_points = np.mgrid[
+            x0:x1:(int((x1-x0)/res[0])+1)*1j,
+            y0:y1:(int((y1-y0)/res[0])+1)*1j,
+            z0:z1:(int((z1-z0)/res[0])+1)*1j,
+            Rx0:Rx1:(int((Rx1-Rx0)/res[0])+1)*1j,
+            Ry0:Ry1:(int((Ry1-x0)/res[0])+1)*1j,
+            Rz0:Rz1:(int((Rz1-x0)/res[0])+1)*1j].reshape(6,-1).T
+        
+        # all_points = np.vstack((X.flatten(),Y.flatten(),Z.flatten(),
+        #         Rx.flatten(),Ry.flatten(),Rz.flatten())).T
+        
+        for i in range(all_points.shape[0]):
+            yield all_points[i]
+            if i % 2000 == 0:
+                self.logger.info(f"Doing a dump of the latest 2000 points")
+                # self.periodic_dump()
+
         yield 1
 
     def periodic_dump(self):
@@ -222,7 +265,7 @@ class FullScan(Pathfinder):
         json_data = { 
             'range of motion' : self.range_of_motion, 
             'resolution' : self.resolution, 
-            'max_point' : self.max_point,
+            'max_point' : self.max_point.tolist(),
             'points' : self.points
         }
         self.write_json_data(json_data)
@@ -247,7 +290,7 @@ class DivisionSearch(Pathfinder):
         self.divisions = divisions
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
 
-    def internal_point_yielder(self):
+    def internal_point_yielder(self) -> np.ndarray:
         '''Divides the search space into n divisions along each of the active dimensions,
         checking each of them, then shrinks the search space to the box surrounding
         just the highest point, and then repeats until the problem converges to below
@@ -286,9 +329,16 @@ class DivisionSearch(Pathfinder):
                         for Rx in temp['Rx']:
                             for Ry in temp['Ry']:
                                 for Rz in temp['Rz']:
-                                    yield ((x,y,z), (Rx,Ry,Rz))
+                                    yield np.array((x,y,z,Rx,Ry,Rz))
             
-            ((temp['X'], temp['Y'], temp['Z']), (temp['Rx'], temp['Ry'], temp['Rz'])) = self.max_point[0]
+            (temp['X'], temp['Y'], temp['Z'], temp['Rx'],
+                temp['Ry'], temp['Rz']) = self.max_point[:6].tolist()
+            # temp['X'] = self.max_point[0]
+            # temp['Y'] = self.max_point[1]
+            # temp['Z'] = self.max_point[2]
+            # temp['Rx'] = self.max_point[3]
+            # temp['Ry'] = self.max_point[4]
+            # temp['Rz'] = self.max_point[5]
 
             for DoF in bounds.keys():
                 if bounds[DoF][0] != bounds[DoF][1]:
@@ -305,7 +355,7 @@ class DivisionSearch(Pathfinder):
         json_data = {
             'range of motion' : self.range_of_motion,
             'divisions' : self.divisions,
-            'max_point' : self.max_point,
+            'max_point' : self.max_point.tolist(),
             'points' : self.points
         }
         self.write_json_data(json_data)
@@ -315,7 +365,7 @@ class Discrete_degree(Pathfinder):
     one dimensions at a time, and loops until it converges on the apparent global max.'''
     def __init__(self,z_range=None,Rx_range=0,
                 Ry_range=0,x_range=0, y_range=0,
-                Rz_range=0,r_o_m=None,max_point=(-1,-1,-1)):
+                Rz_range=0,r_o_m=None,max_point=None):
         
         super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
         
@@ -325,12 +375,13 @@ class Discrete_degree(Pathfinder):
         
         self.range_of_motion = r_o_m
 
-        '''max_point stores the point and magnitude of the highest magnitude yet scanned,
-        stored in a tuple of the form (((X,Y,Z, (Rx,Ry,Rz)), mag), initialized to (-1,-1,-1)
-        for simplicity.'''
-        self.max_point = max_point
+        '''max_point stores the point and magnitude of the highest magnitude yet
+        scanned, stored in a tuple of the form (((X,Y,Z, (Rx,Ry,Rz)), mag),
+        initialized to a (7,) array of -1s for distinction.'''
+        if max_point is not None:
+            self.max_point = max_point
         
-    def internal_point_yielder(self):
+    def internal_point_yielder(self) -> np.ndarray:
         '''This yielder optimizes one degree of freedom at a time, looping in case
         optimizing along more than one direction isn't appropriate.
         
@@ -345,15 +396,14 @@ class Discrete_degree(Pathfinder):
         starting_res = (2,5) # 2 mm, 5 deg
         max_res = (0.03,0.5)
 
-        indeces = {'X': (0,0), 'Y': (0,1), 'Z': (0,2), 'Rx': (1,0), 'Ry': (1,1), 'Rz': (1,2)}
+        indices = {'X': 0, 'Y': 1, 'Z': 2, 'Rx': 3, 'Ry': 4, 'Rz': 5}
         current_best = dict()
 
-        if self.max_point != (-1,-10000,-1000):
-            for i in indeces.keys():
-                # print(self.max_point)
-                current_best[i] = self.max_point[0][indeces[i][0]][indeces[i][1]]
+        if self.max_point[6] != -1.0:
+            for i in indices.keys():
+                current_best[i] = self.max_point[indices[i]]
         else:
-            for i in indeces.keys():
+            for i in indices.keys():
                 current_best[i] = np.mean(self.range_of_motion[i])
 
         i = 1
@@ -366,19 +416,14 @@ class Discrete_degree(Pathfinder):
                     res = max(starting_res[1] * (1 / (i**2)), max_res[1])
 
                 steps = int((self.range_of_motion[slider][1] - self.range_of_motion[slider][0]) / res)
-                # print(slider)
-
                 g = current_best.copy()
-                cent = g[slider]
 
-                # print(np.mean(self.range_of_motion[slider]) / i)
-
-                for j in np.linspace(self.range_of_motion[slider][0] * (2/(2+i)),self.range_of_motion[slider][1] * (2/ (2+i)), steps):
-                # for j in np.linspace(cent + (np.mean(abs(self.range_of_motion[slider])) / i),cent - (np.mean(abs(self.range_of_motion[slider])) / i), steps):
+                for j in np.linspace(self.range_of_motion[slider][0] * (2/(2+i))
+                                    ,self.range_of_motion[slider][1] * (2/ (2+i)), steps):
                     g[slider] = j
                     yield ((g['X'],g['Y'],g['Z']),(g['Rx'],g['Ry'],g['Rz']))
 
-                current_best[slider] = self.max_point[0][indeces[slider][0]][indeces[slider][1]]
+                current_best[slider] = self.max_point[indices[slider]]
 
             keep_going = False
             i += 1
@@ -393,42 +438,32 @@ class Greedy_discrete_degree(Pathfinder):
     '''This pathfinder uses a naive approximation of the search space where it optimizes
     one dimensions at a time, and loops until it converges on the apparent global max.
     Unlike the standard discrete degree, this one doesn't scan the entire space.'''
-    def __init__(self, z_range, Rx_range=0, Ry_range=0,
-        x_range=0, y_range=0, Rz_range=0,bias=10,steps=3,inc=1.6):
+    def __init__(self, z_range, Rx_range=0, Ry_range=0,x_range=0,
+                y_range=0, Rz_range=0,bias=10,steps=3,inc=1.6):
         super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
         self.bias=bias
         self.steps = steps
         self.inc = inc
-        self.max_point = (((0,0,0),(0,0,0)),-1)
     
-    def internal_point_yielder(self):
+    def internal_point_yielder(self) -> np.ndarray:
         '''This yielder optimizes one degree of freedom at a time, looping in case
         optimizing along more than one direction isn't appropriate.
 
         min_tolerance = (0.1,0.5)
-
-        Pseudocode:
-        1. Start with an internal list of all of the active ranges of motion in this module
-        2. Start with one axis and move in a direction until the magnitude goes down twice in a row
-            2a. If this happens from the point you started at, move in the other direction with the
-            same logic
-        3. After you've found the local maximum of the magnitude, repeat the process with the other
-            degrees of freedom
-        4. Repeat and reduce the resolution to the minimum
         '''
         # First find the magnitude at the origin (don't move)
-        yield ((0,0,0),(0,0,0))
+        yield np.zeros(6)
 
         # Iterate through each D_o_f thrice
         l = len(self.active_rom)
-        yield self.max_point[0]
+        yield np.zeros(6)
 
         for i in range(l*4):
             if i%l == 0:
                 self.inc = self.inc / 2
                 print(self.inc)
             # Set the starting point to the point with the current max magnitude
-            t = self.max_point[0]
+            t = self.max_point.copy()
 
             # Iterate through the active degrees of freedom
             axis = self.active_rom[i % l]
@@ -467,7 +502,7 @@ class Greedy_discrete_degree(Pathfinder):
         Returns False if any of the past 'self.steps' points increased. '''
 
         for i in range(self.steps):
-            if (self.points[-1 - i][1] + self.bias > self.points[-2- i][1]):
+            if (self.points[-1 - i][-1] + self.bias > self.points[-2- i][-1]):
                 return False
         
         return True
@@ -515,7 +550,7 @@ class DivisionDiscreteDegree(Pathfinder):
             self.second_stage.newMag(point_mag, override)
         super().newMag(point_mag)
 
-    def internal_point_yielder(self):
+    def internal_point_yielder(self) -> np.ndarray:
         bounds = self.range_of_motion.copy()
         temp = dict()
 

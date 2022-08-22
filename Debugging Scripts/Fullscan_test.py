@@ -12,33 +12,33 @@ print(sys.path)
 from Pathfinders import *
 
 path = os.path.dirname(__file__)
-#path = path + '\\' + time.ctime(time.time())
+path = path + '\\' + time.ctime(time.time())
 
-# file_itr = 0
-# while os.path.exists(path + "\\Scans\\test_%s.json" % file_itr):
-#     file_itr += 1
+file_itr = 0
+while os.path.exists(path + "\\Scans\\test_%s.json" % file_itr):
+    file_itr += 1
 
-# path = path + '\\Scans\\test_%s.json' % file_itr
+path = path + '\\Scans\\test_%s.json' % file_itr
 
+a = FullScan((0.5,2),10,20,20)
 
-# a = FullScan((0.5,2),10,20,20,path=path)
-
-
-# p = a.next()
+p = a.next()
 # print(p)
 
-# start = time.time()
+start = time.time()
 
-# while p != 1:
-#     ((x,y,z),(Rx,Ry,Rz)) = p
+while type(p) is not int:
+    (x,y,z,Rx,Ry,Rz) = p.tolist()
+    # print(p,end='\r')
 
-#     # mag = round(10 - (z + 1)**2 - ((Rx - 35)/10)**2 - ((Ry + 25)/10)**2)# + (random.random() * 5))
-#     mag = max((500 - (5.2*(z + 7))**2 - ((Rx - 35)/0.8)**2 - ((Ry + 25)/0.8)**2), random.random() * 30)
+    # mag = round(10 - (z + 1)**2 - ((Rx - 35)/10)**2 - ((Ry + 25)/10)**2)# + (random.random() * 5))
+    mag = max((500 - (5.2*(z + 7))**2 - ((Rx - 35)/0.8)**2 - 
+                ((Ry + 25)/0.8)**2), random.random() * 30)
 
-#     a.newMag((p,mag))
-#     p = a.next()
+    a.newMag(np.append(p,mag))
+    p = a.next()
 
 
-# a.save_points(path)
-
-# print(time.time() - start)
+print(time.time() - start)
+a.save_points()
+print(time.time() - start)
