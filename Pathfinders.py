@@ -72,7 +72,7 @@ class Pathfinder:
         self.max_point: np.ndarray = np.ones(7) * -1
         '''max_point stores the point and magnitude of the highest
         magnitude yet scanned, stored in an np.ndarray of the form
-        [X,Y,Z,Rx,Ry,Rz,mag], initialized to a (6,) array of -1s to
+        [X,Y,Z,Rx,Ry,Rz,mag], initialized to a (7,) array of -1s to
         distinguish from a real value.'''
 
     def __str__(self):
@@ -85,7 +85,7 @@ class Pathfinder:
         
         self.points.append(point_mag[self.save_indices].tolist())
         if (point_mag[6] > self.max_point[6]):
-            self.max_point = point_mag
+            self.max_point = point_mag.copy()
 
     def next(self) -> np.ndarray:
         return next(self.yielder)
@@ -212,9 +212,9 @@ class FullScan(Pathfinder):
             x0:x1:(int((x1-x0)/res[0])+1)*1j,
             y0:y1:(int((y1-y0)/res[0])+1)*1j,
             z0:z1:(int((z1-z0)/res[0])+1)*1j,
-            Rx0:Rx1:(int((Rx1-Rx0)/res[0])+1)*1j,
-            Ry0:Ry1:(int((Ry1-x0)/res[0])+1)*1j,
-            Rz0:Rz1:(int((Rz1-x0)/res[0])+1)*1j].reshape(6,-1).T
+            Rx0:Rx1:(int((Rx1-Rx0)/res[1])+1)*1j,
+            Ry0:Ry1:(int((Ry1-x0)/res[1])+1)*1j,
+            Rz0:Rz1:(int((Rz1-x0)/res[1])+1)*1j].reshape(6,-1).T
         
         # all_points = np.vstack((X.flatten(),Y.flatten(),Z.flatten(),
         #         Rx.flatten(),Ry.flatten(),Rz.flatten())).T
@@ -481,7 +481,7 @@ class Greedy_discrete_degree(Pathfinder):
                 yield t
             
             positive = True
-            t = self.max_point[0]
+            t = self.max_point.copy()
 
             # Iterate self.steps in the negative direction, exploratory
             for i in range(self.steps):
@@ -508,10 +508,9 @@ class Greedy_discrete_degree(Pathfinder):
         return True
 
     def increment_appropriate_axis(self,max_point,axis,positive) \
-            -> tuple[tuple[float,float,float],tuple[float,float,float]]:
-        # print(max_point)
+            -> np.ndarray:
         try:
-            ((x,y,z),(Rx,Ry,Rz))=max_point
+            (x,y,z,Rx,Ry,Rz)=max_point[:6].tolist()
         except ValueError as e:
             print(max_point)
             print(e)
@@ -534,7 +533,7 @@ class Greedy_discrete_degree(Pathfinder):
         elif axis=='Rz':
             Rx+=inc
 
-        return ((x,y,z),(Rx,Ry,Rz))
+        return np.array((x,y,z,Rx,Ry,Rz))
 
 class DivisionDiscreteDegree(Pathfinder):
     def __init__(self,divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0,cutoff_mag=-1):
@@ -575,10 +574,11 @@ class DivisionDiscreteDegree(Pathfinder):
                         for Ry in temp['Ry']:
                             for Rz in temp['Rz']:
                                 if self.cutoff_mag == -1 or self.max_point[1] < self.cutoff_mag:
-                                    yield ((x,y,z), (Rx,Ry,Rz))
+                                    yield np.array((x,y,z,Rx,Ry,Rz))
         
         # print(self.max_point)
-        ((temp['X'], temp['Y'], temp['Z']), (temp['Rx'], temp['Ry'], temp['Rz'])) = self.max_point[0]
+        (temp['X'], temp['Y'], temp['Z'], 
+            temp['Rx'], temp['Ry'], temp['Rz']) = self.max_point.tolist()
 
         # print("======================")
         # print(f"Bounds: {bounds}")
