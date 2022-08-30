@@ -16,7 +16,7 @@ class Pathfinder:
     position, so the initial position, as far as this is concerned, is ((0,0,0),(0deg,0deg,0deg))
     All internal points are stored as np arrays in the form [X,Y,Z,Rx,Ry,Rz]'''
 
-    def __init__(self, z_range: float, Rx_range: float = 0., Ry_range: float = 0,
+    def __init__(self, z_range: float, Rx_range: float = 0., Ry_range: float =0,
             x_range: float = 0,y_range: float = 0,Rz_range: float = 0):
         '''Accepts as input a series of values indicating the range of different
         points in space it is allowed to exist between. This defines the search
@@ -270,7 +270,6 @@ class FullScan(Pathfinder):
         }
         self.write_json_data(json_data)
 
-
 class DivisionSearch(Pathfinder):
     def __init__(self, divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
         '''Loads a pathfinder implementing a Division Search algorithm
@@ -363,20 +362,56 @@ class DivisionSearch(Pathfinder):
 class Discrete_degree(Pathfinder):
     '''This pathfinder uses a naive approximation of the search space where it optimizes
     one dimensions at a time, and loops until it converges on the apparent global max.'''
-    def __init__(self,z_range=None,Rx_range=0,
+    def __init__(self,z_range=0,Rx_range=0,
                 Ry_range=0,x_range=0, y_range=0,
                 Rz_range=0,r_o_m=None,max_point=None):
-        
-        super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
+
+        super().__init__(z_range, Rx_range, Ry_range, x_range, 
+            y_range, Rz_range)
         
         if r_o_m is None:
             if z_range is None:
                 raise ArgumentError("Please supply a working argument :/")
+        else:
+            self.range_of_motion = r_o_m
+
         
-        self.range_of_motion = r_o_m
+        # self.notes: str = "No notes passed from setup"
+
+        # self.active_rom: list[str] = []
+        
+        # indices = {'X': 0,'Y': 1,'Z':2,'Rx':3,'Ry':4,'Rz':5,'mag':6}
+        # self.save_indices: list[int] = []
+
+        # '''Stores the character representations of the active degrees of freedom.
+        # e.g. ['Z', 'Rx', 'Ry']'''
+        # for degree in self.range_of_motion.keys():
+        #     if self.range_of_motion[degree] != [0,0]:
+        #         self.active_rom.append(degree)
+        #         self.save_indices.append(indices[degree])
+        
+        # self.save_indices.append(6)
+
+        # self.points: list[list[float]] = []
+        # '''Records the point/magnitude pairs that the pathfinder has been given
+        # in a tuple of the form [X,Y,Z,Rx,Ry,Rz,mag]'''
+
+        # self.yielder = self.internal_point_yielder()
+        # self.logger = logging.getLogger(__name__) 
+        # self.logger.info("Pathfinder initialized")
+
+        # file_itr = 0
+        # path = os.path.dirname(__file__)
+        # while os.path.exists(path + f"\\Scans\\test_{file_itr}.json"):
+        #     file_itr += 1
+
+        # self.path = path + f'\\Scans\\test_{file_itr}.json'
+
+        # self.max_point: np.ndarray = np.ones(7) * -1
+        
 
         '''max_point stores the point and magnitude of the highest magnitude yet
-        scanned, stored in a tuple of the form (((X,Y,Z, (Rx,Ry,Rz)), mag),
+        scanned, stored in a ndarray in the form (X,Y,Z,Rx,Ry,Rz,mag),
         initialized to a (7,) array of -1s for distinction.'''
         if max_point is not None:
             self.max_point = max_point
@@ -578,7 +613,7 @@ class DivisionDiscreteDegree(Pathfinder):
         
         # print(self.max_point)
         (temp['X'], temp['Y'], temp['Z'], 
-            temp['Rx'], temp['Ry'], temp['Rz']) = self.max_point.tolist()
+            temp['Rx'], temp['Ry'], temp['Rz'],fk) = self.max_point.tolist()
 
         # print("======================")
         # print(f"Bounds: {bounds}")
