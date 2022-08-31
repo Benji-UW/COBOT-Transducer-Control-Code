@@ -176,18 +176,10 @@ class FullScan(Pathfinder):
         self.will_visit = 1
         self.start_time = time.time()
 
-        for d in self.active_rom:
-            if {'X','Y','Z'}.issuperset(d):
-                self.will_visit *= (self.range_of_motion[d][1] - 
-                    self.range_of_motion[d][0]) / self.resolution[0]
-            else:
-                self.will_visit *= (self.range_of_motion[d][1] - 
-                    self.range_of_motion[d][0]) / self.resolution[1]
-
     def internal_point_yielder(self) -> np.ndarray:
         '''The full scan iterates through every point in the searchspace'''
         res = self.resolution
-        # self.visited_so_far = 0
+        self.visited_so_far = 0
         (x0,x1) = self.range_of_motion['X']
         (y0,y1) = self.range_of_motion['Y']
         (z0,z1) = self.range_of_motion['Z']
@@ -214,13 +206,16 @@ class FullScan(Pathfinder):
             z0:z1:(int((z1-z0)/res[0])+1)*1j,
             Rx0:Rx1:(int((Rx1-Rx0)/res[1])+1)*1j,
             Ry0:Ry1:(int((Ry1-x0)/res[1])+1)*1j,
-            Rz0:Rz1:(int((Rz1-x0)/res[1])+1)*1j].reshape(6,-1).T
+            Rz0:Rz1:(int((Rz1-x0)/res[1])+1)*1j].reshape(6,-1,order='F').T
         
         # all_points = np.vstack((X.flatten(),Y.flatten(),Z.flatten(),
         #         Rx.flatten(),Ry.flatten(),Rz.flatten())).T
+
+        self.will_visit = all_points.shape[0]
         
         for i in range(all_points.shape[0]):
             yield all_points[i]
+            self.visited_so_far += 1
             if i % 2000 == 0:
                 self.logger.info(f"Doing a dump of the latest 2000 points")
                 # self.periodic_dump()

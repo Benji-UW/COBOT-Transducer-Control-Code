@@ -7,11 +7,11 @@ import os
 import numpy as np
 import logging
 import json
-import server
+# import server
 from pynput import keyboard
 from logging.handlers import RotatingFileHandler
 from logging import Formatter
-from threading import Thread
+# from threading import Thread
 from UR3e import *
 from Pathfinders import *
 
@@ -39,7 +39,7 @@ logger = logger_setup()
 
 def main():
     np.set_printoptions(formatter={'float': '{: 0.2f}'.format})
-    Thread(target=server.start_server).start()
+    # Thread(target=server.start_server).start()
 
     '''Initialize a transducer_homing object and run that mf'''
     robot = Transducer_homing()
@@ -64,7 +64,7 @@ class Transducer_homing:
         self.key_listener.start()
         self.keys_pressed:set[str] = set()
 
-        self.headless_test = True
+        self.headless_test = False
 
         self.speed_presets = [(0.005, 0.025,0.025,0.1),
                             (0.0125,0.05,0.05,0.2),
@@ -171,7 +171,7 @@ class Transducer_homing:
                 pos_angle = self.robot.current_relative_target
 
                 if router:
-                    self.pathfinder.newMag((pos_angle, latest_mag), go_next)
+                    self.pathfinder.newMag(np.append(pos_angle,latest_mag), go_next)
 
             # For clarity, the response to key prseses has been moved to another method
             run_bool,router,nextpoint,freedrive = self.key_press_actions(run_bool,router,nextpoint,freedrive)
@@ -190,7 +190,7 @@ class Transducer_homing:
                 # Find the next point
                 nextpoint = self.pathfinder.next()
                 
-                if nextpoint == 1: # nextpoint = 1 means end of path reached
+                if type(nextpoint) is int and nextpoint == 1: # nextpoint = 1 means end of path reached
                     router = False
 
                     # Save points
@@ -271,7 +271,7 @@ class Transducer_homing:
             self.keys_pressed.remove('d')
         if "k" in self.keys_pressed and not router: # Start fullscan pathfinder
             router = True
-            self.pathfinder = FullScan((0.5,0.5),6,0,25)
+            self.pathfinder = FullScan((1,2),9,14,14)
             nextpoint = self.pathfinder.next()
             self.keys_pressed.remove('k')
         if "g" in self.keys_pressed and not router: # Start fullscan pathfinder
@@ -361,7 +361,7 @@ class Transducer_homing:
         be a GUI option for adjusting the default range of motion for the
         pathfinder. By default the range is +/- 8 mm along the z axis and +/- 45
         degrees along the Rx and Ry axes.'''
-        keys = self.range_of_motion.keys()
+        keys = list(self.range_of_motion.keys())
 
         def key_press_actions_2(self, keep_going:bool,
             row:int) -> tuple[bool,int]:
@@ -388,26 +388,23 @@ class Transducer_homing:
                 
             return keep_going,row
 
-
         keep_going = True
         row = 0
 
         while keep_going:
-            prin = "Modify the range of motion that will be passed to the".join(
-                " Fullscan or demo pathfinders.\n")
+            prin = ["Modify the range of motion that will be passed to the" 
+                " Fullscan or demo pathfinders."]
             
-
             for i in range(len(keys)):
-                prin.join(f"{keys[i]}: {self.range_of_motion[keys[i]]}")
                 if i == row:
-                    prin.join(" <---")
-                prin.join("\n")
+                    prin.append(f"{keys[i]}: {self.range_of_motion[keys[i]]} <---")
+                else:
+                    prin.append(f"{keys[i]}: {self.range_of_motion[keys[i]]}")
     
-            
-            prin.join('----------------------\n')
-            print(prin, end='\r')
-            keep_going,row = key_press_actions_2(keep_going, row)
-        pass
+            prin.append('----------------------')
+            print('\n'.join(prin), end=(len(prin) + 1)*'\033[F')
+            keep_going,row = key_press_actions_2(self,keep_going,row)
+        
 
     def main_menu_GUI(self, router, current_target, freedrive, latest_mag):
         pos = self.robot.pos
@@ -438,22 +435,23 @@ class Transducer_homing:
             'Press (g) to trigger a amplitude max-finding pathrouter.',
             'Press (q) to quit']]
         else:
-            if current_target is not None and current_target != 1:
+            if current_target is not None and type(current_target) is not int:
                 prin.append('')
-                t_pos,t_ang = current_target
-                prin.append(f"Next target: ({[format(a,'1.2f') for a in t_pos]},"
-                            f"({[format(a,'1.2f') for a in t_ang]})")
-            prin.append(['Press (x) to cancel the running pathfinder',
+                t_pos_ang = current_target
+                prin.append(f"Next target: ({[format(a,'1.2f') for a in t_pos_ang]})")
+            [prin.append(i) for i in ['Press (x) to cancel the running pathfinder',
             "Press (m) to movel to the next target point.", "",
-            'Progress of the current running pathfinder:'])
+            'Progress of the current running pathfinder:']]
             for i in self.pathfinder.progress_report():
                 prin.append('\t'+ i)
 
         prin.append('\n' + time.ctime() + '\n' + 16*'-')
+        prin.append('')
+        prin.append('')
+        prin.append('')
+        prin.append('')
+        prin.append('')
 
-        [prin.append('') for i in range(6)]
-
-        # print(''.join(prin), end='\r')
         print('\n'.join(prin), end=(len(prin) + 1)*'\033[F')
 
     def on_press(self, key):

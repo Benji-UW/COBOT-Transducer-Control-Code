@@ -189,8 +189,6 @@ set(ps5000aDeviceObj, 'numPostTriggerSamples', total_samples * 0.95);
 flag = 1; % Use flag variable to indicate if stop button has been clicked (0).
 setappdata(gcf, 'run', flag);
 
-blorb = 1;
-formatSpec = 'scan_%dx.mat';
 
 ind = 0;
 update_frequency = zeros(101,1);
@@ -209,15 +207,7 @@ while 1
 
     [numSamples, overflow, chA, chB] = invoke(blockGroupObj, 'getBlockData', startIndex, segmentIndex, ...
                                                 downsamplingRatio, downsamplingRatioMode);
-                                            
-    if mod(ind,100)==0
-        fprintf("Update frequency: %f H\n", mean(update_frequency))
-        title = sprintf(formatSpec,blorb);
-
-        save(title,'chA');
-        blorb = blorb + 1;
-    end
-                                            
+    
     chA = chA(total_samples*0.1:end);
 %     fprintf('max val in block: %f', max(chA))
     ind = ind + 1;
@@ -234,6 +224,9 @@ while 1
     flag = getappdata(gcf, 'run');
     drawnow;
 
+    if mod(ind,100)==0
+        fprintf("Update frequency: %f H\n", mean(update_frequency))
+    end
     
     if (flag == 0)
 
