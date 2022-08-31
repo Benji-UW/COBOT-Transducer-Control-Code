@@ -80,7 +80,7 @@ class Transducer_homing:
         self.speed_preset: int = 3
         
         self.refresh_rate:float = 112.
-        self.lag = 0.2 #10. / self.refresh_rate #0.1
+        # self.lag = 0.2 #10. / self.refresh_rate #0.1
 
         self.range_of_motion = {'X': 0,'Y': 0,'Z':8,'Rx':30,'Ry':30,'Rz':0}
 
@@ -168,10 +168,10 @@ class Transducer_homing:
                 self.last_ten_refresh_rate[self.i%40] = time.time() - self.t
                 self.t = time.time()
                 
-                pos,angle = self.robot.current_relative_target
+                pos_angle = self.robot.current_relative_target
 
                 if router:
-                    self.pathfinder.newMag(((pos,angle), latest_mag), go_next)
+                    self.pathfinder.newMag((pos_angle, latest_mag), go_next)
 
             # For clarity, the response to key prseses has been moved to another method
             run_bool,router,nextpoint,freedrive = self.key_press_actions(run_bool,router,nextpoint,freedrive)
@@ -219,7 +219,7 @@ class Transducer_homing:
             # Post things to the logs.
             self.main_loop_logs()
         #-------------------------Bottom of loop-------------------------------#
-        self.robot.movel_to_target(((0,0,0),(0,0,0)))
+        self.robot.movel_to_target(np.zeros(6))
 
         # loop is exited
         self.robot.disconnect()
@@ -361,6 +361,52 @@ class Transducer_homing:
         be a GUI option for adjusting the default range of motion for the
         pathfinder. By default the range is +/- 8 mm along the z axis and +/- 45
         degrees along the Rx and Ry axes.'''
+        keys = self.range_of_motion.keys()
+
+        def key_press_actions_2(self, keep_going:bool,
+            row:int) -> tuple[bool,int]:
+            ''' Each run through the main loop, listen for actions triggered
+            by key input.
+            q - Quit the program and exit (saving first)'''
+            if 'q' in self.keys_pressed: # Quit
+                keep_going = False
+                self.keys_pressed.remove('q')
+            elif 'right' in self.keys_pressed: # Increment
+                self.range_of_motion[keys[row]] += 1
+                self.keys_pressed.remove('right')
+            elif 'left' in self.keys_pressed: # Decrement
+                self.range_of_motion[keys[row]] -= 1
+                self.keys_pressed.remove('left')
+            elif 'up' in self.keys_pressed: # Decrement
+                if row > 0:
+                    row -= 1
+                self.keys_pressed.remove('up')
+            elif 'down' in self.keys_pressed: # Decrement
+                if row < len(keys):
+                    row += 1
+                self.keys_pressed.remove('down')
+                
+            return keep_going,row
+
+
+        keep_going = True
+        row = 0
+
+        while keep_going:
+            prin = "Modify the range of motion that will be passed to the".join(
+                " Fullscan or demo pathfinders.\n")
+            
+
+            for i in range(len(keys)):
+                prin.join(f"{keys[i]}: {self.range_of_motion[keys[i]]}")
+                if i == row:
+                    prin.join(" <---")
+                prin.join("\n")
+    
+            
+            prin.join('----------------------\n')
+            print(prin, end='\r')
+            keep_going,row = key_press_actions_2(keep_going, row)
         pass
 
     def main_menu_GUI(self, router, current_target, freedrive, latest_mag):
