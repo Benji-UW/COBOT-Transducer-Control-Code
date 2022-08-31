@@ -197,8 +197,8 @@ class Transducer_homing:
                     self.pathfinder.save_points()
 
                     # # Return robot to starting position (comment out when you don't wanna do this)
-                    self.robot.movel_to_target(np.zeros(6))
-                    # self.robot.movel_to_target(self.pathfinder.max_point[:6])
+                    # self.robot.movel_to_target(np.zeros(6))
+                    self.robot.movel_to_target(self.pathfinder.max_point[:6])
 
                     data={"Start joints": self.starting_joints,
                         "joints_at_points": self.joint_history,
@@ -219,7 +219,7 @@ class Transducer_homing:
             # Post things to the logs.
             self.main_loop_logs()
         #-------------------------Bottom of loop-------------------------------#
-        self.robot.movel_to_target(np.zeros(6))
+        # self.robot.movel_to_target(np.zeros(6))
 
         # loop is exited
         self.robot.disconnect()
@@ -283,7 +283,7 @@ class Transducer_homing:
             router = False
             self.pathfinder.save_points()
             logger.debug(f"triggering movel to {((0,0,0),(0,0,0))}")
-            self.robot.movel_to_target(((0,0,0),(0,0,0)))
+            self.robot.movel_to_target(np.zeros(6))
             self.keys_pressed.remove('x')
         if 'a' in self.keys_pressed and not router: # Change operating range
             self.change_range_gui()

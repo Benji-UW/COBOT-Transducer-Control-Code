@@ -214,7 +214,7 @@ while 1
         fprintf("Update frequency: %f H\n", mean(update_frequency))
         title = sprintf(formatSpec,blorb);
 
-        save(title,'chA');
+%         save(title,'chA');
         blorb = blorb + 1;
     end
                                             

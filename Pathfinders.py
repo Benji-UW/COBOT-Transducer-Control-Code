@@ -491,7 +491,7 @@ class Greedy_discrete_degree(Pathfinder):
         for i in range(l*4):
             if i%l == 0:
                 self.inc = self.inc / 2
-                print(self.inc)
+                self.logger.info(f"Increment size {self.inc}")
             # Set the starting point to the point with the current max magnitude
             t = self.max_point.copy()
 
