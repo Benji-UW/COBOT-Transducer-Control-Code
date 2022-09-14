@@ -3546,7 +3546,7 @@
          449.69
       ]
    ],
-   "notes": "No notes passed from setup",
+   "notes": "Appears to be a greedy discrete degree test, passes the vibe check.",
    "active_ROM": [
       "Z",
       "Rx",

@@ -37,8 +37,6 @@ class Pathfinder:
                                 'Rx': [-Rx_range, Rx_range],
                                 'Ry': [-Ry_range, Ry_range],
                                 'Rz': [-Rz_range, Rz_range]}
-        
-        self.notes: str = "No notes passed from setup"
 
         self.active_rom: list[str] = []
         
@@ -74,6 +72,8 @@ class Pathfinder:
         magnitude yet scanned, stored in an np.ndarray of the form
         [X,Y,Z,Rx,Ry,Rz,mag], initialized to a (7,) array of -1s to
         distinguish from a real value.'''
+        
+        self.notes: str = "No notes passed from setup.\n"
 
     def __str__(self):
         return ("Basic, boilerplate version of a pathfinder module.\n" + 
@@ -122,7 +122,7 @@ class Pathfinder:
 
         yield 1
 
-# TODO: Maybe delete the _close_enough module since it's been rendered obselete by the current functionality.        
+# TODO: Maybe delete the _close_enough method since it's been rendered obselete by the current functionality.        
     # def _close_enough(self, point, override, tolerance=(0.5,2)):
     #     '''Accepts as input a point and a tuple containing the dimensional tolerances,
     #     in the form of (mm, deg), where the first element is the toleranace of linear
@@ -154,6 +154,7 @@ class Pathfinder:
         self.write_json_data(json_data)
 
     def write_json_data(self, data):
+        self.notes += self.__str__()
         data['notes'] = self.notes
         data['active_ROM'] = self.active_rom
 
@@ -175,6 +176,13 @@ class FullScan(Pathfinder):
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
         self.will_visit = 1
         self.start_time = time.time()
+    
+    def __str__(self):
+        return ("Fullscan version of a pathfinder module, scans " + 
+            "the entire search-space at a fixed resolution.\n" + 
+            f"\tRange of motion: {self.range_of_motion}\n" +  
+            f"\tResolution: {self.resolution}\n" + 
+            f"\tHighest magnitude found: {self.max_point}")
 
     def internal_point_yielder(self) -> np.ndarray:
         '''The full scan iterates through every point in the searchspace'''
@@ -284,6 +292,12 @@ class DivisionSearch(Pathfinder):
         self.divisions = divisions
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
 
+    def __str__(self):
+        return ("Division search pathfinder module.\n" + 
+            f"\tRange of motion: {self.range_of_motion}\n" +
+            f"\tDivisions: {self.divisions}\n" + 
+            f"\tHighest magnitude found: {self.max_point}")
+
     def internal_point_yielder(self) -> np.ndarray:
         '''Divides the search space into n divisions along each of the active dimensions,
         checking each of them, then shrinks the search space to the box surrounding
@@ -367,7 +381,7 @@ class Discrete_degree(Pathfinder):
         else:
             self.range_of_motion = r_o_m
 
-        
+        #TODO Test the discrete degree module again and delete this code if possible
         # self.notes: str = "No notes passed from setup"
 
         # self.active_rom: list[str] = []
@@ -407,6 +421,11 @@ class Discrete_degree(Pathfinder):
         initialized to a (7,) array of -1s for distinction.'''
         if max_point is not None:
             self.max_point = max_point
+
+    def __str__(self):
+        return ("Discrete degree pathfinder module.\n" + 
+            f"\tRange of motion: {self.range_of_motion}\n" +
+            f"\tHighest magnitude found: {self.max_point}")
         
     def internal_point_yielder(self) -> np.ndarray:
         '''This yielder optimizes one degree of freedom at a time, looping in case
@@ -471,6 +490,13 @@ class Greedy_discrete_degree(Pathfinder):
         self.bias=bias
         self.steps = steps
         self.inc = inc
+
+    def __str__(self):
+        return ("Greedy discrete degree pathfinder module.\n" + 
+            f"\tRange of motion: {self.range_of_motion}\n" +
+            f"\tBias: {self.bias}\n" + 
+            f"\tSteps: {self.steps}\n" + 
+            f"\tHighest magnitude found: {self.max_point}")
     
     def internal_point_yielder(self) -> np.ndarray:
         '''This yielder optimizes one degree of freedom at a time, looping in case
@@ -572,6 +598,13 @@ class DivisionDiscreteDegree(Pathfinder):
         self.second_stage = -1
         self.cutoff_mag = cutoff_mag
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
+
+    def __str__(self):
+        return ("Division + discrete degree pathfinder module.\n" + 
+            f"\tRange of motion: {self.range_of_motion}\n" +
+            f"\tDivisions: {self.divisions}\n" + 
+            f"\tCutoff magnitude: {self.cutoff_mag}\n" + 
+            f"\tHighest magnitude found: {self.max_point}")
 
     def newMag(self, point_mag, override=False):
         if self.second_stage != -1:

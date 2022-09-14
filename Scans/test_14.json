@@ -1704,7 +1704,7 @@
          566.424
       ]
    ],
-   "notes": "No notes passed from setup",
+   "notes": "First one with the new numpy schema, appears to be a greedy discrete degree.",
    "active_ROM": [
       "Z",
       "Rx",
