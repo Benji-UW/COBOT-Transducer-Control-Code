@@ -296,8 +296,6 @@ class DivisionSearch(Pathfinder):
         temp = dict()
 
         while keep_going:
-            # print("I'm in")
-            # print(bounds)
             inc_size = dict()
             keys = bounds.keys()
 
@@ -306,10 +304,11 @@ class DivisionSearch(Pathfinder):
                 if bounds[DoF][0] != bounds[DoF][1]:
                     # Store all the points along this axis we will visit
                     temp[DoF] = np.linspace(bounds[DoF][0], bounds[DoF][1], self.divisions)
+
                     # Terminate the loop if the spacing between those points is too small
                     inc_size[DoF] = (bounds[DoF][1] - bounds[DoF][0]) / self.divisions
-                    if (({'X','Y','Z'}.issuperset(DoF) and inc_size[DoF] 
-                            < max_res[0]) or ({'Rx','Ry','Rz'}.issuperset(DoF) 
+                    if (({'X','Y','Z'}.issuperset(DoF) and inc_size[DoF]
+                            < max_res[0]) or ({'Rx','Ry','Rz'}.issuperset(DoF)
                             and inc_size[DoF] < max_res[1])):
                         keep_going = False
                 else:
@@ -325,18 +324,16 @@ class DivisionSearch(Pathfinder):
                                 for Rz in temp['Rz']:
                                     yield np.array((x,y,z,Rx,Ry,Rz))
             
+            # Store the maxpoint in the temporary dictionary
             (temp['X'], temp['Y'], temp['Z'], temp['Rx'],
                 temp['Ry'], temp['Rz']) = self.max_point[:6].tolist()
-            # temp['X'] = self.max_point[0]
-            # temp['Y'] = self.max_point[1]
-            # temp['Z'] = self.max_point[2]
-            # temp['Rx'] = self.max_point[3]
-            # temp['Ry'] = self.max_point[4]
-            # temp['Rz'] = self.max_point[5]
 
             for DoF in bounds.keys():
+                # If this is an active degree of freedom, 
                 if bounds[DoF][0] != bounds[DoF][1]:
+                    # If the maxpoint exists in the fringe of the searchspace
                     if temp[DoF] == bounds[DoF][0]:
+                        # Set the bounds to 
                         bounds[DoF] = [temp[DoF], temp[DoF] + (2 * inc_size[DoF])]
                     elif temp[DoF] == bounds[DoF][1]:
                         bounds[DoF] = [temp[DoF] - (2 * inc_size[DoF]), temp[DoF]]
@@ -487,8 +484,9 @@ class Greedy_discrete_degree(Pathfinder):
         # Iterate through each D_o_f thrice
         l = len(self.active_rom)
         yield np.zeros(6)
+        i = 0
 
-        for i in range(l*4):
+        while self.inc > 0.1:
             if i%l == 0:
                 self.inc = self.inc / 2
                 self.logger.info(f"Increment size {self.inc}")
@@ -498,7 +496,7 @@ class Greedy_discrete_degree(Pathfinder):
             # Iterate through the active degrees of freedom
             axis = self.active_rom[i % l]
             # Start moving in the positive direction
-            positive=False
+            positive = False
 
             # Iterate self.steps in the positive direction, exploratory
             for i in range(self.steps):
@@ -523,6 +521,7 @@ class Greedy_discrete_degree(Pathfinder):
                 t = self.increment_appropriate_axis(t,axis,positive)
                 yield t
             
+            i += 1
             # Go back to start of the loop and try again with another degree of freedom.
         yield 1
 
