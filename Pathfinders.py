@@ -2,6 +2,7 @@
 Unit convention: mm/kg/s/deg
 '''
 from argparse import ArgumentError
+from re import search
 import numpy as np
 import json
 import time
@@ -84,6 +85,7 @@ class Pathfinder:
         '''Input ndarry in the form [X,Y,Z,Rx,Ry,Rz,mag].'''
         
         self.points.append(point_mag[self.save_indices].tolist())
+        self.logger.debug(f"Appended the point {point_mag[self.save_indices]} to internal registry.")
         if (point_mag[6] > self.max_point[6]):
             self.max_point = point_mag.copy()
 
@@ -195,19 +197,6 @@ class FullScan(Pathfinder):
         (Ry0,Ry1) = self.range_of_motion['Ry']
         (Rz0,Rz1) = self.range_of_motion['Rz']
 
-        # for x in np.linspace(x0, x1, int((x1-x0)/res[0])+1):
-        #     for y in np.linspace(y0, y1, int((y1-y0)/res[0])+1):
-        #         for z in np.linspace(z0, z1, abs(int((z1-z0)/res[0]))+1):
-        #             for Rx in np.linspace(Rx0, Rx1, int((Rx1-Rx0)/res[1])+1):
-        #                 (Ry0,Ry1) = (Ry1,Ry0)
-        #                 for Ry in np.linspace(Ry0, Ry1, int(abs(Ry1-Ry0)/res[1]) + 1):
-        #                     for Rz in np.linspace(Rz0, Rz1, int((Rz1-Rz0)/res[1]) + 1):
-        #                         self.visited_so_far += 1
-        #                         yield np.array([x,y,z,Rx,Ry,Rz])
-        #             if (self.visited_so_far % 2000 == 0):
-        #                 self.logger.info(f"Doing a dump of the latest 2000 points, at")
-        #                 self.periodic_dump()
-        # yield 1
         all_points = np.mgrid[
             x0:x1:(int((x1-x0)/res[0])+1)*1j,
             y0:y1:(int((y1-y0)/res[0])+1)*1j,
@@ -487,7 +476,7 @@ class Greedy_discrete_degree(Pathfinder):
     def __init__(self, z_range, Rx_range=0, Ry_range=0,x_range=0,
                 y_range=0, Rz_range=0,bias=10,steps=3,inc=1.6):
         super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
-        self.bias=bias
+        self.bias = bias
         self.steps = steps
         self.inc = inc
 
@@ -510,44 +499,54 @@ class Greedy_discrete_degree(Pathfinder):
         # Iterate through each D_o_f thrice
         l = len(self.active_rom)
         yield np.zeros(6)
-        i = 0
+        loop_i = 0
 
+        self.logger.debug("Beginning greedy incremental checks.")
         while self.inc > 0.1:
-            if i%l == 0:
+            if loop_i%l == 0:
                 self.inc = self.inc / 2
                 self.logger.info(f"Increment size {self.inc}")
             # Set the starting point to the point with the current max magnitude
             t = self.max_point.copy()
 
             # Iterate through the active degrees of freedom
-            axis = self.active_rom[i % l]
+            axis = self.active_rom[loop_i % l]
             # Start moving in the positive direction
             positive = False
+            within_bounds = True
 
             # Iterate self.steps in the positive direction, exploratory
             for i in range(self.steps):
                 t = self.increment_appropriate_axis(t,axis,positive)
                 yield t
+            self.logger.debug(f"Moved {self.steps} steps in the negative {axis} direciton.")
             
             # If you went downhill twice in a row, that's a bunk direction
-            while not self.recent_downhill():
+            while not self.recent_downhill() and within_bounds:
                 t = self.increment_appropriate_axis(t,axis,positive)
+                within_bounds = self._within_search_space(t)
                 yield t
+            self.logger.debug(f"Hit the bounds: ({(not within_bounds)})\tOtherwise I've just hit a downhill recently.")
             
             positive = True
+            within_bounds = True
             t = self.max_point.copy()
 
             # Iterate self.steps in the negative direction, exploratory
             for i in range(self.steps):
                 t = self.increment_appropriate_axis(t,axis,positive)
                 yield t
+            self.logger.debug(f"Moved {self.steps} steps in the positive {axis} direciton.")
 
             # As long as you don't go downhill twice in a row, keep going in this direction
-            while not self.recent_downhill():
+            while not self.recent_downhill() and within_bounds:
                 t = self.increment_appropriate_axis(t,axis,positive)
+                within_bounds = self._within_search_space(t)
                 yield t
+            self.logger.debug(f"Hit the bounds: ({not within_bounds})\tOtherwise I've just hit a downhill recently.")
             
-            i += 1
+            loop_i += 1
+            self.logger.debug(f"Loops: {loop_i}")
             # Go back to start of the loop and try again with another degree of freedom.
         yield 1
 
@@ -562,6 +561,13 @@ class Greedy_discrete_degree(Pathfinder):
         
         return True
 
+    def _within_search_space(self,point) -> bool:
+        r_o_m = self.range_of_motion
+        lower = np.array([r_o_m[i][0] for i in r_o_m.keys()])
+        upper = np.array([r_o_m[i][1] for i in r_o_m.keys()])
+
+        return np.all(point >= lower) and np.all(point <= upper)
+        
     def increment_appropriate_axis(self,max_point,axis,positive) \
             -> np.ndarray:
         try:
@@ -671,3 +677,135 @@ class DivisionDiscreteDegree(Pathfinder):
             p = self.second_stage.next()
         
         yield 1
+
+class Gradient_Ascent(Pathfinder):
+    '''This pathfinder is going to attempt to use a naive version of gradient
+    ascent to find the maximum point in the search space. Essentially it measures
+    the gradient in a neighborhood and then travels along that gradient until it
+    finds the highest point. Might need to work in tandem with discrete degree tbh.'''
+    def __init__(self, z_range, Rx_range=0, Ry_range=0,x_range=0,
+                y_range=0, Rz_range=0,bias=10,steps=3,inc=1.6,speed=1.0):
+        super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
+        self.bias = bias
+        self.steps = steps
+        self.inc = inc
+        self.speed = speed
+
+    def __str__(self):
+        return ("Gradient ascent approximation pathfinder module.\n" + 
+            f"\tRange of motion: {self.range_of_motion}\n" +
+            f"\tBias: {self.bias}\n" + 
+            f"\tSteps: {self.steps}\n" + 
+            f"\tHighest magnitude found: {self.max_point}")
+
+    def internal_point_yielder(self) -> np.ndarray:
+        '''Gonna use gradient ascent this time but otherwise
+        same dealio as the greedy discrete degree.'''
+
+        # Pseudocode:
+        # 1. At a given point, take the magnitude
+        # 2. Then, explore a tiny searchspace around that
+        #   center point (cubic for three axes, square
+        #   for two)
+        # 3. Take the gradient around your origin to determine
+        #   the axis most appropriate to move along to reach
+        #   a maximum.
+        #       a. How to do that?
+        #           (i) For each of the points around your searchspace,
+        #           (ii) normalize the vector (set it to one), (iii) multiply
+        #           it by the change in magnitude between it and the
+        #           center point. (iv) Add all of these together and
+        #           (v) normalize the answer.
+        # 4. Move along the gradient vector using the same control logic
+        #   as the greedy discrete degree, (4a) continuing until there's a
+        #   consistent decrease above a set bias for  
+        # 5. Repeat the process at the new max_point, decreasing the step size
+        #   for searching around the center_point as well as the stepsize taken
+        #   along the gradient. 
+
+        steps = []
+        for i in range(6):
+            if i in self.save_indices:
+                if i <=3:
+                    steps.append(self.inc)
+                else:
+                    steps.append(self.inc * 2)
+            else:
+                steps.append(0)
+
+        steps = np.array(steps)
+
+        yield np.zeros(6)
+
+        yield np.zeros(6)
+        loop_i = 0
+
+        self.logger.debug("Beginning greedy incremental checks.")
+        while self.inc > 0.1:
+            self.inc = self.inc / 2
+            steps = steps / 2
+            self.logger.info(f"Increment size {self.inc}")
+
+            # 1.
+            t = self.max_point.copy()
+
+            mini_grid = np.mgrid[
+                t[0]-steps[0]:t[0] + steps[0]:(1 + int(steps[0]!=0))*1j,
+                t[1]-steps[1]:t[1] + steps[1]:(1 + int(steps[1]!=0))*1j,
+                t[2]-steps[2]:t[2] + steps[2]:(1 + int(steps[2]!=0))*1j,
+                t[3]-steps[3]:t[3] + steps[3]:(1 + int(steps[3]!=0))*1j,
+                t[4]-steps[4]:t[4] + steps[4]:(1 + int(steps[4]!=0))*1j,
+                t[5]-steps[5]:t[5] + steps[5]:(1 + int(steps[2]==0))*1j].reshape(6,-1,order='F').T
+
+            cube_size = mini_grid.shape[0]
+            # 2
+            for point in mini_grid:
+                yield point
+            
+            # 3
+            gradient = self.local_gradient(t, cube_size)
+
+            t = t[:6]
+
+            within_bounds = True
+            # Iterate self.steps in the positive direction, exploratory
+            for i in range(self.steps):
+                t = t - (gradient * self.inc * self.speed)
+                yield t
+            self.logger.debug(f"Moved {self.steps} steps along the {gradient} direciton.")
+            
+            # If you went downhill twice in a row, that's a bunk direction
+            while not self.recent_downhill() and within_bounds:
+                t = t + (gradient * self.inc * self.speed)
+                yield t
+            self.logger.debug(f"Hit the bounds: ({(not within_bounds)})\tOtherwise I've just hit a downhill recently.")
+            
+            loop_i += 1
+            self.logger.debug(f"Loops: {loop_i}")
+            # Go back to start of the loop and try again with another degree of freedom.
+
+        yield 1
+
+    def local_gradient(self, t, search_size) -> np.ndarray:
+        '''checks the previous #search_size# points to calculate
+        the gradient between them and the current max_point.'''
+        check = self.points[-search_size:]
+        grad = np.zeros(6)
+
+        for point in check:
+            full_point = np.zeros(7)
+            full_point[self.save_indices] = point
+            grad += full_point[:6] / (np.linalg.norm(full_point[:6]) * (full_point[6] - t[6]))
+        
+        return grad / np.linalg.norm(grad)
+
+    def recent_downhill(self) -> bool:
+        '''Returns True if the pathfinder has gone downhill constantly for the past
+        'self.steps' points
+        Returns False if any of the past 'self.steps' points increased. '''
+
+        for i in range(self.steps):
+            if (self.points[-1 - i][-1] + self.bias > self.points[-2- i][-1]):
+                return False
+        
+        return True
