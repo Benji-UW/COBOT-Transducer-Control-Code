@@ -678,18 +678,20 @@ class DivisionDiscreteDegree(Pathfinder):
         
         yield 1
 
-class Gradient_Ascent(Pathfinder):
+class GradientAscent(Pathfinder):
     '''This pathfinder is going to attempt to use a naive version of gradient
     ascent to find the maximum point in the search space. Essentially it measures
     the gradient in a neighborhood and then travels along that gradient until it
     finds the highest point. Might need to work in tandem with discrete degree tbh.'''
-    def __init__(self, z_range, Rx_range=0, Ry_range=0,x_range=0,
-                y_range=0, Rz_range=0,bias=10,steps=3,inc=1.6,speed=1.0):
+    def __init__(self,z_range,Rx_range=0,Ry_range=0,x_range=0,
+                y_range=0,Rz_range=0,bias=10,steps=3,inc=1.8,
+                traverse=2.4,mini_search=1):
         super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
         self.bias = bias
         self.steps = steps
         self.inc = inc
-        self.speed = speed
+        self.traverse = traverse
+        self.mini_search = mini_search
 
     def __str__(self):
         return ("Gradient ascent approximation pathfinder module.\n" + 
@@ -727,7 +729,7 @@ class Gradient_Ascent(Pathfinder):
         for i in range(6):
             if i in self.save_indices:
                 if i <=3:
-                    steps.append(self.inc)
+                    steps.append(self.inc * 1)
                 else:
                     steps.append(self.inc * 2)
             else:
@@ -736,26 +738,28 @@ class Gradient_Ascent(Pathfinder):
         steps = np.array(steps)
 
         yield np.zeros(6)
-
         yield np.zeros(6)
         loop_i = 0
+        progress_made = True
 
         self.logger.debug("Beginning greedy incremental checks.")
-        while self.inc > 0.1:
-            self.inc = self.inc / 2
-            steps = steps / 2
-            self.logger.info(f"Increment size {self.inc}")
-
+        while progress_made and loop_i < 20:
+            progress_made = False
+            if self.traverse > 0.1:
+                self.traverse = self.traverse * 0.75
+                steps = steps * 0.75
+                self.logger.info(f"Increment size {steps}")
             # 1.
             t = self.max_point.copy()
+            old_max = t[6]
 
             mini_grid = np.mgrid[
-                t[0]-steps[0]:t[0] + steps[0]:(1 + int(steps[0]!=0))*1j,
-                t[1]-steps[1]:t[1] + steps[1]:(1 + int(steps[1]!=0))*1j,
-                t[2]-steps[2]:t[2] + steps[2]:(1 + int(steps[2]!=0))*1j,
-                t[3]-steps[3]:t[3] + steps[3]:(1 + int(steps[3]!=0))*1j,
-                t[4]-steps[4]:t[4] + steps[4]:(1 + int(steps[4]!=0))*1j,
-                t[5]-steps[5]:t[5] + steps[5]:(1 + int(steps[2]==0))*1j].reshape(6,-1,order='F').T
+                t[0]-steps[0]:t[0] + steps[0]:(self.mini_search + int(steps[0]!=0))*1j,
+                t[1]-steps[1]:t[1] + steps[1]:(self.mini_search + int(steps[1]!=0))*1j,
+                t[2]-steps[2]:t[2] + steps[2]:(self.mini_search + int(steps[2]!=0))*1j,
+                t[3]-steps[3]:t[3] + steps[3]:(self.mini_search + int(steps[3]!=0))*1j,
+                t[4]-steps[4]:t[4] + steps[4]:(self.mini_search + int(steps[4]!=0))*1j,
+                t[5]-steps[5]:t[5] + steps[5]:(self.mini_search + int(steps[2]==0))*1j].reshape(6,-1,order='F').T
 
             cube_size = mini_grid.shape[0]
             # 2
@@ -770,18 +774,20 @@ class Gradient_Ascent(Pathfinder):
             within_bounds = True
             # Iterate self.steps in the positive direction, exploratory
             for i in range(self.steps):
-                t = t - (gradient * self.inc * self.speed)
+                t = t - (gradient * self.traverse)
                 yield t
             self.logger.debug(f"Moved {self.steps} steps along the {gradient} direciton.")
             
             # If you went downhill twice in a row, that's a bunk direction
             while not self.recent_downhill() and within_bounds:
-                t = t + (gradient * self.inc * self.speed)
+                t = t + (gradient * self.traverse)
                 yield t
             self.logger.debug(f"Hit the bounds: ({(not within_bounds)})\tOtherwise I've just hit a downhill recently.")
             
             loop_i += 1
             self.logger.debug(f"Loops: {loop_i}")
+            if self.max_point[6] > old_max:
+                progress_made = True
             # Go back to start of the loop and try again with another degree of freedom.
 
         yield 1
@@ -791,12 +797,18 @@ class Gradient_Ascent(Pathfinder):
         the gradient between them and the current max_point.'''
         check = self.points[-search_size:]
         grad = np.zeros(6)
-
         for point in check:
             full_point = np.zeros(7)
             full_point[self.save_indices] = point
-            grad += full_point[:6] / (np.linalg.norm(full_point[:6]) * (full_point[6] - t[6]))
+
+            delta_pos = full_point[:6] - t[:6]
+            delta_mag = full_point[6] - t[6]
+
+            grad += (delta_pos)  * (delta_mag) / (np.linalg.norm((delta_pos)))
         
+        # print(f"Total gradient: {grad}")
+        # print(f"Normalized gradient: {grad/np.linalg.norm(grad)}")
+
         return grad / np.linalg.norm(grad)
 
     def recent_downhill(self) -> bool:
