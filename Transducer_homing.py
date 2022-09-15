@@ -276,8 +276,7 @@ class Transducer_homing:
             self.keys_pressed.remove('k')
         if "g" in self.keys_pressed and not router: # Start fullscan pathfinder
             router = True
-            self.pathfinder = Gradient_Ascent(20,15,15,bias=2,
-                steps=4,inc=1.6,speed=1)
+            self.pathfinder = GradientAscent(20,15,15,bias=5,steps=4,traverse=1.6,)
             nextpoint = self.pathfinder.next()
             self.keys_pressed.remove('g')
         if 'x' in self.keys_pressed and router: # stop the running pathfinder
