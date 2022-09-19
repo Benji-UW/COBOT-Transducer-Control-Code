@@ -765,7 +765,7 @@ class GradientAscent(Pathfinder):
             # 2
             for point in mini_grid:
                 yield point
-            
+             
             # 3
             gradient = self.local_gradient(t, cube_size)
 
