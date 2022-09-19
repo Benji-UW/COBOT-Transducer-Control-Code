@@ -10,28 +10,9 @@ import logging
 import os
 
 class Pathfinder:
-    '''A class for controlling where the arm goes. The tl;dr is you define a search space,
-    with a starting and ending value for each degree of freedom. It can do between one and
-    six degrees of freedom. The units for the linear dimensions are mm, the units for the
-    angular dimensions are degrees. Everything is defined relative to the initial starting
-    position, so the initial position, as far as this is concerned, is ((0,0,0),(0deg,0deg,0deg))
-    All internal points are stored as np arrays in the form [X,Y,Z,Rx,Ry,Rz]'''
-
     def __init__(self, z_range: float, Rx_range: float = 0., Ry_range: float =0,
             x_range: float = 0,y_range: float = 0,Rz_range: float = 0):
-        '''Accepts as input a series of values indicating the range of different
-        points in space it is allowed to exist between. This defines the search
-        space of the object. It will not investigate any points outside these bounds.
-        The only range it is require to accept is the z_range, otherwise it will
-        default to zero. Z also defines the range to give more room to move backwards
-        than forwards, in order to reduce the chances of the robot moving into the
-        sample.'''
-        # z_r = [-z_range, z_range]
-        # Rx_r = [-Rx_range, Rx_range]
-        # Ry_r = [-Ry_range, Ry_range]
-        # x_r = [-x_range, x_range]
-        # y_r = [-y_range, y_range]
-        # Rz_r = [-Rz_range, Rz_range]
+        '''Insert generic Docstring here.'''
         self.range_of_motion = {'X': [-x_range, x_range],
                                 'Y': [-y_range, y_range],
                                 'Z': [-z_range, z_range],
@@ -74,6 +55,54 @@ class Pathfinder:
         [X,Y,Z,Rx,Ry,Rz,mag], initialized to a (7,) array of -1s to
         distinguish from a real value.'''
         
+        self.notes: str = "Abstract, N/A.\n"
+
+    def __str__(self):
+        return "Abstraction of a pathfinder module."
+
+    def newMag(self, point_mag:np.ndarray):
+        '''Input ndarry in the form [X,Y,Z,Rx,Ry,Rz,mag].'''
+        return NotImplementedError
+
+    def progress_report(self) -> list[str]:
+        return ["Progress report not implemented!"]
+
+    def internal_point_yielder(self) -> np.ndarray:
+        '''This method gets called when the pathfinder is ini tializes,
+        and adds the center of the search space as well as all the
+        corners to the "to-travel" list. When all the points have been
+        visited it returns the integer 1 to indicate the search is
+        complete.'''
+        return NotImplementedError
+
+    def next(self) -> np.ndarray:
+        return NotImplementedError
+
+    def save_points(self):
+        '''Called at the end of the test or when the pathfinder has finished, outputs the points
+        collected to a json file at a given path, meant to be superceded in each custom class
+        in order to save additional information specific to that mode of pathfinder.'''
+        return NotImplementedError
+
+class FourSquares(Pathfinder):
+    '''A class for controlling where the arm goes. The tl;dr is you define a search space,
+    with a starting and ending value for each degree of freedom. It can do between one and
+    six degrees of freedom. The units for the linear dimensions are mm, the units for the
+    angular dimensions are degrees. Everything is defined relative to the initial starting
+    position, so the initial position, as far as this is concerned, is ((0,0,0),(0deg,0deg,0deg))
+    All internal points are stored as np arrays in the form [X,Y,Z,Rx,Ry,Rz]'''
+
+    def __init__(self, z_range: float, Rx_range: float = 0., Ry_range: float =0,
+            x_range: float = 0,y_range: float = 0,Rz_range: float = 0):
+        '''Accepts as input a series of values indicating the range of different
+        points in space it is allowed to exist between. This defines the search
+        space of the object. It will not investigate any points outside these bounds.
+        The only range it is require to accept is the z_range, otherwise it will
+        default to zero. Z also defines the range to give more room to move backwards
+        than forwards, in order to reduce the chances of the robot moving into the
+        sample.'''
+        super().__init__()
+        
         self.notes: str = "No notes passed from setup.\n"
 
     def __str__(self):
@@ -81,16 +110,13 @@ class Pathfinder:
             f"\tRange of motion: {self.range_of_motion}\n" + 
             f"\tHighest magnitude found: {self.max_point}")
 
-    def newMag(self, point_mag:np.ndarray, override = False):
+    def newMag(self, point_mag:np.ndarray):
         '''Input ndarry in the form [X,Y,Z,Rx,Ry,Rz,mag].'''
         
         self.points.append(point_mag[self.save_indices].tolist())
         self.logger.debug(f"Appended the point {point_mag[self.save_indices]} to internal registry.")
         if (point_mag[6] > self.max_point[6]):
             self.max_point = point_mag.copy()
-
-    def next(self) -> np.ndarray:
-        return next(self.yielder)
 
     def progress_report(self) -> list[str]:
         return ["Progress report not implemented!"]
@@ -152,7 +178,6 @@ class Pathfinder:
             'max_point' : self.max_point.tolist(),
             'points' : self.points
         }
-
         self.write_json_data(json_data)
 
     def write_json_data(self, data):

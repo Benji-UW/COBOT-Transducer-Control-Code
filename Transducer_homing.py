@@ -151,7 +151,6 @@ class Transducer_homing:
         
         self.i=-1
         logger.info('About to start the main loop')
-        go_next:bool = True
         t0 = time.time()
 
         time.sleep(0.05)
@@ -171,7 +170,7 @@ class Transducer_homing:
                 pos_angle = self.robot.current_relative_target
 
                 if router:
-                    self.pathfinder.newMag(np.append(pos_angle,latest_mag), go_next)
+                    self.pathfinder.newMag(np.append(pos_angle,latest_mag))
 
             # For clarity, the response to key prseses has been moved to another method
             run_bool,router,nextpoint,freedrive = self.key_press_actions(run_bool,router,nextpoint,freedrive)
