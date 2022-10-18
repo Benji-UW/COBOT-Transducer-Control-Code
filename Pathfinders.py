@@ -2,6 +2,7 @@
 Unit convention: mm/kg/s/deg
 '''
 from argparse import ArgumentError
+from multiprocessing import current_process
 from re import search
 import numpy as np
 import json
@@ -11,8 +12,9 @@ import os
 
 class Pathfinder:
     def __init__(self, z_range: float, Rx_range: float = 0., Ry_range: float =0,
-            x_range: float = 0,y_range: float = 0,Rz_range: float = 0):
+            x_range: float = 0,y_range: float = 0,Rz_range: float = 0,save=False):
         '''Insert generic Docstring here.'''
+        self.save = save
         self.range_of_motion = {'X': [-x_range, x_range],
                                 'Y': [-y_range, y_range],
                                 'Z': [-z_range, z_range],
@@ -55,14 +57,18 @@ class Pathfinder:
         [X,Y,Z,Rx,Ry,Rz,mag], initialized to a (7,) array of -1s to
         distinguish from a real value.'''
         
-        self.notes: str = "Abstract, N/A.\n"
+        self.notes: str = "No notes passed from setup.\n"
 
     def __str__(self):
         return "Abstraction of a pathfinder module."
 
     def newMag(self, point_mag:np.ndarray):
         '''Input ndarry in the form [X,Y,Z,Rx,Ry,Rz,mag].'''
-        return NotImplementedError
+        
+        self.points.append(point_mag[self.save_indices].tolist())
+        self.logger.debug(f"Appended the point {point_mag[self.save_indices]} to internal registry.")
+        if (point_mag[6] > self.max_point[6]):
+            self.max_point = point_mag.copy()
 
     def progress_report(self) -> list[str]:
         return ["Progress report not implemented!"]
@@ -76,13 +82,27 @@ class Pathfinder:
         return NotImplementedError
 
     def next(self) -> np.ndarray:
-        return NotImplementedError
+        return next(self.yielder)
 
     def save_points(self):
         '''Called at the end of the test or when the pathfinder has finished, outputs the points
         collected to a json file at a given path, meant to be superceded in each custom class
         in order to save additional information specific to that mode of pathfinder.'''
-        return NotImplementedError
+        json_data = { 
+            'range of motion' : self.range_of_motion,
+            'max_point' : self.max_point.tolist(),
+            'points' : self.points
+        }
+        if self.save:
+            self.write_json_data(json_data)
+    
+    def write_json_data(self, data):
+        self.notes += self.__str__()
+        data['notes'] = self.notes
+        data['active_ROM'] = self.active_rom
+
+        with open(self.path, 'w+') as outfile:
+            json.dump(data, outfile, indent=3)
 
 class FourSquares(Pathfinder):
     '''A class for controlling where the arm goes. The tl;dr is you define a search space,
@@ -110,16 +130,8 @@ class FourSquares(Pathfinder):
             f"\tRange of motion: {self.range_of_motion}\n" + 
             f"\tHighest magnitude found: {self.max_point}")
 
-    def newMag(self, point_mag:np.ndarray):
-        '''Input ndarry in the form [X,Y,Z,Rx,Ry,Rz,mag].'''
-        
-        self.points.append(point_mag[self.save_indices].tolist())
-        self.logger.debug(f"Appended the point {point_mag[self.save_indices]} to internal registry.")
-        if (point_mag[6] > self.max_point[6]):
-            self.max_point = point_mag.copy()
-
-    def progress_report(self) -> list[str]:
-        return ["Progress report not implemented!"]
+    # def progress_report(self) -> list[str]:
+    #     return ["Progress report not implemented!"]
 
     def internal_point_yielder(self) -> np.ndarray:
         '''This method gets called when the pathfinder is ini tializes,
@@ -168,25 +180,6 @@ class FourSquares(Pathfinder):
     #         if abs(self.to_travel[0][1][i % 2] - point[1][i % 2]) > tolerance[1]:
     #             return False
     #     return True
-
-    def save_points(self):
-        '''Called at the end of the test or when the pathfinder has finished, outputs the points
-        collected to a json file at a given path, meant to be superceded in each custom class
-        in order to save additional information specific to that mode of pathfinder.'''
-        json_data = { 
-            'range of motion' : self.range_of_motion,
-            'max_point' : self.max_point.tolist(),
-            'points' : self.points
-        }
-        self.write_json_data(json_data)
-
-    def write_json_data(self, data):
-        self.notes += self.__str__()
-        data['notes'] = self.notes
-        data['active_ROM'] = self.active_rom
-
-        with open(self.path, 'w+') as outfile:
-            json.dump(data, outfile, indent=3)
 
 class FullScan(Pathfinder):
     def __init__(self, resolution, z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
@@ -547,28 +540,32 @@ class Greedy_discrete_degree(Pathfinder):
             self.logger.debug(f"Moved {self.steps} steps in the negative {axis} direciton.")
             
             # If you went downhill twice in a row, that's a bunk direction
+            i=0
             while not self.recent_downhill() and within_bounds:
+                i += 1
                 t = self.increment_appropriate_axis(t,axis,positive)
                 within_bounds = self._within_search_space(t)
                 yield t
             self.logger.debug(f"Hit the bounds: ({(not within_bounds)})\tOtherwise I've just hit a downhill recently.")
             
-            positive = True
-            within_bounds = True
-            t = self.max_point.copy()
+            if i < self.steps:
+                # Skip going in the opposite direction if there were sure signs of progress along the other direction.
+                positive = True
+                within_bounds = True
+                t = self.max_point.copy()
 
-            # Iterate self.steps in the negative direction, exploratory
-            for i in range(self.steps):
-                t = self.increment_appropriate_axis(t,axis,positive)
-                yield t
-            self.logger.debug(f"Moved {self.steps} steps in the positive {axis} direciton.")
+                # Iterate self.steps in the negative direction, exploratory
+                for i in range(self.steps):
+                    t = self.increment_appropriate_axis(t,axis,positive)
+                    yield t
+                self.logger.debug(f"Moved {self.steps} steps in the positive {axis} direciton.")
 
-            # As long as you don't go downhill twice in a row, keep going in this direction
-            while not self.recent_downhill() and within_bounds:
-                t = self.increment_appropriate_axis(t,axis,positive)
-                within_bounds = self._within_search_space(t)
-                yield t
-            self.logger.debug(f"Hit the bounds: ({not within_bounds})\tOtherwise I've just hit a downhill recently.")
+                # As long as you don't go downhill twice in a row, keep going in this direction
+                while not self.recent_downhill() and within_bounds:
+                    t = self.increment_appropriate_axis(t,axis,positive)
+                    within_bounds = self._within_search_space(t)
+                    yield t
+                self.logger.debug(f"Hit the bounds: ({not within_bounds})\tOtherwise I've just hit a downhill recently.")
             
             loop_i += 1
             self.logger.debug(f"Loops: {loop_i}")
@@ -620,6 +617,77 @@ class Greedy_discrete_degree(Pathfinder):
             Rx+=inc
 
         return np.array((x,y,z,Rx,Ry,Rz))
+
+class Greedy_discrete_degree_2(Greedy_discrete_degree):
+    '''This pathfinder uses a naive approximation of the search space where it optimizes
+    one dimensions at a time, and loops until it converges on the apparent global max.
+    Unlike the standard discrete degree, this one doesn't scan the entire space.'''
+    
+    def internal_point_yielder(self) -> np.ndarray:
+        '''This yielder optimizes one degree of freedom at a time, looping in case
+        optimizing along more than one direction isn't appropriate.
+
+        min_tolerance = (0.1,0.5)
+        '''
+        # First find the magnitude at the origin (don't move)
+        yield np.zeros(6)
+
+        # Iterate through each D_o_f thrice
+        l = len(self.active_rom)
+        yield np.zeros(6)
+        loop_i = 0
+
+        current_best = self.max_point.copy()
+
+        self.logger.debug("Beginning greedy incremental checks.")
+        while self.inc > 0.1:
+            last_best = current_best.copy()
+            if loop_i%l == 0:
+                self.inc = self.inc / 2
+                self.logger.info(f"Increment size {self.inc}")
+            # Set the starting point to the point with the current max magnitude
+            t = self.current_best.copy()
+
+            # Iterate through the active degrees of freedom
+            axis = self.active_rom[loop_i % l]
+            # Start moving in the positive direction
+            positive = False
+            within_bounds = True
+
+            # Iterate self.steps in the positive direction, exploratory
+            for i in range(self.steps):
+                t = self.increment_appropriate_axis(t,axis,positive)
+                yield t
+            self.logger.debug(f"Moved {self.steps} steps in the negative {axis} direciton.")
+            
+            # If you went downhill twice in a row, that's a bunk direction
+            while not self.recent_downhill() and within_bounds:
+                t = self.increment_appropriate_axis(t,axis,positive)
+                within_bounds = self._within_search_space(t)
+                yield t
+            self.logger.debug(f"Hit the bounds: ({(not within_bounds)})\tOtherwise I've just hit a downhill recently.")
+            
+            positive = True
+            within_bounds = True
+            t = self.max_point.copy()
+
+            # Iterate self.steps in the negative direction, exploratory
+            for i in range(self.steps):
+                t = self.increment_appropriate_axis(t,axis,positive)
+                yield t
+            self.logger.debug(f"Moved {self.steps} steps in the positive {axis} direciton.")
+
+            # As long as you don't go downhill twice in a row, keep going in this direction
+            while not self.recent_downhill() and within_bounds:
+                t = self.increment_appropriate_axis(t,axis,positive)
+                within_bounds = self._within_search_space(t)
+                yield t
+            self.logger.debug(f"Hit the bounds: ({not within_bounds})\tOtherwise I've just hit a downhill recently.")
+            
+            loop_i += 1
+            self.logger.debug(f"Loops: {loop_i}")
+            # Go back to start of the loop and try again with another degree of freedom.
+        yield 1
 
 class DivisionDiscreteDegree(Pathfinder):
     def __init__(self,divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0,cutoff_mag=-1):
@@ -709,7 +777,7 @@ class GradientAscent(Pathfinder):
     the gradient in a neighborhood and then travels along that gradient until it
     finds the highest point. Might need to work in tandem with discrete degree tbh.'''
     def __init__(self,z_range,Rx_range=0,Ry_range=0,x_range=0,
-                y_range=0,Rz_range=0,bias=10,steps=3,inc=1.8,
+                y_range=0,Rz_range=0,bias=0,steps=2,inc=2.2,
                 traverse=2.4,mini_search=1):
         super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
         self.bias = bias
@@ -753,7 +821,7 @@ class GradientAscent(Pathfinder):
         steps = []
         for i in range(6):
             if i in self.save_indices:
-                if i <=3:
+                if i <3:
                     steps.append(self.inc * 1)
                 else:
                     steps.append(self.inc * 2)
@@ -778,25 +846,39 @@ class GradientAscent(Pathfinder):
             t = self.max_point.copy()
             old_max = t[6]
 
-            mini_grid = np.mgrid[
-                t[0]-steps[0]:t[0] + steps[0]:(self.mini_search + int(steps[0]!=0))*1j,
-                t[1]-steps[1]:t[1] + steps[1]:(self.mini_search + int(steps[1]!=0))*1j,
-                t[2]-steps[2]:t[2] + steps[2]:(self.mini_search + int(steps[2]!=0))*1j,
-                t[3]-steps[3]:t[3] + steps[3]:(self.mini_search + int(steps[3]!=0))*1j,
-                t[4]-steps[4]:t[4] + steps[4]:(self.mini_search + int(steps[4]!=0))*1j,
-                t[5]-steps[5]:t[5] + steps[5]:(self.mini_search + int(steps[2]==0))*1j].reshape(6,-1,order='F').T
+            # mini_grid = np.mgrid[
+            #     t[0]-steps[0]:t[0] + steps[0]:(self.mini_search + int(steps[0]!=0))*1j,
+            #     t[1]-steps[1]:t[1] + steps[1]:(self.mini_search + int(steps[1]!=0))*1j,
+            #     t[2]-steps[2]:t[2] + steps[2]:(self.mini_search + int(steps[2]!=0))*1j,
+            #     t[3]-steps[3]:t[3] + steps[3]:(self.mini_search + int(steps[3]!=0))*1j,
+            #     t[4]-steps[4]:t[4] + steps[4]:(self.mini_search + int(steps[4]!=0))*1j,
+            #     t[5]-steps[5]:t[5] + steps[5]:(self.mini_search + int(steps[2]==0))*1j].reshape(6,-1,order='F').T
+            mini_grid = []
+
+            for i in self.save_indices:
+                if i != 6:
+                    p = np.zeros(6)
+                    p[i] = steps[i]
+                    mini_grid.append(t[:6]+p)
+                    p[i] = -steps[i]
+                    mini_grid.append(t[:6]+p)
+            
+            mini_grid = np.array(mini_grid)
 
             cube_size = mini_grid.shape[0]
             # 2
+            self.logger.info("calculating gradient...")
             for point in mini_grid:
                 yield point
              
             # 3
             gradient = self.local_gradient(t, cube_size)
+            self.logger.info(f"Calculated gradient: {gradient}")
 
             t = t[:6]
 
             within_bounds = True
+            self.logger.info("Moving along gradient.")
             # Iterate self.steps in the positive direction, exploratory
             for i in range(self.steps):
                 t = t - (gradient * self.traverse)
@@ -821,6 +903,7 @@ class GradientAscent(Pathfinder):
         '''checks the previous #search_size# points to calculate
         the gradient between them and the current max_point.'''
         check = self.points[-search_size:]
+
         grad = np.zeros(6)
         for point in check:
             full_point = np.zeros(7)
@@ -828,6 +911,7 @@ class GradientAscent(Pathfinder):
 
             delta_pos = full_point[:6] - t[:6]
             delta_mag = full_point[6] - t[6]
+
 
             grad += (delta_pos)  * (delta_mag) / (np.linalg.norm((delta_pos)))
         

@@ -30,7 +30,7 @@ def logger_setup() -> logging.Logger:
     formatter = Formatter(fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     root_logger.addHandler(handler)
-    root_logger.setLevel(logging.INFO)
+    root_logger.setLevel(logging.DEBUG)
     logger = logging.getLogger(__name__)
     logger.info("Debug log for the robot starting on " + date_time_str)
     return logger
@@ -199,14 +199,15 @@ class Transducer_homing:
                     # self.robot.movel_to_target(np.zeros(6))
                     self.robot.movel_to_target(self.pathfinder.max_point[:6])
 
-                    data={"Start joints": self.starting_joints,
-                        "joints_at_points": self.joint_history,
-                        "TCP_offset": np.copy(self.robot.tcp_offset).tolist(),
-                        "Notes": "No notes yet"}
-                    path = (os.path.dirname(__file__) + "\\IK_Scans" + 
-                        f"\\Test_{time.strftime('%m_%d__%H_%M')}.json")
-                    with open(path, 'w+') as outfile:
-                        json.dump(data, outfile, indent=3)
+                    # data={"Start joints": self.starting_joints,
+                    #     "joints_at_points": self.joint_history,
+                    #     "TCP_offset": np.copy(self.robot.tcp_offset).tolist(),
+                    #     "Notes": "No notes yet"}
+                    # path = (os.path.dirname(__file__) + "\\IK_Scans" + 
+                    #     f"\\Test_{time.strftime('%m_%d__%H_%M')}.json")
+                    # with open(path, 'w+') as outfile:
+                    #     json.dump(data, outfile, indent=3)
+
                 else:
                     logger.debug(f"triggering movel to {nextpoint}")
                     self.robot.movel_to_target(nextpoint)
@@ -264,7 +265,7 @@ class Transducer_homing:
             self.keys_pressed.remove(']')
         if 'd' in self.keys_pressed and not router: # Start basic pathfinder
             router = True
-            self.pathfinder = Pathfinder(25,15,15,12,18)
+            self.pathfinder = FourSquares(25,15,15,12,18)
             self.robot.set_initial_pos()
             self.starting_joints = np.copy(self.robot.initial_joints).tolist()
             self.keys_pressed.remove('d')
@@ -273,11 +274,18 @@ class Transducer_homing:
             self.pathfinder = FullScan((1,2),9,14,14)
             nextpoint = self.pathfinder.next()
             self.keys_pressed.remove('k')
-        if "g" in self.keys_pressed and not router: # Start fullscan pathfinder
+        if "g" in self.keys_pressed and not router: # Start maxfinding pathfinder
             router = True
-            self.pathfinder = GradientAscent(20,15,15,bias=5,steps=4,traverse=1.6,)
+            # self.pathfinder = Greedy_discrete_degree(20,15,15,bias=0,steps=2,inc=1.0)
+            self.pathfinder = GradientAscent(20,15,15,bias=0,steps=2,inc=0.75,traverse=1.0)
             nextpoint = self.pathfinder.next()
             self.keys_pressed.remove('g')
+        if "t" in self.keys_pressed and not router: # Start maxfinding pathfinder
+            router = True
+            self.pathfinder = Greedy_discrete_degree(20,15,15,bias=0,steps=2,inc=1.0)
+            # self.pathfinder = GradientAscent(20,15,15,bias=0,steps=2,inc=0.75,traverse=1.0)
+            nextpoint = self.pathfinder.next()
+            self.keys_pressed.remove('t')
         if 'x' in self.keys_pressed and router: # stop the running pathfinder
             router = False
             self.pathfinder.save_points()
@@ -339,7 +347,8 @@ class Transducer_homing:
             loop = int(msg[1:3])
 
             if loop == self.latest_loop:
-                yield (False, mag)
+                time.sleep(0.005)
+                # yield (False, mag)
             #TODO if this causes no problems, delete all instances of 
             # the "latest_loop" boolean
             else:
@@ -432,6 +441,7 @@ class Transducer_homing:
             ['Press (d)emo to demonstrate the basic pathrouting module',
             'Press (k) to trigger a full scan with hard-coded resolution.',
             'Press (g) to trigger a amplitude max-finding pathrouter.',
+            'Press (t) to trigger an alternate amplitude max-finding pathrouter.',
             'Press (q) to quit']]
         else:
             if current_target is not None and type(current_target) is not int:

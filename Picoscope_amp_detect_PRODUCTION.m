@@ -274,7 +274,7 @@ mean(update_frequency)
 plot(timeMs, chA);
 ylim([-500 500]); % Adjust vertical axis for signal
 
-title('Block Data Acquisition');
+% title('Block Data Acquisition');
 xlabel('Time (ms)');
 ylabel('Voltage (mV)');
 grid('on');
