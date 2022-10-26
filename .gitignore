@@ -167,3 +167,8 @@ cython_debug/
 
 # Annoying Excel autosave files
 ~$*.xlsx
+
+#Latex stuff:
+*.aux
+*.out
+*.toc
