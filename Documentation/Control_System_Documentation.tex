@@ -14,6 +14,7 @@
 \usepackage{hyperref}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc}
 \usepackage{listings}
 \usepackage{color}
 \usepackage[utf8]{inputenc}
@@ -33,6 +34,16 @@
  pdfsubject={},
  pdflang={English}}
 \begin{document}
+
+\tikzset{
+block/.style = {draw, fill=white, rectangle, minimum height=3em, minimum width=3em},
+tmp/.style  = {coordinate}, 
+sum/.style= {draw, fill=white, circle, node distance=1cm},
+input/.style = {coordinate},
+output/.style= {coordinate},
+pinstyle/.style = {pin edge={to-,thin,black}
+}
+}
 
 % \setcounter{secnumdepth}{0}
 \author{Ben Anderson}
@@ -59,14 +70,36 @@ Okay that looks promising to me. Lets go with that.
 
 The focus of my work for the better part of the last year has been studying how to use a UR3e Cobot for the purposes of focusing and stabilizing a sensor at its focal length away from a target surface. This has involved a thorough examination of the API and programming tools that accompany the Universal Robots ecosystem, as well as creating systems for synchronizing the robotic control system with signal processing and sensor systems.
 
-In doing so a number of systems are being used in ways for which they were not designed. The consequence of this is that my codebase resembles a kludgy pile of half-fixes and temporary-solutions that, technically, have achieved the objective, at the expense of stability and ease of use. In recent months more efforts have been made to improve the readability of the codebase and allow for easier changes later on, but the work is ongoing and the project cannot wait for me to complete this work.
+In doing so a number of systems are being used in ways for which they were not designed. The consequence of this is that my codebase resembles a kludgy pile of half-fixes and temporary-solutions that, technically, have achieved the objective, at the expense of stability and ease of use.
+In recent months more efforts have been made to improve the readability of the codebase and allow for easier changes later on, but the work is ongoing and the project cannot wait for me to complete this work.
 
 The hope is with this documentation, others in the OCE project can gain enough of an understanding of how the system works to use it in my absence as well as modify or extend the platform I've built.
 
-Due to the kludgy nature of the platform, it may not be suitable to read this guide linearly. The introduction section should hopefully give you an overview of how the components of this section communicate and interface with each other, and a more thorough description of the workings of each module are in the following chapters. If you are planning to operate the robot I would recommend reviewing the section on operating the robot through the control pendant (\autoref{sec:pendant}) and the section on running the code (\autoref{sec:startup}).
+Due to the kludgy nature of the platform, it may not be suitable to read this guide linearly. The introduction section should hopefully give you an overview of how the components of this section communicate and interface with each other, and a more thorough description of the workings of each module are in the following chapters.
+If you are planning to operate the robot I would recommend reviewing the section on operating the robot through the control pendant (\autoref{sec:pendant}) and the section on running the code (\autoref{sec:startup}).
+
+\section{Overview of Transudcer Alignment system}
+Idk why the tikz snippet isn't loading :/
+
+\begin{tikzpicture}[auto, node distance=2cm, on grid, >=latex']
+\node[block] (sensor) {Sensor};
+\node[block, right = of sensor] (robot) {STANLEy};
+\node[block, right = of robot] (URScript) {URScript};
+\node[block, below = of sensor] (labview) {Signal Processing};
+\node[block, right = of labview] (socket) {Internal Socket Server};
+\node[block, right = of socket] (tcc) {Python Code};
+
+\draw [draw, <-] (robot) -- (URScript);
+\draw [->] (sensor) -- (robot);
+\draw [draw, <->] (sensor) -- (labview);
+\draw [->] (labview) -- (socket);
+\draw [->] (socket) -- (tcc);
+
+\end{tikzpicture}
+
 
 \begin{align*}
-\frac{1}{n} \sum\limits_{i=1}^n (\mathbb{E}[\hat{f}_m(x_i)] - f(x_i))^2 = \frac{1}{n} \sum\limits_{j=1}^{n/m} \sum\limits_{i=(j-1)m+1}^{jm} (\overline{f}^{(j)} - f(x_i))^2 
+\frac{1}{n}
 \end{align*}
 
 \begin{center}
@@ -83,5 +116,6 @@ Due to the kludgy nature of the platform, it may not be suitable to read this gu
 \subsection{Startup guide}\label{sec:startup}
 \subsection{TransducerHoming.py}\label{sec:TransducerHoming}
 
+STANLEy -> Stabilization and Transducer Alignment for Nearby Laser Elastography
 
 \end{document}
