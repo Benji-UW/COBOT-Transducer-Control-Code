@@ -332,10 +332,11 @@ class Transducer_homing:
         return (d_pos,d_angle)
 
     def MATLAB_listener(self) -> tuple[bool, float]:
-        '''This method creates a generator for listening to the server for new
-        data from MATLAB. At each yield statement it returns a tuple containing
-        a boolean and a float, the boolean indicating whether the magnitude is
-        new and the float representing the magnitude.'''   
+        '''Creates a generator for listening to the server for new data from
+        MATLAB.
+
+        Returns a tuple containing a boolean and a float, the boolean
+        indicating whether the magnitude is new and the float representing the data.'''   
         mag,self.latest_loop = -1,-1
         i=0
         while True:
@@ -348,13 +349,9 @@ class Transducer_homing:
 
             if loop == self.latest_loop:
                 time.sleep(0.005)
-                # yield (False, mag)
-            #TODO if this causes no problems, delete all instances of 
-            # the "latest_loop" boolean
             else:
                 self.latest_loop = loop
                 yield (True, mag)
-            # yield (True,mag)
     
     def fake_MATLAB_listener(self) -> tuple[bool, float]:
         '''This method fakes the input from the MATLAB listener, can be used 

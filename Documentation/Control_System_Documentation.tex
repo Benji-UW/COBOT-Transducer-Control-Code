@@ -45,6 +45,8 @@ pinstyle/.style = {pin edge={to-,thin,black}
 }
 }
 
+\newcommand\connect[2]{\path[draw,arrow] (#1) |- ($(#1)!1/2!(#2)$) -| (#2)}
+
 % \setcounter{secnumdepth}{0}
 \author{Ben Anderson}
 % \date{\today}
@@ -79,32 +81,44 @@ Due to the kludgy nature of the platform, it may not be suitable to read this gu
 If you are planning to operate the robot I would recommend reviewing the section on operating the robot through the control pendant (\autoref{sec:pendant}) and the section on running the code (\autoref{sec:startup}).
 
 \section{Overview of Transudcer Alignment system}
-Idk why the tikz snippet isn't loading :/
-
-\begin{tikzpicture}[auto, node distance=2cm, on grid, >=latex']
+\begin{center}
+\begin{tikzpicture}[auto, node distance=3cm, on grid,auto,>=latex']
 \node[block] (sensor) {Sensor};
-\node[block, right = of sensor] (robot) {STANLEy};
+\node[block, right = of sensor] (robot) {UR3e};
 \node[block, right = of robot] (URScript) {URScript};
-\node[block, below = of sensor] (labview) {Signal Processing};
-\node[block, right = of labview] (socket) {Internal Socket Server};
-\node[block, right = of socket] (tcc) {Python Code};
+\node[block, below = of sensor, align=center] (labview) {Signal\\Processing};
+\node[block, right = of labview, align=center] (socket) {Internal\\Socket Server};
+\node[block, right = of socket, align=center] (tcc) {Control\\Code};
 
 \draw [draw, <-] (robot) -- (URScript);
 \draw [->] (sensor) -- (robot);
 \draw [draw, <->] (sensor) -- (labview);
 \draw [->] (labview) -- (socket);
-\draw [->] (socket) -- (tcc);
+\draw [<->] (socket) -- (tcc);
+\draw [<->] (socket) |- ($(socket)!1/2!(socket |- URScript)$) coordinate (C) -| (URScript);
+
+\node[text=black, below left= 6mm and 12mm of tcc.west] (pc) {PC};
+\draw[black, dashed] (pc.east)-|([xshift=3mm]tcc.east)|-([yshift=3mm]socket.north)-|([xshift=-4mm]labview.west)|-(pc.west);
+
+\node[text=black, above right= 6mm and 4mm of robot.east] (ur) {STANLEy};
+\draw[black, dashed] (ur.east)-|([xshift=3mm]URScript.east)|-([yshift=-3mm]robot.south)-|([xshift=-4mm]robot.west)|-(ur.west);
 
 \end{tikzpicture}
-
-
-\begin{align*}
-\frac{1}{n}
-\end{align*}
-
-\begin{center}
-    \includegraphics[width=.9\linewidth]{c:/Users/ander/Sync/Screenshots/22_10_18_4.png}
 \end{center}
+
+The sensor is a generic device that requires focusing and produces an output that is read by the signal processing package within the computer. The Stabilization and Transducer Alignment for Nearby Laser Elastography system (hencforth referred to as STANLEy) consists of a UR3e cobot from Unviersal Robots, and a script written in using the Universal Robots proprietary scripting language. \\
+(Attempts are being made to reverse-engineer some of this languages functions to cut this box out of the control diagram, but the process will be very involved and is being put off in order to meet deadlines).
+
+Physically, this system includes a robotic arm manipulator, a control box, and a teaching pendant.
+STANLEy interfaces with the sensor through a physical linkage at the end of the robotic manipulator, and with the PC through an ethernet cable.
+
+The remaining control blocks occur within a nearby computer. The signal processing block refers to a program (typically in MATLAB or LabView) which recieves the data from the sensor and processes it for further use. 
+\emph{For the purposes of the control loop that focuses the sensor, the signal processing block must reduce the sensor input, no matter how complex, to a simple magnitude that should be maximized to bring the sensor into alignment.}\\
+An internal socket server is spun up in a simple python program. This is a program that listens on a hard-coded IP-address and port within the computer for input sent from the signal processing block, the control code, and to the robot through the control box. More on the limitations of this system in the section on running the code (\autoref{sec:startup})\\
+The control code is run from a script named +TransducerHoming.py+, and associated libraries. For now, directly editing this file is the main interface with which we can modify how the homing sequence runs.
+In future I hope to expand the user interface as well as the command-line options to allow more on-the-fly modification of program parameters, but the duration off tests and the speed at which changes are made have made this an inefficient goal for some time.
+
+Overall the system utilizes three discrete devices and at least three programming languages. I (Ben Anderson) am most directly involved with the programming of the control code and URScript. The top-down overview of each components' functions are pretty simple, but debugging/modifying them will require
 
 \section{Stanley and the URScript API}\label{sec:robot_summary}
 
@@ -117,5 +131,13 @@ Idk why the tikz snippet isn't loading :/
 \subsection{TransducerHoming.py}\label{sec:TransducerHoming}
 
 STANLEy -> Stabilization and Transducer Alignment for Nearby Laser Elastography
+\begin{center}
+    \includegraphics[width=.9\linewidth]{../Debugging Scripts/figures/2D_fullscan_render_test_10.jpg}
+\end{center}
+
+\begin{center}
+    \includegraphics[width=.9\linewidth]{c:/Users/ander/Sync/Screenshots/22_10_18_4.png}
+\end{center}
+
 
 \end{document}
