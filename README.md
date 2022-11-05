@@ -56,10 +56,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-![BAIL LAB logo](lab-screenshot)
-
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `Benji-UW`, `COBOT-Transducer-Control-Code`, `DELETE_ME`, `benji-anderson`, `DELETE_ME_client`, `DELETE_ME`, `project_title`, `project_description`
-
+![BAIL LAB logo](http://depts.washington.edu/wangast/images/u336-15-crop-u123.png?crc=4107162486)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!--
@@ -81,34 +78,32 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
 This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
+This project is written predominantly in Python (version 3.7+), additional python packages are outlined in `requirements.txt`. To install them all at once run
+```sh
+pip install -r requirements.txt
+```
+from the root of the repository.
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+Jupyternotebooks are also commonly used for data analysis and visualization.
+
+Sensor input is processed in MATLAB or LabView, but so long as the optimization value is sent to the required socket on a running socket server, there's no real restrictions on what you use.
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/Benji-UW/COBOT-Transducer-Control-Code.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+1. Ensure your computer has Python version 3+
+2. Clone the respository
+3. Connect your UR3e to your computer via ethernet and assign it the static IP `192.168.0.5`
+   1. Make sure the UR3e has internally assigned its eithernet port the static IP `192.168.0.10`
+4. Make sure your sensor and signal processing software complies with the interface outlined in `/Documentation/Control_System_Documentation.pdf`, or make sure to enable the "headless" boolean in `TransducerHoming.py`
+5. Make sure the programs stored in `/Code_for_the_robot` is installed on the UR3e, with `before_start.script` assigned to run before the script and `robot_program.script` assigned to run after. You will have to further configure your UR3e depending on the dimensions and location of your particular sensor.
+6. First run `server.py` to enable the socket server that handles communication between the components. Then run the scripts on the UR3e, it should quickly connect to the socket server. Then run `Transducer_homing.py` to enable the robot and follow the on-screen instructions.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -117,32 +112,12 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+This project is being run in the University of Washington department of bioengineering. Most of the documentation will be found in the pdf in the Documentation folder. There is large technical debt and presently the code-base is inscrutible for people who aren't working with it directly, so don't hesitate to reach out if you have questions on how to adapt this code to your project.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/Benji-UW/COBOT-Transducer-Control-Code/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- CONTRIBUTING -->
 ## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
@@ -157,27 +132,27 @@ Don't forget to give the project a star! Thanks again!
 
 
 
-<!-- LICENSE -->
-## License
+<!-- LICENSE ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+-->
 
 
-<!-- CONTACT -->
-## Contact
+<!-- CONTACT ## Contact
 
 Your Name - [@DELETE_ME](https://twitter.com/DELETE_ME) - DELETE_ME@DELETE_ME_client.com
 
 Project Link: [https://github.com/Benji-UW/COBOT-Transducer-Control-Code](https://github.com/Benji-UW/COBOT-Transducer-Control-Code)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+-->
 
 
 
-<!-- ACKNOWLEDGMENTS -->
+<!-- ACKNOWLEDGMENTS 
 ## Acknowledgments
 
 * []()
@@ -186,7 +161,7 @@ Project Link: [https://github.com/Benji-UW/COBOT-Transducer-Control-Code](https:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
+-->
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
