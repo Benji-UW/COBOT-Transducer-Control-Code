@@ -115,12 +115,18 @@ STANLEy interfaces with the sensor through a physical linkage at the end of the 
 The remaining control blocks occur within a nearby computer. The signal processing block refers to a program (typically in MATLAB or LabView) which recieves the data from the sensor and processes it for further use. 
 \emph{For the purposes of the control loop that focuses the sensor, the signal processing block must reduce the sensor input, no matter how complex, to a simple magnitude that should be maximized to bring the sensor into alignment.}\\
 An internal socket server is spun up in a simple python program. This is a program that listens on a hard-coded IP-address and port within the computer for input sent from the signal processing block, the control code, and to the robot through the control box. More on the limitations of this system in the section on running the code (\autoref{sec:startup})\\
-The control code is run from a script named +TransducerHoming.py+, and associated libraries. For now, directly editing this file is the main interface with which we can modify how the homing sequence runs.
+The control code is run from a script named \texttt{TransducerHoming.py}, and associated libraries. For now, directly editing this file is the main interface with which we can modify how the homing sequence runs.
 In future I hope to expand the user interface as well as the command-line options to allow more on-the-fly modification of program parameters, but the duration off tests and the speed at which changes are made have made this an inefficient goal for some time.
 
-Overall the system utilizes three discrete devices and at least three programming languages. I (Ben Anderson) am most directly involved with the programming of the control code and URScript. The top-down overview of each components' functions are pretty simple, but debugging/modifying them will require
+Overall the system utilizes three discrete devices and at least three programming languages. I (Ben Anderson) am most directly involved with the programming of the control code and URScript. The top-down overview of each components' functions are pretty simple, but debugging/modifying them will require a rough understanding of the URScript API and a strong understanding of Python.
 
-\section{Stanley and the URScript API}\label{sec:robot_summary}
+\section{STANELEy and the URScript API}\label{sec:robot_summary}
+
+The body the novelty surrounding this project centers around the use of 
+a UR3e robotic arm to position and hold the OCE sensor.
+The UR3e is manufactured by Universal Robots and is primarily designed to automate human labor. Shipped with the robotic arm is a control box and a teach pendant, a hand-held tablet for manually controlling the robot. The control box allows you to write and execute scripts using the proprietary URScript API, a set of functions built into the robot that handle common tasks related to positioning and animating the arm.
+Additionally, 
+
 
 \subsection{Teach Pendant}\label{sec:pendant}
 \subsection{Client interfaces}\label{sec:robot_interfaces}

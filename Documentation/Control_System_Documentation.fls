@@ -1081,6 +1081,11 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\sym
 OUTPUT Control_System_Documentation.toc
 INPUT C:\Users\ander\AppData\Local\MiKTeX\pdftex\config\pdftex.map
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1095.tfm
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ectt1095.tfm
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbx1200.tfm
 INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
 INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
@@ -1114,3 +1119,5 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\s
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sfrm1728.pfb
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sfti1095.pfb
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sfti1095.pfb
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sftt1095.pfb
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sftt1095.pfb
