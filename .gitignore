@@ -176,3 +176,4 @@ cython_debug/
 *.synctex.gz
 *.fdb_latexmk
 *.fls
+!Documentation/figures/*

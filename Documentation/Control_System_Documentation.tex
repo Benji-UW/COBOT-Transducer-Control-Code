@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{longtable}
 \usepackage{wrapfig}
+\usepackage{indentfirst}
 \usepackage{rotating}
 \usepackage[normalem]{ulem}
 \usepackage{amsmath}
@@ -77,7 +78,7 @@ In recent months more efforts have been made to improve the readability of the c
 
 The hope is with this documentation, others in the OCE project can gain enough of an understanding of how the system works to use it in my absence as well as modify or extend the platform I've built.
 
-Due to the kludgy nature of the platform, it may not be suitable to read this guide linearly. The introduction section should hopefully give you an overview of how the components of this section communicate and interface with each other, and a more thorough description of the workings of each module are in the following chapters.
+Due to the kludgy nature of the platform, it may not be suitable to read this guide linearly. The introduction section should hopefully give you an overview of how the components of this section communicate and interface with each other, and a more thorough description of the workings of each module are in the following chapters.\\
 If you are planning to operate the robot I would recommend reviewing the section on operating the robot through the control pendant (\autoref{sec:pendant}) and the section on running the code (\autoref{sec:startup}).
 
 \section{Overview of Transudcer Alignment system}
@@ -122,18 +123,56 @@ Overall the system utilizes three discrete devices and at least three programmin
 
 \section{STANELEy and the URScript API}\label{sec:robot_summary}
 
-The body the novelty surrounding this project centers around the use of 
-a UR3e robotic arm to position and hold the OCE sensor.
-The UR3e is manufactured by Universal Robots and is primarily designed to automate human labor. Shipped with the robotic arm is a control box and a teach pendant, a hand-held tablet for manually controlling the robot. The control box allows you to write and execute scripts using the proprietary URScript API, a set of functions built into the robot that handle common tasks related to positioning and animating the arm.
-Additionally, 
+The body of the novelty surrounding this project centers around the use of a UR3e robotic arm to position and hold the OCE sensor. \\
+The UR3e is manufactured by Universal Robots and is primarily designed to automate human labor. Shipped with the robotic arm is a control box and a teach pendant, a hand-held tablet for manually controlling the robot. The control box allows one to write and execute scripts using the proprietary URScript API, a set of functions built into the robot that handle common tasks related to positioning and animating the arm.
+Additionally, the control box has an ethernet port supporting the secondary and Real Time Data Exchange interfaces. Both of these have their uses and can be read about in the \hyperlink{https://www.universal-robots.com/articles/ur/interface-communication/remote-control-via-tcpip/}{remote control interface guide}, however they weren't adequate for the method ultimately used. \\
 
 
-\subsection{Teach Pendant}\label{sec:pendant}
-\subsection{Client interfaces}\label{sec:robot_interfaces}
+
+
+\subsection{The Teach Pendant and the PolyScope interface}\label{sec:pendant}
+The teach pendant is the default accesory for interacting with the internals of the robot. It is shipped with the robot along with the control box.
+\begin{center}
+\includegraphics[width=.8\linewidth]{figures/teach_pendant.jpg}
+\end{center}
+The pendant, when active, is running an interface known as PolyScope, the GUI used for operation of all UR robots. Along the top of the page, there are six different menus and a file explorer interface that we will refer to later:
+
+\begin{center}
+\includegraphics*[width=.9\linewidth]{figures/menu_banner.jpg}
+\end{center}
+
+The full manual for PolyScope can be read \hyperlink{https://s3-eu-west-1.amazonaws.com/ur-support-site/114079/99403_UR3e_User_Manual_en_Global.pdf\#page=107\&zoom=100,76,233}{here}, but this guide will cover the elements necessary for operation of STANLEy.
+
+\subsubsection{Initialization and setup}
+In order to use the robot, power on the tool box by pressing the physical power button above the screen and next to the e-stop on the teach pendant. 
+(It can be finicky how long a press is necessary, so if you suspect you're holding the button down too long listen for a click from the control box to indicate it has been powered on. You should release the button immediately after hearing this click).\\
+The power button should light up green and the screen should show a loading screen as the robot takes a minute to boot up.\\
+
+Upon fully booting up, the robot itself still remains dormant. In the bottom-left of the screen is the \uline{robot status indicator}, shown here:
+
+\begin{center}
+\includegraphics[width=.9\linewidth]{figures/robot_state_menu.jpg}
+The color inside the circle indicates the state of the robot:
+\end{center}
+\begin{itemize}
+    \item \emph{Red}: The robot is powered off.
+    \item \emph{Blue}: The robot is in freedrive mode.
+    \item \emph{Yellow}: The robot is idle; powered on but not ready for operation.
+    \item \emph{Green}: Powered on and ready for normal operation.
+\end{itemize}
+
+After booting up the control box you enter the Initialization screen (shown in the image above). When powering up the robot from full-shutdown the central button will be active and you will press it twice to enable the robot; first it will say `ON` and you press it to deliver power to the robot, then it will say `START` and you will press it to unlock the brakes and enable the robot completely.\\
+
+\emph{Warning:} The robot will move slightly as the brakes are unlocked, do not leave the robot in a stat where this motion will put nearby equipment at risk.
+
+\subsubsection*{Program tab}
+The program tab is one of the options in the menu tab. Here is where you write/modify URScript programs. The UR3e used in our lab has a program saved already that can be opened by tapping the "open" button in the top banner and tapping "Program" from the subsequent dropdown. (The program written for this lab is still called \texttt{test.urp})
+
 \subsection{URScript API}\label{sec:urscript}
 
 \section{Python + the control loop}\label{sec:control_code}
 \subsection{Startup guide}\label{sec:startup}
+There isn't really content here yet.
 \subsection{TransducerHoming.py}\label{sec:TransducerHoming}
 
 STANLEy -> Stabilization and Transducer Alignment for Nearby Laser Elastography
