@@ -106,6 +106,17 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\wrapfig\wrapfig.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\wrapfig\wrapfig.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\wrapfig\wrapfig.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\wrapfig\wrapfig.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\indentfirst.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\indentfirst.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\indentfirst.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\indentfirst.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\indentfirst.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\indentfirst.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\indentfirst.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\indentfirst.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\indentfirst.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\indentfirst.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\indentfirst.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\rotating.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\rotating.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\rotating.sty
@@ -945,14 +956,41 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\sym
 OUTPUT Control_System_Documentation.toc
 INPUT C:\Users\ander\AppData\Local\MiKTeX\pdftex\config\pdftex.map
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1095.tfm
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ectt1095.tfm
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbx1200.tfm
-INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
-INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
-INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
-INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
-INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
-INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
-INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
+INPUT .\figures\teach_pendant.jpg
+INPUT .\figures\teach_pendant.jpg
+INPUT figures\teach_pendant.jpg
+INPUT .\figures\teach_pendant.jpg
+INPUT .\figures\teach_pendant.jpg
+INPUT .\figures\teach_pendant.jpg
+INPUT .\figures\teach_pendant.jpg
+INPUT .\figures\menu_banner.jpg
+INPUT .\figures\menu_banner.jpg
+INPUT figures\menu_banner.jpg
+INPUT .\figures\menu_banner.jpg
+INPUT .\figures\menu_banner.jpg
+INPUT .\figures\menu_banner.jpg
+INPUT .\figures\menu_banner.jpg
+INPUT .\figures\robot_state_menu.jpg
+INPUT .\figures\robot_state_menu.jpg
+INPUT figures\robot_state_menu.jpg
+INPUT .\figures\robot_state_menu.jpg
+INPUT .\figures\robot_state_menu.jpg
+INPUT .\figures\robot_state_menu.jpg
+INPUT .\figures\robot_state_menu.jpg
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\tcrm1095.tfm
+INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
+INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
+INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
+INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
+INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
+INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
+INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
 INPUT c:\Users\ander\Sync\Screenshots\22_10_18_4.png
 INPUT c:\Users\ander\Sync\Screenshots\22_10_18_4.png
 INPUT c:\Users\ander\Sync\Screenshots\22_10_18_4.png
@@ -963,6 +1001,7 @@ INPUT c:\Users\ander\Sync\Screenshots\22_10_18_4.png
 INPUT Control_System_Documentation.aux
 INPUT .\Control_System_Documentation.out
 INPUT .\Control_System_Documentation.out
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\cm-super\cm-super-ts1.enc
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\cm-super\cm-super-t1.enc
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sfbx1095.pfb
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sfbx1095.pfb
@@ -978,3 +1017,5 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\s
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sfrm1728.pfb
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sfti1095.pfb
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sfti1095.pfb
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sftt1095.pfb
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sftt1095.pfb

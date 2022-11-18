@@ -16,6 +16,7 @@ from UR3e import *
 from Pathfinders import *
 
 def logger_setup() -> logging.Logger:
+    '''Sets up the logging system.'''
     date_time_str = time.strftime(r"%Y-%m-%d_%H-%M-%S")
 
     # Configure the root logger to a particular folder, format, and level.
