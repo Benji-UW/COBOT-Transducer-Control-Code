@@ -1,7 +1,8 @@
-PWD c:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Documentation
+PWD c:\Users\ander\Documents\COBOT-Transducer-Control-Code\Documentation
 INPUT C:\Users\ander\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
-INPUT c:\Users\ander\OneDrive - UW\Robotics lab material\Robotics Control Code\Ben's Control Code\Documentation\Control_System_Documentation.tex
+INPUT c:\Users\ander\Documents\COBOT-Transducer-Control-Code\Documentation\Control_System_Documentation.tex
 OUTPUT Control_System_Documentation.log
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
@@ -27,6 +28,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\inputenc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\inputenc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\inputenc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\inputenc.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\inputenc.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\fontenc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\fontenc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\fontenc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\fontenc.sty
@@ -48,6 +51,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphicx.s
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphicx.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphicx.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphicx.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphicx.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\keyval.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\keyval.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\keyval.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\keyval.sty
@@ -68,6 +73,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphics.s
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphics.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphics.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphics.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphics.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\trig.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\trig.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\trig.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\trig.sty
@@ -96,6 +103,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\longtable.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\longtable.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\longtable.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\longtable.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\longtable.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\wrapfig\wrapfig.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\wrapfig\wrapfig.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\wrapfig\wrapfig.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\wrapfig\wrapfig.sty
@@ -127,6 +136,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\rotating.s
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\rotating.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\rotating.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\rotating.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\rotating.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphicx.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\ifthen.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\ifthen.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\ifthen.sty
@@ -137,6 +148,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\ifthen.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\ifthen.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\ifthen.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\ifthen.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\ifthen.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\ulem\ulem.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\ulem\ulem.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\ulem\ulem.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\ulem\ulem.sty
@@ -158,8 +171,10 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsmath.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsmath.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsmath.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsmath.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsmath.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsopn.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsopn.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amstext.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amstext.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amstext.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amstext.sty
@@ -180,6 +195,7 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsgen.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsgen.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsgen.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsgen.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsgen.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsbsy.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsbsy.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsbsy.sty
@@ -190,6 +206,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsbsy.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsbsy.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsbsy.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsbsy.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsbsy.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsgen.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsopn.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsopn.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsopn.sty
@@ -200,6 +218,9 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsopn.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsopn.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsopn.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsopn.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsopn.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsgen.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\amssymb.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\amssymb.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\amssymb.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\amssymb.sty
@@ -220,6 +241,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\amsfonts.s
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\amsfonts.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\amsfonts.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\amsfonts.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\amsfonts.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\capt-of\capt-of.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\capt-of\capt-of.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\capt-of\capt-of.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\capt-of\capt-of.sty
@@ -240,6 +263,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hyperref.s
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hyperref.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hyperref.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hyperref.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hyperref.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
@@ -260,6 +285,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\iftex.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\iftex.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\iftex.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\iftex.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\iftex.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdftexcmds\pdftexcmds.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdftexcmds\pdftexcmds.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdftexcmds\pdftexcmds.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdftexcmds\pdftexcmds.sty
@@ -280,6 +307,12 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infware
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\iftex.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\keyval.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\kvsetkeys\kvsetkeys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\kvsetkeys\kvsetkeys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\kvsetkeys\kvsetkeys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\kvsetkeys\kvsetkeys.sty
@@ -300,6 +333,7 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\kvdefinekeys\kvde
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\kvdefinekeys\kvdefinekeys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\kvdefinekeys\kvdefinekeys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\kvdefinekeys\kvdefinekeys.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\kvdefinekeys\kvdefinekeys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdfescape\pdfescape.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdfescape\pdfescape.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdfescape\pdfescape.sty
@@ -310,6 +344,10 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdfescape\pdfesca
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdfescape\pdfescape.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdfescape\pdfescape.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdfescape\pdfescape.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdfescape\pdfescape.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdftexcmds\pdftexcmds.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hycolor\hycolor.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hycolor\hycolor.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hycolor\hycolor.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hycolor\hycolor.sty
@@ -330,6 +368,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\letltxmacro\letltxm
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\letltxmacro\letltxmacro.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\letltxmacro\letltxmacro.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\letltxmacro\letltxmacro.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\letltxmacro\letltxmacro.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\auxhook\auxhook.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\auxhook\auxhook.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\auxhook\auxhook.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\auxhook\auxhook.sty
@@ -350,10 +390,18 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\kvoptions\kvoptions
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\kvoptions\kvoptions.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\kvoptions\kvoptions.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\kvoptions\kvoptions.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\kvoptions\kvoptions.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\kvsetkeys\kvsetkeys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\pd1enc.def
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\pd1enc.def
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\pd1enc.def
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\pd1enc.def
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hyperref-langpatches.def
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hyperref-langpatches.def
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hyperref-langpatches.def
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hyperref-langpatches.def
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\intcalc\intcalc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\intcalc\intcalc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\intcalc\intcalc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\intcalc\intcalc.sty
@@ -374,6 +422,14 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\etexcmds\etexcmds
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\etexcmds\etexcmds.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\etexcmds\etexcmds.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\etexcmds\etexcmds.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\etexcmds\etexcmds.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\iftex.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\puenc.def
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\puenc.def
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\puenc.def
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\puenc.def
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\url\url.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\url\url.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\url\url.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\url\url.sty
@@ -394,6 +450,9 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\bitset\bitset.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\bitset\bitset.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\bitset\bitset.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\bitset\bitset.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\bitset\bitset.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\intcalc\intcalc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\bigintcalc\bigintcalc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\bigintcalc\bigintcalc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\bigintcalc\bigintcalc.sty
@@ -404,6 +463,9 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\bigintcalc\bigint
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\bigintcalc\bigintcalc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\bigintcalc\bigintcalc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\bigintcalc\bigintcalc.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\bigintcalc\bigintcalc.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdftexcmds\pdftexcmds.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\atbegshi\atbegshi.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\atbegshi\atbegshi.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\atbegshi\atbegshi.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\atbegshi-ltx.sty
@@ -425,16 +487,17 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hpdftex.de
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hpdftex.def
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\atveryend\atveryend.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\atveryend\atveryend.sty
-INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\atveryend-ltx.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\atveryend\atveryend.sty
-INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\atveryend\atveryend.sty
-INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\atveryend-ltx.sty
-INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\atveryend\atveryend.sty
-INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\atveryend-ltx.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\atveryend-ltx.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\atveryend\atveryend.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\atveryend\atveryend.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\atveryend-ltx.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\atveryend\atveryend.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\atveryend-ltx.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\atveryend-ltx.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\atveryend\atveryend.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\atveryend\atveryend.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\atveryend-ltx.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\atveryend-ltx.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\atveryend\atveryend.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\atveryend-ltx.sty
@@ -448,6 +511,11 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\rerunfilecheck\reru
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\rerunfilecheck\rerunfilecheck.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\rerunfilecheck\rerunfilecheck.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\rerunfilecheck\rerunfilecheck.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\rerunfilecheck\rerunfilecheck.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\kvoptions\kvoptions.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdftexcmds\pdftexcmds.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\atveryend\atveryend.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\uniquecounter\uniquecounter.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\uniquecounter\uniquecounter.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\uniquecounter\uniquecounter.sty
@@ -458,6 +526,10 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\uniquecounter\uni
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\uniquecounter\uniquecounter.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\uniquecounter\uniquecounter.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\uniquecounter\uniquecounter.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\uniquecounter\uniquecounter.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\bigintcalc\bigintcalc.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\xcolor\xcolor.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\xcolor\xcolor.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\xcolor\xcolor.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\xcolor\xcolor.sty
@@ -486,6 +558,7 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\frontendlayer\t
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\frontendlayer\tikz.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\frontendlayer\tikz.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\frontendlayer\tikz.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\frontendlayer\tikz.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\basiclayer\pgf.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\basiclayer\pgf.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\basiclayer\pgf.sty
@@ -496,6 +569,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\basiclayer\pgf.
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\basiclayer\pgf.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\basiclayer\pgf.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\basiclayer\pgf.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\basiclayer\pgf.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgfrcs.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgfrcs.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgfrcs.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgfrcs.sty
@@ -525,6 +600,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\basiclayer\pgfc
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\basiclayer\pgfcore.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\basiclayer\pgfcore.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\basiclayer\pgfcore.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\basiclayer\pgfcore.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphicx.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\systemlayer\pgfsys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\systemlayer\pgfsys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\systemlayer\pgfsys.sty
@@ -535,6 +612,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\systemlayer\pgf
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\systemlayer\pgfsys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\systemlayer\pgfsys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\systemlayer\pgfsys.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\systemlayer\pgfsys.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgfrcs.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\systemlayer\pgfsys.code.tex
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\systemlayer\pgfsys.code.tex
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\systemlayer\pgfsys.code.tex
@@ -553,6 +632,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\systemlayer\p
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\systemlayer\pgfsysprotocol.code.tex
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\systemlayer\pgfsysprotocol.code.tex
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\systemlayer\pgfsysprotocol.code.tex
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\keyval.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\xcolor\xcolor.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\basiclayer\pgfcore.code.tex
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\basiclayer\pgfcore.code.tex
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\basiclayer\pgfcore.code.tex
@@ -601,6 +682,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\compatibility\p
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\compatibility\pgfcomp-version-0-65.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\compatibility\pgfcomp-version-0-65.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\compatibility\pgfcomp-version-0-65.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\compatibility\pgfcomp-version-0-65.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgfrcs.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\compatibility\pgfcomp-version-1-18.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\compatibility\pgfcomp-version-1-18.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\compatibility\pgfcomp-version-1-18.sty
@@ -611,6 +694,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\compatibility\p
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\compatibility\pgfcomp-version-1-18.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\compatibility\pgfcomp-version-1-18.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\compatibility\pgfcomp-version-1-18.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\compatibility\pgfcomp-version-1-18.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgfrcs.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgffor.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgffor.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgffor.sty
@@ -621,6 +706,9 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgffo
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgffor.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgffor.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgffor.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgffor.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgfrcs.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgfkeys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgfkeys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgfkeys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgfkeys.sty
@@ -645,6 +733,9 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\math\pgfmath.st
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\math\pgfmath.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\math\pgfmath.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\math\pgfmath.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\math\pgfmath.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgfrcs.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\pgf\utilities\pgfkeys.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\math\pgfmath.code.tex
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\math\pgfmath.code.tex
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\math\pgfmath.code.tex
@@ -707,6 +798,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.s
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\keyval.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstmisc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstmisc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstmisc.sty
@@ -715,6 +808,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.c
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.cfg
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.cfg
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.cfg
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\color.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\inputenc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mathtools.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mathtools.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mathtools.sty
@@ -725,6 +820,9 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mathtools
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mathtools.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mathtools.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mathtools.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mathtools.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\keyval.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\calc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\calc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\calc.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\tools\calc.sty
@@ -745,6 +843,10 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mhsetup.s
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mhsetup.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mhsetup.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mhsetup.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mhsetup.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsmath.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsmath.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\amsfonts.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.sty
@@ -755,6 +857,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.s
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\keyval.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\ifvtex.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\ifvtex.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\ifvtex.sty
@@ -765,6 +869,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\ifvtex.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\ifvtex.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\ifvtex.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\ifvtex.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\ifvtex.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\iftex\iftex.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.cfg
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.cfg
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.cfg
@@ -779,6 +885,9 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mdframed\mdframed.s
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mdframed\mdframed.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mdframed\mdframed.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mdframed\mdframed.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mdframed\mdframed.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\kvoptions\kvoptions.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3packages\xparse\xparse.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3packages\xparse\xparse.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3packages\xparse\xparse.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3packages\xparse\xparse.sty
@@ -799,6 +908,7 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3kernel\expl3.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3kernel\expl3.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3kernel\expl3.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3kernel\expl3.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3kernel\expl3.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
@@ -809,7 +919,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3backend\l3backend
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
-INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3packages\xparse\xparse-generic.tex
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\etoolbox\etoolbox.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\etoolbox\etoolbox.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\etoolbox\etoolbox.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\etoolbox\etoolbox.sty
@@ -830,6 +941,7 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\zref\zref-abspage.s
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\zref\zref-abspage.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\zref\zref-abspage.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\zref\zref-abspage.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\zref\zref-abspage.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\zref\zref-base.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\zref\zref-base.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\zref\zref-base.sty
@@ -840,6 +952,15 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\zref\zref-base.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\zref\zref-base.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\zref\zref-base.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\zref\zref-base.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\zref\zref-base.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\kvsetkeys\kvsetkeys.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\kvdefinekeys\kvdefinekeys.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pdftexcmds\pdftexcmds.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\etexcmds\etexcmds.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\auxhook\auxhook.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\atbegshi\atbegshi.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\needspace\needspace.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\needspace\needspace.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\needspace\needspace.sty
@@ -850,6 +971,8 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\needspace\needspace
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\needspace\needspace.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\needspace\needspace.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\needspace\needspace.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\needspace\needspace.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\color.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mdframed\md-frame-0.mdf
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mdframed\md-frame-0.mdf
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\mdframed\md-frame-0.mdf
@@ -872,6 +995,12 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\epstopdf-pkg\epstop
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\epstopdf-pkg\epstopdf-base.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\epstopdf-pkg\epstopdf-base.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\epstopdf-pkg\epstopdf-base.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\epstopdf-pkg\epstopdf-base.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\00miktex\epstopdf-sys.cfg
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\00miktex\epstopdf-sys.cfg
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\00miktex\epstopdf-sys.cfg
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\00miktex\epstopdf-sys.cfg
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\nameref.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\nameref.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\nameref.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\nameref.sty
@@ -892,6 +1021,9 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\refcount\refcount.s
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\refcount\refcount.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\refcount\refcount.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\refcount\refcount.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\refcount\refcount.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\gettitlestring\gettitlestring.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\gettitlestring\gettitlestring.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\gettitlestring\gettitlestring.sty
@@ -902,6 +1034,9 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\gettitlestring\ge
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\gettitlestring\gettitlestring.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\gettitlestring\gettitlestring.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\gettitlestring\gettitlestring.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\gettitlestring\gettitlestring.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\kvoptions\kvoptions.sty
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
 INPUT .\Control_System_Documentation.out
 INPUT Control_System_Documentation.out
 INPUT .\Control_System_Documentation.out
@@ -914,6 +1049,7 @@ OUTPUT Control_System_Documentation.pdf
 INPUT .\Control_System_Documentation.out
 INPUT .\Control_System_Documentation.out
 OUTPUT Control_System_Documentation.out
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphicx.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecrm1728.tfm
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecrm1200.tfm
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmr12.tfm
@@ -953,15 +1089,24 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmsy10.tf
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmex10.tfm
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msam10.tfm
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm10.tfm
-OUTPUT Control_System_Documentation.toc
-INPUT C:\Users\ander\AppData\Local\MiKTeX\pdftex\config\pdftex.map
-INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1095.tfm
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ectt1095.tfm
+OUTPUT Control_System_Documentation.toc
+INPUT C:\Users\ander\AppData\Local\MiKTeX\pdftex\config\pdftex.map
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbx1200.tfm
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\tcrm1095.tfm
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1095.tfm
+INPUT .\figures\TrasducerHoming_start_window.jpg
+INPUT .\figures\TrasducerHoming_start_window.jpg
+INPUT figures\TrasducerHoming_start_window.jpg
+INPUT .\figures\TrasducerHoming_start_window.jpg
+INPUT .\figures\TrasducerHoming_start_window.jpg
+INPUT .\figures\TrasducerHoming_start_window.jpg
+INPUT .\figures\TrasducerHoming_start_window.jpg
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbi1095.tfm
 INPUT .\figures\teach_pendant.jpg
 INPUT .\figures\teach_pendant.jpg
 INPUT figures\teach_pendant.jpg
@@ -983,14 +1128,14 @@ INPUT .\figures\robot_state_menu.jpg
 INPUT .\figures\robot_state_menu.jpg
 INPUT .\figures\robot_state_menu.jpg
 INPUT .\figures\robot_state_menu.jpg
-INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\tcrm1095.tfm
-INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
-INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
-INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
-INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
-INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
-INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
-INPUT ..\Debugging Scripts\figures\2D_fullscan_render_test_10.jpg
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ectt1200.tfm
+INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
+INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
+INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
+INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
+INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
+INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
+INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
 INPUT c:\Users\ander\Sync\Screenshots\22_10_18_4.png
 INPUT c:\Users\ander\Sync\Screenshots\22_10_18_4.png
 INPUT c:\Users\ander\Sync\Screenshots\22_10_18_4.png
@@ -1001,8 +1146,10 @@ INPUT c:\Users\ander\Sync\Screenshots\22_10_18_4.png
 INPUT Control_System_Documentation.aux
 INPUT .\Control_System_Documentation.out
 INPUT .\Control_System_Documentation.out
-INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\cm-super\cm-super-ts1.enc
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\cm-super\cm-super-t1.enc
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\cm-super\cm-super-ts1.enc
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sfbi1095.pfb
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sfbi1095.pfb
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sfbx1095.pfb
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sfbx1095.pfb
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sfbx1200.pfb
@@ -1019,3 +1166,5 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\s
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sfti1095.pfb
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sftt1095.pfb
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sftt1095.pfb
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sftt1200.pfb
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\type1\public\cm-super\sftt1200.pfb

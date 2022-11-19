@@ -65,7 +65,7 @@ class Transducer_homing:
         self.key_listener.start()
         self.keys_pressed:set[str] = set()
 
-        self.headless_test = False
+        self.headless_test = True
 
         self.speed_presets = [(0.005, 0.025,0.025,0.1),
                             (0.0125,0.05,0.05,0.2),
