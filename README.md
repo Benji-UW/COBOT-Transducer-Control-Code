@@ -81,19 +81,18 @@
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+To get a local copy up and running on your UR cobot follow these simple example steps.
 
 ### Prerequisites
-This project is written predominantly in Python (version 3.7+), additional python packages are outlined in `requirements.txt`. To install them all at once run
+Make sure your computer has Python (version 3.7+) installed, and that you have the specific python packages outlined in `requirements.txt`. To install them all at once run
 ```sh
 pip install -r requirements.txt
 ```
 from the root of the repository.
 
-Jupyternotebooks are also commonly used for data analysis and visualization.
+Jupyternotebooks are also commonly used for data analysis and visualization, it is recommended you have that installed either standalone or as an extension on your prefered IDE.
 
-Sensor input is processed in MATLAB or LabView, but so long as the optimization value is sent to the required socket on a running socket server, there's no real restrictions on what you use.
+Sensor input is processed in MATLAB or LabView, but so long as the optimization value is sent to the required socket on a running socket server, there's no real restrictions on what you use. To read about how to define sensor input effectively, read about it in `/Documentation/Control_System_Documentation.pdf`.
 
 ### Installation
 
@@ -105,9 +104,9 @@ Sensor input is processed in MATLAB or LabView, but so long as the optimization 
 5. Make sure the programs stored in `/Code_for_the_robot` is installed on the UR3e, with `before_start.script` assigned to run before the script and `robot_program.script` assigned to run after. You will have to further configure your UR3e depending on the dimensions and location of your particular sensor.
 6. First run `server.py` to enable the socket server that handles communication between the components. Then run the scripts on the UR3e, it should quickly connect to the socket server. Then run `Transducer_homing.py` to enable the robot and follow the on-screen instructions.
 
+For full robot installation and setup procedure, read the quickstart guide in `/Documentation/Control_System_Documentation.pdf`.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- USAGE EXAMPLES -->
 ## Usage
