@@ -47,6 +47,9 @@ pinstyle/.style = {pin edge={to-,thin,black}
 }
 }
 \newcommand\connect[2]{\path[draw,arrow] (#1) |- ($(#1)!1/2!(#2)$) -| (#2)}
+\newcommand\ImageNode[3][]{
+  \node[draw=arrowblue!80!black,line width=1pt,#1] (#2) {\includegraphics[width=1.5cm,height=1.5cm]{#3}};
+}
 
 \maketitle
 \tableofcontents
@@ -286,10 +289,19 @@ Our program relies heavily on the scripting language, so the only nodes in our p
 
 \subsection{URScript API}\label{sec:urscript}
 URScript is the propreitary scripting language created by Universal Robots and runs natively on all of their machines. The functions are tailored to work for their machines specifically, and I haven't found a way to run URScript outside of the control box.
+The full URScript API guide can be found \href{https://s3-eu-west-1.amazonaws.com/ur-support-site/32554/scriptManual-3.5.4.pdf}{here} (a copy of this document can also be found in Documentation folder of this git directory).
+
+The URScript API provides one major opportunity and one major problem; On the one hand, it abstracts-away a lot of the low-level handling that's required to move the robot in a controlled manner. At no point in this project did we need to work with inverse kinematics or joint positions or anything of that sort.
+
+The tradeoff is that the URScript API is extremely confining and doesn't provide a lot of ways to interface with other computers. The UR series of robots were designed to work collaboratively with humans, automating tasks that would normally be done with manual labor. Consequently, most of the scripting language and interfaces are designed with repetitive, simple tasks in mind, and getting the robot to work in an active control setting was a challenge.
+
+Essentially the two ways they design the robot to work is either as a standalone machine, running URScript program nodes that get written once and then repeated forever, or as a mindless drone recieving simple commands from an external computer.
+
+There is an interface in the robot to allow for direct control from an external computer, but the available commands in this mode are limiting.
 \section{Control code}\label{sec:control_code}
 Working on it
 \begin{center}
-    \includegraphics[width=.9\linewidth]{figures/control_code_loading_image.png}
+    \includegraphics[width=.6\linewidth]{figures/control_code_loading_image.png}
 \end{center}
 
 \subsection{\texttt{TransducerHoming.py}}\label{sec:TransducerHoming}
@@ -298,8 +310,27 @@ Working on it
 STANLEy -> Stabilization and Transducer Alignment for Nearby Laser Elastography
 
 \subsubsection{Interfacing with Sensor output}\label{sec:data_format}
+The control code has been written to move the robot in such a way that it maximizes some value it is getting passed from the outside. It is completely agnostic about where this value comes from, and it is the programmers responsibility to ensure that the value it gets passed is an appropriate function of how "focused" the sensor you're working with is.
 
-\begin{center}
+Our goal is to create a fitness function $f$ that produces a single scalar value representing how well focused the sensor is. A fitness function $f$ will result in the robot focusing correctly if:
+\begin{itemize}
+    \item The global maximum value of $f$ occurs at the focal point of the sensor
+    \item $f$ has few or no local maxima
+\end{itemize}
+Other desireable properties of the fitness function are:
+\begin{itemize}
+    \item Function $f$ is concave (e.g. $\nabla^2 f \leq 0$ for everywhere in the domain)
+    \item $f$ has a discrenable magnitude for a wide envelope around the focal point (since eventually the function will be dominated by noise)
+    \item $f$ has a high SNR across as much area as possible
+    \item $f$ is smooth everywhere
+    \begin{itemize}
+        \item If $f$ is smooth everywhere except at the focal point $f_{max}$, that is also acceptable
+    \end{itemize}
+\end{itemize}
+The robot control code sees this value as some function of the tools position in 6-D space, and will try to maximize that function according to the constraints you give it.
+
+Once that fitness function has been defined, the signal-processing toolkit must send that value to the central socket server as a string in the following format:
+\begin{center}\label{sec:data_format_fig}
 \begin{tikzpicture}[
     node distance=0pt,
      start chain = A going right,
@@ -317,19 +348,84 @@ STANLEy -> Stabilization and Transducer Alignment for Nearby Laser Elastography
     \foreach \i in {T,1,3,Z,0,0,1,6,4,
                     5,1,0,2}% <-- content of nodes
         \node[X] {\i};
-    \draw[B] (A-1.south west) -- node[below=2mm] {Timing block} ( A-3.south east);
-    \draw[B] (A-4.south west) -- node[below=2mm] {Data block} (A-13.south east);
+    \draw[B] (A-2.south west) -- node[below=2mm] {Timing block} ( A-3.south east);
+    \draw[B] (A-5.south west) -- node[below=2mm] {Data block} (A-13.south east);
         \end{tikzpicture}
 \end{center}
-Yeah looks like that.
-\begin{center}
-    \includegraphics[width=.9\linewidth]{../Debugging Scripts/figures/fullscan_render_test_4.jpg}
-    %\includegraphics[width=.9\linewidth]{2D_fullscan_render_test_4.jpg}
-\end{center}
+The two characters following the $T$ is a timing block that increments by one each time a new value is sent to the server (this is so the code knows when a value it recieves is new). The nine characters following the $Z$ is the data block, and this is where the value of the fitness function must go. Nine digits is an arbitrary choice of precision, but should be sufficient for the kind of resolution we deal with.
+\begin{quote}
+    \textbf{Note:} The socket server can only handle integers, but high-resolution data can still be provided by multiplying a value by some large number before passing a value in.
+\end{quote}
+For example, my previous setup yielded fitness values in a range between $40$ and $700$, so to capture full definition I multiplied the value by $1000$ before passing it and divided it again on the other side.
+
+
+\section{Testing methodology}
+The control logic we write for focusing the transducer needs to be resilient to noise and different initial placements of the sensor. Therefore it is critical that each mode of control logic gets tested thoroughly before being relied on in produciton.
+There are logistical limitations with testing control logic exclusively on the physical system, and if a particular algorithm fails to focus the transducer correctly, it's not always possible to understand why.
+
+To deal with this, control patterns were tested against pre-recorded data so their feasability could be checked quickly, before the simulated results were validated with the real robot.
+
+The \texttt{FullScan} module in \texttt{Pathfinders.py} defines a pathfinder that visits every point in an n-dimensional search space at a given resolution. Such resolution should be adjsted to reflect the size of the focal area of the sensor.
+
+Shown below is the data in \texttt{test\_6.json}, which captured over $51749$ signal magnitudes. It scanned a search space that spanned $\pm 13^\circ$ in the $\theta_x,\theta_y$ directions, and $\pm 14 mm$ in the $z$ direction, at a resolution of $0.4 mm$ along translational axes and $1.0^\circ$ in the rotational axes.
+
+\begin{figure}
+    \includegraphics[width=.9\linewidth]{figures/fullscan_render_test_6.jpg}
+    \caption{Raw data output from a full-scan (opacity is scaled with data magnitude, so many values are hidden)}
+\end{figure}
+
+There are two helpful things that the data from a full scan gets used for; first of all it allows us to test our pathfinders explicitly on pre-existing data, and secondly it allows us to evaluate how our fitness function plays out in a real scan.
+
+\subsection{Sensor fitness function}
+\subsubsection{A foreword in fitness function design}
+Earlier the fitness function was described as a function of the position of the robot that outputs a scalar representing how well the sensor is focused, and that the robot control code sees this as a function in 6-D space. Now we will get into the process of designing and evalutating effective fitness functions.
+
+Since we are trying to bring a sensor into focus, we assume that the "focusedness" of the transducer is some function of its position in 6-D space relative to the target. Since, fundamentally, the focusedness of a sensor relates to some physical phenomena, we can imagine a function $\delta(\mathbf{X})$ that represents the true function mapping sensor-target position $\mathbf{X} = \{x,y,z,\theta_x,\theta_y, \theta_z\}$ to sensor focus.
+This function should relate to the fundamental principles of the sensing method and the quantity being measured.
+
+In the real world our sensor will never be able to take perfect readings because we cannot isolate the quantity being measured from the other elements of the system. Therefore we must imagine that the data collected from our sensor is some mixture of the ground truth function and some stochastic noise.
+
+\begin{equation*}
+    \mathcal{D} = \delta(\mathbf{X}) + \epsilon \qquad \epsilon \sim \mathcal{N}(\mu, \sigma^2)
+\end{equation*}
+The error term might change depending on the setup, the sample, or how the signal is processed.
+
+When we start focusing the robot, we have no idea where the robot is relative to the target surface, we can only react to input data the sensor provides. So our fitness function $f$ from earlier is some function of the sensor data:
+\begin{equation*}
+    f(\mathcal{D})
+\end{equation*}
+
+A healthy place to start might be to approximate the ground truth function $\delta(\mathbf{X})$, but that isn't always the case. In the next section I will give an example of a naive fitness function that has inconvenient properties. This function is analogous to a loss function when solving an optimization problem.
+
+\subsection{Evaluating the fitness function on real data}
 
 \begin{center}
-    \includegraphics[width=.9\linewidth]{c:/Users/ander/Sync/Screenshots/22_10_18_4.png}
-\end{center}
+    \begin{tikzpicture}[
+        node distance=1.5cm,
+        % >={Triangle[angle=60:1pt 2]},
+        shorten >= 2pt,
+        shorten <= 2pt,
+        arrow/.style={
+        ->,
+        line width=2pt
+        }]
+        
+        \node[block] (A) {\includegraphics[width=7cm,height=6cm]{figures/data_slice1_6.jpg}};
+        \node[block,below=of A] (B) {\includegraphics[width=7cm,height=6cm]{figures/data_slice2_6.jpg}};
+        \node[block,below=of B] (D) {\includegraphics[width=4cm,height=4cm]{figures/Isolated_axes_2_6.jpg}};
+        \node[block,left=of D] (C) {\includegraphics[width=4cm,height=4cm]{figures/Isolated_axes_1_6.jpg}};
+        \node[block,right=of D] (E) {\includegraphics[width=4cm,height=4cm]{figures/Isolated_axes_3_6.jpg}};
 
+        \draw[arrow]
+        (A) -- (B);
+        \draw[red, arrow]
+        (B) -- (C);
+        \draw[blue, arrow]
+        (B) -- (D);
+        \draw[green, arrow]
+        (B) -- (E);
+
+    \end{tikzpicture}
+\end{center}
 
 \end{document}
