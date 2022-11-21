@@ -788,6 +788,15 @@ INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\frontendlayer
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\frontendlayer\tikz\libraries\tikzlibrarypositioning.code.tex
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\frontendlayer\tikz\libraries\tikzlibrarycalc.code.tex
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\frontendlayer\tikz\libraries\tikzlibrarycalc.code.tex
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\frontendlayer\tikz\libraries\tikzlibrarychains.code.tex
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\frontendlayer\tikz\libraries\tikzlibrarychains.code.tex
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\frontendlayer\tikz\libraries\tikzlibrarydecorations.pathreplacing.code.tex
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\frontendlayer\tikz\libraries\tikzlibrarydecorations.pathreplacing.code.tex
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\frontendlayer\tikz\libraries\tikzlibrarydecorations.code.tex
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\frontendlayer\tikz\libraries\tikzlibrarydecorations.code.tex
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\modules\pgfmoduledecorations.code.tex
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\libraries\decorations\pgflibrarydecorations.pathreplacing.code.tex
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\generic\pgf\libraries\decorations\pgflibrarydecorations.pathreplacing.code.tex
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.sty
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.sty
@@ -1099,14 +1108,6 @@ INPUT C:\Users\ander\AppData\Local\MiKTeX\pdftex\config\pdftex.map
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbx1200.tfm
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\tcrm1095.tfm
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1095.tfm
-INPUT .\figures\TrasducerHoming_start_window.jpg
-INPUT .\figures\TrasducerHoming_start_window.jpg
-INPUT figures\TrasducerHoming_start_window.jpg
-INPUT .\figures\TrasducerHoming_start_window.jpg
-INPUT .\figures\TrasducerHoming_start_window.jpg
-INPUT .\figures\TrasducerHoming_start_window.jpg
-INPUT .\figures\TrasducerHoming_start_window.jpg
-INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbi1095.tfm
 INPUT .\figures\teach_pendant.jpg
 INPUT .\figures\teach_pendant.jpg
 INPUT figures\teach_pendant.jpg
@@ -1128,6 +1129,14 @@ INPUT .\figures\robot_state_menu.jpg
 INPUT .\figures\robot_state_menu.jpg
 INPUT .\figures\robot_state_menu.jpg
 INPUT .\figures\robot_state_menu.jpg
+INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbi1095.tfm
+INPUT .\figures\control_code_loading_image.png
+INPUT .\figures\control_code_loading_image.png
+INPUT figures\control_code_loading_image.png
+INPUT .\figures\control_code_loading_image.png
+INPUT .\figures\control_code_loading_image.png
+INPUT .\figures\control_code_loading_image.png
+INPUT .\figures\control_code_loading_image.png
 INPUT C:\Users\ander\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ectt1200.tfm
 INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg
 INPUT ..\Debugging Scripts\figures\fullscan_render_test_4.jpg

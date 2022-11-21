@@ -15,7 +15,7 @@
 \usepackage{hyperref}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{tikz}
-\usetikzlibrary{shapes,arrows,positioning,calc}
+\usetikzlibrary{shapes,arrows,positioning,calc,chains,decorations.pathreplacing}
 \usepackage{listings}
 \usepackage{color}
 \usepackage[utf8]{inputenc}
@@ -138,15 +138,50 @@ Once the above configuration steps have be completed, you should be ready to run
     \item Finally, run \texttt{TransducerHoming.py}. This can be done by double-clicking the file in file explorer, but it is better to run it from an IDE such as Visual Studio; the software is not stable and being able to see an error message when it breaks is very helpful.
     \begin{itemize}
         \item This should open a terminal window that looks like the following:
-        \begin{center}
-        \includegraphics*[width=\linewidth]{figures/TrasducerHoming_start_window.jpg}
-        \end{center}
     \end{itemize}
+\begin{verbatim}
+TCP position in relation to its initial position:
+        ([[-1000.00 -1000.00 -1000.00]](mm),[[-57.30 -57.30 -57.30]](deg))
+=========================
+TCP position in base: ([[ 0.00  0.00  0.00]], [[ 0.00  0.00  0.00]]
+Current joint position in degrees: ([[ 0.00  0.00  0.00  0.00  0.00  0.00]])
+Recent refresh rate: 0.1465371191501617415
+------------------------
+Latest mag:48
+|||||                                                                      |
+Freedrive active: False
+Press (f) to toggle (f)reedrive mode :)
 
-From here you are ready to run your test. Follow the directions on screen to enable/disable freedrive and activate the appropriate pathfinding module. The two menu options I suggest using are `(k) for fullscan' and `(g) for maxfinding'. The fullscan module runs a full scan of a search volume of a hard-coded shape and resolution, and the maxfinding module runs the current-best module for focusing a transducer.
+Press (d)emo to demonstrate the basic pathrouting module
+Press (k) to trigger a full scan with hard-coded resolution.
+Press (g) to trigger a amplitude max-finding pathrouter.
+Press (t) to trigger an alternate amplitude max-finding pathrouter.
+Press (q) to quit
+
+Sun Nov 20 18:23:36 2022
+----------------
+\end{verbatim}
 \end{enumerate}
 
-\section{Overview of Transudcer Alignment system}
+From here you are ready to run your test. Follow the directions on screen to enable/disable freedrive and activate the appropriate pathfinding module. The two menu options I suggest using are `(k) for fullscan' and `(g) for maxfinding'. The fullscan module runs a full scan of a search volume of a hard-coded shape and resolution, and the maxfinding module runs the current-best module for focusing a transducer.
+\subsection{Common debugging steps}
+Because the sole author of 90\% of this code is such a genius, occasionally this software breaks in ways that may be frustrating. Here are common problems and the best-known steps to address them (short of writing better sofware)
+\begin{itemize}
+    \item The robot collides with something during a test and locks itself up
+    \begin{enumerate}
+        \item If this happens the experiment is ruined, you will need to restart
+        \item Close the \texttt{TransducerHoming.py} script, and stop the socket server.
+        \item The robot will need to be unlocked through the main menu, after you have done so tap the `stop' button to cancel the running program (the default behavior is to pause the program, you don't want that)
+    \end{enumerate}
+    \item \texttt{TransducerHoming.py} crashes
+    \begin{itemize}
+        \item This is a frequent occurance whenever major changes are made to the program or installation
+        \item It is worth noting though, that \texttt{TransducerHoming.py} is not a dependency for the other components; they will simply sto pmoving. You are able to restart the script without resetting any of the other systems.
+        \item If you ran the script through an IDE, take note of the error message and where it occured, and alert Ben Anderson to the problem (bpa13@uw.edu) or submit a pull request on github
+    \end{itemize}
+\end{itemize}
+
+\section{System Overview}
 \begin{figure}\label{fig:component_block_diagram}
 \centering
 \begin{tikzpicture}[auto, node distance=3cm, on grid,auto,>=latex']
@@ -154,7 +189,7 @@ From here you are ready to run your test. Follow the directions on screen to ena
 \node[block, right = of sensor] (robot) {UR3e};
 \node[block, right = of robot] (URScript) {URScript};
 \node[block, below = of sensor, align=center] (labview) {Signal\\Processing};
-\node[block, right = of labview, align=center] (socket) {Internal\\Socket Server};
+\node[block, right = of labview, align=center] (socket) {Socket\\Server};
 \node[block, right = of socket, align=center] (tcc) {Control\\Code};
 
 \draw [draw, <-] (robot) -- (URScript);
@@ -173,6 +208,7 @@ From here you are ready to run your test. Follow the directions on screen to ena
 \end{tikzpicture}
 \caption{Component overview of the STANLEy system}
 \end{figure}
+The system is designed to keep as much modularity as possible and to isolate responsibilities for particular tasks.
 
 The sensor is a generic device that requires focusing and produces an output that is read by the signal processing package within the computer. The Stabilization and Transducer Alignment for Nearby Laser Elastography system (hencforth referred to as STANLEy) consists of a UR3e cobot from Unviersal Robots, and a script written in using the Universal Robots proprietary scripting language.
 (Attempts are being made to reverse-engineer some of this languages functions to cut this box out of the control diagram, but the process will be very involved and is being put off in order to meet deadlines).
@@ -182,9 +218,11 @@ STANLEy interfaces with the sensor through a physical linkage at the end of the 
 
 The remaining control blocks occur within a nearby computer. The signal processing block refers to a program (typically in MATLAB or LabView) which recieves the data from the sensor and processes it for further use. 
 
-\textbf{\textit{For the purposes of the control loop that focuses the sensor, the signal processing block must reduce the sensor input, no matter how complex, to a simple magnitude that should be maximized to bring the sensor into alignment.}}
+\textbf{For the purposes of the control loop that focuses the sensor, the signal processing block must reduce the sensor input, no matter how complex, to a simple magnitude that should be maximized to bring the sensor into alignment.} More on this to be added later.
 
-An internal socket server is spun up in a simple python program. This is a program that listens on a hard-coded IP-address and port within the computer for input sent from the signal processing block, the control code, and to the robot through the control box. More on the limitations of this system in the section on running the code (\autoref{sec:startup})\\
+An internal socket server is spun up in a simple python program.
+This is a program that listens on a hard-coded IP-address and port within the computer for input sent from the signal processing block, the control code, and to the robot through the control box.
+More on the specific IP addresses in the initial setup section of the startup section. (\autoref{sec:startup})
 
 The control code is run from a script named \texttt{TransducerHoming.py}, and associated libraries. For now, directly editing this file is the main interface with which we can modify how the homing sequence runs.
 In future I hope to expand the user interface as well as the command-line options to allow more on-the-fly modification of program parameters, but the duration off tests and the speed at which changes are made have made this an inefficient goal for some time.
@@ -243,16 +281,47 @@ Stanely (The UR3e currently used in our lab) has a program saved called \texttt{
 It can be opened by tapping the `open' button in the top banner and tapping `Program' from the subsequent dropdown. 
 Our program relies heavily on the scripting language, so the only nodes in our program are a `BeforeStart' and `Run Program' node, each containing a script that does everything we need.
 \begin{quote}
-\textbf{Note}: If you want to edit either of these programs, \textit{use a USB stick and a computer to transfer/edit the program}. The text input for the teach pendant is a finicky touch screen an dI've had trouble getting a keyboard with the right language settings.
+\textbf{Note}: If you want to edit either of these programs, \textit{use a USB stick and a computer to transfer/edit the program}. The text input for the teach pendant is a finicky touch screen and I've had trouble getting a keyboard with the right language settings.
 \end{quote}
 
 \subsection{URScript API}\label{sec:urscript}
-
+URScript is the propreitary scripting language created by Universal Robots and runs natively on all of their machines. The functions are tailored to work for their machines specifically, and I haven't found a way to run URScript outside of the control box.
 \section{Control code}\label{sec:control_code}
-we'll get to that
+Working on it
+\begin{center}
+    \includegraphics[width=.9\linewidth]{figures/control_code_loading_image.png}
+\end{center}
+
 \subsection{\texttt{TransducerHoming.py}}\label{sec:TransducerHoming}
+476 lines of nonsense and yes I wrote the whole thing myself. No I am not fine. More extensive documentation is pending but for now we need only refer to the data formatting standard used to pass data between the sensor and the control code: \autoref{sec:data_format}
 
 STANLEy -> Stabilization and Transducer Alignment for Nearby Laser Elastography
+
+\subsubsection{Interfacing with Sensor output}\label{sec:data_format}
+
+\begin{center}
+\begin{tikzpicture}[
+    node distance=0pt,
+     start chain = A going right,
+        X/.style = {rectangle, draw,% styles of nodes in string (chain)
+                    minimum width=2ex, minimum height=3ex,
+                    outer sep=0pt, on chain},
+        B/.style = {decorate,
+                    decoration={brace, amplitude=5pt,
+                    pre=moveto,pre length=1pt,post=moveto,post length=1pt,
+                    raise=1mm,
+                                #1}, % for mirroring of brace, if necessary
+                    thick},
+        B/.default=mirror, % by default braces are mirrored
+        ]
+    \foreach \i in {T,1,3,Z,0,0,1,6,4,
+                    5,1,0,2}% <-- content of nodes
+        \node[X] {\i};
+    \draw[B] (A-1.south west) -- node[below=2mm] {Timing block} ( A-3.south east);
+    \draw[B] (A-4.south west) -- node[below=2mm] {Data block} (A-13.south east);
+        \end{tikzpicture}
+\end{center}
+Yeah looks like that.
 \begin{center}
     \includegraphics[width=.9\linewidth]{../Debugging Scripts/figures/fullscan_render_test_4.jpg}
     %\includegraphics[width=.9\linewidth]{2D_fullscan_render_test_4.jpg}
