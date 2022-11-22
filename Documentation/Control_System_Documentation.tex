@@ -398,7 +398,8 @@ When we start focusing the robot, we have no idea where the robot is relative to
 A healthy place to start might be to approximate the ground truth function $\delta(\mathbf{X})$, but that isn't always the case. In the next section I will give an example of a naive fitness function that has inconvenient properties. This function is analogous to a loss function when solving an optimization problem.
 
 \subsection{Evaluating the fitness function on real data}
-
+To check out how the fitness function works on real data, we start by unpacking the data into a form that is more easily readable. Shown below is the full scan data from before. In order to get a better view of how the output value varies in space, we slice three planes through the maximum point found in the scan, with each plane corresponding to a 2D scan isolating one of the three degrees of freedom.
+Then we plot each of those planes in its own 3D scatter plot to see how the fitness function changes with respect to different 
 \begin{center}
     \begin{tikzpicture}[
         node distance=1.5cm,

@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1669066906 "c:/Users/ander/OneDrive - UW/Robotics lab material/Robotics Control Code/Ben's Control Code/Documentation/Control_System_Documentation.tex" "Control_System_Documentation.pdf" "Control_System_Documentation" 1669066908
+["pdflatex"] 1669099188 "c:/Users/ander/OneDrive - UW/Robotics lab material/Robotics Control Code/Ben's Control Code/Documentation/Control_System_Documentation.tex" "Control_System_Documentation.pdf" "Control_System_Documentation" 1669099191
   "C:/Users/ander/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1643157855 9258810 ac5e8e666ee50199d2339d7d52dfb025 ""
   "C:/Users/ander/AppData/Local/MiKTeX/pdftex/config/pdftex.map" 1665979197 282274 721b78735b4c3f2e9b77c4e2fd8f1159 ""
   "C:/Users/ander/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1001771820 2971 def0b6c1f0b107b3b936def894055589 ""
@@ -219,11 +219,11 @@
   "C:/Users/ander/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1463131981 57049 34128738f682d033422ca125f82e5d62 ""
   "C:/Users/ander/AppData/Local/Programs/MiKTeX/tex/latex/zref/zref-abspage.sty" 1650047684 2245 c8a4088d07cffc2e5207730c738edd76 ""
   "C:/Users/ander/AppData/Local/Programs/MiKTeX/tex/latex/zref/zref-base.sty" 1650047684 20785 71a3d72ab517959a6979c27e6176bec1 ""
-  "Control_System_Documentation.aux" 1669066908 4281 3d3e4250b79041fa61edbcb7cf89a156 "pdflatex"
-  "Control_System_Documentation.out" 1669066908 1252 d7aa86d9b0c3df4c96dfbb35f1c22005 "pdflatex"
-  "Control_System_Documentation.tex" 1669066899 32322 c01e0768b430cc973884f105e1ba5b95 ""
-  "Control_System_Documentation.toc" 1669066908 1589 db0f18775d7d7c07fa1273dfab70cdf4 "pdflatex"
-  "c:/Users/ander/OneDrive - UW/Robotics lab material/Robotics Control Code/Ben's Control Code/Documentation/Control_System_Documentation.tex" 1669066899 32322 c01e0768b430cc973884f105e1ba5b95 ""
+  "Control_System_Documentation.aux" 1669099190 4281 4401ead7d5e65dbc71feea9545d587aa "pdflatex"
+  "Control_System_Documentation.out" 1669099190 1252 d7aa86d9b0c3df4c96dfbb35f1c22005 "pdflatex"
+  "Control_System_Documentation.tex" 1669099182 32856 9ed9d1907aee96132e61976fc88b4256 ""
+  "Control_System_Documentation.toc" 1669099190 1589 6a5cc984c123fe3b6e7427075a6e7ef6 "pdflatex"
+  "c:/Users/ander/OneDrive - UW/Robotics lab material/Robotics Control Code/Ben's Control Code/Documentation/Control_System_Documentation.tex" 1669099182 32856 9ed9d1907aee96132e61976fc88b4256 ""
   "figures/Isolated_axes_1_6.jpg" 1669060023 226979 6b5eb88fd616b0de23065e74613cf005 ""
   "figures/Isolated_axes_2_6.jpg" 1669060008 192000 6b82b08f1401a04277826fcd705be9c1 ""
   "figures/Isolated_axes_3_6.jpg" 1669059990 193605 f97b232ee07f5c0c98a3cb614fcad4e6 ""
