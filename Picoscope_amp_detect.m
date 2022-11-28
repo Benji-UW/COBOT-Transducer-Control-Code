@@ -31,7 +31,7 @@ if (exist('ps5000aDeviceObj', 'var') && ps5000aDeviceObj.isvalid && ...
     
     if (openDevice == PicoConstants.TRUE)
         
-        % Close connection to device.
+        % Close connection to device
         disconnect(ps5000aDeviceObj);
         delete(ps5000aDeviceObj);
         
