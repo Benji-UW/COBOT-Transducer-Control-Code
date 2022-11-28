@@ -2,33 +2,25 @@
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{graphicx}
-\usepackage{longtable}
 \usepackage{wrapfig}
 \usepackage{indentfirst}
 \usepackage{rotating}
 \usepackage[normalem]{ulem}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{capt-of}
+\usepackage{amsfonts}
 \usepackage{hyperref}
-\usepackage[dvipsnames]{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows,positioning,calc,chains,decorations.pathreplacing}
 \usepackage{listings}
 \usepackage{color}
 \usepackage[utf8]{inputenc}
-\usepackage{mathtools}
-\usepackage{amsmath}
-\usepackage{amsfonts}
 \usepackage[margin=1.0in]{geometry}
-\usepackage{mdframed}
-\BeforeBeginEnvironment{minted}{\begin{mdframed}}
-\AfterEndEnvironment{minted}{\end{mdframed}}
-\date{\today}
-\author{Ben Anderson}
-\title{The STANLEy User Manual \\[1ex] \large Stabilization and Transducer Alignment for Nearby Laser Elastography}
+\usepackage{subcaption}
+\usepackage{}
+
+\captionsetup{width=.75\textwidth,font={small},labelfont=bf}
+
 \hypersetup{
  pdfauthor={Ben Anderson},
  pdftitle={UR3e Documentation},
@@ -51,6 +43,9 @@ pinstyle/.style = {pin edge={to-,thin,black}
   \node[draw=arrowblue!80!black,line width=1pt,#1] (#2) {\includegraphics[width=1.5cm,height=1.5cm]{#3}};
 }
 
+\date{\today}
+\author{Ben Anderson}
+\title{The STANLEy User Manual \\[1ex] \large Stabilization and Transducer Alignment for Nearby Laser Elastography}
 \maketitle
 \tableofcontents
 \parskip=6pt
@@ -137,7 +132,7 @@ Once the above configuration steps have be completed, you should be ready to run
         \item This activates the socket server that the system uses to communicate between modules.
     \end{itemize}
     \item Tap the `play' button at the bottom of the teach pendant to run the program; The terminal window from the previous step shold show a new connection has been established.
-    \item Start your signal processing script; make sure your signal processing program follows the appropriate communication protocol (TODO elaborate)
+    \item Start your signal processing script; make sure your signal processing program follows the appropriate data transmission standard (Described in \autoref{sec:data_format_fig}) (TODO elaborate)
     \item Finally, run \texttt{TransducerHoming.py}. This can be done by double-clicking the file in file explorer, but it is better to run it from an IDE such as Visual Studio; the software is not stable and being able to see an error message when it breaks is very helpful.
     \begin{itemize}
         \item This should open a terminal window that looks like the following:
@@ -185,7 +180,7 @@ Because the sole author of 90\% of this code is such a genius, occasionally this
 \end{itemize}
 
 \section{System Overview}
-\begin{figure}\label{fig:component_block_diagram}
+\begin{figure}[ht]
 \centering
 \begin{tikzpicture}[auto, node distance=3cm, on grid,auto,>=latex']
 \node[block] (sensor) {Sensor};
@@ -209,7 +204,7 @@ Because the sole author of 90\% of this code is such a genius, occasionally this
 \draw[black, dashed] (ur.east)-|([xshift=3mm]URScript.east)|-([yshift=-3mm]robot.south)-|([xshift=-4mm]robot.west)|-(ur.west);
 
 \end{tikzpicture}
-\caption{Component overview of the STANLEy system}
+\caption{Component overview of the STANLEy system}\label{fig:component_block_diagram}
 \end{figure}
 The system is designed to keep as much modularity as possible and to isolate responsibilities for particular tasks.
 
@@ -262,8 +257,9 @@ Upon fully booting up, the robot itself still remains dormant. In the bottom-lef
 
 \begin{center}
 \includegraphics[width=.9\linewidth]{figures/robot_state_menu.jpg}
-The color inside the circle indicates the state of the robot:
 \end{center}
+
+The color inside the circle indicates the state of the robot:
 \begin{itemize}
     \item \emph{Red}: The robot is powered off.
     \item \emph{Blue}: The robot is in freedrive mode.
@@ -307,10 +303,10 @@ Working on it
 \subsection{\texttt{TransducerHoming.py}}\label{sec:TransducerHoming}
 476 lines of nonsense and yes I wrote the whole thing myself. No I am not fine. More extensive documentation is pending but for now we need only refer to the data formatting standard used to pass data between the sensor and the control code: \autoref{sec:data_format}
 
-STANLEy -> Stabilization and Transducer Alignment for Nearby Laser Elastography
+STANLEy -\> Stabilization and Transducer Alignment for Nearby Laser Elastography
 
 \subsubsection{Interfacing with Sensor output}\label{sec:data_format}
-The control code has been written to move the robot in such a way that it maximizes some value it is getting passed from the outside. It is completely agnostic about where this value comes from, and it is the programmers responsibility to ensure that the value it gets passed is an appropriate function of how "focused" the sensor you're working with is.
+The control code has been written to move the robot in such a way that it maximizes some value it is getting passed from the outside. It is completely agnostic about where this value comes from, and it is the programmers responsibility to ensure that the value it gets passed is an appropriate function of how `focused' the sensor you're working with is.
 
 Our goal is to create a fitness function $f$ that produces a single scalar value representing how well focused the sensor is. A fitness function $f$ will result in the robot focusing correctly if:
 \begin{itemize}
@@ -324,34 +320,38 @@ Other desireable properties of the fitness function are:
     \item $f$ has a high SNR across as much area as possible
     \item $f$ is smooth everywhere
     \begin{itemize}
-        \item If $f$ is smooth everywhere except at the focal point $f_{max}$, that is also acceptable
+        \item If $f$ is smooth everywhere except at the focal point $f_{\max}$, that is also acceptable
     \end{itemize}
 \end{itemize}
 The robot control code sees this value as some function of the tools position in 6-D space, and will try to maximize that function according to the constraints you give it.
 
 Once that fitness function has been defined, the signal-processing toolkit must send that value to the central socket server as a string in the following format:
-\begin{center}\label{sec:data_format_fig}
-\begin{tikzpicture}[
-    node distance=0pt,
-     start chain = A going right,
-        X/.style = {rectangle, draw,% styles of nodes in string (chain)
-                    minimum width=2ex, minimum height=3ex,
-                    outer sep=0pt, on chain},
-        B/.style = {decorate,
-                    decoration={brace, amplitude=5pt,
-                    pre=moveto,pre length=1pt,post=moveto,post length=1pt,
-                    raise=1mm,
-                                #1}, % for mirroring of brace, if necessary
-                    thick},
-        B/.default=mirror, % by default braces are mirrored
-        ]
-    \foreach \i in {T,1,3,Z,0,0,1,6,4,
-                    5,1,0,2}% <-- content of nodes
-        \node[X] {\i};
-    \draw[B] (A-2.south west) -- node[below=2mm] {Timing block} ( A-3.south east);
-    \draw[B] (A-5.south west) -- node[below=2mm] {Data block} (A-13.south east);
+
+\begin{figure}[ht]
+    \begin{center}
+        \begin{tikzpicture}[
+            node distance=0pt,
+            start chain = A going right,
+                X/.style = {rectangle, draw,% styles of nodes in string (chain)
+                            minimum width=2ex, minimum height=3ex,
+                            outer sep=0pt, on chain},
+                B/.style = {decorate,
+                            decoration={brace, amplitude=5pt,
+                            pre=moveto,pre length=1pt,post=moveto,post length=1pt,
+                            raise=1mm,
+                                        #1}, % for mirroring of brace, if necessary
+                            thick},
+                B/.default=mirror, % by default braces are mirrored
+                ]
+            \foreach \i in {T,1,3,Z,0,0,1,6,4,
+                            5,1,0,2}% <-- content of nodes
+                \node[X] {\i};
+            \draw[B] (A-2.south west) -- node[below=2mm] {Timing block} ( A-3.south east);
+            \draw[B] (A-5.south west) -- node[below=2mm] {Data block} (A-13.south east);
         \end{tikzpicture}
-\end{center}
+        \caption{Visual description of the data format in messages between the sensor processing block and the socket server.}\label{sec:data_format_fig}
+    \end{center}
+\end{figure}
 The two characters following the $T$ is a timing block that increments by one each time a new value is sent to the server (this is so the code knows when a value it recieves is new). The nine characters following the $Z$ is the data block, and this is where the value of the fitness function must go. Nine digits is an arbitrary choice of precision, but should be sufficient for the kind of resolution we deal with.
 \begin{quote}
     \textbf{Note:} The socket server can only handle integers, but high-resolution data can still be provided by multiplying a value by some large number before passing a value in.
@@ -369,9 +369,9 @@ The \texttt{FullScan} module in \texttt{Pathfinders.py} defines a pathfinder tha
 
 Shown below is the data in \texttt{test\_6.json}, which captured over $51749$ signal magnitudes. It scanned a search space that spanned $\pm 13^\circ$ in the $\theta_x,\theta_y$ directions, and $\pm 14 mm$ in the $z$ direction, at a resolution of $0.4 mm$ along translational axes and $1.0^\circ$ in the rotational axes.
 
-\begin{figure}
+\begin{figure}[ht]
     \includegraphics[width=.9\linewidth]{figures/fullscan_render_test_6.jpg}
-    \caption{Raw data output from a full-scan (opacity is scaled with data magnitude, so many values are hidden)}
+    \caption{Raw data output from a full-scan (opacity is scaled with data magnitude, so many values are hidden)}\label{fig:fullscan-6}
 \end{figure}
 
 There are two helpful things that the data from a full scan gets used for; first of all it allows us to test our pathfinders explicitly on pre-existing data, and secondly it allows us to evaluate how our fitness function plays out in a real scan.
@@ -380,7 +380,7 @@ There are two helpful things that the data from a full scan gets used for; first
 \subsubsection{A foreword in fitness function design}
 Earlier the fitness function was described as a function of the position of the robot that outputs a scalar representing how well the sensor is focused, and that the robot control code sees this as a function in 6-D space. Now we will get into the process of designing and evalutating effective fitness functions.
 
-Since we are trying to bring a sensor into focus, we assume that the "focusedness" of the transducer is some function of its position in 6-D space relative to the target. Since, fundamentally, the focusedness of a sensor relates to some physical phenomena, we can imagine a function $\delta(\mathbf{X})$ that represents the true function mapping sensor-target position $\mathbf{X} = \{x,y,z,\theta_x,\theta_y, \theta_z\}$ to sensor focus.
+Since we are trying to bring a sensor into focus, we assume that the `focusedness' of the transducer is some function of its position in 6-D space relative to the target. Since, fundamentally, the focusedness of a sensor relates to some physical phenomena, we can imagine a function $\delta(\mathbf{X})$ that represents the true function mapping sensor-target position $\mathbf{X} = \{x,y,z,\theta_x,\theta_y, \theta_z\}$ to sensor focus.
 This function should relate to the fundamental principles of the sensing method and the quantity being measured.
 
 In the real world our sensor will never be able to take perfect readings because we cannot isolate the quantity being measured from the other elements of the system. Therefore we must imagine that the data collected from our sensor is some mixture of the ground truth function and some stochastic noise.
@@ -398,10 +398,37 @@ When we start focusing the robot, we have no idea where the robot is relative to
 A healthy place to start might be to approximate the ground truth function $\delta(\mathbf{X})$, but that isn't always the case. In the next section I will give an example of a naive fitness function that has inconvenient properties. This function is analogous to a loss function when solving an optimization problem.
 
 \subsection{Evaluating the fitness function on real data}
+The fitness function ultimately exists to help our robot focus effectively; therefore the most direct way of measuring whether the fitness function is effective is to run a focusing routine on the robot and see how close the sensor gets to being perfectly in focus. The problem with this approach is that it's not effective at diagnosing problems; if the robot focuses effectively that's great, but if it doesn't then it's really difficult to reverse-engineer what went wrong.
+
+The more maleable approach instead is to run a high-density scan of a search space that surrounds the focal point of the sensor, and record the data for later analysis. The time cost of running a high-density scan on the robot is significantly higher than doing an individual focusing session, but once the data is recorded, all subsequent tests can be run on the computer with minimal time cost.
+
+Within the \texttt{Debugging Scripts} folder of this git directory, there are several python notebooks that are designed to parse data from a scan and test out different homing methods. In particular, \texttt{Fullscan\_renders.ipynb} was used to produce the images in the flowchart below, which describes my methodology for checking the fitness function on real data.
+
+\subsubsection{Running a high-resolution scan}
+In this example, the robot was equipped with an immersion transducer and brought into focus manually, bouncing a pulse off the bottom of a wet tank. This setup used an extremely naive fitness function which simply returned the maximum magnitude of the return signal after a timing threshold. \autoref{fig:immersionTransducerSample} shows a sample of the raw sensor data with the fitness function overlaid.
+This is the setup that was used to produce the data in \autoref{fig:fullscan-6}.
+
+\begin{figure}[ht]
+\begin{center}
+    \includegraphics[width=.75\linewidth]{figures/IT_sample_1.jpg}
+    \caption{Sample output from the immersion transducer, and the output of a naive fitness function.}\label{fig:immersionTransducerSample}
+\end{center}
+\end{figure}
+
+As mentioned previously the data in \autoref{fig:fullscan-6} spans a search space of $28 mm$ in the translational $z$ axis and $26^\circ$ in the rotational $\theta_x$ and $\theta_y$ axes. The translational $x$ and $y$ axes were omitted because the bottom of the tank the transducer was bouncing off of was flat, so motion in this plane would have no bearing on the output signal strength.
+We focus the transducer ahead of starting the scan so that we could minimize the size of the search area we needed to look through while still capturing the full shape of the fitness function as it falls off from a fully-focused position to a position where the noise completely blots out the signal.
+
+Higher-resolution data provides us more information about the shape of the fitness function as well as its sensitivity to noise, but the number of points the fullscan needs to visit grows exponentially as the resolution shrinks.
+The \texttt{test\_6.json} data has a resolution of $1.0^\circ$ in the rotational axes and $0.4 mm$ in the translational axis; since there are two translational and one rotational axis, the total number of points was equal to $\left(\frac{26}{1} + 1\right) \cdot \left(\frac{26}{1} + 1\right) \cdot \left(\frac{28}{0.4} + 1\right) = 51,759$ (Plus-one is added to each range since the motion of the robot includes endpoints)
+
+Since the cost of increased resolution is so high, the resolution and search space volume should be calibrated to capture the minimum number of points that provide you all the information you need about the fitness function. If you know the signal you're measuring falls off within $1.1mm$ of the focal point, don't expand the search space any further than that.
+
+\subsubsection{Parsing a high-resolution scan}
+The full-scan module captures a very large amount of data, but most of it is
 
 \begin{center}
     \begin{tikzpicture}[
-        node distance=1.5cm,
+        node distance=1cm,
         % >={Triangle[angle=60:1pt 2]},
         shorten >= 2pt,
         shorten <= 2pt,
@@ -410,8 +437,8 @@ A healthy place to start might be to approximate the ground truth function $\del
         line width=2pt
         }]
         
-        \node[block] (A) {\includegraphics[width=7cm,height=6cm]{figures/data_slice1_6.jpg}};
-        \node[block,below=of A] (B) {\includegraphics[width=7cm,height=6cm]{figures/data_slice2_6.jpg}};
+        \node[block] (A) {\includegraphics[width=4cm,height=4cm]{figures/data_slice1_6.jpg}};
+        \node[block,below=of A] (B) {\includegraphics[width=4cm,height=4cm]{figures/data_slice2_6.jpg}};
         \node[block,below=of B] (D) {\includegraphics[width=4cm,height=4cm]{figures/Isolated_axes_2_6.jpg}};
         \node[block,left=of D] (C) {\includegraphics[width=4cm,height=4cm]{figures/Isolated_axes_1_6.jpg}};
         \node[block,right=of D] (E) {\includegraphics[width=4cm,height=4cm]{figures/Isolated_axes_3_6.jpg}};
