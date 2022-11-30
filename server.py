@@ -119,18 +119,19 @@ def client_thread(conn):
         i_rr += 1
         t_nm1 = t
 
-
 def start_server():
     while True:
         logger.info("entered while loop")
         con, addr = s.accept()
         logger.info('Connected: ' + str(addr))
+        print('Connected: ' + str(addr))
         Thread(target=client_thread, args=(con,)).start()
 
 def test_import():
     logger.info("You've successfully accessed a method within this file.")
 
 if __name__ == "__main__":
+    print("...starting server!")
     start_server()
 else:
     logger.info(__name__)

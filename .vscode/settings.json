@@ -6,5 +6,6 @@
 "python.analysis.extraPaths": [
     "c:\\Users\\ander\\OneDrive - UW\\Robotics lab material\\Robotics Control Code\\Ben's Control Code\\Debugging Scripts",
     "c:\\Users\\ander\\OneDrive - UW\\Robotics lab material\\Robotics Control Code\\Ben's Control Code"
-]
+],
+"python.analysis.typeCheckingMode": "off"
 }

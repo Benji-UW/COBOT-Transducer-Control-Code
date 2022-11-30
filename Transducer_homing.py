@@ -11,7 +11,6 @@ import json
 from pynput import keyboard
 from logging.handlers import RotatingFileHandler
 from logging import Formatter
-# from threading import Thread
 from UR3e import *
 from Pathfinders import *
 
@@ -94,10 +93,10 @@ class Transducer_homing:
             self.matlab_socket.connect((server_ip, port))
         except socket.gaierror as e:
             logger.warning(f'Connection error to robot: {e}')
-            return (False,e)
+            return (False,e.strerror)
         except ConnectionRefusedError as e:
             logger.warning("Connection was fuckin refused :/ fuck me")
-            return (False,e)
+            return (False,str(e))
         
         logger.info('Connected to MATLAB')
         return (True,'')
@@ -136,6 +135,7 @@ class Transducer_homing:
         if self.headless_test:
             self.listener = self.fake_MATLAB_listener()
         else:
+            # self.listener = self.fake_MATLAB_listener()
             self.listener = self.MATLAB_listener()
 
         self.last_ten_refresh_rate:np.array = np.zeros((40,1))
@@ -183,8 +183,8 @@ class Transducer_homing:
 #TODO Delete joint history items after IK has been understood
                 # Store the joint angles of the robot in the joint_history for analysis
                 self.robot.get_joint_angles()
-                self.joint_history.append((nextpoint.tolist(), np.copy(self.robot.joints).tolist(),
-                    (np.copy(self.robot.pos).tolist(), np.copy(self.robot.angle).tolist())))
+                # self.joint_history.append((nextpoint.tolist(), np.copy(self.robot.joints).tolist(),
+                #     (np.copy(self.robot.pos).tolist(), np.copy(self.robot.angle).tolist())))
 
                 # Find the next point
                 nextpoint = self.pathfinder.next()
@@ -265,7 +265,7 @@ class Transducer_homing:
             self.keys_pressed.remove(']')
         if 'd' in self.keys_pressed and not router: # Start basic pathfinder
             router = True
-            self.pathfinder = FourSquares(25,15,15,12,18)
+            self.pathfinder = FourSquares(20,10,10)
             self.robot.set_initial_pos()
             self.starting_joints = np.copy(self.robot.initial_joints).tolist()
             self.keys_pressed.remove('d')
@@ -413,7 +413,6 @@ class Transducer_homing:
             print('\n'.join(prin), end=(len(prin) + 1)*'\033[F')
             keep_going,row = key_press_actions_2(self,keep_going,row)
         
-
     def main_menu_GUI(self, router, current_target, freedrive, latest_mag):
         pos = self.robot.pos
         angle = self.robot.angle

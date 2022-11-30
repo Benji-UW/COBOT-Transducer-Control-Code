@@ -121,7 +121,7 @@ class FourSquares(Pathfinder):
         default to zero. Z also defines the range to give more room to move backwards
         than forwards, in order to reduce the chances of the robot moving into the
         sample.'''
-        super().__init__()
+        super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
         
         self.notes: str = "No notes passed from setup.\n"
 
@@ -147,18 +147,18 @@ class FourSquares(Pathfinder):
         corners: set[np.ndarray] = set()
         q = (0,0,1)
         for i in range(64):
-            pt:np.ndarray = np.array((
+            pt = (
                 self.range_of_motion['X'][q[((-1)**int(i))]],
                 self.range_of_motion['Y'][q[((-1)**int(i/2))]],
                 self.range_of_motion['Z'][q[((-1)**int(i/4))]],
                 self.range_of_motion['Rx'][q[((-1)**int(i/8))]],
                 self.range_of_motion['Ry'][q[((-1)**int(i/16))]],
-                self.range_of_motion['Rz'][q[((-1)**int(i/32))]]))
+                self.range_of_motion['Rz'][q[((-1)**int(i/32))]])
             
             corners.add(pt)
         
         for pt in corners:
-            yield pt
+            yield np.array(pt)
 
         yield 1
 
