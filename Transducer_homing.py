@@ -15,6 +15,7 @@ from UR3e import *
 from Pathfinders import *
 
 def logger_setup() -> logging.Logger:
+    '''Sets up the logging system.'''
     date_time_str = time.strftime(r"%Y-%m-%d_%H-%M-%S")
 
     # Configure the root logger to a particular folder, format, and level.
@@ -63,7 +64,7 @@ class Transducer_homing:
         self.key_listener.start()
         self.keys_pressed:set[str] = set()
 
-        self.headless_test = False
+        self.headless_test = True
 
         self.speed_presets = [(0.005, 0.025,0.025,0.1),
                             (0.0125,0.05,0.05,0.2),
@@ -332,10 +333,11 @@ class Transducer_homing:
         return (d_pos,d_angle)
 
     def MATLAB_listener(self) -> tuple[bool, float]:
-        '''This method creates a generator for listening to the server for new
-        data from MATLAB. At each yield statement it returns a tuple containing
-        a boolean and a float, the boolean indicating whether the magnitude is
-        new and the float representing the magnitude.'''   
+        '''Creates a generator for listening to the server for new data from
+        MATLAB.
+
+        Returns a tuple containing a boolean and a float, the boolean
+        indicating whether the magnitude is new and the float representing the data.'''   
         mag,self.latest_loop = -1,-1
         i=0
         while True:
@@ -348,13 +350,9 @@ class Transducer_homing:
 
             if loop == self.latest_loop:
                 time.sleep(0.005)
-                # yield (False, mag)
-            #TODO if this causes no problems, delete all instances of 
-            # the "latest_loop" boolean
             else:
                 self.latest_loop = loop
                 yield (True, mag)
-            # yield (True,mag)
     
     def fake_MATLAB_listener(self) -> tuple[bool, float]:
         '''This method fakes the input from the MATLAB listener, can be used 

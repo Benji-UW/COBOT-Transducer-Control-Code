@@ -16,7 +16,7 @@
 % 
 % The file, PS5000A_ID_STREAMING_EXAMPLE.M must be on your MATLAB PATH. For
 % additional information on setting your MATLAB PATH, type 'help addpath'
-% at the MATLAB command prompt.
+% at the MATLAB command prompt
 %
 % *Example:*
 %     PS5000A_ID_Streaming_Example;

@@ -182,7 +182,7 @@ class FourSquares(Pathfinder):
     #     return True
 
 class FullScan(Pathfinder):
-    def __init__(self, resolution, z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
+    def __init__(self,resolution,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
         '''Initialize a pathfinder object that traverses the searchspace at resolution
         
         Acts almost identical to the regular pathfinder module, except it contains an additional
@@ -190,7 +190,7 @@ class FullScan(Pathfinder):
         form (mm, deg) where the mm represents the linear mm tolerance for the full scan and the
         deg represents the angular degree tolerance for the full scan. There is a minimum tolerance
         based on the limitations of the robot, those are subject to change experimentally.'''
-        min_tolerance = (0.1,0.5)
+        min_tolerance = (0.02,0.1)
         self.resolution = (max(resolution[0],min_tolerance[0]), 
                             max(resolution[1],min_tolerance[1]))
         super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
@@ -220,8 +220,8 @@ class FullScan(Pathfinder):
             y0:y1:(int((y1-y0)/res[0])+1)*1j,
             z0:z1:(int((z1-z0)/res[0])+1)*1j,
             Rx0:Rx1:(int((Rx1-Rx0)/res[1])+1)*1j,
-            Ry0:Ry1:(int((Ry1-x0)/res[1])+1)*1j,
-            Rz0:Rz1:(int((Rz1-x0)/res[1])+1)*1j].reshape(6,-1,order='F').T
+            Ry0:Ry1:(int((Ry1-Ry0)/res[1])+1)*1j,
+            Rz0:Rz1:(int((Rz1-Rz0)/res[1])+1)*1j].reshape(6,-1,order='F').T
         
         # all_points = np.vstack((X.flatten(),Y.flatten(),Z.flatten(),
         #         Rx.flatten(),Ry.flatten(),Rz.flatten())).T
@@ -279,6 +279,61 @@ class FullScan(Pathfinder):
             'points' : self.points
         }
         self.write_json_data(json_data)
+
+class EllipsoidFullScan(FullScan):
+    def __init__(self,resolution,z_range,Rx_range=0,Ry_range=0,
+            x_range=0,y_range=0,Rz_range=0, semi_axes=np.ones(6)):
+        self.semi_axes = semi_axes
+        super().__init__(resolution, z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
+
+
+    def internal_point_yielder(self) -> np.ndarray:
+        '''The full scan iterates through every point in the searchspace'''
+        res = self.resolution
+        self.visited_so_far = 0
+        (x0,x1) = self.range_of_motion['X']
+        (y0,y1) = self.range_of_motion['Y']
+        (z0,z1) = self.range_of_motion['Z']
+        (Rx0,Rx1) = self.range_of_motion['Rx']
+        (Ry0,Ry1) = self.range_of_motion['Ry']
+        (Rz0,Rz1) = self.range_of_motion['Rz']
+
+        cubic_points = np.mgrid[
+            x0:x1:(int((x1-x0)/res[0])+1)*1j,
+            y0:y1:(int((y1-y0)/res[0])+1)*1j,
+            z0:z1:(int((z1-z0)/res[0])+1)*1j,
+            Rx0:Rx1:(int((Rx1-Rx0)/res[1])+1)*1j,
+            Ry0:Ry1:(int((Ry1-Ry0)/res[1])+1)*1j,
+            Rz0:Rz1:(int((Rz1-Rz0)/res[1])+1)*1j].reshape(6,-1,order='F').T
+
+        axes_radii = np.array(((x1-x0)/2,(y1-y0)/2,(z1-z0)/2,(Rx1-Rx0)/2,(Ry1-Ry0)/2,(Rz1-Rz0)/2))
+        axes_radii[(axes_radii == 0)] = 1
+
+        axes_coef = self.semi_axes / axes_radii
+
+        radii = ((axes_coef[0]*cubic_points[:,0])**2 + 
+                (axes_coef[1]*cubic_points[:,1])**2 + 
+                (axes_coef[2]*cubic_points[:,2])**2 + 
+                (axes_coef[3]*cubic_points[:,3])**2 + 
+                (axes_coef[4]*cubic_points[:,4])**2 +
+                (axes_coef[5]*cubic_points[:,5])**2)**0.5
+
+        mask = radii <= 1
+
+        ellipsoid_points = cubic_points[mask]
+        # all_points = np.vstack((X.flatten(),Y.flatten(),Z.flatten(),
+        #         Rx.flatten(),Ry.flatten(),Rz.flatten())).T
+
+        self.will_visit = ellipsoid_points.shape[0]
+        
+        for i in range(self.will_visit):
+            yield ellipsoid_points[i]
+            self.visited_so_far += 1
+            if i % 2000 == 0:
+                self.logger.info(f"Doing a dump of the latest 2000 points")
+                self.periodic_dump()
+
+        yield 1
 
 class DivisionSearch(Pathfinder):
     def __init__(self, divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):

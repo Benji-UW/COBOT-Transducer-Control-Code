@@ -164,6 +164,8 @@ cython_debug/
 #Images
 *.png
 *.jpg
+# !fullscan_render_test_4.jpg
+*.vs/
 
 # Annoying Excel autosave files
 ~$*.xlsx
@@ -172,3 +174,7 @@ cython_debug/
 *.aux
 *.out
 *.toc
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+!Documentation/figures/*
