@@ -279,7 +279,6 @@ class FullScan(Pathfinder):
             'points' : self.points
         }
         self.write_json_data(json_data)
-
 class EllipsoidFullScan(FullScan):
     def __init__(self,resolution,z_range,Rx_range=0,Ry_range=0,
             x_range=0,y_range=0,Rz_range=0, semi_axes=np.ones(6)):
@@ -334,7 +333,6 @@ class EllipsoidFullScan(FullScan):
                 self.periodic_dump()
 
         yield 1
-
 class DivisionSearch(Pathfinder):
     def __init__(self, divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
         '''Loads a pathfinder implementing a Division Search algorithm
