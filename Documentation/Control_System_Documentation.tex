@@ -6,6 +6,7 @@
 \usepackage{indentfirst}
 \usepackage{rotating}
 \usepackage[normalem]{ulem}
+\usepackage{xcolor}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsfonts}
@@ -20,6 +21,10 @@
 \usepackage{}
 
 \captionsetup{width=.75\textwidth,font={small},labelfont=bf}
+
+\definecolor{mpl-blue}{HTML}{1f77b4}
+\definecolor{mpl-orange}{HTML}{ff7f0e}
+\definecolor{mpl-green}{HTML}{2ca02c}
 
 \hypersetup{
  pdfauthor={Ben Anderson},
@@ -421,38 +426,90 @@ We focus the transducer ahead of starting the scan so that we could minimize the
 Higher-resolution data provides us more information about the shape of the fitness function as well as its sensitivity to noise, but the number of points the fullscan needs to visit grows exponentially as the resolution shrinks.
 The \texttt{test\_6.json} data has a resolution of $1.0^\circ$ in the rotational axes and $0.4 mm$ in the translational axis; since there are two translational and one rotational axis, the total number of points was equal to $\left(\frac{26}{1} + 1\right) \cdot \left(\frac{26}{1} + 1\right) \cdot \left(\frac{28}{0.4} + 1\right) = 51,759$ (Plus-one is added to each range since the motion of the robot includes endpoints)
 
-Since the cost of increased resolution is so high, the resolution and search space volume should be calibrated to capture the minimum number of points that provide you all the information you need about the fitness function. If you know the signal you're measuring falls off within $1.1mm$ of the focal point, don't expand the search space any further than that.
+Since the cost of increased resolution is so high, the resolution and search space volume should be calibrated to capture the minimum number of points that provide you all the information you need about the fitness function. If you know the signal you're measuring falls off within $1.1\textrm{mm}$ of the focal point, don't expand the search space any further than that.
 
 \subsubsection{Parsing a high-resolution scan}
-The full-scan module captures a very large amount of data, but most of it is
+The full-scan module captures a very large amount of data, but most of it isn't terribly helpful. Since our search space is cubic and expands outwards enough for each axis to go out of focus, the corners of our search space are out of focus in multiple axes and the signal is dominated by noise.
+We want to focus on the effect of one degree of freedom at a time, so to do this we slice the full-scan data along three axes, each parallel to one degree of motion of the robot and going through the point of greatest magnitude in the search space.
 
-\begin{center}
-    \begin{tikzpicture}[
-        node distance=1cm,
-        % >={Triangle[angle=60:1pt 2]},
-        shorten >= 2pt,
-        shorten <= 2pt,
-        arrow/.style={
-        ->,
-        line width=2pt
-        }]
-        
-        \node[block] (A) {\includegraphics[width=4cm,height=4cm]{figures/data_slice1_6.jpg}};
-        \node[block,below=of A] (B) {\includegraphics[width=4cm,height=4cm]{figures/data_slice2_6.jpg}};
-        \node[block,below=of B] (D) {\includegraphics[width=4cm,height=4cm]{figures/Isolated_axes_2_6.jpg}};
-        \node[block,left=of D] (C) {\includegraphics[width=4cm,height=4cm]{figures/Isolated_axes_1_6.jpg}};
-        \node[block,right=of D] (E) {\includegraphics[width=4cm,height=4cm]{figures/Isolated_axes_3_6.jpg}};
+Then we plot the points of each of these planes individually. Since our data initially had three spatial dimensions and one scalar value dimension, slicing three 2D spatial planes out of it allows us to more easily plot the data in a way that is visually intuitive (process shown below in \autoref{fig:dataSlice1})
 
-        \draw[arrow]
-        (A) -- (B);
-        \draw[red, arrow]
-        (B) -- (C);
-        \draw[blue, arrow]
-        (B) -- (D);
-        \draw[green, arrow]
-        (B) -- (E);
+\begin{figure}[ht]
+    \begin{center}
+        \begin{tikzpicture}[
+            node distance=1cm,
+            % >={Triangle[angle=60:1pt 2]},
+            shorten >= 2pt,
+            shorten <= 2pt,
+            arrow/.style={
+            ->,
+            line width=2pt
+            }]
+            
+            \node[block] (A) {\includegraphics[width=4cm,height=4cm]{figures/data_slice1_6.jpg}};
+            \node[block,below=of A] (B) {\includegraphics[width=4cm,height=4cm]{figures/data_slice2_6.jpg}};
+            \node[block,below=of B] (D) {\includegraphics[width=4cm,height=4cm]{figures/Isolated_axes_2_6.jpg}};
+            \node[block,left=of D] (C) {\includegraphics[width=4cm,height=4cm]{figures/Isolated_axes_1_6.jpg}};
+            \node[block,right=of D] (E) {\includegraphics[width=4cm,height=4cm]{figures/Isolated_axes_3_6.jpg}};
 
-    \end{tikzpicture}
-\end{center}
+            \draw[arrow]
+            (A) -- (B);
+            \draw[red, arrow]
+            (B) -- (C);
+            \draw[blue, arrow]
+            (B) -- (D);
+            \draw[green, arrow]
+            (B) -- (E);
+
+        \end{tikzpicture}
+    \end{center}
+    \caption{}\label{fig:dataSlice1}
+\end{figure}
+
+Then we repeat the process the produce a 1-dimensional slice of the fitness function as we move through one degree of freedom, through the optimal point.
+
+\begin{figure}[ht]
+    \begin{center}
+        \begin{tikzpicture}[
+            node distance=1cm,
+            % >={Triangle[angle=60:1pt 2]},
+            shorten >= 2pt,
+            shorten <= 2pt,
+            arrow/.style={
+            ->,
+            line width=2pt
+            }]
+
+            % Each frame is ~4.666 cm wide, middle one is centered on the middle
+            
+            \node[block, draw=white] (A) {\includegraphics[width=14cm,height=4cm]{figures/IsolatedTrace2.jpg}};
+            
+            \node[above left=1mm and 46mm of A.south] (blueOrange) {};
+            \node[above =1mm of A.south] (greenOrange){};
+            \node[above right=1mm and 46mm of A.south] (blueGreen){};
+
+            \node[block, below=3cm of A] (B) {\includegraphics[width=14cm,height=3cm]{figures/1dSlice-1.png}};
+            
+            \node[below left=1mm and 46mm of B.north] (green){};
+            \node[below =1mm of B.north] (blue){};
+            \node[below right=1mm and 46mm of B.north] (orange){};
+
+            \draw[mpl-blue, arrow]
+            (blueOrange) edge[out=300,in=90,->] (blue);
+            \draw[mpl-orange, arrow]
+            (blueOrange) edge[out=315,in=100,->] (orange);
+            \draw[mpl-green, arrow]
+            (greenOrange) edge[out=240,in=80,->] (green);
+            \draw[mpl-orange, arrow]
+            (greenOrange) edge[out=300,in=100,->] (orange);
+            \draw[mpl-blue, arrow]
+            (blueGreen) edge[out=240,in=90,->] (blue);
+            \draw[mpl-green, arrow]
+            (blueGreen) edge[out=225,in=80,->] (green);
+
+        \end{tikzpicture}
+    \end{center}
+    \caption{}\label{fig:dataSlice2}
+\end{figure}
 
 \end{document}

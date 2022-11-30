@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1669673357 "c:/Users/ander/Documents/COBOT-Transducer-Control-Code/Documentation/Control_System_Documentation.tex" "Control_System_Documentation.pdf" "Control_System_Documentation" 1669673367
+["pdflatex"] 1669749412 "c:/Users/ander/Documents/COBOT-Transducer-Control-Code/Documentation/Control_System_Documentation.tex" "Control_System_Documentation.pdf" "Control_System_Documentation" 1669749433
   "C:/Users/ander/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1629399286 9742851 80500b0c2fbdcef197067f0098972c53 ""
   "C:/Users/ander/AppData/Local/MiKTeX/pdftex/config/pdftex.map" 1669665067 282076 6e675d989cef748ee975ab1e928bb53e ""
   "C:/Users/ander/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1001771820 2900 1537cc8184ad1792082cd229ecc269f4 ""
@@ -202,12 +202,14 @@
   "C:/Users/ander/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/ander/AppData/Local/Programs/MiKTeX/tex/latex/wrapfig/wrapfig.sty" 1044403200 26220 3701aebf80ccdef248c0c20dd062fea9 ""
   "C:/Users/ander/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1623002060 55589 34128738f682d033422ca125f82e5d62 ""
-  "Control_System_Documentation.aux" 1669673366 5535 047716341e977736abc890fdc1af9922 "pdflatex"
-  "Control_System_Documentation.out" 1669673366 3590 0a3477f5f7b32f540bfeb771610bcf54 "pdflatex"
-  "Control_System_Documentation.tex" 1669673343 36445 4a158d87f174425f8ec946e31d7626a4 ""
-  "Control_System_Documentation.toc" 1669673366 1804 c2dd7a6795b6f5259d9a985b9005f263 "pdflatex"
-  "c:/Users/ander/Documents/COBOT-Transducer-Control-Code/Documentation/Control_System_Documentation.tex" 1669673343 36445 4a158d87f174425f8ec946e31d7626a4 ""
+  "Control_System_Documentation.aux" 1669749431 5917 331f81e54f4d511f703d7585435f7887 "pdflatex"
+  "Control_System_Documentation.out" 1669749431 3590 0a3477f5f7b32f540bfeb771610bcf54 "pdflatex"
+  "Control_System_Documentation.tex" 1669749410 39424 422b030488f00f2d237650f73401fe1f ""
+  "Control_System_Documentation.toc" 1669749431 1804 c2dd7a6795b6f5259d9a985b9005f263 "pdflatex"
+  "c:/Users/ander/Documents/COBOT-Transducer-Control-Code/Documentation/Control_System_Documentation.tex" 1669749410 39424 422b030488f00f2d237650f73401fe1f ""
+  "figures/1dSlice-1.png" 1669674937 106014 942db45a9df935371bf40c595e8ad5e5 ""
   "figures/IT_sample_1.jpg" 1669663788 61312 915938c3cf4a886d485ca8c6e1a9495c ""
+  "figures/IsolatedTrace2.jpg" 1669674528 788061 8d5b9ea6bf1aa5d740b72c52a2b8c77b ""
   "figures/Isolated_axes_1_6.jpg" 1669086583 226979 6b5eb88fd616b0de23065e74613cf005 ""
   "figures/Isolated_axes_2_6.jpg" 1669086583 192000 6b82b08f1401a04277826fcd705be9c1 ""
   "figures/Isolated_axes_3_6.jpg" 1669086583 193605 f97b232ee07f5c0c98a3cb614fcad4e6 ""
