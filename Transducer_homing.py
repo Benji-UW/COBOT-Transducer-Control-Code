@@ -66,6 +66,8 @@ class Transducer_homing:
 
         self.headless_test = True
 
+# TODO: Delete all use of speed-presets et cetera,
+# they are not necessary for the current robot configuration. 
         self.speed_presets = [(0.005, 0.025,0.025,0.1),
                             (0.0125,0.05,0.05,0.2),
                             (0.025,0.1,0.1,0.4),
@@ -75,8 +77,6 @@ class Transducer_homing:
                             (0.4,1.0,0.5,1.2),
                             (0.8,2.0,1.0,2.0)]
 
-        # 'self.speed_preset' is an int representing the current 
-        # speed setting
         self.speed_preset: int = 3
         
         self.refresh_rate:float = 112.
