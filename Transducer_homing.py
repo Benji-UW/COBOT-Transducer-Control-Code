@@ -14,7 +14,23 @@ from logging import Formatter
 from UR3e import *
 from Pathfinders import *
 
-def logger_setup() -> logging.Logger:
+(X_RANGE,               # ROM in the X-axis (0)
+ Y_RANGE,               # "   "   "  Y-axis (0)
+ Z_RANGE,               # "   "   "  Z-axis (positive)
+ RX_RANGE,              # "   "   "  Rx-axis (positive)
+ RY_RANGE,              # "   "   "  Ry-axis (positive)
+ RZ_RANGE) = 0,0,4,10,10,0
+T_RES,R_RES = 1,2       # Resolution of high-def scans, in mm and deg respectively
+D_PATHFINDER = FourSquares
+K_PATHFINDER = EllipsoidFullScan
+G_PATHFINDER = Greedy_discrete_degree
+T_PATHFINDER = GradientAscent
+HEADLESS_TEST = True
+IK_TEST:bool = True # Set to True to save joint positions during a scan
+
+
+# LOGGING SETUP IS COMPLETE, don't touch again
+def logger_setup(log_level=logging.INFO) -> logging.Logger:
     '''Sets up the logging system.'''
     date_time_str = time.strftime(r"%Y-%m-%d_%H-%M-%S")
 
@@ -30,17 +46,15 @@ def logger_setup() -> logging.Logger:
     formatter = Formatter(fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     root_logger.addHandler(handler)
-    root_logger.setLevel(logging.DEBUG)
+    root_logger.setLevel(log_level)
     logger = logging.getLogger(__name__)
     logger.info("Debug log for the robot starting on " + date_time_str)
     return logger
 
-logger = logger_setup()
+logger = logger_setup(logging.DEBUG)
+np.set_printoptions(formatter={'float': '{: 0.2f}'.format})
 
 def main():
-    np.set_printoptions(formatter={'float': '{: 0.2f}'.format})
-    # Thread(target=server.start_server).start()
-
     '''Initialize a transducer_homing object and run that mf'''
     robot = Transducer_homing()
     robot.initialize()
@@ -56,15 +70,15 @@ class Transducer_homing:
         self.matlab_socket: socket.socket = None
         self.latest_loop:int = -1
 
-        self.joint_history: list[tuple] = []
-        self.starting_joints: list[float] = None
+        if IK_TEST:
+            self.joint_history: list[tuple] = []
+            self.starting_joints: list[float] = None
 
         self.key_listener = keyboard.Listener(on_press=self.on_press,
             on_release=self.on_release)
         self.key_listener.start()
         self.keys_pressed:set[str] = set()
 
-        self.headless_test = True
 
 # TODO: Delete all use of speed-presets et cetera,
 # they are not necessary for the current robot configuration. 
@@ -86,9 +100,8 @@ class Transducer_homing:
 
     def connect_to_matlab(self, server_ip:str='localhost',
                         port:int=508) -> tuple[bool, str]:
-        '''Connects to the central socket server that coordinates 
-        information between this module and the MATLAB signal 
-        processing info.'''
+        '''Connects to the socket server that passes information
+        between this module and the signal processing module.'''
         self.matlab_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.matlab_socket.connect((server_ip, port))
@@ -109,7 +122,7 @@ class Transducer_homing:
     def initialize(self, ip_robot='192.168.0.10'):
         os.system("title " + 'Transducer homing')
 
-        if self.headless_test:
+        if HEADLESS_TEST:
             self.robot = Fake_UR3e()
         else:
             self.robot = UR3e()
@@ -129,11 +142,9 @@ class Transducer_homing:
         logger.info("Robot initialized :)")
 
     def start(self):
-        run_bool = True
-        router = False
-        freedrive = False
+        _RUN,_PATHFINDER_ACTIVE,freedrive = True,False,False
 
-        if self.headless_test:
+        if HEADLESS_TEST:
             self.listener = self.fake_MATLAB_listener()
         else:
             # self.listener = self.fake_MATLAB_listener()
@@ -155,7 +166,7 @@ class Transducer_homing:
         t0 = time.time()
 
         time.sleep(0.05)
-        while run_bool:
+        while _RUN:
             self.robot.update()
             t1=time.time()
 
@@ -170,28 +181,30 @@ class Transducer_homing:
                 
                 pos_angle = self.robot.current_relative_target
 
-                if router:
+                if _PATHFINDER_ACTIVE:
                     self.pathfinder.newMag(np.append(pos_angle,latest_mag))
 
             # For clarity, the response to key prseses has been moved to another method
-            run_bool,router,nextpoint,freedrive = self.key_press_actions(run_bool,router,nextpoint,freedrive)
+            _RUN,_PATHFINDER_ACTIVE,nextpoint,freedrive = self.key_press_actions(_RUN,_PATHFINDER_ACTIVE,nextpoint,freedrive)
 
             # If there is a running pathfinder:
-            if router and not freedrive:
+            if _PATHFINDER_ACTIVE and not freedrive:
                 # Wait for the robot to arrive at current target (log how long it took)
                 v = self.robot.wait_for_at_tar()
                 logger.info(f"Waiting for the at_tar return took {v} loops")
 #TODO Delete joint history items after IK has been understood
+
                 # Store the joint angles of the robot in the joint_history for analysis
-                self.robot.get_joint_angles()
-                # self.joint_history.append((nextpoint.tolist(), np.copy(self.robot.joints).tolist(),
-                #     (np.copy(self.robot.pos).tolist(), np.copy(self.robot.angle).tolist())))
+                if IK_TEST:
+                    self.robot.get_joint_angles()
+                    self.joint_history.append((nextpoint.tolist(), np.copy(self.robot.joints).tolist(),
+                        (np.copy(self.robot.pos).tolist(), np.copy(self.robot.angle).tolist())))
 
                 # Find the next point
                 nextpoint = self.pathfinder.next()
                 
                 if type(nextpoint) is int and nextpoint == 1: # nextpoint = 1 means end of path reached
-                    router = False
+                    _PATHFINDER_ACTIVE = False
 
                     # Save points
                     self.pathfinder.save_points()
@@ -200,14 +213,8 @@ class Transducer_homing:
                     # self.robot.movel_to_target(np.zeros(6))
                     self.robot.movel_to_target(self.pathfinder.max_point[:6])
 
-                    # data={"Start joints": self.starting_joints,
-                    #     "joints_at_points": self.joint_history,
-                    #     "TCP_offset": np.copy(self.robot.tcp_offset).tolist(),
-                    #     "Notes": "No notes yet"}
-                    # path = (os.path.dirname(__file__) + "\\IK_Scans" + 
-                    #     f"\\Test_{time.strftime('%m_%d__%H_%M')}.json")
-                    # with open(path, 'w+') as outfile:
-                    #     json.dump(data, outfile, indent=3)
+                    if IK_TEST:
+                        self._save_IK_data()
 
                 else:
                     logger.debug(f"triggering movel to {nextpoint}")
@@ -215,7 +222,7 @@ class Transducer_homing:
 
             # Update the GUI if enough time has elapsed.
             if (t1 - t0) > (1/30):
-                self.main_menu_GUI(router, nextpoint, freedrive, latest_mag)
+                self.main_menu_GUI(_PATHFINDER_ACTIVE, nextpoint, freedrive, latest_mag)
                 t0 = t1
             # Post things to the logs.
             self.main_loop_logs()
@@ -228,13 +235,23 @@ class Transducer_homing:
         if self.matlab_socket is not None:
             self._disconnect_from_matlab()
             logger.info('Disconnected from server.')
-        if router:
+        if _PATHFINDER_ACTIVE:
             self.pathfinder.save_points()
+
+    def _save_IK_data(self, notes="No notes yet"):
+        data={"Start joints": self.starting_joints,
+            "joints_at_points": self.joint_history,
+            "TCP_offset": np.copy(self.robot.tcp_offset).tolist(),
+            "Notes": "No notes yet"}
+        path = (os.path.dirname(__file__) + "\\IK_Scans" + 
+            f"\\Test_{time.strftime('%m_%d__%H_%M')}.json")
+        with open(path, 'w+') as outfile:
+            json.dump(data, outfile, indent=3)
 
     def key_press_actions(
             self,
-            run_bool:bool,
-            router:Pathfinder,
+            RUN:bool,
+            PATHFINDER_ACTIVE:bool,
             nextpoint:np.ndarray,
             freedrive:bool) -> tuple[bool,Pathfinder,tuple,bool]:
         '''
@@ -254,54 +271,56 @@ class Transducer_homing:
         f - toggle Freedrive
         '''
         if 'q' in self.keys_pressed: # Quit
-            run_bool = False
+            RUN = False
             self.keys_pressed.remove('q')
-        elif '[' in self.keys_pressed: # Increment
-            if self.speed_preset < len(self.v_list) - 1:
-                self.speed_preset += 1
-            self.keys_pressed.remove('[')
-        elif ']' in self.keys_pressed: # Decrement
-            if self.speed_preset > 0:
-                self.speed_preset -= 1
-            self.keys_pressed.remove(']')
-        if 'd' in self.keys_pressed and not router: # Start basic pathfinder
-            router = True
-            self.pathfinder = FourSquares(20,10,10)
-            self.robot.set_initial_pos()
-            self.starting_joints = np.copy(self.robot.initial_joints).tolist()
-            self.keys_pressed.remove('d')
-        if "k" in self.keys_pressed and not router: # Start fullscan pathfinder
-            router = True
-            self.pathfinder = FullScan((1,2),9,14,14)
-            nextpoint = self.pathfinder.next()
-            self.keys_pressed.remove('k')
-        if "g" in self.keys_pressed and not router: # Start maxfinding pathfinder
-            router = True
-            # self.pathfinder = Greedy_discrete_degree(20,15,15,bias=0,steps=2,inc=1.0)
-            self.pathfinder = GradientAscent(20,15,15,bias=0,steps=2,inc=0.75,traverse=1.0)
-            nextpoint = self.pathfinder.next()
-            self.keys_pressed.remove('g')
-        if "t" in self.keys_pressed and not router: # Start maxfinding pathfinder
-            router = True
-            self.pathfinder = Greedy_discrete_degree(20,15,15,bias=0,steps=2,inc=1.0)
-            # self.pathfinder = GradientAscent(20,15,15,bias=0,steps=2,inc=0.75,traverse=1.0)
-            nextpoint = self.pathfinder.next()
-            self.keys_pressed.remove('t')
-        if 'x' in self.keys_pressed and router: # stop the running pathfinder
-            router = False
-            self.pathfinder.save_points()
-            logger.debug(f"triggering movel to {((0,0,0),(0,0,0))}")
-            self.robot.movel_to_target(np.zeros(6))
-            self.keys_pressed.remove('x')
-        if 'a' in self.keys_pressed and not router: # Change operating range
-            self.change_range_gui()
-            self.keys_pressed.remove('a')
-        if 'f' in self.keys_pressed:
-            self.robot.toggle_freedrive()
-            freedrive = not freedrive
-            self.keys_pressed.remove('f')
+        # elif '[' in self.keys_pressed: # Increment
+        #     if self.speed_preset < len(self.v_list) - 1:
+        #         self.speed_preset += 1
+        #     self.keys_pressed.remove('[')
+        # elif ']' in self.keys_pressed: # Decrement
+        #     if self.speed_preset > 0:
+        #         self.speed_preset -= 1
+        #     self.keys_pressed.remove(']')
+        if PATHFINDER_ACTIVE:
+            if 'x' in self.keys_pressed: # stop the running pathfinder
+                PATHFINDER_ACTIVE = False
+                self.pathfinder.save_points()
+                logger.debug(f"triggering movel to {((0,0,0),(0,0,0))}")
+                self.robot.movel_to_target(np.zeros(6))
+                self.keys_pressed.remove('x')
+        else:
+            if 'd' in self.keys_pressed: # Start basic pathfinder
+                PATHFINDER_ACTIVE = True
+                self.pathfinder = D_PATHFINDER(Z_RANGE,RX_RANGE,RY_RANGE,X_RANGE,Y_RANGE,RZ_RANGE)
+                self.robot.set_initial_pos()
+                self.starting_joints = np.copy(self.robot.initial_joints).tolist()
+                self.keys_pressed.remove('d')
+            if "k" in self.keys_pressed: # Start fullscan pathfinder
+                PATHFINDER_ACTIVE = True
+                self.pathfinder = K_PATHFINDER((T_RES,R_RES),Z_RANGE,RX_RANGE,RY_RANGE,X_RANGE,Y_RANGE,RZ_RANGE)
+                nextpoint = self.pathfinder.next()
+                self.keys_pressed.remove('k')
+            if "g" in self.keys_pressed: # Start maxfinding pathfinder
+                PATHFINDER_ACTIVE = True
+                # self.pathfinder = Greedy_discrete_degree(20,15,15,bias=0,steps=2,inc=1.0)
+                self.pathfinder = GradientAscent(20,15,15,bias=0,steps=2,inc=0.75,traverse=1.0)
+                nextpoint = self.pathfinder.next()
+                self.keys_pressed.remove('g')
+            if "t" in self.keys_pressed: # Start maxfinding pathfinder
+                PATHFINDER_ACTIVE = True
+                self.pathfinder = Greedy_discrete_degree(20,15,15,bias=0,steps=2,inc=1.0)
+                # self.pathfinder = GradientAscent(20,15,15,bias=0,steps=2,inc=0.75,traverse=1.0)
+                nextpoint = self.pathfinder.next()
+                self.keys_pressed.remove('t')
+            if 'a' in self.keys_pressed: # Change operating range
+                self.change_range_gui()
+                self.keys_pressed.remove('a')
+            if 'f' in self.keys_pressed:
+                self.robot.toggle_freedrive()
+                freedrive = not freedrive
+                self.keys_pressed.remove('f')
 
-        return run_bool,router,nextpoint,freedrive
+        return RUN,PATHFINDER_ACTIVE,nextpoint,freedrive
 
     def main_loop_logs(self):
         '''Log information that gets posted every single loop, 
@@ -310,10 +329,10 @@ class Transducer_homing:
         logger.debug(f"Q in pressed keys: {'q' in self.keys_pressed}")
         logger.debug("----------------------------------------------")
         logger.debug("Position info about the robot:")
-        logger.debug(f"Initial pos/angle: ({self.robot.initial_pos.T},".join(
+        logger.debug(f"\tInitial pos/angle: ({self.robot.initial_pos.T},".join(
             f"{self.robot.initial_angle.T})"))
-        logger.debug(f"Current pos/angle: ({self.robot.pos.T}, {self.robot.angle.T}")
-        logger.debug(f"Current joint positions (radians): {self.robot.joints.T}")
+        logger.debug(f"\tCurrent pos/angle: ({self.robot.pos.T}, {self.robot.angle.T}")
+        logger.debug(f"\tCurrent joint positions (radians): {self.robot.joints.T}")
         logger.debug("----------------------------------------------")
 
     def _get_delta_pos(self) -> tuple[float,float]:
@@ -409,9 +428,9 @@ class Transducer_homing:
     
             prin.append('----------------------')
             print('\n'.join(prin), end=(len(prin) + 1)*'\033[F')
-            keep_going,row = key_press_actions_2(self,keep_going,row)
-        
-    def main_menu_GUI(self, router, current_target, freedrive, latest_mag):
+            keep_going,row = key_press_actions_2(self,keep_going,row)     
+
+    def main_menu_GUI(self, PATHFINDER_ACTIVE, current_target, freedrive, latest_mag):
         pos = self.robot.pos
         angle = self.robot.angle
         joints = self.robot.joints
@@ -433,7 +452,7 @@ class Transducer_homing:
         "Press (f) to toggle (f)reedrive mode :)",
         '']
         
-        if not router:
+        if not PATHFINDER_ACTIVE:
             [prin.append(i) for i in 
             ['Press (d)emo to demonstrate the basic pathrouting module',
             'Press (k) to trigger a full scan with hard-coded resolution.',

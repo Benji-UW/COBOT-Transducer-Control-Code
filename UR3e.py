@@ -10,7 +10,6 @@ from math import *
 import UR3e_config as uconf
 import logging
 
-
 def _reg_convert(reg, rtype=None):
     coeff = 1.
     if rtype == 'pos':
