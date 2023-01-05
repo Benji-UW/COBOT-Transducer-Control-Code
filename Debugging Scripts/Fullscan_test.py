@@ -42,5 +42,5 @@ while type(p) is not int:
 
 
 print(time.time() - start)
-a.save_points()
+# a.save_points()
 print(time.time() - start)

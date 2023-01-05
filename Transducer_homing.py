@@ -19,14 +19,14 @@ from Pathfinders import *
  Z_RANGE,               # "   "   "  Z-axis (positive)
  RX_RANGE,              # "   "   "  Rx-axis (positive)
  RY_RANGE,              # "   "   "  Ry-axis (positive)
- RZ_RANGE) = 0,0,4,10,10,0
-T_RES,R_RES = 1,2       # Resolution of high-def scans, in mm and deg respectively
+ RZ_RANGE) = 0,0,4,10,0,0
+T_RES,R_RES = 0.6,2     # Resolution of high-def scans, in mm and deg respectively
 D_PATHFINDER = FourSquares
 K_PATHFINDER = EllipsoidFullScan
 G_PATHFINDER = Greedy_discrete_degree
 T_PATHFINDER = GradientAscent
-HEADLESS_TEST = True
-IK_TEST:bool = True # Set to True to save joint positions during a scan
+HEADLESS_TEST = False
+IK_TEST:bool = False # Set to True to save joint positions during a scan
 
 
 # LOGGING SETUP IS COMPLETE, don't touch again
@@ -364,7 +364,7 @@ class Transducer_homing:
             msg = self.matlab_socket.recv(1024)
             i += 1
 
-            mag = float(msg[4:13]) / 1.0E3
+            mag = (float(msg[4:13]) - 50000) / 100000
             loop = int(msg[1:3])
 
             if loop == self.latest_loop:

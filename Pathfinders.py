@@ -310,6 +310,7 @@ class EllipsoidFullScan(FullScan):
         # all_points = np.vstack((X.flatten(),Y.flatten(),Z.flatten(),
         #         Rx.flatten(),Ry.flatten(),Rz.flatten())).T
 
+        
         self.will_visit = ellipsoid_points.shape[0]
         
         for i in range(self.will_visit):

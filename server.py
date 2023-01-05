@@ -94,6 +94,7 @@ def client_thread(conn):
             is_alive = False
         elif client_input[0] == 84:
             motion = client_input
+            print(motion)
         else:
             # motion = client_input
             logger.debug(shitty_sql)
