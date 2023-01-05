@@ -162,25 +162,6 @@ class FourSquares(Pathfinder):
 
         yield 1
 
-# TODO: Maybe delete the _close_enough method since it's been rendered obselete by the current functionality.        
-    # def _close_enough(self, point, override, tolerance=(0.5,2)):
-    #     '''Accepts as input a point and a tuple containing the dimensional tolerances,
-    #     in the form of (mm, deg), where the first element is the toleranace of linear
-    #     dimensions and the second is the angular tolerance. They default to 0.5 mm and 2 degrees.'''
-    #     if override:
-    #         return True
-    #     for i in range(3):
-    #         try:
-    #             if abs(self.to_travel[0][0][i] - point[0][i]) > tolerance[0]:
-    #                 return False
-    #         except TypeError:
-    #             print(self.to_travel[0])
-    #             print(point)
-    #             raise TypeError
-    #         if abs(self.to_travel[0][1][i % 2] - point[1][i % 2]) > tolerance[1]:
-    #             return False
-    #     return True
-
 class FullScan(Pathfinder):
     def __init__(self,resolution,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
         '''Initialize a pathfinder object that traverses the searchspace at resolution
@@ -286,6 +267,12 @@ class EllipsoidFullScan(FullScan):
         self.semi_axes = semi_axes
         super().__init__(resolution, z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
 
+    def __str__(self):
+        return ("Ellipsoidal version of a fullscan module, scans " + 
+            "an n-ellipse around the origin at a fixed resolution.\n" + 
+            f"\tRange of motion: {self.range_of_motion}\n" +  
+            f"\tResolution: {self.resolution}\n" + 
+            f"\tHighest magnitude found: {self.max_point}")
 
     def internal_point_yielder(self) -> np.ndarray:
         '''The full scan iterates through every point in the searchspace'''
