@@ -38,7 +38,7 @@ class Pathfinder:
         for i in range(data_channels):
             self.save_indices.append(6+i)
         
-        print(self.save_indices)
+        # print(self.save_indices)
 
         self.points: list[list[float]] = []
         '''Records the point/magnitude pairs that the pathfinder has been given
