@@ -19,8 +19,8 @@ from Pathfinders import *
  Z_RANGE,               # "   "   "  Z-axis (positive)
  RX_RANGE,              # "   "   "  Rx-axis (positive)
  RY_RANGE,              # "   "   "  Ry-axis (positive)
- RZ_RANGE) = 0,0,4,10,0,0
-T_RES,R_RES = 0.6,2     # Resolution of high-def scans, in mm and deg respectively
+ RZ_RANGE) = 0,0,5,10,10,0
+T_RES,R_RES = 0.2,1     # Resolution of high-def scans, in mm and deg respectively
 D_PATHFINDER = FourSquares
 K_PATHFINDER = EllipsoidFullScan
 G_PATHFINDER = Greedy_discrete_degree
@@ -298,7 +298,8 @@ class Transducer_homing:
                 self.keys_pressed.remove('d')
             if "k" in self.keys_pressed: # Start fullscan pathfinder
                 PATHFINDER_ACTIVE = True
-                self.pathfinder = K_PATHFINDER((T_RES,R_RES),Z_RANGE,RX_RANGE,RY_RANGE,X_RANGE,Y_RANGE,RZ_RANGE)
+                self.pathfinder = K_PATHFINDER((T_RES,R_RES),Z_RANGE,RX_RANGE,
+                                    RY_RANGE,X_RANGE,Y_RANGE,RZ_RANGE,data_channels=DATA_CHANNELS)
                 nextpoint = self.pathfinder.next()
                 self.keys_pressed.remove('k')
             if "g" in self.keys_pressed: # Start maxfinding pathfinder
@@ -450,19 +451,17 @@ class Transducer_homing:
         f"Current joint position in degrees: ({np.rad2deg(joints.T)})",
         f'Recent refresh rate: {np.mean(self.last_ten_refresh_rate)}',
         "------------------------",
-        f"Latest mag:",]
-
-        for i in range(DATA_CHANNELS):
-            prin.append(f"\t{latest_mag[i]}")
-            bars = int((latest_mag[i]/750) * 80)
-            spaces = 80 - bars
-            prin.append((bars*'|') + (spaces*' ') + '|')
-        
-
-        [prin.append(i) for i in [
+        f"Latest mag:{latest_mag}",
         f"Freedrive active: {freedrive}",
         "Press (f) to toggle (f)reedrive mode :)",
-        '']]
+        '']
+
+        # for i in range(DATA_CHANNELS):
+        #     prin.append(f"\t")
+        #     bars = int((latest_mag[i]/2.5) * 80)
+        #     spaces = 80 - bars
+        #     prin.append((bars*'|') + (spaces*' ') + '|')
+        
         
         if not PATHFINDER_ACTIVE:
             [prin.append(i) for i in 
@@ -482,6 +481,8 @@ class Transducer_homing:
             for i in self.pathfinder.progress_report():
                 prin.append('\t'+ i)
 
+        prin.append('')
+        prin.append('')
         prin.append('\n' + time.ctime() + '\n' + 16*'-')
         prin.append('')
         prin.append('')
