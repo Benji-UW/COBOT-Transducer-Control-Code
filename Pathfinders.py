@@ -12,7 +12,8 @@ import os
 
 class Pathfinder:
     def __init__(self, z_range: float, Rx_range: float = 0., Ry_range: float =0,
-            x_range: float = 0,y_range: float = 0,Rz_range: float = 0,save=False):
+            x_range: float = 0,y_range: float = 0,Rz_range: float = 0,save=False,
+            data_channels=1):
         '''Insert generic Docstring here.'''
         self.save = save
         self.range_of_motion = {'X': [-x_range, x_range],
@@ -34,7 +35,10 @@ class Pathfinder:
                 self.active_rom.append(degree)
                 self.save_indices.append(indices[degree])
         
-        self.save_indices.append(6)
+        for i in range(data_channels):
+            self.save_indices.append(6+i)
+        
+        print(self.save_indices)
 
         self.points: list[list[float]] = []
         '''Records the point/magnitude pairs that the pathfinder has been given
@@ -63,7 +67,7 @@ class Pathfinder:
         return "Abstraction of a pathfinder module."
 
     def newMag(self, point_mag:np.ndarray):
-        '''Input ndarry in the form [X,Y,Z,Rx,Ry,Rz,mag].'''
+        '''Input ndarry in the form [X,Y,Z,Rx,Ry,Rz,mag1,mag2,...].'''
         
         self.points.append(point_mag[self.save_indices].tolist())
         self.logger.debug(f"Appended the point {point_mag[self.save_indices]} to internal registry.")
@@ -112,18 +116,18 @@ class FourSquares(Pathfinder):
     position, so the initial position, as far as this is concerned, is ((0,0,0),(0deg,0deg,0deg))
     All internal points are stored as np arrays in the form [X,Y,Z,Rx,Ry,Rz]'''
 
-    def __init__(self, z_range: float, Rx_range: float = 0., Ry_range: float =0,
-            x_range: float = 0,y_range: float = 0,Rz_range: float = 0):
-        '''Accepts as input a series of values indicating the range of different
-        points in space it is allowed to exist between. This defines the search
-        space of the object. It will not investigate any points outside these bounds.
-        The only range it is require to accept is the z_range, otherwise it will
-        default to zero. Z also defines the range to give more room to move backwards
-        than forwards, in order to reduce the chances of the robot moving into the
-        sample.'''
-        super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
+    # def __init__(self, z_range: float, Rx_range: float = 0., Ry_range: float =0,
+    #         x_range: float = 0,y_range: float = 0,Rz_range: float = 0, data_channels=1):
+    #     '''Accepts as input a series of values indicating the range of different
+    #     points in space it is allowed to exist between. This defines the search
+    #     space of the object. It will not investigate any points outside these bounds.
+    #     The only range it is require to accept is the z_range, otherwise it will
+    #     default to zero. Z also defines the range to give more room to move backwards
+    #     than forwards, in order to reduce the chances of the robot moving into the
+    #     sample.'''
+    #     super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
         
-        self.notes: str = "No notes passed from setup.\n"
+    #     self.notes: str = "No notes passed from setup.\n"
 
     def __str__(self):
         return ("Basic, boilerplate version of a pathfinder module.\n" + 
@@ -163,7 +167,8 @@ class FourSquares(Pathfinder):
         yield 1
 
 class FullScan(Pathfinder):
-    def __init__(self,resolution,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
+    def __init__(self,resolution,z_range,Rx_range=0,Ry_range=0,
+            x_range =0,y_range=0,Rz_range=0,data_channels=1):
         '''Initialize a pathfinder object that traverses the searchspace at resolution
         
         Acts almost identical to the regular pathfinder module, except it contains an additional
@@ -174,7 +179,8 @@ class FullScan(Pathfinder):
         min_tolerance = (0.02,0.1)
         self.resolution = (max(resolution[0],min_tolerance[0]), 
                             max(resolution[1],min_tolerance[1]))
-        super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
+        super().__init__(z_range,Rx_range,Ry_range,x_range,
+            y_range,Rz_range,data_channels=data_channels)
         self.will_visit = 1
         self.start_time = time.time()
     
@@ -260,11 +266,13 @@ class FullScan(Pathfinder):
             'points' : self.points
         }
         self.write_json_data(json_data)
+
 class EllipsoidFullScan(FullScan):
     def __init__(self,resolution,z_range,Rx_range=0,Ry_range=0,
-            x_range=0,y_range=0,Rz_range=0, semi_axes=np.ones(6)):
+            x_range=0,y_range=0,Rz_range=0,semi_axes=np.ones(6),
+            data_channels=1):
         self.semi_axes = semi_axes
-        super().__init__(resolution, z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
+        super().__init__(resolution, z_range, Rx_range, Ry_range, x_range, y_range, Rz_range, data_channels)
 
     def __str__(self):
         return ("Ellipsoidal version of a fullscan module, scans " + 
@@ -322,7 +330,8 @@ class EllipsoidFullScan(FullScan):
 
         yield 1
 class DivisionSearch(Pathfinder):
-    def __init__(self, divisions,z_range,Rx_range=0,Ry_range=0,x_range =0,y_range=0,Rz_range=0):
+    def __init__(self, divisions, z_range: float, Rx_range: float = 0, Ry_range: float = 0,
+            x_range: float = 0, y_range: float = 0, Rz_range: float = 0, save=False, data_channels=1):
         '''Loads a pathfinder implementing a Division Search algorithm
 
         This pathfinder divides the searchspace into a set number of pieces (at least three),
@@ -338,7 +347,8 @@ class DivisionSearch(Pathfinder):
         Rx/Ry/x/y/Rz_range -- Same as z_range in the other directions.
         '''
         self.divisions = divisions
-        super().__init__(z_range,Rx_range,Ry_range,x_range,y_range,Rz_range)
+        super().__init__(z_range, Rx_range, Ry_range, x_range,
+            y_range, Rz_range, save, data_channels)
 
     def __str__(self):
         return ("Division search pathfinder module.\n" + 
@@ -416,12 +426,14 @@ class DivisionSearch(Pathfinder):
 class Discrete_degree(Pathfinder):
     '''This pathfinder uses a naive approximation of the search space where it optimizes
     one dimensions at a time, and loops until it converges on the apparent global max.'''
-    def __init__(self,z_range=0,Rx_range=0,
-                Ry_range=0,x_range=0, y_range=0,
-                Rz_range=0,r_o_m=None,max_point=None):
-
-        super().__init__(z_range, Rx_range, Ry_range, x_range, 
-            y_range, Rz_range)
+    def __init__(self, z_range: float, Rx_range: float = 0, Ry_range: float = 0,
+        x_range: float = 0, y_range: float = 0, Rz_range: float = 0, save = False,
+        data_channels = 1, r_o_m = None, max_point = None):
+        
+        # super().__init__(z_range, Rx_range, Ry_range, x_range, 
+        #     y_range, Rz_range)
+        super().__init__(z_range, Rx_range, Ry_range, x_range,
+            y_range, Rz_range, save, data_channels)
         
         if r_o_m is None:
             if z_range is None:
@@ -532,9 +544,11 @@ class Greedy_discrete_degree(Pathfinder):
     '''This pathfinder uses a naive approximation of the search space where it optimizes
     one dimensions at a time, and loops until it converges on the apparent global max.
     Unlike the standard discrete degree, this one doesn't scan the entire space.'''
-    def __init__(self, z_range, Rx_range=0, Ry_range=0,x_range=0,
-                y_range=0, Rz_range=0,bias=10,steps=3,inc=1.6):
-        super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range)
+
+    def __init__(self, z_range, Rx_range = 0, Ry_range = 0,x_range = 0,
+                y_range = 0, Rz_range = 0, save = False, data_channels = 1,
+                bias = 10, steps = 3, inc = 1.6):
+        super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range, save, data_channels)
         self.bias = bias
         self.steps = steps
         self.inc = inc

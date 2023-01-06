@@ -27,6 +27,7 @@ G_PATHFINDER = Greedy_discrete_degree
 T_PATHFINDER = GradientAscent
 HEADLESS_TEST = False
 IK_TEST:bool = False # Set to True to save joint positions during a scan
+DATA_CHANNELS = 2
 
 
 # LOGGING SETUP IS COMPLETE, don't touch again
@@ -158,7 +159,7 @@ class Transducer_homing:
         # i_rr = 0.
 
         self.t:float = time.time()
-        (new_mag, latest_mag) = next(self.listener)
+        (new_mag, latest_mag) = next(self.listener) # MAYBE latest_mag is a tuple???
         # latest_mag = 1
         
         self.i=-1
@@ -364,7 +365,12 @@ class Transducer_homing:
             msg = self.matlab_socket.recv(1024)
             i += 1
 
-            mag = (float(msg[4:13]) - 50000) / 100000
+            mag = []
+            for i in range(DATA_CHANNELS):
+                mag.append((float(msg[4+(10*i):13+(10*i)]) - 50000) / 100000)
+
+            # mag = (float(msg[4:13]) - 50000) / 100000
+            mag = tuple(mag)
             loop = int(msg[1:3])
 
             if loop == self.latest_loop:
@@ -436,8 +442,6 @@ class Transducer_homing:
         joints = self.robot.joints
         d_pos,d_ang = self._get_delta_pos()
 
-        bars = int((latest_mag/750) * 80)
-        spaces = 80 - bars
 
         prin = ["TCP position in relation to its initial position:",
         f"\t({d_pos.T}(mm),{d_ang.T}(deg))",
@@ -446,11 +450,19 @@ class Transducer_homing:
         f"Current joint position in degrees: ({np.rad2deg(joints.T)})",
         f'Recent refresh rate: {np.mean(self.last_ten_refresh_rate)}',
         "------------------------",
-        f"Latest mag:{latest_mag}",
-        (bars*'|') + (spaces*' ') + '|',
+        f"Latest mag:",]
+
+        for i in range(DATA_CHANNELS):
+            prin.append(f"\t{latest_mag[i]}")
+            bars = int((latest_mag[i]/750) * 80)
+            spaces = 80 - bars
+            prin.append((bars*'|') + (spaces*' ') + '|')
+        
+
+        [prin.append(i) for i in [
         f"Freedrive active: {freedrive}",
         "Press (f) to toggle (f)reedrive mode :)",
-        '']
+        '']]
         
         if not PATHFINDER_ACTIVE:
             [prin.append(i) for i in 
