@@ -16,6 +16,7 @@ class Pathfinder:
             data_channels=1):
         '''Insert generic Docstring here.'''
         self.save = save
+        self.data_channels = data_channels
         self.range_of_motion = {'X': [-x_range, x_range],
                                 'Y': [-y_range, y_range],
                                 'Z': [-z_range, z_range],
@@ -94,8 +95,6 @@ class Pathfinder:
         in order to save additional information specific to that mode of pathfinder.'''
         json_data = { 
             'range of motion' : self.range_of_motion,
-            'max_point' : self.max_point.tolist(),
-            'points' : self.points
         }
         if self.save:
             self.write_json_data(json_data)
@@ -104,6 +103,9 @@ class Pathfinder:
         self.notes += self.__str__()
         data['notes'] = self.notes
         data['active_ROM'] = self.active_rom
+        data['data_channels'] = self.data_channels
+        data['max_point'] = self.max_point.tolist()
+        data['points'] = self.points
 
         with open(self.path, 'w+') as outfile:
             json.dump(data, outfile, indent=3)
@@ -261,9 +263,7 @@ class FullScan(Pathfinder):
     def save_points(self):
         json_data = { 
             'range of motion' : self.range_of_motion, 
-            'resolution' : self.resolution, 
-            'max_point' : self.max_point.tolist(),
-            'points' : self.points
+            'resolution' : self.resolution
         }
         self.write_json_data(json_data)
 
@@ -417,9 +417,7 @@ class DivisionSearch(Pathfinder):
     def save_points(self):
         json_data = {
             'range of motion' : self.range_of_motion,
-            'divisions' : self.divisions,
-            'max_point' : self.max_point.tolist(),
-            'points' : self.points
+            'divisions' : self.divisions
         }
         self.write_json_data(json_data)
 
