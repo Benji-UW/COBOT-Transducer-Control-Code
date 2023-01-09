@@ -299,7 +299,8 @@ class Transducer_homing:
             if "k" in self.keys_pressed: # Start fullscan pathfinder
                 PATHFINDER_ACTIVE = True
                 self.pathfinder = K_PATHFINDER((T_RES,R_RES),Z_RANGE,RX_RANGE,
-                                    RY_RANGE,X_RANGE,Y_RANGE,RZ_RANGE,data_channels=DATA_CHANNELS)
+                                    RY_RANGE,X_RANGE,Y_RANGE,RZ_RANGE,
+                                    semi_axes=np.ones(6)*0.95, data_channels=DATA_CHANNELS)
                 nextpoint = self.pathfinder.next()
                 self.keys_pressed.remove('k')
             if "g" in self.keys_pressed: # Start maxfinding pathfinder
