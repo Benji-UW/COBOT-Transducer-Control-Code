@@ -51,10 +51,10 @@ class Pathfinder:
 
         file_itr = 0
         path = os.path.dirname(__file__)
-        while os.path.exists(path + f"\\Scans\\test_{file_itr}.json"):
+        while os.path.exists(path + f"\\Scans\\OCE_Scans\\oce_test_{file_itr}.json"):
             file_itr += 1
 
-        self.path = path + f'\\Scans\\test_{file_itr}.json'
+        self.path = path + f'\\Scans\\OCE_Scans\\oce_test_{file_itr}.json'
 
         self.max_point: np.ndarray = np.ones(7) * -1
         '''max_point stores the point and magnitude of the highest
