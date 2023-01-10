@@ -10,6 +10,8 @@ import time
 import logging
 import os
 
+CURRENT_SUBFOLDER = 'OCE_Scans'
+
 class Pathfinder:
     def __init__(self, z_range: float, Rx_range: float = 0., Ry_range: float =0,
             x_range: float = 0,y_range: float = 0,Rz_range: float = 0,save=False,
@@ -51,7 +53,7 @@ class Pathfinder:
 
         file_itr = 0
         path = os.path.dirname(__file__)
-        while os.path.exists(path + f"\\Scans\\OCE_Scans\\oce_test_{file_itr}.json"):
+        while os.path.exists(path + "\\Scans\\" + CURRENT_SUBFOLDER + f"\\oce_test_{file_itr}.json"):
             file_itr += 1
 
         self.path = path + f'\\Scans\\OCE_Scans\\oce_test_{file_itr}.json'
