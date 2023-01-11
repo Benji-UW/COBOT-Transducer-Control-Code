@@ -1,0 +1,77 @@
+Info.nZseg = 500;
+Stru = img';
+
+Info.gaussfilt = [1 1];
+Info.thrsh_ratio = 0.95;
+BandLines=[5,12,95,Info.nZseg];
+nX=size(Stru,2);
+dep = size(Stru,1);
+Stru(1:20,:) = 0;
+% figure(100);imagesc(Stru,[2 4]);colormap(gray)
+cimgc=imgaussfilt(Stru,Info.gaussfilt);
+cc = zeros(1,nX);
+cimgMax=max(cimgc);
+
+for iX=1:nX
+    vol=cimgc(:,iX);
+    loc = find(vol>cimgMax(iX)*Info.thrsh_ratio,1,'first');
+        while isempty(loc)
+            cimgMax(iX)=cimgMax(iX)*Info.thrsh_ratio;
+            loc = find(vol>cimgMax(iX)*Info.thrsh_ratio,1,'first');
+        end
+        cc(iX)=loc;
+end
+cc=round(medfilt1(cc,50,'truncate'))
+
+% hold on;plot(cc,'r')
+
+%path_to_here = mfilename('fullpath')
+%save(fullfile('C:\Temp','asdfasdf.mat'),'cc')
+
+stdcc = std(cc);
+%     disp(['flatteness: ' num2str(1-stdcc/50)]);
+stdccN = 1-stdcc/50;
+%%% Flatten Image
+[O,P]=ndgrid(1:Info.nZseg,1:nX);
+XX=repmat(cc-150,[Info.nZseg,1]); %300 is the defined depth field
+O=bsxfun(@plus,O,XX);
+O(O>size(Stru,1))=size(Stru,1); %For out of limied data
+O(O<1)=1;
+ind=sub2ind(size(Stru),O,P);
+Stru(1:10,:) = NaN;
+FSTR=Stru(ind); %Faltten Structure
+% figure;imagesc(FSTR,[1.8 4.5]);colormap(gray)
+% %% Upside down?
+down = std(FSTR(160:170,:),[],'all',"omitnan");
+up = std(FSTR(140:150,:),[],'all',"omitnan");
+%%
+x = 1:100;
+x = x-round(length(x)/2);
+y = 1./(1+exp(0.2*x));%7+7=14 width
+ov = [zeros(1,50) flip(y) y zeros(1,dep-250)];
+fol = ov(round(mean(cc)));
+    %%
+%     Ek = focusingDuo(FSTR);
+%     Ek = Ek(:,10:end-10);
+%     focusVa = mean(Ek(160:170,:),'all');
+%     FV = focusVa*20;
+LessThanNum = sum(cc<30);
+     if up<down || LessThanNum>20 || range(cc) > 150
+        disp('upside down');
+%         FV = 0;
+        stdccN = 0;
+        fol = -1;
+    end
+%     disp(['Flatteness: ' num2str(stdccN)]);
+%%
+
+%%% Ben added all these bits, plus opening the socket at the top
+t = datetime('now');
+s = round(second(t) * 10);
+
+%focusedness = ((stdccN * fol) * 100000) + 50000;
+focusedness = ((stdccN * 1) * 100000) + 50000;
+
+msg_format = 'T%02dZ%09dZ%09d\n'
+msg = sprintf(msg_format, [mod(s,100), round(((stdccN * 1) * 100000) + 50000),round(((fol * 1) * 100000) + 50000)]);
+%write(socket,msg);
