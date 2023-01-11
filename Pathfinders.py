@@ -263,9 +263,10 @@ class FullScan(Pathfinder):
     #     return popped
 
     def save_points(self):
-        json_data = { 
+        json_data = {
             'range of motion' : self.range_of_motion, 
-            'resolution' : self.resolution
+            'resolution' : self.resolution,
+            'scan_duration' : time.strftime("%H:%M:%S", time.gmtime(time.time() - self.start_time))
         }
         self.write_json_data(json_data)
 
@@ -331,6 +332,8 @@ class EllipsoidFullScan(FullScan):
                 self.periodic_dump()
 
         yield 1
+    
+
 class DivisionSearch(Pathfinder):
     def __init__(self, divisions, z_range: float, Rx_range: float = 0, Ry_range: float = 0,
             x_range: float = 0, y_range: float = 0, Rz_range: float = 0, save=False, data_channels=1):
