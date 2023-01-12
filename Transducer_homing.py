@@ -19,8 +19,8 @@ from Pathfinders import *
  Z_RANGE,               # "   "   "  Z-axis (positive)
  RX_RANGE,              # "   "   "  Rx-axis (positive)
  RY_RANGE,              # "   "   "  Ry-axis (positive)
- RZ_RANGE) = 0,0,2.5,6,6,0
-T_RES,R_RES = 0.05,1.2     # Resolution of high-def scans, in mm and deg respectively
+ RZ_RANGE) = 0,0,2.5,0,6,0
+T_RES,R_RES = 0.1,0.24     # Resolution of high-def scans, in mm and deg respectively
 D_PATHFINDER = FourSquares
 K_PATHFINDER = EllipsoidFullScan
 G_PATHFINDER = Greedy_discrete_degree
