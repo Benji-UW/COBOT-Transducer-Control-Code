@@ -19,8 +19,8 @@ from Pathfinders import *
  Z_RANGE,               # "   "   "  Z-axis (positive)
  RX_RANGE,              # "   "   "  Rx-axis (positive)
  RY_RANGE,              # "   "   "  Ry-axis (positive)
- RZ_RANGE) = 0,0,2.5,0,6,0
-T_RES,R_RES = 0.1,0.24     # Resolution of high-def scans, in mm and deg respectively
+ RZ_RANGE) = 0,0,2.5,5,5,0
+T_RES,R_RES = 0.1,0.88     # Resolution of high-def scans, in mm and deg respectively
 D_PATHFINDER = FourSquares
 K_PATHFINDER = EllipsoidFullScan
 G_PATHFINDER = Greedy_discrete_degree
@@ -211,8 +211,8 @@ class Transducer_homing:
                     self.pathfinder.save_points()
 
                     # # Return robot to starting position (comment out when you don't wanna do this)
-                    # self.robot.movel_to_target(np.zeros(6))
-                    self.robot.movel_to_target(self.pathfinder.max_point[:6])
+                    self.robot.movel_to_target(np.zeros(6))
+                    # self.robot.movel_to_target(self.pathfinder.max_point[:6])
 
                     if IK_TEST:
                         self._save_IK_data()
@@ -300,7 +300,7 @@ class Transducer_homing:
                 PATHFINDER_ACTIVE = True
                 self.pathfinder = K_PATHFINDER((T_RES,R_RES),Z_RANGE,RX_RANGE,
                                     RY_RANGE,X_RANGE,Y_RANGE,RZ_RANGE,
-                                    semi_axes=np.ones(6)*0.95, data_channels=DATA_CHANNELS)
+                                    semi_axes=np.ones(6)*0.92, data_channels=DATA_CHANNELS)
                 nextpoint = self.pathfinder.next()
                 self.keys_pressed.remove('k')
             if "g" in self.keys_pressed: # Start maxfinding pathfinder
