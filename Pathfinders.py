@@ -578,7 +578,7 @@ class Greedy_discrete_degree(Pathfinder):
         loop_i = 0
 
         self.logger.debug("Beginning greedy incremental checks.")
-        while self.inc > 0.1:
+        while self.inc > 0.01:
             if loop_i%l == 0:
                 self.inc = self.inc / 2
                 self.logger.info(f"Increment size {self.inc}")
