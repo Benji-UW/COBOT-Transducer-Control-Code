@@ -855,27 +855,6 @@ class GradientAscent(Pathfinder):
         '''Gonna use gradient ascent this time but otherwise
         same dealio as the greedy discrete degree.'''
 
-        # Pseudocode:
-        # 1. At a given point, take the magnitude
-        # 2. Then, explore a tiny searchspace around that
-        #   center point (cubic for three axes, square
-        #   for two)
-        # 3. Take the gradient around your origin to determine
-        #   the axis most appropriate to move along to reach
-        #   a maximum.
-        #       a. How to do that?
-        #           (i) For each of the points around your searchspace,
-        #           (ii) normalize the vector (set it to one), (iii) multiply
-        #           it by the change in magnitude between it and the
-        #           center point. (iv) Add all of these together and
-        #           (v) normalize the answer.
-        # 4. Move along the gradient vector using the same control logic
-        #   as the greedy discrete degree, (4a) continuing until there's a
-        #   consistent decrease above a set bias for  
-        # 5. Repeat the process at the new max_point, decreasing the step size
-        #   for searching around the center_point as well as the stepsize taken
-        #   along the gradient. 
-
         steps = []
         for i in range(6):
             if i in self.save_indices:
@@ -970,7 +949,6 @@ class GradientAscent(Pathfinder):
             delta_pos = full_point[:6] - t[:6]
             delta_mag = full_point[6] - t[6]
 
-
             grad += (delta_pos)  * (delta_mag) / (np.linalg.norm((delta_pos)))
         
         # print(f"Total gradient: {grad}")
@@ -988,3 +966,80 @@ class GradientAscent(Pathfinder):
                 return False
         
         return True
+
+class Bespoke_to_OCE(Pathfinder):
+    '''This pathfinder uses a naive approximation of the search space where it optimizes
+    one dimensions at a time, and loops until it converges on the apparent global max.
+    Unlike the standard discrete degree, this one doesn't scan the entire space.'''
+
+    def __init__(self, z_range, Rx_range = 0, Ry_range = 0,x_range = 0,
+                y_range = 0, Rz_range = 0, save = False, data_channels = 1,
+                bias = 10, steps = 3, inc = 0.8):
+        super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range, save, data_channels)
+        self.bias = bias
+        self.steps = steps
+        self.inc = inc
+
+    def __str__(self):
+        return ("Greedy discrete degree pathfinder module.\n" + 
+            f"\tRange of motion: {self.range_of_motion}\n" +
+            f"\tBias: {self.bias}\n" + 
+            f"\tSteps: {self.steps}\n" + 
+            f"\tHighest magnitude found: {self.max_point}")
+    
+    def internal_point_yielder(self) -> np.ndarray:
+        '''This yielder optimizes one degree of freedom at a time, looping in case
+        optimizing along more than one direction isn't appropriate.
+
+        min_tolerance = (0.1,0.5)
+        '''
+        # First find the magnitude at the origin (don't move)
+        yield np.zeros(6)
+  
+
+
+    def recent_downhill(self) -> bool:
+        '''Returns True if the pathfinder has gone downhill constantly for the past
+        'self.steps' points
+        Returns False if any of the past 'self.steps' points increased. '''
+
+        for i in range(self.steps):
+            if (self.points[-1 - i][-1] + self.bias > self.points[-2- i][-1]):
+                return False
+        
+        return True
+
+    def _within_search_space(self,point) -> bool:
+        r_o_m = self.range_of_motion
+        lower = np.array([r_o_m[i][0] for i in r_o_m.keys()])
+        upper = np.array([r_o_m[i][1] for i in r_o_m.keys()])
+
+        return np.all(point >= lower) and np.all(point <= upper)
+        
+    def increment_appropriate_axis(self,max_point,axis,positive) \
+            -> np.ndarray:
+        try:
+            (x,y,z,Rx,Ry,Rz)=max_point[:6].tolist()
+        except ValueError as e:
+            print(max_point)
+            print(e)
+        
+        inc = self.inc
+
+        if not positive:
+            inc = inc * -1
+        
+        if axis=='X':
+            x+=inc
+        elif axis=='Y':
+            y+=inc
+        elif axis=='Z':
+            z+=inc
+        elif axis=='Rx':
+            Rx+=inc
+        elif axis=='Ry':
+            Ry+=inc
+        elif axis=='Rz':
+            Rx+=inc
+
+        return np.array((x,y,z,Rx,Ry,Rz))

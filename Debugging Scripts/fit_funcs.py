@@ -8,6 +8,18 @@ def r_squared(func, popt, x_dat, y_dat):
 
     return 1 - (ss_res/ss_tot)
 
+def r1(func, popt, x_dat, y_dat):
+    residuals = y_dat - func(x_dat, *popt)
+    ss_res = np.sum(np.abs(residuals))
+
+    # ss_tot = np.sum(np.abs((y_dat - np.mean(y_dat))))
+
+    return 1 - (ss_res/residuals.size)
+
+def linear(x, a, b):
+    '''1st order polynomial'''
+    return (a*x) + b
+
 def polynomial_2(x, a, b, c):
     '''2nd order polynomial'''
     return (a*(x**2)) + (b*x) + c
@@ -51,7 +63,17 @@ def inv_abs_poly_4(x,a,b,c,d,e,f,y_offset):
     '''Rational absolute value 4th degree polynomial'''
     return (a / (np.abs(x**4 + (x*b)**3 + (x*c)**2 + (x*d) + e) + f)) + y_offset
 
+def sloped_abs_plane(data,a,b,c,d,e,f,g):
+    '''absolute should be applied to the Z data, linear to the R data'''
+    x= a * data[0] + b * data[1]
+    y= c * data[0] + d * data[1]
 
+    return (absolute(x,1,1,e) * linear(y,1,f)) + g
+
+def abs_plane(data,a,b,c,d):
+    x = a * data[0] + b * data[1]
+    
+    return (absolute(x,1,c,d))
 
 def ang_plus_z(data,a,b,c,x_offset,y_offset,z_offset):
     '''The inv_absolute should be applied to the Z data, gauss to the Ry data'''
