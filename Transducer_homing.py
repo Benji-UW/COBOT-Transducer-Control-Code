@@ -20,14 +20,14 @@ from Pathfinders import *
  RX_RANGE,              # "   "   "  Rx-axis (positive)
  RY_RANGE,              # "   "   "  Ry-axis (positive)
  RZ_RANGE) = 0,0,2.5,5,5,0
-T_RES,R_RES = 0.1,0.88     # Resolution of high-def scans, in mm and deg respectively
+T_RES,R_RES = 0.25,0.5     # Resolution of high-def scans, in mm and deg respectively
 D_PATHFINDER = FourSquares
 K_PATHFINDER = EllipsoidFullScan
 G_PATHFINDER = Greedy_discrete_degree
 T_PATHFINDER = GradientAscent
 HEADLESS_TEST = False
 IK_TEST:bool = False # Set to True to save joint positions during a scan
-DATA_CHANNELS = 2
+DATA_CHANNELS = 3
 
 
 # LOGGING SETUP IS COMPLETE, don't touch again
@@ -211,8 +211,8 @@ class Transducer_homing:
                     self.pathfinder.save_points()
 
                     # # Return robot to starting position (comment out when you don't wanna do this)
-                    self.robot.movel_to_target(np.zeros(6))
-                    # self.robot.movel_to_target(self.pathfinder.max_point[:6])
+                    # self.robot.movel_to_target(np.zeros(6))
+                    self.robot.movel_to_target(self.pathfinder.max_point[:6])
 
                     if IK_TEST:
                         self._save_IK_data()
@@ -300,18 +300,21 @@ class Transducer_homing:
                 PATHFINDER_ACTIVE = True
                 self.pathfinder = K_PATHFINDER((T_RES,R_RES),Z_RANGE,RX_RANGE,
                                     RY_RANGE,X_RANGE,Y_RANGE,RZ_RANGE,
-                                    semi_axes=np.ones(6)*0.92, data_channels=DATA_CHANNELS)
+                                    semi_axes=np.ones(6)*0.98,data_channels=DATA_CHANNELS)
                 nextpoint = self.pathfinder.next()
                 self.keys_pressed.remove('k')
             if "g" in self.keys_pressed: # Start maxfinding pathfinder
                 PATHFINDER_ACTIVE = True
                 # self.pathfinder = Greedy_discrete_degree(20,15,15,bias=0,steps=2,inc=1.0)
-                self.pathfinder = GradientAscent(20,15,15,bias=0,steps=2,inc=0.75,traverse=1.0)
+                # self.pathfinder = GradientAscent(20,15,15,bias=0,steps=2,inc=0.75,traverse=1.0)
+                self.pathfinder = G_PATHFINDER(Z_RANGE,RX_RANGE,
+                                    RY_RANGE,X_RANGE,Y_RANGE,RZ_RANGE,
+                                    bias=0,inc=0.2,data_channels=3)
                 nextpoint = self.pathfinder.next()
                 self.keys_pressed.remove('g')
             if "t" in self.keys_pressed: # Start maxfinding pathfinder
                 PATHFINDER_ACTIVE = True
-                self.pathfinder = Greedy_discrete_degree(20,15,15,bias=0,steps=2,inc=1.0)
+                self.pathfinder = Greedy_discrete_degree(20,15,15,bias=-1,steps=2,inc=1.0)
                 # self.pathfinder = GradientAscent(20,15,15,bias=0,steps=2,inc=0.75,traverse=1.0)
                 nextpoint = self.pathfinder.next()
                 self.keys_pressed.remove('t')
@@ -359,7 +362,11 @@ class Transducer_homing:
         MATLAB.
 
         Returns a tuple containing a boolean and a float, the boolean
-        indicating whether the magnitude is new and the float representing the data.'''   
+        indicating whether the magnitude is new and the float representing the data.'''
+        a_,b_ = 5,500
+        def loss_function(slope, intercept):
+            return 1000 - a_*(np.abs((slope*200) + intercept - 110)) - b_*np.abs(slope)
+
         mag,self.latest_loop = -1,-1
         i=0
         while True:
@@ -368,10 +375,13 @@ class Transducer_homing:
             i += 1
 
             mag = []
-            for i in range(DATA_CHANNELS):
+            for i in range(DATA_CHANNELS-1):
                 mag.append((float(msg[4+(10*i):13+(10*i)]) - 50000) / 100000)
 
             # mag = (float(msg[4:13]) - 50000) / 100000
+
+            mag.append(loss_function(mag[0],mag[1]))
+
             mag = tuple(mag)
             loop = int(msg[1:3])
 
@@ -380,6 +390,7 @@ class Transducer_homing:
             else:
                 self.latest_loop = loop
                 yield (True, mag)
+
     
     def fake_MATLAB_listener(self) -> tuple[bool, float]:
         '''This method fakes the input from the MATLAB listener, can be used 

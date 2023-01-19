@@ -74,7 +74,7 @@ class Pathfinder:
         
         self.points.append(point_mag[self.save_indices].tolist())
         self.logger.debug(f"Appended the point {point_mag[self.save_indices]} to internal registry.")
-        if (point_mag[6] > self.max_point[6]):
+        if (point_mag[-1] > self.max_point[-1]):
             self.max_point = point_mag.copy()
 
     def progress_report(self) -> list[str]:
@@ -275,7 +275,8 @@ class EllipsoidFullScan(FullScan):
             x_range=0,y_range=0,Rz_range=0,semi_axes=np.ones(6),
             data_channels=1):
         self.semi_axes = semi_axes
-        super().__init__(resolution, z_range, Rx_range, Ry_range, x_range, y_range, Rz_range, data_channels)
+        super().__init__(resolution, z_range, Rx_range, Ry_range, x_range,
+                         y_range, Rz_range, data_channels)
 
     def __str__(self):
         return ("Ellipsoidal version of a fullscan module, scans " + 
@@ -550,7 +551,7 @@ class Greedy_discrete_degree(Pathfinder):
 
     def __init__(self, z_range, Rx_range = 0, Ry_range = 0,x_range = 0,
                 y_range = 0, Rz_range = 0, save = False, data_channels = 1,
-                bias = 10, steps = 3, inc = 1.6):
+                bias = 10, steps = 3, inc = 0.16, loss_function = None):
         super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range, save, data_channels)
         self.bias = bias
         self.steps = steps
@@ -578,7 +579,7 @@ class Greedy_discrete_degree(Pathfinder):
         loop_i = 0
 
         self.logger.debug("Beginning greedy incremental checks.")
-        while self.inc > 0.01:
+        while self.inc > 0.02:
             if loop_i%l == 0:
                 self.inc = self.inc / 2
                 self.logger.info(f"Increment size {self.inc}")
@@ -657,6 +658,7 @@ class Greedy_discrete_degree(Pathfinder):
             print(e)
         
         inc = self.inc
+        ang_coeff = 2.5
 
         if not positive:
             inc = inc * -1
@@ -668,11 +670,11 @@ class Greedy_discrete_degree(Pathfinder):
         elif axis=='Z':
             z+=inc
         elif axis=='Rx':
-            Rx+=inc
+            Rx+=(inc*ang_coeff)
         elif axis=='Ry':
-            Ry+=inc
+            Ry+=(inc*ang_coeff)
         elif axis=='Rz':
-            Rx+=inc
+            Rz+=(inc*ang_coeff)
 
         return np.array((x,y,z,Rx,Ry,Rz))
 
