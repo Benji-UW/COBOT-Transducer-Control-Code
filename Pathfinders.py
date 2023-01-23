@@ -973,31 +973,56 @@ class Bespoke_to_OCE(Pathfinder):
     Unlike the standard discrete degree, this one doesn't scan the entire space.'''
 
     def __init__(self, z_range, Rx_range = 0, Ry_range = 0,x_range = 0,
-                y_range = 0, Rz_range = 0, save = False, data_channels = 1,
-                bias = 10, steps = 3, inc = 0.8):
+                y_range = 0, Rz_range = 0, save = False, data_channels = 2):
         super().__init__(z_range, Rx_range, Ry_range, x_range, y_range, Rz_range, save, data_channels)
-        self.bias = bias
-        self.steps = steps
-        self.inc = inc
 
     def __str__(self):
-        return ("Greedy discrete degree pathfinder module.\n" + 
-            f"\tRange of motion: {self.range_of_motion}\n" +
-            f"\tBias: {self.bias}\n" + 
-            f"\tSteps: {self.steps}\n" + 
-            f"\tHighest magnitude found: {self.max_point}")
+        return ("Chadly bespoke pathfinder for the OCE image.\n" + 
+            f"\tRange of motion: {self.range_of_motion}\n")
     
     def internal_point_yielder(self) -> np.ndarray:
         '''This yielder optimizes one degree of freedom at a time, looping in case
         optimizing along more than one direction isn't appropriate.
 
-        min_tolerance = (0.1,0.5)
         '''
         # First find the magnitude at the origin (don't move)
         yield np.zeros(6)
+        # For some reason we frequently have to do this twice :/
+        yield np.zeros(6)
+
+        slope,intercept = self.points[-1][-2],self.points[-1][-1]
+        i = 0
+
+        while (i < 4 and np.abs(slope) > 0.05 and np.abs(intercept - 100) > 5):
+            yield np.zeros(6)
+            yield 'reset_origin'
+            i += 1
+
+            to_rotate = -1 * (slope) / 0.06
+            yield np.array([0,0,0,0,to_rotate,0])
+            yield 'reset_origin'
+            yield np.zeros(6)
+
+            slope,intercept = self.points[-1][-2],self.points[-1][-1]
+
+            alt_at_mid = slope*200 + intercept
+
+            to_translate = -1 *((110 - alt_at_mid) / 150)
+
+            going_up = (to_translate > 0) # Bool says whether we're going up
+
+            yield np.array([to_translate,0,0,0,0,0])
+
+            slope,intercept = self.points[-1][-2],self.points[-1][-1]
+
+            alt_at_mid = slope*200 + intercept
+            new_to_translate = -1 *((110 - alt_at_mid) / 150)
+
+            new_going_up = (new_to_translate > 0)
+
+
+
   
-
-
     def recent_downhill(self) -> bool:
         '''Returns True if the pathfinder has gone downhill constantly for the past
         'self.steps' points
@@ -1008,38 +1033,3 @@ class Bespoke_to_OCE(Pathfinder):
                 return False
         
         return True
-
-    def _within_search_space(self,point) -> bool:
-        r_o_m = self.range_of_motion
-        lower = np.array([r_o_m[i][0] for i in r_o_m.keys()])
-        upper = np.array([r_o_m[i][1] for i in r_o_m.keys()])
-
-        return np.all(point >= lower) and np.all(point <= upper)
-        
-    def increment_appropriate_axis(self,max_point,axis,positive) \
-            -> np.ndarray:
-        try:
-            (x,y,z,Rx,Ry,Rz)=max_point[:6].tolist()
-        except ValueError as e:
-            print(max_point)
-            print(e)
-        
-        inc = self.inc
-
-        if not positive:
-            inc = inc * -1
-        
-        if axis=='X':
-            x+=inc
-        elif axis=='Y':
-            y+=inc
-        elif axis=='Z':
-            z+=inc
-        elif axis=='Rx':
-            Rx+=inc
-        elif axis=='Ry':
-            Ry+=inc
-        elif axis=='Rz':
-            Rx+=inc
-
-        return np.array((x,y,z,Rx,Ry,Rz))

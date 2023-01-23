@@ -31,6 +31,7 @@ def rational_2(x,a,b,c,d):
 
 
 def gauss(x,a,b,x_offset,y_offset): # '''Gaussian fit'''
+    '''Gaussian fit :/'''
     return (a * (np.e)**(-b * (x-x_offset)**2)) + y_offset
 
 

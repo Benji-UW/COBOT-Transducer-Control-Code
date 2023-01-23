@@ -193,7 +193,6 @@ class Transducer_homing:
                 # Wait for the robot to arrive at current target (log how long it took)
                 v = self.robot.wait_for_at_tar()
                 logger.info(f"Waiting for the at_tar return took {v} loops")
-#TODO Delete joint history items after IK has been understood
 
                 # Store the joint angles of the robot in the joint_history for analysis
                 if IK_TEST:
@@ -203,7 +202,12 @@ class Transducer_homing:
 
                 # Find the next point
                 nextpoint = self.pathfinder.next()
-                
+
+                if type(nextpoint) is str and nextpoint == 'reset_origin':
+                    self.robot.set_initial_pos()
+                    time.sleep(0.01)
+                    nextpoint = self.pathfinder.next()
+
                 if type(nextpoint) is int and nextpoint == 1: # nextpoint = 1 means end of path reached
                     _PATHFINDER_ACTIVE = False
 
@@ -216,7 +220,6 @@ class Transducer_homing:
 
                     if IK_TEST:
                         self._save_IK_data()
-
                 else:
                     logger.debug(f"triggering movel to {nextpoint}")
                     self.robot.movel_to_target(nextpoint)
