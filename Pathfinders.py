@@ -992,15 +992,19 @@ class Bespoke_to_OCE(Pathfinder):
         # For some reason we frequently have to do this twice :/
         yield np.zeros(6)
 
+        step_size = 0.75
+
         slope,intercept = self.points[-1][-2],self.points[-1][-1]
         i = 0
 
-        while (i < 4 and np.abs(slope) > 0.05 and np.abs(intercept - 100) > 5):
-            yield np.zeros(6)
+        target_intercept = 120
+
+        while (i < 4 and (np.abs(slope) > 0.02 or np.abs(intercept - target_intercept) > 5)):
             yield 'reset_origin'
+            yield np.zeros(6)
             i += 1
 
-            to_rotate = -1 * (slope) / 0.06
+            to_rotate = 1 * step_size * (slope) / 0.06
             yield np.array([0,0,0,0,to_rotate,0])
             yield 'reset_origin'
             yield np.zeros(6)
@@ -1009,20 +1013,27 @@ class Bespoke_to_OCE(Pathfinder):
 
             alt_at_mid = slope*200 + intercept
 
-            to_translate = -1 *((110 - alt_at_mid) / 150)
+            old_alt = alt_at_mid
+
+            to_translate = -1 * step_size *((target_intercept - alt_at_mid) / 150)
 
             going_up = (to_translate > 0) # Bool says whether we're going up
 
-            yield np.array([to_translate,0,0,0,0,0])
+            yield np.array([0,0,to_translate,0,0,0])
 
             slope,intercept = self.points[-1][-2],self.points[-1][-1]
 
             alt_at_mid = slope*200 + intercept
-            new_to_translate = -1 *((110 - alt_at_mid) / 150)
+            new_to_translate = -1 * step_size *((110 - alt_at_mid) / 150)
 
-            new_going_up = (new_to_translate > 0)
+            if ((alt_at_mid > old_alt) is going_up):
+                pass
+                # yield np.array([0,0,-2*to_translate,0,0,0])
 
+            slope,intercept = self.points[-1][-2],self.points[-1][-1]
+            
 
+        yield 1
 
   
     def recent_downhill(self) -> bool:

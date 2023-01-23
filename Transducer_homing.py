@@ -24,7 +24,7 @@ T_RES,R_RES = 0.25,0.5     # Resolution of high-def scans, in mm and deg respect
 D_PATHFINDER = FourSquares
 K_PATHFINDER = EllipsoidFullScan
 G_PATHFINDER = Greedy_discrete_degree
-T_PATHFINDER = GradientAscent
+T_PATHFINDER = Bespoke_to_OCE
 HEADLESS_TEST = False
 IK_TEST:bool = False # Set to True to save joint positions during a scan
 DATA_CHANNELS = 3
@@ -215,8 +215,8 @@ class Transducer_homing:
                     self.pathfinder.save_points()
 
                     # # Return robot to starting position (comment out when you don't wanna do this)
-                    # self.robot.movel_to_target(np.zeros(6))
-                    self.robot.movel_to_target(self.pathfinder.max_point[:6])
+                    self.robot.movel_to_target(np.zeros(6))
+                    # self.robot.movel_to_target(self.pathfinder.max_point[:6])
 
                     if IK_TEST:
                         self._save_IK_data()
@@ -317,7 +317,9 @@ class Transducer_homing:
                 self.keys_pressed.remove('g')
             if "t" in self.keys_pressed: # Start maxfinding pathfinder
                 PATHFINDER_ACTIVE = True
-                self.pathfinder = Greedy_discrete_degree(20,15,15,bias=-1,steps=2,inc=1.0)
+                # self.pathfinder = Greedy_discrete_degree(20,15,15,bias=-1,steps=2,inc=1.0)
+                self.pathfinder = T_PATHFINDER(Z_RANGE,RX_RANGE,
+                                    RY_RANGE,X_RANGE,Y_RANGE,RZ_RANGE)
                 # self.pathfinder = GradientAscent(20,15,15,bias=0,steps=2,inc=0.75,traverse=1.0)
                 nextpoint = self.pathfinder.next()
                 self.keys_pressed.remove('t')
