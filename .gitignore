@@ -163,8 +163,8 @@ cython_debug/
 #.idea/
 
 #Images
-*.png
-*.jpg
+#*.png
+#*.jpg
 # !fullscan_render_test_4.jpg
 *.vs/
 
