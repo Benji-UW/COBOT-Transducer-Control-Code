@@ -17,6 +17,7 @@ class Pathfinder:
             x_range: float = 0,y_range: float = 0,Rz_range: float = 0,save=False,
             data_channels=1):
         '''Insert generic Docstring here.'''
+        self.start_time = time.time()
         self.save = save
         self.data_channels = data_channels
         self.range_of_motion = {'X': [-x_range, x_range],
@@ -73,7 +74,7 @@ class Pathfinder:
         '''Input ndarry in the form [X,Y,Z,Rx,Ry,Rz,mag1,mag2,...].'''
         
         self.points.append(point_mag[self.save_indices].tolist())
-        self.logger.debug(f"Appended the point {point_mag[self.save_indices]} to internal registry.")
+        self.logger.info(f"Appended the point {point_mag[self.save_indices]} to internal registry.")
         if (point_mag[-1] > self.max_point[-1]):
             self.max_point = point_mag.copy()
 
@@ -186,7 +187,6 @@ class FullScan(Pathfinder):
         super().__init__(z_range,Rx_range,Ry_range,x_range,
             y_range,Rz_range,data_channels=data_channels)
         self.will_visit = 1
-        self.start_time = time.time()
     
     def __str__(self):
         return ("Fullscan version of a pathfinder module, scans " + 
@@ -988,50 +988,70 @@ class Bespoke_to_OCE(Pathfinder):
 
         '''
         # First find the magnitude at the origin (don't move)
+        self.start_time = time.time()
         yield np.zeros(6)
+        target = np.zeros(6)
         # For some reason we frequently have to do this twice :/
-        yield np.zeros(6)
 
-        step_size = 0.75
+        step_size = 0.95
 
-        slope,intercept = self.points[-1][-2],self.points[-1][-1]
         i = 0
 
-        target_intercept = 120
+        target_intercept = 150
+        slope,intercept = 1,1
 
-        while (i < 4 and (np.abs(slope) > 0.02 or np.abs(intercept - target_intercept) > 5)):
-            yield 'reset_origin'
-            yield np.zeros(6)
+        while (i < 4 and (np.abs(slope) > 0.06 or np.abs(intercept - target_intercept) > 10)):
+            yield target
+            slope,intercept = self.points[-1][-2],self.points[-1][-1]
             i += 1
 
             to_rotate = 1 * step_size * (slope) / 0.06
-            yield np.array([0,0,0,0,to_rotate,0])
-            yield 'reset_origin'
-            yield np.zeros(6)
-
-            slope,intercept = self.points[-1][-2],self.points[-1][-1]
-
             alt_at_mid = slope*200 + intercept
+            to_translate = -1.35 * step_size *((target_intercept - alt_at_mid) / 150)
 
-            old_alt = alt_at_mid
+            to_translate_1 = (-80 * np.tan(np.deg2rad(to_rotate))) / 15
+            #                400 approximates the distance from
+            #               the middle of the scan and the point
+            #               to the left at which a line remains uniform 
 
-            to_translate = -1 * step_size *((target_intercept - alt_at_mid) / 150)
-
-            going_up = (to_translate > 0) # Bool says whether we're going up
-
-            yield np.array([0,0,to_translate,0,0,0])
-
-            slope,intercept = self.points[-1][-2],self.points[-1][-1]
-
-            alt_at_mid = slope*200 + intercept
-            new_to_translate = -1 * step_size *((110 - alt_at_mid) / 150)
-
-            if ((alt_at_mid > old_alt) is going_up):
-                pass
-                # yield np.array([0,0,-2*to_translate,0,0,0])
+            self.logger.info(f"Measured the current slope/intercept to be {slope}, {intercept} (middle height {alt_at_mid}")
+            self.logger.info(f"Moving the robot by {to_rotate} degrees and {to_translate_1 + to_translate} mm to adjust.")
+            self.logger.info(f"(Math says I should translate {to_translate_1} + {to_translate} = {to_translate_1 + to_translate} mm)")
+            to_translate_1 = to_translate_1 + to_translate
+            target = target + np.array([0,0,to_translate_1,0,to_rotate,0])
+            yield target
+            time.sleep(0.01)
+            yield target
 
             slope,intercept = self.points[-1][-2],self.points[-1][-1]
+
+            # if (np.abs(slope) < 0.06 and np.abs(intercept - target_intercept) < 10):
+            #     break
+            # else:
+            #     alt_at_mid = slope*200 + intercept
+
+            #     old_alt = alt_at_mid
+
+            #     to_translate = -1.25 * step_size *((target_intercept - alt_at_mid) / 150)
+
+            #     going_up = (to_translate > 0) # Bool says whether we're going up
+
+            #     self.logger.info(f"Measured the current slope/intercept to be {slope}, {intercept}, (middle height {alt_at_mid})")
+            #     self.logger.info(f"Moving the robot by {to_translate} mm to adjust.")
+            #     target = target + np.array([0,0,to_translate,0,0,0])
+            #     yield target
+            #     yield target
+            #     # slope,intercept = self.points[-1][-2],self.points[-1][-1]
+
+            #             # alt_at_mid = slope*200 + intercept
+            #             # new_to_translate = -1 * step_size *((110 - alt_at_mid) / 150)
+
+            #             # if ((alt_at_mid > old_alt) is going_up):
+            #             #     pass
+            #             #     # yield np.array([0,0,-2*to_translate,0,0,0])
             
+        self.logger.info(f"Focusing loop exited with i={i}, slope {slope}, and intercept {intercept}.")
+        self.logger.info(f"From initialization to loop exit took {(time.time() - self.start_time):0.4f} seconds")
 
         yield 1
 

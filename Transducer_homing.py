@@ -52,7 +52,7 @@ def logger_setup(log_level=logging.INFO) -> logging.Logger:
     logger.info("Debug log for the robot starting on " + date_time_str)
     return logger
 
-logger = logger_setup(logging.DEBUG)
+logger = logger_setup(logging.INFO)
 np.set_printoptions(formatter={'float': '{: 0.2f}'.format})
 
 def main():
@@ -166,10 +166,14 @@ class Transducer_homing:
         logger.info('About to start the main loop')
         t0 = time.time()
 
-        time.sleep(0.05)
+        time.sleep(0.025)
         while _RUN:
             self.robot.update()
             t1=time.time()
+            if _PATHFINDER_ACTIVE and not freedrive:
+                # Wait for the robot to arrive at current target (log how long it took)
+                v = self.robot.wait_for_at_tar()
+                logger.info(f"Waiting for the at_tar return took {v} loops")
 
             (new_mag, latest_mag) = next(self.listener)
 
@@ -190,15 +194,6 @@ class Transducer_homing:
 
             # If there is a running pathfinder:
             if _PATHFINDER_ACTIVE and not freedrive:
-                # Wait for the robot to arrive at current target (log how long it took)
-                v = self.robot.wait_for_at_tar()
-                logger.info(f"Waiting for the at_tar return took {v} loops")
-
-                # Store the joint angles of the robot in the joint_history for analysis
-                if IK_TEST:
-                    self.robot.get_joint_angles()
-                    self.joint_history.append((nextpoint.tolist(), np.copy(self.robot.joints).tolist(),
-                        (np.copy(self.robot.pos).tolist(), np.copy(self.robot.angle).tolist())))
 
                 # Find the next point
                 nextpoint = self.pathfinder.next()
@@ -207,7 +202,6 @@ class Transducer_homing:
                     self.robot.set_initial_pos()
                     time.sleep(0.01)
                     nextpoint = self.pathfinder.next()
-
                 if type(nextpoint) is int and nextpoint == 1: # nextpoint = 1 means end of path reached
                     _PATHFINDER_ACTIVE = False
 
@@ -215,7 +209,7 @@ class Transducer_homing:
                     self.pathfinder.save_points()
 
                     # # Return robot to starting position (comment out when you don't wanna do this)
-                    self.robot.movel_to_target(np.zeros(6))
+                    # self.robot.movel_to_target(np.zeros(6))
                     # self.robot.movel_to_target(self.pathfinder.max_point[:6])
 
                     if IK_TEST:
