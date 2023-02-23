@@ -143,7 +143,7 @@ class FourSquares(Pathfinder):
     #     return ["Progress report not implemented!"]
 
     def internal_point_yielder(self) -> np.ndarray:
-        '''This method gets called when the pathfinder is ini tializes,
+        '''This method gets called when the pathfinder is initializes,
         and adds the center of the search space as well as all the
         corners to the "to-travel" list. When all the points have been
         visited it returns the integer 1 to indicate the search is

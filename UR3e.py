@@ -130,6 +130,40 @@ class UR3e:
 
         return (True, '')
 
+    def connect_lite(self,
+            robot_ip:str,
+            # robot_port:int=30020,
+            robot_port:int=30002,
+            modbus_port:int=502) -> tuple[bool,str]:
+        """
+        Connect to the robot.
+
+        :param str robot_ip: IP address of the robot
+        :param int robot_port: port of the robot
+        :param int modbus_port: modbus port of the robot
+        :return:
+        """
+        self.robot_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.robot_socket.settimeout(5)
+        try:
+            self.robot_socket.connect((robot_ip, robot_port))
+        except socket.gaierror as e:
+            self.logger.error('Connection error to robot: %s' % e)
+            return (False, e)
+        except socket.timeout as e:
+            self.logger.error("Connection timed out")
+            return (False,e)
+
+        self.modbus_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            self.modbus_socket.connect((robot_ip, modbus_port))
+        except socket.gaierror as e:
+            self.logger.info('Connection error to modbus: %s' % e)
+            return (False, e)
+
+        print("Fully connected lmao")
+        return (True, '')
+
     def disconnect(self):
         self.robot_socket.close()
 
@@ -166,26 +200,69 @@ class UR3e:
         self.logger.info('THIS IS HUGE WHY ISNT IT GOING')
         time.sleep(0.01)
 
+    def FONKY_movel(self, nextpoint:np.ndarray, t=0.0) -> bool:
+        x,y,z,rx,ry,rz = nextpoint.tolist()
+        x,y,z = x/1000,y/1000,z/1000
+        rx,ry,rz = np.deg2rad(rx),np.deg2rad(ry),np.deg2rad(rz),
+
+        # self.movel([x,y,z],[rx,ry,rz])
+        # for i in range(10):
+        #     self.speedl(np.array([x,y,z]),np.array([rx,ry,rz]),lag=0.2)
+        #     time.sleep(0.03)
+        # cmd = f'movel(pose_trans(get_forward_kin(), p[{x:1.4f},{y:1.4f},{z:1.4f},{rx:1.4f},{ry:1.4f},{rz:1.4f}]), a=1.2, v=0.25)'
+        # cmd = f'movel(p[{x:1.4f},{y:1.4f},{z:1.4f},{np.deg2rad(rx):1.4f},{np.deg2rad(ry):1.4f},' + \
+        #         f'{np.deg2rad(rz):1.4f}],a={self.acc:1.2f},v={self.velocity:1.2f},t={t:2.2f},r=0)'
+        # cmd = cmd.encode()
+
+
+        cmd = f"global pose_wrt_tool = p[{x:1.4f},{y:1.4f},{z:1.4f},{rx:1.4f},{ry:1.4f},{rz:1.4f}]\n"
+        cmd = cmd.encode()
+        self.robot_socket.send(b'sync()\n')
+        time.sleep(self.sleep_time)
+        self.robot_socket.send(cmd + b'\n')
+        time.sleep(0.05)
+
+        cmd = "global pose_wrt_base = pose_trans(get_forward_kin(), pose_wrt_tool)\n"
+        cmd = cmd.encode()
+        self.robot_socket.send(b'sync()\n')
+        time.sleep(self.sleep_time)
+        self.robot_socket.send(cmd + b'\n')
+        time.sleep(0.05)
+        # "movel(pose_wrt_base , a=1.2, v=0.25)"
+        # cmd = cmd.encode()
+
+        # self.robot_socket.send(b'sync()\n')
+        # time.sleep(self.sleep_time)
+        # self.robot_socket.send(cmd + b'\n')
+        # time.sleep(0.05)
+        # print(cmd)
+        return True
+
     def movel(self, pos_to, angle_to, t=0.0) -> bool:
-        if self._check_move_displacement(pos_to):
+        if True:
+        # if self._check_move_displacement(pos_to):
             cmd = (b'movel(p[%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f],a=%1.2f,v='
                 b'%1.2f,t=%2.2f,r=0)' % (pos_to[0], pos_to[1], pos_to[2],
                 angle_to[0], angle_to[1], angle_to[2], self.acc, self.velocity, t))
             self.robot_socket.send(b'sync()\n')
-            time.sleep(self.sleep_time)
+            print(cmd)
+            # time.sleep(self.sleep_time)
+            time.sleep(0.1)
             self.robot_socket.send(cmd + b'\n')
             if t == 0.0:
                 dist = np.linalg.norm(np.subtract(pos_to, self.pos))  # move distance
                 t_a = self.velocity / self.acc  # time to accelerate
                 t_v = dist / self.velocity
-                time.sleep(t_a + t_v)
+                # time.sleep(t_a + t_v)
+                time.sleep(0.1)
             else:
                 time.sleep(t)
             return True
         return False
 
     def speedl(self, speed_vect, rotation_vect, lag) -> bool:
-        if self._check_speed_displacement(speed_vect):
+        if True:
+        # if self._check_speed_displacement(speed_vect):
             # multiplies the incoming motion vectors by the velocity
             speed_vect = self.velocity * speed_vect
             rotation_vect = self.vel_rot * rotation_vect
@@ -250,6 +327,7 @@ class UR3e:
             self.servo_Kd = Kd
         if lag is not None:
             self.servo_lag = lag
+
 
     def update_servo(self, setpoint=None):
         self.servo_error = self.pos - self.initial_pos - self._change_base(setpoint)
@@ -594,6 +672,7 @@ class UR3e:
         time.sleep(0.01)
         self.data_socket.send(b'SET atTar %i ' % (-1))
         time.sleep(0.01)
+
 
     def get_current_rel_target(self) -> np.ndarray:
         '''Returns the current relative target, in the form of a (6,) ndarray'''
